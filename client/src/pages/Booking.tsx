@@ -9,7 +9,11 @@ import ColorWheelSelector from "@/components/ColorWheelSelector";
 import CakeTopperSelector from "@/components/CakeTopperSelector";
 import BookingSummary from "@/components/BookingSummary";
 import ProgressSteps from "@/components/ProgressSteps";
+import CustomerInfoForm from "@/components/CustomerInfoForm";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { apiRequest } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
+import { loadStripe } from '@stripe/stripe-js';
 
 import elopementImg from '@assets/generated_images/Intimate_elopement_ceremony_setup_d5c87634.png';
 import vowRenewalImg from '@assets/generated_images/Vow_renewal_ceremony_decoration_3582a109.png';
@@ -23,44 +27,45 @@ const steps = [
   { id: '1', title: 'Select Package', description: 'Choose your wedding type' },
   { id: '2', title: 'Date & Time', description: 'Pick your ceremony date' },
   { id: '3', title: 'Customize', description: 'Personalize your ceremony' },
-  { id: '4', title: 'Review', description: 'Confirm your selections' },
+  { id: '4', title: 'Your Information', description: 'Enter contact details' },
+  { id: '5', title: 'Review', description: 'Confirm your selections' },
 ];
 
 const weddingTypes = [
   {
     id: 'elopement',
     title: 'Elopement',
-    description: 'Intimate ceremony for just the two of you',
-    price: '$499',
-    basePrice: 499,
-    inclusions: ['30-minute ceremony', 'Professional officiant', 'Choice of ceremony script', 'Venue for 2 guests'],
+    description: 'Intimate ceremony at our elegant indoor venue',
+    price: 'From $999',
+    basePrice: 999,
+    inclusions: ['90-minute ceremony', 'Up to 10 guests', 'Professional officiant', 'Professional photography included', 'Floral arrangements included', 'Full ceremony customization'],
     image: elopementImg,
   },
   {
     id: 'vow-renewal',
     title: 'Vow Renewal',
     description: 'Celebrate your continued love and commitment',
-    price: '$699',
-    basePrice: 699,
-    inclusions: ['45-minute ceremony', 'Professional officiant', 'Custom vow assistance', 'Venue for up to 20 guests'],
+    price: 'From $999',
+    basePrice: 999,
+    inclusions: ['90-minute ceremony', 'Up to 10 guests', 'Professional officiant', 'Professional photography included', 'Floral arrangements included', 'Custom vow assistance'],
     image: vowRenewalImg,
   },
   {
     id: 'friday-sunday',
     title: 'Friday/Sunday',
-    description: 'Beautiful ceremony on weekend edges',
-    price: '$999',
-    basePrice: 999,
-    inclusions: ['1-hour ceremony', 'Professional officiant', 'Full customization', 'Venue for up to 50 guests', 'Basic decorations'],
+    description: 'Complete wedding experience on weekend edges',
+    price: '$3,900',
+    basePrice: 3900,
+    inclusions: ['3-hour event', 'Up to 30 guests', 'Professional officiant', 'Professional photography included', 'Floral arrangements included', 'Full customization'],
     image: fridaySundayImg,
   },
   {
     id: 'saturday',
     title: 'Saturday',
-    description: 'Premium Saturday wedding experience',
-    price: '$1,499',
-    basePrice: 1499,
-    inclusions: ['2-hour ceremony & reception', 'Professional officiant', 'Full customization', 'Venue for up to 100 guests', 'Premium decorations', 'Refreshments'],
+    description: 'Premium Saturday wedding at our venue',
+    price: '$4,500',
+    basePrice: 4500,
+    inclusions: ['3-hour event', 'Up to 30 guests', 'Professional officiant', 'Professional photography included', 'Floral arrangements included', 'Full customization'],
     image: saturdayImg,
   },
 ];
@@ -105,6 +110,10 @@ export default function Booking() {
   const [selectedMusic, setSelectedMusic] = useState<string[]>([]);
   const [selectedColor, setSelectedColor] = useState<string>('#e91e63');
   const [selectedTopper, setSelectedTopper] = useState<string>('');
+  const [customerName, setCustomerName] = useState<string>('');
+  const [customerEmail, setCustomerEmail] = useState<string>('');
+  const [customerPhone, setCustomerPhone] = useState<string>('');
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleNext = () => {
     if (currentStep < steps.length - 1) {
@@ -137,6 +146,8 @@ export default function Booking() {
       case 2:
         return selectedScript && selectedVows && selectedTopper;
       case 3:
+        return customerName && customerEmail && customerPhone;
+      case 4:
         return true;
       default:
         return false;
@@ -145,6 +156,61 @@ export default function Booking() {
 
   const getSelectedPackage = () => weddingTypes.find(w => w.id === selectedPackage);
   const getTotal = () => getSelectedPackage()?.basePrice || 0;
+  const { toast } = useToast();
+
+  const handleProceedToPayment = async () => {
+    if (!selectedDate) return;
+
+    setIsProcessing(true);
+    try {
+      const bookingData = {
+        weddingType: getSelectedPackage()?.title || '',
+        weddingDate: selectedDate.toISOString(),
+        weddingTime: selectedTime,
+        customerName,
+        customerEmail,
+        customerPhone,
+        ceremonyScript: ceremonyScripts.find(s => s.id === selectedScript)?.name || '',
+        vows: vowsOptions.find(v => v.id === selectedVows)?.title || '',
+        music: selectedMusic,
+        color: selectedColor,
+        cakeTopper: cakeToppers.find(t => t.id === selectedTopper)?.name || '',
+        totalPrice: getTotal() * 100, // Convert to cents for storage
+      };
+
+      const bookingResponse = await apiRequest('POST', '/api/bookings', bookingData);
+      const booking = await bookingResponse.json();
+      
+      const checkoutResponse = await apiRequest('POST', '/api/create-checkout-session', {
+        bookingId: booking.id,
+      });
+      const { sessionId } = await checkoutResponse.json();
+
+      if (!import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
+        throw new Error('Stripe public key not configured');
+      }
+
+      const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+      if (!stripe) {
+        throw new Error('Failed to load Stripe');
+      }
+
+      const { error } = await (stripe as any).redirectToCheckout({ sessionId });
+      
+      if (error) {
+        throw error;
+      }
+    } catch (error: any) {
+      console.error('Booking error:', error);
+      toast({
+        title: "Booking Error",
+        description: error.message || "Failed to process booking. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsProcessing(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -240,6 +306,25 @@ export default function Booking() {
               {currentStep === 3 && (
                 <div>
                   <div className="mb-8">
+                    <h2 className="font-serif text-3xl font-bold mb-2">Your Information</h2>
+                    <p className="text-muted-foreground">Please provide your contact details</p>
+                  </div>
+                  <div className="max-w-2xl mx-auto">
+                    <CustomerInfoForm
+                      name={customerName}
+                      email={customerEmail}
+                      phone={customerPhone}
+                      onNameChange={setCustomerName}
+                      onEmailChange={setCustomerEmail}
+                      onPhoneChange={setCustomerPhone}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {currentStep === 4 && (
+                <div>
+                  <div className="mb-8">
                     <h2 className="font-serif text-3xl font-bold mb-2">Review Your Booking</h2>
                     <p className="text-muted-foreground">Confirm your selections before proceeding to payment</p>
                   </div>
@@ -253,10 +338,11 @@ export default function Booking() {
                         { label: 'Music Selections', value: `${selectedMusic.length} songs selected`, onEdit: () => setCurrentStep(2) },
                         { label: 'Color Theme', value: selectedColor, onEdit: () => setCurrentStep(2) },
                         { label: 'Cake Topper', value: cakeToppers.find(t => t.id === selectedTopper)?.name || '', onEdit: () => setCurrentStep(2) },
+                        { label: 'Contact', value: `${customerName} (${customerEmail})`, onEdit: () => setCurrentStep(3) },
                       ]}
                       basePrice={getTotal()}
                       total={getTotal()}
-                      onProceed={() => console.log('Proceed to payment')}
+                      onProceed={handleProceedToPayment}
                     />
                   </div>
                 </div>
@@ -275,7 +361,7 @@ export default function Booking() {
                 {currentStep < steps.length - 1 && (
                   <Button
                     onClick={handleNext}
-                    disabled={!canProceed()}
+                    disabled={!canProceed() || isProcessing}
                     data-testid="button-next"
                   >
                     Continue
