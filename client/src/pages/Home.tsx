@@ -26,7 +26,7 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/booking">
               <Button size="lg" className="text-lg px-8 bg-primary/90 hover:bg-primary backdrop-blur-sm" data-testid="button-start-planning">
-                Start Planning Your Day
+                The Wedding Composer
               </Button>
             </Link>
             <Button size="lg" variant="outline" className="text-lg px-8 bg-white/10 hover:bg-white/20 text-white border-white/50 backdrop-blur-sm" data-testid="button-view-packages">
@@ -93,7 +93,7 @@ export default function Home() {
           </p>
           <Link href="/booking">
             <Button size="lg" className="text-lg px-8" data-testid="button-book-now">
-              Book Your Wedding
+              The Wedding Composer
             </Button>
           </Link>
         </div>

@@ -216,7 +216,7 @@ export default function Booking() {
     <div className="min-h-screen bg-background">
       <div className="border-b sticky top-0 bg-background z-50">
         <div className="max-w-7xl mx-auto px-4 py-4">
-          <h1 className="font-serif text-2xl font-bold">Book Your Wedding</h1>
+          <h1 className="font-serif text-2xl font-bold">The Wedding Composer</h1>
         </div>
       </div>
 
