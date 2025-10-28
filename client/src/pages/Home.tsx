@@ -18,7 +18,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="relative min-h-screen flex items-center justify-center overflow-hidden py-12">
+      <div className="relative min-h-screen flex items-start justify-center overflow-hidden pb-12" style={{ paddingTop: '0.03rem' }}>
         <div className="absolute inset-0">
           <img
             src={heroImage}
