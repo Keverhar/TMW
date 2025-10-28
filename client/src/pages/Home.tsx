@@ -29,14 +29,22 @@ export default function Home() {
         </div>
         
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
-          <h1 className="font-serif text-4xl md:text-6xl font-bold mb-6 md:whitespace-nowrap" style={{ color: '#FAA0F0' }}>
-            Welcome to the Wedding Composer
-          </h1>
+          <div className="mb-6">
+            <div className="font-serif text-2xl md:text-4xl italic mb-1" style={{ color: '#FAA0F0' }}>
+              Welcome to...
+            </div>
+            <h1 className="font-serif text-4xl md:text-6xl font-bold md:whitespace-nowrap" style={{ color: '#FAA0F0' }}>
+              The Wedding Composer
+            </h1>
+          </div>
           
           <div className="text-white/90 space-y-6 mb-8">
-            <p style={{ fontFamily: 'Arial, sans-serif', fontSize: '14pt' }}>
-              Design, Save, and Return. Your selections are automatically saved with your email, so feel free to play and change things—nothing is final until you say it is.
-            </p>
+            <div style={{ fontFamily: 'Arial, sans-serif', fontSize: '14pt', lineHeight: '1.2' }}>
+              <p style={{ marginBottom: '0' }}>Design, Save, Return.</p>
+              <p style={{ marginBottom: '0' }}>Your selections are automatically saved with your email,</p>
+              <p style={{ marginBottom: '0' }}>so feel free to plan and change things.</p>
+              <p style={{ marginBottom: '0' }} className="italic font-bold">Nothing is final until you say it is.</p>
+            </div>
             
             <div className="text-left md:text-center text-base md:text-lg max-w-3xl mx-auto" style={{ fontFamily: '"Book Antiqua", Palatino, serif' }}>
               <p className="font-semibold text-white mb-2">Your vision comes to life - perfectly on cue.</p>
