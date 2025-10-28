@@ -245,31 +245,7 @@ export default function WeddingComposer() {
     await saveProgress();
 
     if (composerId) {
-      try {
-        const response = await apiRequest("POST", "/api/wedding-composers/create-checkout-session", { composerId });
-        const data = await response.json();
-
-        if (data.sessionId && import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
-          const stripe = await import("@stripe/stripe-js").then((m) =>
-            m.loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
-          );
-          if (stripe) {
-            await stripe.redirectToCheckout({ sessionId: data.sessionId });
-          }
-        } else {
-          toast({
-            title: "Payment configuration error",
-            description: "Stripe is not configured. Please contact support.",
-            variant: "destructive",
-          });
-        }
-      } catch (error: any) {
-        toast({
-          title: "Payment error",
-          description: error.message || "Failed to initiate payment. Please try again.",
-          variant: "destructive",
-        });
-      }
+      setLocation(`/account-creation/${composerId}`);
     }
   };
 

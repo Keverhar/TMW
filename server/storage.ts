@@ -3,7 +3,7 @@ import { randomUUID } from "crypto";
 
 export interface IStorage {
   getUser(id: string): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
+  getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
   
   // Legacy booking methods (for backwards compatibility)
@@ -35,15 +35,22 @@ export class MemStorage implements IStorage {
     return this.users.get(id);
   }
 
-  async getUserByUsername(username: string): Promise<User | undefined> {
+  async getUserByEmail(email: string): Promise<User | undefined> {
     return Array.from(this.users.values()).find(
-      (user) => user.username === username,
+      (user) => user.email === email,
     );
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
     const id = randomUUID();
-    const user: User = { ...insertUser, id };
+    const now = new Date();
+    const user: User = { 
+      ...insertUser,
+      displayName: insertUser.displayName ?? null,
+      password: insertUser.password ?? null,
+      id,
+      createdAt: now,
+    };
     this.users.set(id, user);
     return user;
   }
@@ -152,9 +159,16 @@ export class MemStorage implements IStorage {
       departureOrganizer: null,
       departureVehicle: null,
       personalTouchesSpecialInstructions: null,
-      billingAddress: null,
-      mailingAddress: null,
       ...insertComposer,
+      unityCandle: insertComposer.unityCandle ?? null,
+      sandCeremony: insertComposer.sandCeremony ?? null,
+      handfasting: insertComposer.handfasting ?? null,
+      smsConsent: insertComposer.smsConsent ?? null,
+      photoBookAddon: insertComposer.photoBookAddon ?? null,
+      extraTimeAddon: insertComposer.extraTimeAddon ?? null,
+      byobBarAddon: insertComposer.byobBarAddon ?? null,
+      rehearsalAddon: insertComposer.rehearsalAddon ?? null,
+      termsAccepted: insertComposer.termsAccepted ?? null,
       id,
       paymentStatus: "pending",
       stripeSessionId: null,

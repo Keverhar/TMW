@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertBookingSchema, insertWeddingComposerSchema } from "@shared/schema";
+import { insertBookingSchema, insertWeddingComposerSchema, insertUserSchema } from "@shared/schema";
 import Stripe from "stripe";
 
 let stripe: Stripe | null = null;
@@ -16,6 +16,38 @@ if (process.env.STRIPE_SECRET_KEY) {
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // User routes
+  app.post("/api/users", async (req, res) => {
+    try {
+      const validatedData = insertUserSchema.parse(req.body);
+      
+      const existingUser = await storage.getUserByEmail(validatedData.email);
+      if (existingUser) {
+        return res.status(400).json({ message: "An account with this email already exists" });
+      }
+      
+      const user = await storage.createUser(validatedData);
+      
+      const { password, ...userWithoutPassword } = user;
+      res.json(userWithoutPassword);
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+  app.get("/api/users/:id", async (req, res) => {
+    try {
+      const user = await storage.getUser(req.params.id);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      const { password, ...userWithoutPassword } = user;
+      res.json(userWithoutPassword);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
   // Create a new booking
   app.post("/api/bookings", async (req, res) => {
     try {

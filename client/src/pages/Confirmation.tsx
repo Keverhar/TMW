@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { useLocation } from "wouter";
+import { useLocation, useRoute } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,93 +7,26 @@ import type { WeddingComposer } from "@shared/schema";
 
 export default function Confirmation() {
   const [, setLocation] = useLocation();
-  const [sessionId, setSessionId] = useState<string | null>(null);
-  const [composerId, setComposerId] = useState<string | null>(null);
-  const [canceled, setCanceled] = useState(false);
+  const [, params] = useRoute("/confirmation/:composerId");
+  const composerId = params?.composerId;
 
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const session = params.get("session_id");
-    const composer = params.get("composer_id");
-    const wasCanceled = params.get("canceled");
-    
-    if (session) setSessionId(session);
-    if (composer) setComposerId(composer);
-    if (wasCanceled) setCanceled(true);
-  }, []);
-
-  const { data: paymentStatus, isLoading } = useQuery<{
-    status: string;
-    composer?: WeddingComposer;
-  }>({
-    queryKey: [`/api/wedding-composers/verify-payment/${sessionId}`],
-    enabled: !!sessionId && !canceled,
-    refetchInterval: (query) => {
-      const data = query.state.data;
-      return data?.status === 'pending' ? 2000 : false;
-    },
+  const { data: composer, isLoading } = useQuery<WeddingComposer>({
+    queryKey: ["/api/wedding-composers", composerId],
+    enabled: !!composerId,
   });
 
-  const composer = paymentStatus?.composer;
-
-  if (canceled) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <Card className="max-w-md w-full">
-          <CardHeader className="text-center">
-            <CardTitle className="font-serif text-2xl">Booking Canceled</CardTitle>
-          </CardHeader>
-          <CardContent className="text-center space-y-6">
-            <p className="text-muted-foreground">
-              Your booking was canceled. No charges were made to your card.
-            </p>
-            <div className="flex flex-col gap-3">
-              <Button onClick={() => setLocation("/composer")} className="w-full" data-testid="button-try-again">
-                Try Again
-              </Button>
-              <Button onClick={() => setLocation("/")} variant="outline" className="w-full" data-testid="button-home">
-                Return Home
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  if (isLoading || paymentStatus?.status === 'pending') {
+  if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Card className="max-w-md w-full">
           <CardHeader className="text-center">
             <Loader2 className="h-12 w-12 animate-spin mx-auto mb-4 text-primary" />
-            <CardTitle className="font-serif text-2xl">Processing Payment</CardTitle>
+            <CardTitle className="font-serif text-2xl">Loading...</CardTitle>
           </CardHeader>
           <CardContent className="text-center">
             <p className="text-muted-foreground">
-              Please wait while we confirm your payment...
+              Retrieving your booking details...
             </p>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  if (paymentStatus?.status !== "success") {
-    return (
-      <div className="min-h-screen flex items-center justify-center p-4">
-        <Card className="max-w-md w-full">
-          <CardHeader className="text-center">
-            <CardTitle className="font-serif text-2xl">Payment Verification</CardTitle>
-            <CardDescription>There was an issue verifying your payment</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-muted-foreground">
-              We couldn't verify your payment. Please try again or contact us for assistance.
-            </p>
-            <Button onClick={() => setLocation("/composer")} className="w-full" data-testid="button-try-again">
-              Try Again
-            </Button>
           </CardContent>
         </Card>
       </div>
