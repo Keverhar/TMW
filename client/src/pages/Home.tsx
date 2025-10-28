@@ -43,7 +43,7 @@ export default function Home() {
               <p style={{ marginBottom: '0' }}>Design, Save, Return.</p>
               <p style={{ marginBottom: '0' }}>Your selections are automatically saved with your email,</p>
               <p style={{ marginBottom: '0' }}>so feel free to plan and change things.</p>
-              <p style={{ marginBottom: '0' }} className="italic font-bold underline">Nothing is final until you say it is.</p>
+              <p style={{ marginBottom: '0', color: '#F04673' }} className="italic font-bold underline">Nothing is final until you say it is.</p>
             </div>
             
             <div className="text-left md:text-center text-base md:text-lg max-w-3xl mx-auto" style={{ fontFamily: '"Book Antiqua", Palatino, serif' }}>
