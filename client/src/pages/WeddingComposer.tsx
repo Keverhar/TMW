@@ -268,11 +268,50 @@ export default function WeddingComposer() {
       return;
     }
 
+    // Save progress first
     await saveProgress();
 
-    if (composerId) {
-      // Redirect to confirmation page which will handle payment
-      setLocation(`/confirmation/${composerId}`);
+    if (!composerId) {
+      toast({
+        title: "Error",
+        description: "Unable to process payment. Please try again.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      setIsSaving(true);
+      
+      // Create Stripe checkout session
+      const response: any = await apiRequest("POST", "/api/wedding-composers/create-checkout-session", {
+        composerId
+      });
+
+      // Redirect to Stripe checkout
+      if (response.sessionId && import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
+        const stripe = await import("@stripe/stripe-js").then(m => 
+          m.loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
+        );
+        
+        if (stripe) {
+          await stripe.redirectToCheckout({ sessionId: response.sessionId });
+        }
+      } else {
+        toast({
+          title: "Payment not configured",
+          description: "Stripe is not configured. Redirecting to confirmation...",
+        });
+        // For demo purposes when Stripe is not configured
+        setTimeout(() => setLocation(`/confirmation/${composerId}`), 1500);
+      }
+    } catch (error: any) {
+      toast({
+        title: "Payment error",
+        description: error.message || "Failed to initiate payment. Please try again.",
+        variant: "destructive",
+      });
+      setIsSaving(false);
     }
   };
 
