@@ -3,7 +3,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Music, Play, Pause } from "lucide-react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 interface MusicOption {
   id: string;
@@ -26,11 +26,28 @@ export default function MusicSelector({
 }: MusicSelectorProps) {
   const [playingId, setPlayingId] = useState<string | null>(null);
   const audioRefs = useRef<{ [key: string]: HTMLAudioElement | null }>({});
+  const handlersRef = useRef<{ [key: string]: () => void }>({});
+
+  useEffect(() => {
+    return () => {
+      Object.entries(audioRefs.current).forEach(([id, audio]) => {
+        if (audio) {
+          audio.pause();
+          audio.currentTime = 0;
+          const handler = handlersRef.current[id];
+          if (handler) {
+            audio.removeEventListener('ended', handler);
+          }
+        }
+      });
+      audioRefs.current = {};
+      handlersRef.current = {};
+    };
+  }, []);
 
   const handlePlayPause = (musicId: string, previewUrl: string) => {
     const currentAudio = audioRefs.current[musicId];
     
-    // Stop any currently playing audio
     Object.entries(audioRefs.current).forEach(([id, audio]) => {
       if (id !== musicId && audio && !audio.paused) {
         audio.pause();
@@ -49,8 +66,10 @@ export default function MusicSelector({
       }
     } else {
       const audio = new Audio(previewUrl);
+      const handleEnded = () => setPlayingId(null);
+      handlersRef.current[musicId] = handleEnded;
       audioRefs.current[musicId] = audio;
-      audio.addEventListener('ended', () => setPlayingId(null));
+      audio.addEventListener('ended', handleEnded);
       audio.play();
       setPlayingId(musicId);
     }

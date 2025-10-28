@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import heroImage from '@assets/generated_images/Elegant_wedding_venue_interior_cc244093.png';
+import heroImage from '@assets/Copy of Composer banner_1761671065075.png';
 import { Heart, Calendar, Sparkles, CheckCircle } from "lucide-react";
 
 export default function Home() {
@@ -23,15 +23,12 @@ export default function Home() {
           <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-2xl mx-auto">
             Create your perfect ceremony with our elegant venue and personalized service
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex justify-center">
             <Link href="/booking">
               <Button size="lg" className="text-lg px-8 bg-primary/90 hover:bg-primary backdrop-blur-sm" data-testid="button-start-planning">
                 The Wedding Composer
               </Button>
             </Link>
-            <Button size="lg" variant="outline" className="text-lg px-8 bg-white/10 hover:bg-white/20 text-white border-white/50 backdrop-blur-sm" data-testid="button-view-packages">
-              View Packages
-            </Button>
           </div>
         </div>
       </div>
