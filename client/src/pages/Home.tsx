@@ -38,27 +38,29 @@ export default function Home() {
             </h1>
           </div>
           
-          <div className="text-white/90 space-y-6 mb-8">
+          <div className="space-y-6 mb-8" style={{ color: '#FAA0F0' }}>
             <div style={{ fontFamily: 'Arial, sans-serif', fontSize: '14pt', lineHeight: '1.2' }}>
               <p style={{ marginBottom: '0' }}>Design, Save, Return.</p>
               <p style={{ marginBottom: '0' }}>Your selections are automatically saved with your email,</p>
               <p style={{ marginBottom: '0' }}>so feel free to plan and change things.</p>
-              <p style={{ marginBottom: '0' }} className="italic font-bold">Nothing is final until you say it is.</p>
+              <p style={{ marginBottom: '0' }} className="italic font-bold underline">Nothing is final until you say it is.</p>
             </div>
             
             <div className="text-left md:text-center text-base md:text-lg max-w-3xl mx-auto" style={{ fontFamily: '"Book Antiqua", Palatino, serif' }}>
-              <p className="font-semibold text-white mb-2">Your vision comes to life - perfectly on cue.</p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.325rem' }}>
-                <p><span className="font-semibold">Couple Information</span> – <span className="italic">Your love story, at the center.</span></p>
-                <p><span className="font-semibold">Wedding Date</span> – <span className="italic">No date? No problem.</span></p>
-                <p><span className="font-semibold">Guest Count</span> – <span className="italic">Estimate now, adjust later.</span></p>
-                <p><span className="font-semibold">Event Type</span> – <span className="italic">From intimate elopements to full celebrations.</span></p>
-                <p><span className="font-semibold">Signature Color</span> – <span className="italic">Choose your satin ribbon hue.</span></p>
-                <p><span className="font-semibold">Ceremony & Vows</span> – <span className="italic">Personalize the words that matter most.</span></p>
-                <p><span className="font-semibold">Music & Toasts</span> – <span className="italic">Every song and speech, orchestrated.</span></p>
-                <p><span className="font-semibold">Evite Templates</span> – <span className="italic">Stylish invites, ready to send.</span></p>
-                <p><span className="font-semibold">Photo Book Options</span> – <span className="italic">Cherish the memories forever.</span></p>
-                <p className="font-semibold italic">And much more!</p>
+              <p className="font-semibold mb-2">Your vision comes to life - perfectly on cue.</p>
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <p style={{ marginBottom: '0.03rem' }}><span className="font-semibold">Couple Information</span> – <span className="italic">Your love story, at the center.</span></p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.325rem' }}>
+                  <p><span className="font-semibold">Wedding Date</span> – <span className="italic">No date? No problem.</span></p>
+                  <p><span className="font-semibold">Guest Count</span> – <span className="italic">Estimate now, adjust later.</span></p>
+                  <p><span className="font-semibold">Event Type</span> – <span className="italic">From intimate elopements to full celebrations.</span></p>
+                  <p><span className="font-semibold">Signature Color</span> – <span className="italic">Choose your satin ribbon hue.</span></p>
+                  <p><span className="font-semibold">Ceremony & Vows</span> – <span className="italic">Personalize the words that matter most.</span></p>
+                  <p><span className="font-semibold">Music & Toasts</span> – <span className="italic">Every song and speech, orchestrated.</span></p>
+                  <p><span className="font-semibold">Evite Templates</span> – <span className="italic">Stylish invites, ready to send.</span></p>
+                  <p><span className="font-semibold">Photo Book Options</span> – <span className="italic">Cherish the memories forever.</span></p>
+                  <p className="font-semibold italic">And much more!</p>
+                </div>
               </div>
             </div>
           </div>
