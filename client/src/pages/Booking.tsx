@@ -19,7 +19,7 @@ import venueBackgroundImg from '@assets/generated_images/Intimate_indoor_wedding
 import traditionalImg from '@assets/generated_images/Traditional_wedding_cake_topper_8cf92715.png';
 import gentlemenImg from '@assets/generated_images/Gentlemen_wedding_cake_topper_3a9bd51a.png';
 import ladiesImg from '@assets/generated_images/Ladies_wedding_cake_topper_e1b9db02.png';
-import heroImage from '@assets/Copy of Composer banner_1761671065075.png';
+import heroImage from '@assets/Copy of Chapel_1761677843013.png';
 
 const steps = [
   { id: '1', title: 'Select Package', description: 'Choose your wedding type' },
