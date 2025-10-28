@@ -5,7 +5,6 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Home from "@/pages/Home";
 import WeddingComposer from "@/pages/WeddingComposer";
-import AccountCreation from "@/pages/AccountCreation";
 import Confirmation from "@/pages/Confirmation";
 import NotFound from "@/pages/not-found";
 
@@ -14,7 +13,6 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/composer" component={WeddingComposer} />
-      <Route path="/account-creation/:composerId" component={AccountCreation} />
       <Route path="/confirmation/:composerId" component={Confirmation} />
       <Route component={NotFound} />
     </Switch>
