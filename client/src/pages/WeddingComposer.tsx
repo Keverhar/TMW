@@ -40,8 +40,8 @@ const calculatePrice = (eventType: string, dayOfWeek: string): number => {
     // Modest Wedding: Saturday = $4500, Friday/Sunday = $3900
     return dayOfWeek === 'saturday' ? 450000 : 390000;
   } else if (eventType === 'modest-elopement' || eventType === 'vow-renewal') {
-    // Elopement/Vow Renewal: Default = $999, Friday = $1499
-    return dayOfWeek === 'friday' ? 149900 : 99900;
+    // Elopement/Vow Renewal: Default = $999, Friday = $1500
+    return dayOfWeek === 'friday' ? 150000 : 99900;
   }
   return 390000; // Default
 };
