@@ -9,6 +9,7 @@ interface DateTimeSelectorProps {
   selectedTime?: string;
   onSelectDate: (date: Date | undefined) => void;
   onSelectTime: (time: string) => void;
+  selectedPackage?: string;
 }
 
 const timeSlots = [
@@ -28,7 +29,36 @@ export default function DateTimeSelector({
   selectedTime,
   onSelectDate,
   onSelectTime,
+  selectedPackage,
 }: DateTimeSelectorProps) {
+  // Determine which days of the week are allowed based on package
+  const getAllowedDays = () => {
+    switch (selectedPackage) {
+      case 'elopement':
+      case 'vow-renewal':
+        return [5]; // Friday only
+      case 'friday-sunday':
+        return [5, 0]; // Friday and Sunday
+      case 'saturday':
+        return [6]; // Saturday only
+      default:
+        return [0, 1, 2, 3, 4, 5, 6]; // All days if no package selected
+    }
+  };
+
+  const allowedDays = getAllowedDays();
+
+  const isDateDisabled = (date: Date) => {
+    // Disable past dates
+    if (date < new Date()) {
+      return true;
+    }
+    
+    // Disable dates that don't match the allowed days for the package
+    const dayOfWeek = date.getDay();
+    return !allowedDays.includes(dayOfWeek);
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -43,7 +73,7 @@ export default function DateTimeSelector({
               mode="single"
               selected={selectedDate}
               onSelect={onSelectDate}
-              disabled={(date) => date < new Date()}
+              disabled={isDateDisabled}
               className="rounded-md border"
               data-testid="calendar-date-selector"
             />

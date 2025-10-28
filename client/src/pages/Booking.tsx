@@ -264,6 +264,7 @@ export default function Booking() {
                     selectedTime={selectedTime}
                     onSelectDate={setSelectedDate}
                     onSelectTime={setSelectedTime}
+                    selectedPackage={selectedPackage}
                   />
                 </div>
               )}
