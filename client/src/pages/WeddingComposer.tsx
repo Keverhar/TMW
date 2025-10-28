@@ -282,30 +282,42 @@ export default function WeddingComposer() {
   const dayOfWeek = getDayOfWeek(formData.preferredDate);
   const basePrice = calculatePrice(formData.eventType, dayOfWeek);
 
+  const addonsTotal =
+    (formData.photoBookAddon ? 30000 : 0) +
+    (formData.extraTimeAddon ? 100000 : 0) +
+    (formData.byobBarAddon ? 40000 : 0) +
+    (formData.rehearsalAddon ? 15000 : 0);
+  const totalPrice = basePrice + addonsTotal;
+
   return (
     <div className="min-h-screen bg-background">
       <div className="sticky top-0 z-50 bg-background border-b">
         <div className="max-w-4xl mx-auto px-6 py-3">
-          <div className="flex gap-2 overflow-x-auto pb-2">
-            {steps.map((step, index) => {
-              const stepNumber = index + 1;
-              return (
-                <button
-                  key={step.id}
-                  onClick={() => setCurrentStep(stepNumber)}
-                  data-testid={`button-step-${stepNumber}`}
-                  className={`flex-shrink-0 px-3 py-2 rounded-md text-xs font-medium transition-colors ${
-                    currentStep === stepNumber
-                      ? 'bg-primary text-primary-foreground'
-                      : currentStep > stepNumber
-                      ? 'bg-muted text-muted-foreground hover-elevate'
-                      : 'bg-background text-muted-foreground border hover-elevate'
-                  }`}
-                >
-                  <span className="block">{stepNumber}. {step.title}</span>
-                </button>
-              );
-            })}
+          <div className="flex items-center gap-3">
+            <div className="flex-shrink-0 px-4 py-2 bg-primary text-primary-foreground rounded-md font-semibold text-sm" data-testid="text-total-price">
+              ${(totalPrice / 100).toFixed(2)}
+            </div>
+            <div className="flex gap-2 overflow-x-auto pb-2">
+              {steps.map((step, index) => {
+                const stepNumber = index + 1;
+                return (
+                  <button
+                    key={step.id}
+                    onClick={() => setCurrentStep(stepNumber)}
+                    data-testid={`button-step-${stepNumber}`}
+                    className={`flex-shrink-0 px-3 py-2 rounded-md text-xs font-medium transition-colors ${
+                      currentStep === stepNumber
+                        ? 'bg-primary text-primary-foreground'
+                        : currentStep > stepNumber
+                        ? 'bg-muted text-muted-foreground hover-elevate'
+                        : 'bg-background text-muted-foreground border hover-elevate'
+                    }`}
+                  >
+                    <span className="block">{stepNumber}. {step.title}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
