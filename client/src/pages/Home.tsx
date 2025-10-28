@@ -46,8 +46,8 @@ export default function Home() {
               <p style={{ marginBottom: '0', color: '#F04673' }} className="italic font-bold underline">Nothing is final until you say it is.</p>
             </div>
             
-            <div className="text-left md:text-center text-base md:text-lg max-w-3xl mx-auto" style={{ fontFamily: '"Book Antiqua", Palatino, serif' }}>
-              <p className="font-semibold mb-2">Your vision comes to life - perfectly on cue.</p>
+            <div className="text-left md:text-center max-w-3xl mx-auto" style={{ fontFamily: '"Book Antiqua", Palatino, serif' }}>
+              <p className="font-semibold" style={{ fontFamily: 'Garamond, serif', fontSize: '1.2em', marginBottom: '0.03rem' }}>Your vision comes to life - perfectly on cue.</p>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <p style={{ marginBottom: '0.03rem' }}><span className="font-semibold">Couple Information</span> – <span className="italic">Your love story, at the center.</span></p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.025rem' }}>
