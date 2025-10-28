@@ -167,15 +167,10 @@ export default function WeddingComposer() {
       };
 
       if (composerId) {
-        await apiRequest(`/api/wedding-composers/${composerId}`, {
-          method: "PATCH",
-          body: composerData,
-        });
+        await apiRequest("PATCH", `/api/wedding-composers/${composerId}`, composerData);
       } else {
-        const result = await apiRequest("/api/wedding-composers", {
-          method: "POST",
-          body: composerData,
-        });
+        const response = await apiRequest("POST", "/api/wedding-composers", composerData);
+        const result = await response.json();
         setComposerId(result.id);
       }
 
@@ -241,17 +236,15 @@ export default function WeddingComposer() {
 
     if (composerId) {
       try {
-        const response = await apiRequest("/api/wedding-composers/create-checkout-session", {
-          method: "POST",
-          body: { composerId },
-        });
+        const response = await apiRequest("POST", "/api/wedding-composers/create-checkout-session", { composerId });
+        const data = await response.json();
 
-        if (response.sessionId && import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
+        if (data.sessionId && import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
           const stripe = await import("@stripe/stripe-js").then((m) =>
             m.loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
           );
           if (stripe) {
-            await stripe.redirectToCheckout({ sessionId: response.sessionId });
+            await stripe.redirectToCheckout({ sessionId: data.sessionId });
           }
         } else {
           toast({
