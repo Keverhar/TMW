@@ -311,12 +311,23 @@ export default function WeddingComposer() {
     setHasSeenInitialDialog(true);
   };
 
-  // Auto-save when user account changes (after login or account creation)
+  // Auto-save when formData changes and user is logged in
+  useEffect(() => {
+    if (userAccount && composerId) {
+      const timeoutId = setTimeout(() => {
+        saveProgress();
+      }, 1000); // Debounce auto-save
+      
+      return () => clearTimeout(timeoutId);
+    }
+  }, [formData, userAccount]);
+
+  // Save immediately when user account is created or logs in
   useEffect(() => {
     if (userAccount && hasSeenInitialDialog) {
       saveProgress();
     }
-  }, [userAccount, formData]);
+  }, [userAccount]);
 
   // Extract day of week from preferred date
   const getDayOfWeek = (dateString: string): string => {
