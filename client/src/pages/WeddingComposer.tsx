@@ -7,6 +7,8 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import type { WeddingComposer as WeddingComposerType } from "@shared/schema";
 import AccountCreationDialog from "@/components/AccountCreationDialog";
+import InitialAuthDialog from "@/components/InitialAuthDialog";
+import LoginDialog from "@/components/LoginDialog";
 
 import Block1EventType from "@/components/composer/Block1EventType";
 import Block2DateTime from "@/components/composer/Block2DateTime";
@@ -54,7 +56,10 @@ export default function WeddingComposer() {
   const [composerId, setComposerId] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [showAccountDialog, setShowAccountDialog] = useState(false);
+  const [showInitialDialog, setShowInitialDialog] = useState(true);
+  const [showLoginDialog, setShowLoginDialog] = useState(false);
   const [userAccount, setUserAccount] = useState<{ id: string; email: string } | null>(null);
+  const [hasSeenInitialDialog, setHasSeenInitialDialog] = useState(false);
 
   const [formData, setFormData] = useState({
     // Block 1: Event Type
@@ -275,8 +280,43 @@ export default function WeddingComposer() {
 
   const handleAccountCreated = (userId: string, email: string) => {
     setUserAccount({ id: userId, email });
-    saveProgress();
+    toast({
+      title: "Account created!",
+      description: "Your progress will now be saved automatically",
+    });
   };
+
+  const handleLoginSuccess = (userId: string, email: string) => {
+    setUserAccount({ id: userId, email });
+    setShowLoginDialog(false);
+    setShowInitialDialog(false);
+    toast({
+      title: "Welcome back!",
+      description: "Loading your saved progress...",
+    });
+  };
+
+  const handleInitialDialogLogin = () => {
+    setShowInitialDialog(false);
+    setShowLoginDialog(true);
+  };
+
+  const handleInitialDialogCreateAccount = () => {
+    setShowInitialDialog(false);
+    setShowAccountDialog(true);
+  };
+
+  const handleInitialDialogGuest = () => {
+    setShowInitialDialog(false);
+    setHasSeenInitialDialog(true);
+  };
+
+  // Auto-save when user account changes (after login or account creation)
+  useEffect(() => {
+    if (userAccount && hasSeenInitialDialog) {
+      saveProgress();
+    }
+  }, [userAccount, formData]);
 
   // Extract day of week from preferred date
   const getDayOfWeek = (dateString: string): string => {
@@ -346,7 +386,7 @@ export default function WeddingComposer() {
                 Your personalized planning tool for designing a wedding day that feels entirely your own
               </p>
             </div>
-            {currentStep > 1 && (
+            {currentStep > 1 && !userAccount && (
               <Button
                 onClick={handleSaveProgress}
                 disabled={isSaving || !formData.eventType}
@@ -354,8 +394,13 @@ export default function WeddingComposer() {
                 data-testid="button-save-progress"
               >
                 <Save className="h-4 w-4 mr-2" />
-                {isSaving ? 'Saving...' : userAccount ? 'Save Progress' : 'Create Account'}
+                {isSaving ? 'Saving...' : 'Create Account'}
               </Button>
+            )}
+            {userAccount && (
+              <div className="text-sm text-muted-foreground" data-testid="text-auto-save-indicator">
+                Auto-saving as {userAccount.email}
+              </div>
             )}
           </div>
 
@@ -537,6 +582,19 @@ export default function WeddingComposer() {
           )}
         </div>
       </div>
+
+      <InitialAuthDialog
+        open={showInitialDialog && !hasSeenInitialDialog}
+        onLoginClick={handleInitialDialogLogin}
+        onCreateAccountClick={handleInitialDialogCreateAccount}
+        onContinueAsGuest={handleInitialDialogGuest}
+      />
+
+      <LoginDialog
+        open={showLoginDialog}
+        onOpenChange={setShowLoginDialog}
+        onLoginSuccess={handleLoginSuccess}
+      />
 
       <AccountCreationDialog
         open={showAccountDialog}
