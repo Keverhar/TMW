@@ -232,6 +232,15 @@ export default function WeddingComposer() {
       return;
     }
 
+    if (!formData.timeSlot) {
+      toast({
+        title: "Time required",
+        description: "Please select a time slot before proceeding to payment.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (!formData.termsAccepted) {
       toast({
         title: "Terms not accepted",
@@ -262,7 +271,8 @@ export default function WeddingComposer() {
     await saveProgress();
 
     if (composerId) {
-      setLocation(`/account-creation/${composerId}`);
+      // Redirect to confirmation page which will handle payment
+      setLocation(`/confirmation/${composerId}`);
     }
   };
 
