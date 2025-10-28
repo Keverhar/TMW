@@ -161,6 +161,7 @@ export class MemStorage implements IStorage {
       departureVehicle: null,
       personalTouchesSpecialInstructions: null,
       ...insertComposer,
+      customerName2: insertComposer.customerName2 ?? null,
       customerPhone: insertComposer.customerPhone ?? null,
       mailingAddress: insertComposer.mailingAddress ?? null,
       unityCandle: insertComposer.unityCandle ?? null,

@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight, Save } from "lucide-react";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import type { WeddingComposer as WeddingComposerType } from "@shared/schema";
+import AccountCreationDialog from "@/components/AccountCreationDialog";
 
 import Block1EventType from "@/components/composer/Block1EventType";
 import Block2DateTime from "@/components/composer/Block2DateTime";
@@ -52,6 +53,8 @@ export default function WeddingComposer() {
   const [currentStep, setCurrentStep] = useState(1);
   const [composerId, setComposerId] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [showAccountDialog, setShowAccountDialog] = useState(false);
+  const [userAccount, setUserAccount] = useState<{ id: string; email: string } | null>(null);
 
   const [formData, setFormData] = useState({
     // Block 1: Event Type
@@ -215,6 +218,15 @@ export default function WeddingComposer() {
   };
 
   const handleSubmit = async () => {
+    if (!formData.preferredDate) {
+      toast({
+        title: "Date required",
+        description: "Please select a preferred date before proceeding to payment.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (!formData.termsAccepted) {
       toast({
         title: "Terms not accepted",
@@ -247,6 +259,23 @@ export default function WeddingComposer() {
     if (composerId) {
       setLocation(`/account-creation/${composerId}`);
     }
+  };
+
+  const handleSaveProgress = async () => {
+    if (!userAccount) {
+      setShowAccountDialog(true);
+    } else {
+      await saveProgress();
+      toast({
+        title: "Progress saved",
+        description: "Your wedding details have been saved.",
+      });
+    }
+  };
+
+  const handleAccountCreated = (userId: string, email: string) => {
+    setUserAccount({ id: userId, email });
+    saveProgress();
   };
 
   // Extract day of week from preferred date
@@ -319,13 +348,13 @@ export default function WeddingComposer() {
             </div>
             {currentStep > 1 && (
               <Button
-                onClick={saveProgress}
+                onClick={handleSaveProgress}
                 disabled={isSaving || !formData.eventType}
                 variant="outline"
                 data-testid="button-save-progress"
               >
                 <Save className="h-4 w-4 mr-2" />
-                {isSaving ? 'Saving...' : 'Save Progress'}
+                {isSaving ? 'Saving...' : userAccount ? 'Save Progress' : 'Create Account'}
               </Button>
             )}
           </div>
@@ -508,6 +537,12 @@ export default function WeddingComposer() {
           )}
         </div>
       </div>
+
+      <AccountCreationDialog
+        open={showAccountDialog}
+        onOpenChange={setShowAccountDialog}
+        onAccountCreated={handleAccountCreated}
+      />
     </div>
   );
 }
