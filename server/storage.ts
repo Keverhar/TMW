@@ -48,6 +48,7 @@ export class MemStorage implements IStorage {
       ...insertUser,
       displayName: insertUser.displayName ?? null,
       password: insertUser.password ?? null,
+      authProvider: insertUser.authProvider ?? "email",
       id,
       createdAt: now,
     };
@@ -160,6 +161,8 @@ export class MemStorage implements IStorage {
       departureVehicle: null,
       personalTouchesSpecialInstructions: null,
       ...insertComposer,
+      customerPhone: insertComposer.customerPhone ?? null,
+      mailingAddress: insertComposer.mailingAddress ?? null,
       unityCandle: insertComposer.unityCandle ?? null,
       sandCeremony: insertComposer.sandCeremony ?? null,
       handfasting: insertComposer.handfasting ?? null,
