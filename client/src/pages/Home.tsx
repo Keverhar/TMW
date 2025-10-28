@@ -29,7 +29,7 @@ export default function Home() {
         </div>
         
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
-          <h1 className="font-serif text-4xl md:text-6xl font-bold text-white mb-6 md:whitespace-nowrap">
+          <h1 className="font-serif text-4xl md:text-6xl font-bold mb-6 md:whitespace-nowrap" style={{ color: '#FAA0F0' }}>
             Welcome to the Wedding Composer
           </h1>
           
