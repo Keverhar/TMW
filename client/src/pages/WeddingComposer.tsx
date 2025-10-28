@@ -290,12 +290,14 @@ export default function WeddingComposer() {
 
       // Redirect to Stripe checkout
       if (response.sessionId && import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
-        const stripe = await import("@stripe/stripe-js").then(m => 
-          m.loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
-        );
+        const { loadStripe } = await import("@stripe/stripe-js");
+        const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
         
         if (stripe) {
-          await stripe.redirectToCheckout({ sessionId: response.sessionId });
+          const { error } = await stripe.redirectToCheckout({ sessionId: response.sessionId });
+          if (error) {
+            throw new Error(error.message);
+          }
         }
       } else {
         toast({
