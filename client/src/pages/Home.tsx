@@ -50,7 +50,7 @@ export default function Home() {
               <p className="font-semibold mb-2">Your vision comes to life - perfectly on cue.</p>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <p style={{ marginBottom: '0.03rem' }}><span className="font-semibold">Couple Information</span> – <span className="italic">Your love story, at the center.</span></p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.325rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.025rem' }}>
                   <p><span className="font-semibold">Wedding Date</span> – <span className="italic">No date? No problem.</span></p>
                   <p><span className="font-semibold">Guest Count</span> – <span className="italic">Estimate now, adjust later.</span></p>
                   <p><span className="font-semibold">Event Type</span> – <span className="italic">From intimate elopements to full celebrations.</span></p>
