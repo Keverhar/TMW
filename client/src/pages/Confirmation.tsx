@@ -1,43 +1,47 @@
 import { useEffect, useState } from "react";
-import { useLocation, Link } from "wouter";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { CheckCircle, XCircle, Loader2 } from "lucide-react";
+import { useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import type { Booking } from "@shared/schema";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { CheckCircle, Loader2, Calendar, Mail, Phone } from "lucide-react";
+import type { WeddingComposer } from "@shared/schema";
 
 export default function Confirmation() {
-  const [, navigate] = useLocation();
-  const [searchParams] = useState(() => new URLSearchParams(window.location.search));
-  const sessionId = searchParams.get('session_id');
-  const bookingId = searchParams.get('booking_id');
-  const canceled = searchParams.get('canceled');
+  const [, setLocation] = useLocation();
+  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [composerId, setComposerId] = useState<string | null>(null);
+  const [canceled, setCanceled] = useState(false);
 
-  const { data: verificationData, isLoading } = useQuery<{ status: string; booking?: Booking }>({
-    queryKey: ['/api/verify-payment', sessionId],
-    enabled: !!sessionId,
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const session = params.get("session_id");
+    const composer = params.get("composer_id");
+    const wasCanceled = params.get("canceled");
+    
+    if (session) setSessionId(session);
+    if (composer) setComposerId(composer);
+    if (wasCanceled) setCanceled(true);
+  }, []);
+
+  const { data: paymentStatus, isLoading } = useQuery<{
+    status: string;
+    composer?: WeddingComposer;
+  }>({
+    queryKey: [`/api/wedding-composers/verify-payment/${sessionId}`],
+    enabled: !!sessionId && !canceled,
     refetchInterval: (query) => {
       const data = query.state.data;
       return data?.status === 'pending' ? 2000 : false;
     },
   });
 
-  useEffect(() => {
-    if (!sessionId && !canceled) {
-      navigate('/booking');
-    }
-  }, [sessionId, canceled, navigate]);
+  const composer = paymentStatus?.composer;
 
   if (canceled) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
         <Card className="max-w-md w-full">
           <CardHeader className="text-center">
-            <div className="flex justify-center mb-4">
-              <div className="h-16 w-16 rounded-full bg-muted flex items-center justify-center">
-                <XCircle className="h-10 w-10 text-muted-foreground" />
-              </div>
-            </div>
             <CardTitle className="font-serif text-2xl">Booking Canceled</CardTitle>
           </CardHeader>
           <CardContent className="text-center space-y-6">
@@ -45,16 +49,12 @@ export default function Confirmation() {
               Your booking was canceled. No charges were made to your card.
             </p>
             <div className="flex flex-col gap-3">
-              <Link href="/booking">
-                <Button className="w-full" data-testid="button-try-again">
-                  Try Again
-                </Button>
-              </Link>
-              <Link href="/">
-                <Button variant="outline" className="w-full" data-testid="button-home">
-                  Return Home
-                </Button>
-              </Link>
+              <Button onClick={() => setLocation("/composer")} className="w-full" data-testid="button-try-again">
+                Try Again
+              </Button>
+              <Button onClick={() => setLocation("/")} variant="outline" className="w-full" data-testid="button-home">
+                Return Home
+              </Button>
             </div>
           </CardContent>
         </Card>
@@ -62,14 +62,12 @@ export default function Confirmation() {
     );
   }
 
-  if (isLoading || verificationData?.status === 'pending') {
+  if (isLoading || paymentStatus?.status === 'pending') {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+      <div className="min-h-screen flex items-center justify-center">
         <Card className="max-w-md w-full">
           <CardHeader className="text-center">
-            <div className="flex justify-center mb-4">
-              <Loader2 className="h-16 w-16 text-primary animate-spin" />
-            </div>
+            <Loader2 className="h-12 w-12 animate-spin mx-auto mb-4 text-primary" />
             <CardTitle className="font-serif text-2xl">Processing Payment</CardTitle>
           </CardHeader>
           <CardContent className="text-center">
@@ -82,29 +80,21 @@ export default function Confirmation() {
     );
   }
 
-  const booking = verificationData?.booking;
-
-  if (!booking || verificationData?.status !== 'success') {
+  if (paymentStatus?.status !== "success") {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+      <div className="min-h-screen flex items-center justify-center p-4">
         <Card className="max-w-md w-full">
           <CardHeader className="text-center">
-            <div className="flex justify-center mb-4">
-              <div className="h-16 w-16 rounded-full bg-destructive/10 flex items-center justify-center">
-                <XCircle className="h-10 w-10 text-destructive" />
-              </div>
-            </div>
-            <CardTitle className="font-serif text-2xl">Payment Failed</CardTitle>
+            <CardTitle className="font-serif text-2xl">Payment Verification</CardTitle>
+            <CardDescription>There was an issue verifying your payment</CardDescription>
           </CardHeader>
-          <CardContent className="text-center space-y-6">
+          <CardContent className="space-y-4">
             <p className="text-muted-foreground">
-              We couldn't process your payment. Please try again or contact us for assistance.
+              We couldn't verify your payment. Please try again or contact us for assistance.
             </p>
-            <Link href="/booking">
-              <Button className="w-full" data-testid="button-try-again">
-                Try Again
-              </Button>
-            </Link>
+            <Button onClick={() => setLocation("/composer")} className="w-full" data-testid="button-try-again">
+              Try Again
+            </Button>
           </CardContent>
         </Card>
       </div>
@@ -114,83 +104,163 @@ export default function Confirmation() {
   return (
     <div className="min-h-screen bg-background p-4">
       <div className="max-w-3xl mx-auto py-12">
-        <Card>
-          <CardHeader className="text-center border-b">
-            <div className="flex justify-center mb-4">
-              <div className="h-20 w-20 rounded-full bg-primary/10 flex items-center justify-center">
-                <CheckCircle className="h-12 w-12 text-primary" />
-              </div>
-            </div>
-            <CardTitle className="font-serif text-3xl md:text-4xl mb-2">
-              Booking Confirmed!
-            </CardTitle>
-            <p className="text-lg text-muted-foreground">
-              Your wedding ceremony has been successfully booked
-            </p>
-          </CardHeader>
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full mb-4">
+            <CheckCircle className="h-8 w-8 text-green-600 dark:text-green-400" />
+          </div>
+          <h1 className="text-4xl font-serif mb-2">Congratulations!</h1>
+          <p className="text-xl text-muted-foreground">Your wedding celebration is officially booked!</p>
+        </div>
 
-          <CardContent className="space-y-8 pt-8">
-            <div className="space-y-6">
-              <div>
-                <h3 className="font-serif text-xl font-semibold mb-4">Booking Details</h3>
-                <div className="grid gap-4">
-                  <div className="flex justify-between py-2 border-b">
-                    <span className="text-muted-foreground">Booking ID</span>
-                    <span className="font-medium font-mono text-sm" data-testid="text-booking-id">
-                      {booking.id}
-                    </span>
-                  </div>
-                  <div className="flex justify-between py-2 border-b">
-                    <span className="text-muted-foreground">Package</span>
-                    <span className="font-medium">{booking.weddingType}</span>
-                  </div>
-                  <div className="flex justify-between py-2 border-b">
-                    <span className="text-muted-foreground">Date & Time</span>
-                    <span className="font-medium">
-                      {new Date(booking.weddingDate).toLocaleDateString('en-US', {
-                        weekday: 'long',
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                      })} at {booking.weddingTime}
-                    </span>
-                  </div>
-                  <div className="flex justify-between py-2 border-b">
-                    <span className="text-muted-foreground">Total Paid</span>
-                    <span className="font-semibold text-lg text-primary" data-testid="text-total-paid">
-                      ${(booking.totalPrice / 100).toFixed(2)}
-                    </span>
+        {composer && (
+          <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Booking Confirmation</CardTitle>
+                <CardDescription>Your wedding is reserved and confirmed</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <Calendar className="h-5 w-5 text-muted-foreground" />
+                  <div>
+                    <p className="font-medium">Event Date & Time</p>
+                    <p className="text-sm text-muted-foreground">
+                      {composer.preferredDate || "To be determined"} at {composer.timeSlot || "TBD"}
+                    </p>
                   </div>
                 </div>
-              </div>
 
-              <div className="bg-accent/50 rounded-lg p-6 space-y-2">
-                <h4 className="font-semibold">What's Next?</h4>
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li>✓ A confirmation email has been sent to {booking.customerEmail}</li>
-                  <li>✓ We'll contact you within 24 hours to finalize details</li>
-                  <li>✓ Save this booking ID for your records</li>
-                </ul>
-              </div>
+                <div className="flex items-center gap-3">
+                  <Mail className="h-5 w-5 text-muted-foreground" />
+                  <div>
+                    <p className="font-medium">Confirmation Email</p>
+                    <p className="text-sm text-muted-foreground">
+                      Sent to {composer.customerEmail}
+                    </p>
+                  </div>
+                </div>
 
-              <div className="flex flex-col sm:flex-row gap-3">
-                <Link href="/" className="flex-1">
-                  <Button variant="outline" className="w-full" data-testid="button-home">
-                    Return Home
-                  </Button>
-                </Link>
-                <Button
-                  onClick={() => window.print()}
-                  variant="outline"
-                  className="flex-1"
-                  data-testid="button-print"
-                >
-                  Print Confirmation
-                </Button>
-              </div>
+                <div className="flex items-center gap-3">
+                  <Phone className="h-5 w-5 text-muted-foreground" />
+                  <div>
+                    <p className="font-medium">Contact</p>
+                    <p className="text-sm text-muted-foreground">
+                      {composer.customerPhone}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Your Wedding Details</CardTitle>
+                <CardDescription>Review your selections</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div>
+                  <p className="text-sm font-medium">Event Type:</p>
+                  <p className="text-sm text-muted-foreground">{composer.eventType}</p>
+                </div>
+
+                {composer.signatureColor && (
+                  <div>
+                    <p className="text-sm font-medium">Signature Color:</p>
+                    <p className="text-sm text-muted-foreground">{composer.signatureColor}</p>
+                  </div>
+                )}
+
+                {composer.ceremonyScript && (
+                  <div>
+                    <p className="text-sm font-medium">Ceremony Style:</p>
+                    <p className="text-sm text-muted-foreground">{composer.ceremonyScript}</p>
+                  </div>
+                )}
+
+                {composer.vibeCheck && (
+                  <div>
+                    <p className="text-sm font-medium">Event Vibe:</p>
+                    <p className="text-sm text-muted-foreground">{composer.vibeCheck}</p>
+                  </div>
+                )}
+
+                <div className="pt-3 border-t">
+                  <p className="text-sm font-medium">Total Investment:</p>
+                  <p className="text-2xl font-semibold text-primary">
+                    ${(composer.totalPrice / 100).toFixed(2)}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>What's Next?</CardTitle>
+                <CardDescription>Here's what to expect</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="flex gap-3">
+                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-medium">
+                    1
+                  </div>
+                  <div>
+                    <p className="font-medium">Check Your Email</p>
+                    <p className="text-sm text-muted-foreground">
+                      You'll receive a detailed confirmation email with all your wedding composer selections.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-medium">
+                    2
+                  </div>
+                  <div>
+                    <p className="font-medium">Edit Anytime</p>
+                    <p className="text-sm text-muted-foreground">
+                      You can update your selections in the Wedding Composer up until 7 days before your event.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-medium">
+                    3
+                  </div>
+                  <div>
+                    <p className="font-medium">We'll Handle the Rest</p>
+                    <p className="text-sm text-muted-foreground">
+                      Our team will begin preparing everything for your special day.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <div className="text-center pt-6">
+              <Button onClick={() => setLocation("/")} size="lg" data-testid="button-return-home">
+                Return to Home
+              </Button>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        )}
+
+        {!composer && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Booking Confirmed!</CardTitle>
+              <CardDescription>Your payment has been successfully processed</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-muted-foreground">
+                Thank you for booking with The Wedding Composer. You'll receive a confirmation email shortly with all the details of your celebration.
+              </p>
+              <Button onClick={() => setLocation("/")} className="w-full" data-testid="button-return-home">
+                Return to Home
+              </Button>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   );

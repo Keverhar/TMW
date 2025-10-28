@@ -1,0 +1,494 @@
+import { useState, useEffect } from "react";
+import { useLocation } from "wouter";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { ChevronLeft, ChevronRight, Save } from "lucide-react";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
+import type { WeddingComposer as WeddingComposerType } from "@shared/schema";
+
+import Block1EventType from "@/components/composer/Block1EventType";
+import Block2DateTime from "@/components/composer/Block2DateTime";
+import Block3SignatureColor from "@/components/composer/Block3SignatureColor";
+import Block4Music from "@/components/composer/Block4Music";
+import Block5Announcements from "@/components/composer/Block5Announcements";
+import Block6Ceremony from "@/components/composer/Block6Ceremony";
+import Block7Processional from "@/components/composer/Block7Processional";
+import Block8Reception from "@/components/composer/Block8Reception";
+import Block9Photography from "@/components/composer/Block9Photography";
+import Block10PhotoProjection from "@/components/composer/Block10PhotoProjection";
+import Block11PersonalTouches from "@/components/composer/Block11PersonalTouches";
+import Block12ContactPayment from "@/components/composer/Block12ContactPayment";
+
+const steps = [
+  { id: 1, title: 'Event Type', description: 'Choose your celebration' },
+  { id: 2, title: 'Date & Time', description: 'Pick your ceremony date' },
+  { id: 3, title: 'Signature Color', description: 'Choose your color theme' },
+  { id: 4, title: 'Music Selection', description: 'Pick your songs' },
+  { id: 5, title: 'Announcements', description: 'Special moments' },
+  { id: 6, title: 'Ceremony', description: 'Ceremony preferences' },
+  { id: 7, title: 'Processional', description: 'Seating & procession' },
+  { id: 8, title: 'Reception', description: 'Reception details' },
+  { id: 9, title: 'Photography', description: 'Photo preferences' },
+  { id: 10, title: 'Photo Projection', description: 'Slideshow options' },
+  { id: 11, title: 'Personal Touches', description: 'Special details' },
+  { id: 12, title: 'Contact & Payment', description: 'Finalize booking' },
+];
+
+const eventTypePricing: Record<string, number> = {
+  'modest-wedding': 450000, // $4,500
+  'modest-elopement': 99900, // $999
+  'vow-renewal': 299900, // $2,999
+  'other': 350000, // $3,500 (default)
+};
+
+export default function WeddingComposer() {
+  const [, setLocation] = useLocation();
+  const { toast } = useToast();
+  const [currentStep, setCurrentStep] = useState(1);
+  const [composerId, setComposerId] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+
+  const [formData, setFormData] = useState({
+    // Block 1: Event Type
+    eventType: "",
+    eventTypeOther: "",
+
+    // Block 2: Date & Time
+    preferredDate: "",
+    backupDate: "",
+    timeSlot: "",
+
+    // Block 3: Signature Color
+    signatureColor: "",
+    colorSwatchDecision: "",
+
+    // Block 4: Music
+    processionalSong: "",
+    recessionalSong: "",
+    receptionEntranceSong: "",
+    cakeCuttingSong: "",
+    fatherDaughterDanceSong: "",
+    lastDanceSong: "",
+    playlistUrl: "",
+
+    // Block 5: Announcements
+    grandIntroduction: "",
+    fatherDaughterDanceAnnouncement: "",
+    toastsSpeechesAnnouncement: "",
+    guestCallouts: "",
+    vibeCheck: "",
+
+    // Block 6: Ceremony
+    ceremonyScript: "simple-modern",
+    unityCandle: false,
+    sandCeremony: false,
+    handfasting: false,
+    guestReadingOrSong: "",
+    guestReadingOrSongName: "",
+    officiantPassage: "",
+    includingChild: "",
+    petInvolvement: "",
+    ceremonySpecialRequests: "",
+
+    // Block 7: Processional
+    walkingDownAisle: "",
+    ringBearerFlowerGirl: "",
+    ringBearerOrganizer: "",
+    honoredGuestEscorts: "",
+    brideSideFrontRow: "",
+    groomSideFrontRow: "",
+    framedPhotos: "",
+    specialSeatingNeeds: "",
+    processionalSpecialInstructions: "",
+
+    // Block 8: Reception
+    firstDance: "",
+    motherSonDance: "",
+    specialDances: "",
+    toastGivers: "",
+    beveragePreferences: "",
+    horsDoeuvresPreferences: "",
+    sendOffStyle: "",
+    receptionSpecialRequests: "",
+
+    // Block 9: Photography
+    photographyStyle: "",
+    mustHaveShots: "",
+    vipList: "",
+    groupPhotosRequested: "",
+    photographySpecialRequests: "",
+
+    // Block 10: Photo Projection
+    photoProjectionPreferences: "",
+
+    // Block 11: Personal Touches
+    freshFlorals: "",
+    guestBook: "",
+    cakeKnifeServiceSet: "",
+    departureOrganizer: "",
+    departureVehicle: "",
+    personalTouchesSpecialInstructions: "",
+
+    // Block 12: Contact & Payment
+    customerName: "",
+    customerEmail: "",
+    customerPhone: "",
+    billingAddress: "",
+    mailingAddress: "",
+    termsAccepted: false,
+
+    // Add-ons
+    photoBookAddon: false,
+    extraTimeAddon: false,
+    byobBarAddon: false,
+    rehearsalAddon: false,
+  });
+
+  const updateField = (field: string, value: string | boolean) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const saveProgress = async () => {
+    setIsSaving(true);
+    try {
+      const basePrice = eventTypePricing[formData.eventType] || eventTypePricing['other'];
+      const addonsTotal =
+        (formData.photoBookAddon ? 30000 : 0) +
+        (formData.extraTimeAddon ? 100000 : 0) +
+        (formData.byobBarAddon ? 40000 : 0) +
+        (formData.rehearsalAddon ? 15000 : 0);
+      const totalPrice = basePrice + addonsTotal;
+
+      const composerData = {
+        ...formData,
+        basePackagePrice: basePrice,
+        totalPrice,
+      };
+
+      if (composerId) {
+        await apiRequest(`/api/wedding-composers/${composerId}`, {
+          method: "PATCH",
+          body: composerData,
+        });
+      } else {
+        const result = await apiRequest("/api/wedding-composers", {
+          method: "POST",
+          body: composerData,
+        });
+        setComposerId(result.id);
+      }
+
+      toast({
+        title: "Progress saved",
+        description: "Your wedding composer progress has been saved.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error saving progress",
+        description: error.message || "Failed to save your progress. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleNext = async () => {
+    if (currentStep < steps.length) {
+      await saveProgress();
+      setCurrentStep(currentStep + 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!formData.termsAccepted) {
+      toast({
+        title: "Terms not accepted",
+        description: "Please accept the terms and conditions to proceed.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!formData.customerName || !formData.customerEmail || !formData.customerPhone) {
+      toast({
+        title: "Missing information",
+        description: "Please fill in all required contact information.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!formData.eventType || !formData.ceremonyScript) {
+      toast({
+        title: "Missing information",
+        description: "Please select an event type and ceremony script.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    await saveProgress();
+
+    if (composerId) {
+      try {
+        const response = await apiRequest("/api/wedding-composers/create-checkout-session", {
+          method: "POST",
+          body: { composerId },
+        });
+
+        if (response.sessionId && import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
+          const stripe = await import("@stripe/stripe-js").then((m) =>
+            m.loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
+          );
+          if (stripe) {
+            await stripe.redirectToCheckout({ sessionId: response.sessionId });
+          }
+        } else {
+          toast({
+            title: "Payment configuration error",
+            description: "Stripe is not configured. Please contact support.",
+            variant: "destructive",
+          });
+        }
+      } catch (error: any) {
+        toast({
+          title: "Payment error",
+          description: error.message || "Failed to initiate payment. Please try again.",
+          variant: "destructive",
+        });
+      }
+    }
+  };
+
+  const progress = (currentStep / steps.length) * 100;
+  const basePrice = eventTypePricing[formData.eventType] || 0;
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="max-w-4xl mx-auto p-6">
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h1 className="text-4xl font-serif mb-2">The Wedding Composer</h1>
+              <p className="text-muted-foreground">
+                Your personalized planning tool for designing a wedding day that feels entirely your own
+              </p>
+            </div>
+            <Button
+              onClick={saveProgress}
+              disabled={isSaving || !formData.eventType}
+              variant="outline"
+              data-testid="button-save-progress"
+            >
+              <Save className="h-4 w-4 mr-2" />
+              {isSaving ? 'Saving...' : 'Save Progress'}
+            </Button>
+          </div>
+
+          <div className="space-y-2">
+            <div className="flex justify-between text-sm text-muted-foreground">
+              <span>Step {currentStep} of {steps.length}: {steps[currentStep - 1].title}</span>
+              <span>{Math.round(progress)}% Complete</span>
+            </div>
+            <Progress value={progress} className="h-2" />
+          </div>
+
+          <div className="mt-4 flex gap-2 overflow-x-auto pb-2">
+            {steps.map((step) => (
+              <button
+                key={step.id}
+                onClick={() => setCurrentStep(step.id)}
+                data-testid={`button-step-${step.id}`}
+                className={`flex-shrink-0 px-3 py-2 rounded-md text-xs font-medium transition-colors ${
+                  currentStep === step.id
+                    ? 'bg-primary text-primary-foreground'
+                    : currentStep > step.id
+                    ? 'bg-muted text-muted-foreground hover-elevate'
+                    : 'bg-background text-muted-foreground border hover-elevate'
+                }`}
+              >
+                <span className="block">{step.id}. {step.title}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="mb-8">
+          {currentStep === 1 && (
+            <Block1EventType
+              eventType={formData.eventType}
+              eventTypeOther={formData.eventTypeOther}
+              onChange={updateField}
+            />
+          )}
+          {currentStep === 2 && (
+            <Block2DateTime
+              preferredDate={formData.preferredDate}
+              backupDate={formData.backupDate}
+              timeSlot={formData.timeSlot}
+              onChange={updateField}
+            />
+          )}
+          {currentStep === 3 && (
+            <Block3SignatureColor
+              signatureColor={formData.signatureColor}
+              colorSwatchDecision={formData.colorSwatchDecision}
+              onChange={updateField}
+            />
+          )}
+          {currentStep === 4 && (
+            <Block4Music
+              processionalSong={formData.processionalSong}
+              recessionalSong={formData.recessionalSong}
+              receptionEntranceSong={formData.receptionEntranceSong}
+              cakeCuttingSong={formData.cakeCuttingSong}
+              fatherDaughterDanceSong={formData.fatherDaughterDanceSong}
+              lastDanceSong={formData.lastDanceSong}
+              playlistUrl={formData.playlistUrl}
+              onChange={updateField}
+            />
+          )}
+          {currentStep === 5 && (
+            <Block5Announcements
+              grandIntroduction={formData.grandIntroduction}
+              fatherDaughterDanceAnnouncement={formData.fatherDaughterDanceAnnouncement}
+              toastsSpeechesAnnouncement={formData.toastsSpeechesAnnouncement}
+              guestCallouts={formData.guestCallouts}
+              vibeCheck={formData.vibeCheck}
+              onChange={updateField}
+            />
+          )}
+          {currentStep === 6 && (
+            <Block6Ceremony
+              ceremonyScript={formData.ceremonyScript}
+              unityCandle={formData.unityCandle}
+              sandCeremony={formData.sandCeremony}
+              handfasting={formData.handfasting}
+              guestReadingOrSong={formData.guestReadingOrSong}
+              guestReadingOrSongName={formData.guestReadingOrSongName}
+              officiantPassage={formData.officiantPassage}
+              includingChild={formData.includingChild}
+              petInvolvement={formData.petInvolvement}
+              ceremonySpecialRequests={formData.ceremonySpecialRequests}
+              onChange={updateField}
+            />
+          )}
+          {currentStep === 7 && (
+            <Block7Processional
+              walkingDownAisle={formData.walkingDownAisle}
+              ringBearerFlowerGirl={formData.ringBearerFlowerGirl}
+              ringBearerOrganizer={formData.ringBearerOrganizer}
+              honoredGuestEscorts={formData.honoredGuestEscorts}
+              brideSideFrontRow={formData.brideSideFrontRow}
+              groomSideFrontRow={formData.groomSideFrontRow}
+              framedPhotos={formData.framedPhotos}
+              specialSeatingNeeds={formData.specialSeatingNeeds}
+              processionalSpecialInstructions={formData.processionalSpecialInstructions}
+              onChange={updateField}
+            />
+          )}
+          {currentStep === 8 && (
+            <Block8Reception
+              firstDance={formData.firstDance}
+              motherSonDance={formData.motherSonDance}
+              specialDances={formData.specialDances}
+              toastGivers={formData.toastGivers}
+              beveragePreferences={formData.beveragePreferences}
+              horsDoeuvresPreferences={formData.horsDoeuvresPreferences}
+              sendOffStyle={formData.sendOffStyle}
+              receptionSpecialRequests={formData.receptionSpecialRequests}
+              onChange={updateField}
+            />
+          )}
+          {currentStep === 9 && (
+            <Block9Photography
+              photographyStyle={formData.photographyStyle}
+              mustHaveShots={formData.mustHaveShots}
+              vipList={formData.vipList}
+              groupPhotosRequested={formData.groupPhotosRequested}
+              photographySpecialRequests={formData.photographySpecialRequests}
+              onChange={updateField}
+            />
+          )}
+          {currentStep === 10 && (
+            <Block10PhotoProjection
+              photoProjectionPreferences={formData.photoProjectionPreferences}
+              onChange={updateField}
+            />
+          )}
+          {currentStep === 11 && (
+            <Block11PersonalTouches
+              freshFlorals={formData.freshFlorals}
+              guestBook={formData.guestBook}
+              cakeKnifeServiceSet={formData.cakeKnifeServiceSet}
+              departureOrganizer={formData.departureOrganizer}
+              departureVehicle={formData.departureVehicle}
+              personalTouchesSpecialInstructions={formData.personalTouchesSpecialInstructions}
+              onChange={updateField}
+            />
+          )}
+          {currentStep === 12 && (
+            <Block12ContactPayment
+              customerName={formData.customerName}
+              customerEmail={formData.customerEmail}
+              customerPhone={formData.customerPhone}
+              billingAddress={formData.billingAddress}
+              mailingAddress={formData.mailingAddress}
+              termsAccepted={formData.termsAccepted}
+              photoBookAddon={formData.photoBookAddon}
+              extraTimeAddon={formData.extraTimeAddon}
+              byobBarAddon={formData.byobBarAddon}
+              rehearsalAddon={formData.rehearsalAddon}
+              onChange={updateField}
+              eventType={formData.eventType}
+              basePackagePrice={basePrice}
+            />
+          )}
+        </div>
+
+        <div className="flex justify-between gap-4 pt-6 border-t">
+          <Button
+            onClick={handlePrevious}
+            disabled={currentStep === 1}
+            variant="outline"
+            data-testid="button-previous"
+          >
+            <ChevronLeft className="h-4 w-4 mr-2" />
+            Previous
+          </Button>
+
+          {currentStep < steps.length ? (
+            <Button
+              onClick={handleNext}
+              disabled={!formData.eventType}
+              data-testid="button-next"
+            >
+              Next
+              <ChevronRight className="h-4 w-4 ml-2" />
+            </Button>
+          ) : (
+            <Button
+              onClick={handleSubmit}
+              disabled={!formData.termsAccepted || !formData.customerName}
+              size="lg"
+              data-testid="button-finalize-payment"
+            >
+              Proceed to Payment
+              <ChevronRight className="h-4 w-4 ml-2" />
+            </Button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,151 @@
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Mic, Sparkles } from "lucide-react";
+
+interface Block5AnnouncementsProps {
+  grandIntroduction: string;
+  fatherDaughterDanceAnnouncement: string;
+  toastsSpeechesAnnouncement: string;
+  guestCallouts: string;
+  vibeCheck: string;
+  onChange: (field: string, value: string) => void;
+}
+
+const vibeOptions = [
+  {
+    value: "warm-romantic",
+    label: "Warm & Romantic",
+    description: "Heartfelt, emotional, and deeply personal"
+  },
+  {
+    value: "lively-celebratory",
+    label: "Lively & Celebratory",
+    description: "High-energy, joyful, and interactive"
+  },
+  {
+    value: "simple-unobtrusive",
+    label: "Simple & Unobtrusive",
+    description: "Seamless, minimal, and understated"
+  }
+];
+
+export default function Block5Announcements({
+  grandIntroduction,
+  fatherDaughterDanceAnnouncement,
+  toastsSpeechesAnnouncement,
+  guestCallouts,
+  vibeCheck,
+  onChange
+}: Block5AnnouncementsProps) {
+  return (
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-3xl font-serif mb-2">Announcements & Special Moments</h2>
+        <p className="text-muted-foreground">
+          Words create memories — shape exactly how those moments sound and feel.
+        </p>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <div className="flex items-center gap-2">
+            <Mic className="h-5 w-5" />
+            <CardTitle>Grand Introduction</CardTitle>
+          </div>
+          <CardDescription>How would you like to be introduced as newlyweds when you enter your reception?</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="grand-introduction">Your Preferred Introduction</Label>
+            <Textarea
+              id="grand-introduction"
+              data-testid="input-grand-introduction"
+              placeholder='Example: "Please welcome for the very first time, Mr. and Mrs. James Carter!"'
+              value={grandIntroduction}
+              onChange={(e) => onChange('grandIntroduction', e.target.value)}
+              rows={3}
+            />
+          </div>
+          
+          <div className="p-3 bg-muted rounded-md">
+            <p className="text-sm font-medium mb-2">Examples:</p>
+            <ul className="text-sm text-muted-foreground space-y-1">
+              <li>• "Please welcome for the very first time, Mr. and Mrs. James Carter!"</li>
+              <li>• "Let's hear it for the newlyweds — Taylor and Morgan!"</li>
+              <li>• "Give a warm welcome to the stars of the day, Alex and Jordan!"</li>
+            </ul>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Special Moments & Announcements</CardTitle>
+          <CardDescription>Personalize the way your emcee announces your milestone moments</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="father-daughter-dance-announcement">Father-Daughter Dance</Label>
+            <Textarea
+              id="father-daughter-dance-announcement"
+              data-testid="input-father-daughter-dance-announcement"
+              placeholder="How would you like this moment announced?"
+              value={fatherDaughterDanceAnnouncement}
+              onChange={(e) => onChange('fatherDaughterDanceAnnouncement', e.target.value)}
+              rows={2}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="toasts-speeches-announcement">Toasts & Speeches</Label>
+            <Textarea
+              id="toasts-speeches-announcement"
+              data-testid="input-toasts-speeches-announcement"
+              placeholder="Any specific instructions for introducing toasts?"
+              value={toastsSpeechesAnnouncement}
+              onChange={(e) => onChange('toastsSpeechesAnnouncement', e.target.value)}
+              rows={2}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="guest-callouts">Guest Callouts (Optional)</Label>
+            <Textarea
+              id="guest-callouts"
+              data-testid="input-guest-callouts"
+              placeholder="Any special guests you'd like the emcee to acknowledge?"
+              value={guestCallouts}
+              onChange={(e) => onChange('guestCallouts', e.target.value)}
+              rows={2}
+            />
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <div className="flex items-center gap-2">
+            <Sparkles className="h-5 w-5" />
+            <CardTitle>Vibe Check – Make Sure It Feels Right</CardTitle>
+          </div>
+          <CardDescription>This guides how your emcee speaks, how transitions feel, and how the whole celebration flows</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <RadioGroup value={vibeCheck} onValueChange={(value) => onChange('vibeCheck', value)}>
+            {vibeOptions.map((vibe) => (
+              <div key={vibe.value} className="flex items-start space-x-2 p-3 rounded-md hover-elevate">
+                <RadioGroupItem value={vibe.value} id={`vibe-${vibe.value}`} data-testid={`radio-vibe-${vibe.value}`} className="mt-1" />
+                <Label htmlFor={`vibe-${vibe.value}`} className="flex-1 cursor-pointer">
+                  <span className="font-medium block">{vibe.label}</span>
+                  <span className="text-sm text-muted-foreground">{vibe.description}</span>
+                </Label>
+              </div>
+            ))}
+          </RadioGroup>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}

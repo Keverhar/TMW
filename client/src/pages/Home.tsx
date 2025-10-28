@@ -56,10 +56,10 @@ export default function Home() {
 
           <div className="max-w-md mx-auto">
             <Button 
-              onClick={() => setLocation("/booking")}
+              onClick={() => setLocation("/composer")}
               size="lg" 
               className="text-lg px-8 bg-primary/90 hover:bg-primary backdrop-blur-sm w-full md:w-auto"
-              data-testid="button-start-booking"
+              data-testid="button-start-composer"
             >
               Start Planning Your Wedding
             </Button>

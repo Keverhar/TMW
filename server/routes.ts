@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertBookingSchema } from "@shared/schema";
+import { insertBookingSchema, insertWeddingComposerSchema } from "@shared/schema";
 import Stripe from "stripe";
 
 let stripe: Stripe | null = null;
@@ -159,6 +159,170 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       } else {
         res.status(404).json({ message: 'Booking not found' });
+      }
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Wedding Composer Routes
+  
+  // Create a new wedding composer (draft)
+  app.post("/api/wedding-composers", async (req, res) => {
+    try {
+      const validatedData = insertWeddingComposerSchema.parse(req.body);
+      const composer = await storage.createWeddingComposer(validatedData);
+      res.json(composer);
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+  // Get a wedding composer by ID
+  app.get("/api/wedding-composers/:id", async (req, res) => {
+    try {
+      const composer = await storage.getWeddingComposer(req.params.id);
+      if (!composer) {
+        return res.status(404).json({ message: "Wedding composer not found" });
+      }
+      res.json(composer);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Update a wedding composer (save progress)
+  app.patch("/api/wedding-composers/:id", async (req, res) => {
+    try {
+      const composer = await storage.updateWeddingComposer(req.params.id, req.body);
+      if (!composer) {
+        return res.status(404).json({ message: "Wedding composer not found" });
+      }
+      res.json(composer);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Create Stripe checkout session for a wedding composer
+  app.post("/api/wedding-composers/create-checkout-session", async (req, res) => {
+    if (!stripe) {
+      return res.status(503).json({ message: "Payment processing not configured" });
+    }
+
+    try {
+      const { composerId } = req.body;
+      
+      const composer = await storage.getWeddingComposer(composerId);
+      if (!composer) {
+        return res.status(404).json({ message: "Wedding composer not found" });
+      }
+
+      const eventDate = composer.preferredDate || "TBD";
+      const eventTime = composer.timeSlot || "TBD";
+
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ['card'],
+        line_items: [
+          {
+            price_data: {
+              currency: 'usd',
+              product_data: {
+                name: `${composer.eventType} Package`,
+                description: `The Wedding Composer - ${eventDate} at ${eventTime}`,
+              },
+              unit_amount: composer.totalPrice,
+            },
+            quantity: 1,
+          },
+        ],
+        mode: 'payment',
+        success_url: `${req.headers.origin}/confirmation?session_id={CHECKOUT_SESSION_ID}&composer_id=${composerId}`,
+        cancel_url: `${req.headers.origin}/composer?canceled=true`,
+        customer_email: composer.customerEmail,
+        metadata: {
+          composerId: composer.id,
+        },
+      });
+
+      await storage.updateWeddingComposerPaymentStatus(
+        composerId,
+        'pending',
+        session.id
+      );
+
+      res.json({ sessionId: session.id });
+    } catch (error: any) {
+      res.status(500).json({ message: "Error creating checkout session: " + error.message });
+    }
+  });
+
+  // Webhook for wedding composer payments
+  app.post("/api/wedding-composers/webhook", async (req, res) => {
+    if (!stripe) {
+      return res.status(503).json({ message: "Payment processing not configured" });
+    }
+
+    const sig = req.headers['stripe-signature'];
+    
+    let event;
+    try {
+      event = stripe.webhooks.constructEvent(
+        req.body,
+        sig as string,
+        process.env.STRIPE_WEBHOOK_SECRET || ''
+      );
+    } catch (err: any) {
+      console.error('Webhook signature verification failed:', err.message);
+      return res.status(400).send(`Webhook Error: ${err.message}`);
+    }
+
+    if (event.type === 'checkout.session.completed') {
+      const session = event.data.object as Stripe.Checkout.Session;
+      const composerId = session.metadata?.composerId;
+
+      if (composerId) {
+        await storage.updateWeddingComposerPaymentStatus(
+          composerId,
+          'completed',
+          session.id,
+          session.payment_intent as string
+        );
+      }
+    }
+
+    res.json({ received: true });
+  });
+
+  // Verify payment status for a wedding composer
+  app.get("/api/wedding-composers/verify-payment/:sessionId", async (req, res) => {
+    if (!stripe) {
+      return res.status(503).json({ message: "Payment processing not configured" });
+    }
+
+    try {
+      const session = await stripe.checkout.sessions.retrieve(req.params.sessionId);
+      
+      if (session.metadata?.composerId) {
+        const composer = await storage.getWeddingComposer(session.metadata.composerId);
+        
+        if (composer && session.payment_status === 'paid') {
+          await storage.updateWeddingComposerPaymentStatus(
+            composer.id,
+            'completed',
+            session.id,
+            session.payment_intent as string
+          );
+          
+          res.json({ 
+            status: 'success',
+            composer: await storage.getWeddingComposer(composer.id)
+          });
+        } else {
+          res.json({ status: 'pending' });
+        }
+      } else {
+        res.status(404).json({ message: 'Wedding composer not found' });
       }
     } catch (error: any) {
       res.status(500).json({ message: error.message });
