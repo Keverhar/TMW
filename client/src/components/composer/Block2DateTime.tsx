@@ -1,8 +1,11 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Info } from "lucide-react";
+import { Info, Calendar as CalendarIcon } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { format } from "date-fns";
 
 interface Block2DateTimeProps {
   preferredDate: string;
@@ -32,6 +35,20 @@ export default function Block2DateTime({ preferredDate, backupDate, timeSlot, on
   
   const availableDaysText = allowedDays.map(d => getDayName(d)).join(', ');
   
+  // Convert string dates to Date objects
+  const preferredDateObj = preferredDate ? new Date(preferredDate + 'T12:00:00') : undefined;
+  const backupDateObj = backupDate ? new Date(backupDate + 'T12:00:00') : undefined;
+  
+  // Matcher function to disable days not in allowedDays
+  const disabledDays = (date: Date) => {
+    return !allowedDays.includes(date.getDay());
+  };
+  
+  // Matcher function to highlight available days
+  const highlightDays = (date: Date) => {
+    return allowedDays.includes(date.getDay());
+  };
+  
   return (
     <div className="space-y-6">
       <div>
@@ -48,26 +65,39 @@ export default function Block2DateTime({ preferredDate, backupDate, timeSlot, on
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="preferred-date">Preferred Date ({availableDaysText} only)</Label>
-            <Input
-              id="preferred-date"
-              data-testid="input-preferred-date"
-              type="date"
-              value={preferredDate}
-              onChange={(e) => {
-                const selectedDate = new Date(e.target.value);
-                const dayOfWeek = selectedDate.getDay();
-                if (allowedDays.includes(dayOfWeek)) {
-                  onChange('preferredDate', e.target.value);
-                }
-              }}
-              onKeyDown={(e) => {
-                // Prevent manual typing - force calendar selection
-                if (e.key !== 'Tab') {
-                  e.preventDefault();
-                }
-              }}
-            />
+            <Label>Preferred Date ({availableDaysText} only)</Label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  data-testid="button-preferred-date"
+                  className="w-full justify-start text-left font-normal"
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {preferredDateObj ? format(preferredDateObj, "PPP") : <span>Pick a date</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={preferredDateObj}
+                  onSelect={(date) => {
+                    if (date) {
+                      const year = date.getFullYear();
+                      const month = String(date.getMonth() + 1).padStart(2, '0');
+                      const day = String(date.getDate()).padStart(2, '0');
+                      onChange('preferredDate', `${year}-${month}-${day}`);
+                    }
+                  }}
+                  disabled={disabledDays}
+                  modifiers={{ available: highlightDays }}
+                  modifiersClassNames={{
+                    available: "bg-primary/10 font-semibold"
+                  }}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
             <p className="text-sm text-muted-foreground">
               💡 Available days: {availableDaysText}
             </p>
@@ -82,26 +112,41 @@ export default function Block2DateTime({ preferredDate, backupDate, timeSlot, on
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
-            <Label htmlFor="backup-date">Backup Date ({availableDaysText} only)</Label>
-            <Input
-              id="backup-date"
-              data-testid="input-backup-date"
-              type="date"
-              value={backupDate}
-              onChange={(e) => {
-                const selectedDate = new Date(e.target.value);
-                const dayOfWeek = selectedDate.getDay();
-                if (allowedDays.includes(dayOfWeek)) {
-                  onChange('backupDate', e.target.value);
-                }
-              }}
-              onKeyDown={(e) => {
-                // Prevent manual typing - force calendar selection
-                if (e.key !== 'Tab') {
-                  e.preventDefault();
-                }
-              }}
-            />
+            <Label>Backup Date ({availableDaysText} only)</Label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  data-testid="button-backup-date"
+                  className="w-full justify-start text-left font-normal"
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {backupDateObj ? format(backupDateObj, "PPP") : <span>Pick a date (optional)</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={backupDateObj}
+                  onSelect={(date) => {
+                    if (date) {
+                      const year = date.getFullYear();
+                      const month = String(date.getMonth() + 1).padStart(2, '0');
+                      const day = String(date.getDate()).padStart(2, '0');
+                      onChange('backupDate', `${year}-${month}-${day}`);
+                    } else {
+                      onChange('backupDate', '');
+                    }
+                  }}
+                  disabled={disabledDays}
+                  modifiers={{ available: highlightDays }}
+                  modifiersClassNames={{
+                    available: "bg-primary/10 font-semibold"
+                  }}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
           </div>
         </CardContent>
       </Card>

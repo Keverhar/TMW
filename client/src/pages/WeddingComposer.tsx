@@ -154,6 +154,15 @@ export default function WeddingComposer() {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
+  // Clear dates when event type changes
+  useEffect(() => {
+    setFormData((prev) => ({
+      ...prev,
+      preferredDate: "",
+      backupDate: "",
+    }));
+  }, [formData.eventType]);
+
   const saveProgress = async () => {
     setIsSaving(true);
     try {
