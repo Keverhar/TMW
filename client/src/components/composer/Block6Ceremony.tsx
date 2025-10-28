@@ -18,6 +18,7 @@ interface Block6CeremonyProps {
   petInvolvement: string;
   ceremonySpecialRequests: string;
   onChange: (field: string, value: string | boolean) => void;
+  showAddOns?: boolean;
 }
 
 const ceremonyScripts = [
@@ -58,7 +59,8 @@ export default function Block6Ceremony({
   includingChild,
   petInvolvement,
   ceremonySpecialRequests,
-  onChange
+  onChange,
+  showAddOns = true
 }: Block6CeremonyProps) {
   return (
     <div className="space-y-6">
@@ -136,87 +138,89 @@ export default function Block6Ceremony({
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <div className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5" />
-            <CardTitle>Additional Ceremony Add-Ons</CardTitle>
-          </div>
-          <CardDescription>Personalize your ceremony with special touches (all completely optional)</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="guest-reading-or-song">Singing, Reading or Poem by a Guest</Label>
-            <Input
-              id="guest-reading-or-song-name"
-              data-testid="input-guest-reading-or-song-name"
-              placeholder="Name of guest"
-              value={guestReadingOrSongName}
-              onChange={(e) => onChange('guestReadingOrSongName', e.target.value)}
-            />
-            <Textarea
-              id="guest-reading-or-song"
-              data-testid="input-guest-reading-or-song"
-              placeholder="Please describe how you'd like them involved and when"
-              value={guestReadingOrSong}
-              onChange={(e) => onChange('guestReadingOrSong', e.target.value)}
-              rows={2}
-            />
-          </div>
+      {showAddOns && (
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Sparkles className="h-5 w-5" />
+              <CardTitle>Additional Ceremony Add-Ons</CardTitle>
+            </div>
+            <CardDescription>Personalize your ceremony with special touches (all completely optional)</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="guest-reading-or-song">Singing, Reading or Poem by a Guest</Label>
+              <Input
+                id="guest-reading-or-song-name"
+                data-testid="input-guest-reading-or-song-name"
+                placeholder="Name of guest"
+                value={guestReadingOrSongName}
+                onChange={(e) => onChange('guestReadingOrSongName', e.target.value)}
+              />
+              <Textarea
+                id="guest-reading-or-song"
+                data-testid="input-guest-reading-or-song"
+                placeholder="Please describe how you'd like them involved and when"
+                value={guestReadingOrSong}
+                onChange={(e) => onChange('guestReadingOrSong', e.target.value)}
+                rows={2}
+              />
+            </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="officiant-passage">Passage Reading by the Officiant</Label>
-            <Textarea
-              id="officiant-passage"
-              data-testid="input-officiant-passage"
-              placeholder="Upload or paste the passage here (10 minute max)"
-              value={officiantPassage}
-              onChange={(e) => onChange('officiantPassage', e.target.value)}
-              rows={3}
-            />
-          </div>
+            <div className="space-y-2">
+              <Label htmlFor="officiant-passage">Passage Reading by the Officiant</Label>
+              <Textarea
+                id="officiant-passage"
+                data-testid="input-officiant-passage"
+                placeholder="Upload or paste the passage here (10 minute max)"
+                value={officiantPassage}
+                onChange={(e) => onChange('officiantPassage', e.target.value)}
+                rows={3}
+              />
+            </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="including-child">Including a Child or Children</Label>
-            <Textarea
-              id="including-child"
-              data-testid="input-including-child"
-              placeholder="Please describe how you'd like them involved (family vow, unity ritual, gift presentation, etc.)"
-              value={includingChild}
-              onChange={(e) => onChange('includingChild', e.target.value)}
-              rows={2}
-            />
-          </div>
+            <div className="space-y-2">
+              <Label htmlFor="including-child">Including a Child or Children</Label>
+              <Textarea
+                id="including-child"
+                data-testid="input-including-child"
+                placeholder="Please describe how you'd like them involved (family vow, unity ritual, gift presentation, etc.)"
+                value={includingChild}
+                onChange={(e) => onChange('includingChild', e.target.value)}
+                rows={2}
+              />
+            </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="pet-involvement">Pet Involvement</Label>
-            <Textarea
-              id="pet-involvement"
-              data-testid="input-pet-involvement"
-              placeholder="Name, role, and handler details (Note: pets only allowed in chapel area, not reception)"
-              value={petInvolvement}
-              onChange={(e) => onChange('petInvolvement', e.target.value)}
-              rows={2}
-            />
-          </div>
+            <div className="space-y-2">
+              <Label htmlFor="pet-involvement">Pet Involvement</Label>
+              <Textarea
+                id="pet-involvement"
+                data-testid="input-pet-involvement"
+                placeholder="Name, role, and handler details (Note: pets only allowed in chapel area, not reception)"
+                value={petInvolvement}
+                onChange={(e) => onChange('petInvolvement', e.target.value)}
+                rows={2}
+              />
+            </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="ceremony-special-requests">Other Special Requests</Label>
-            <Textarea
-              id="ceremony-special-requests"
-              data-testid="input-ceremony-special-requests"
-              placeholder="Any other details you'd like your officiant to include (max 400 characters)"
-              value={ceremonySpecialRequests}
-              onChange={(e) => onChange('ceremonySpecialRequests', e.target.value)}
-              rows={2}
-              maxLength={400}
-            />
-            <p className="text-xs text-muted-foreground">
-              {ceremonySpecialRequests.length}/400 characters
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+            <div className="space-y-2">
+              <Label htmlFor="ceremony-special-requests">Other Special Requests</Label>
+              <Textarea
+                id="ceremony-special-requests"
+                data-testid="input-ceremony-special-requests"
+                placeholder="Any other details you'd like your officiant to include (max 400 characters)"
+                value={ceremonySpecialRequests}
+                onChange={(e) => onChange('ceremonySpecialRequests', e.target.value)}
+                rows={2}
+                maxLength={400}
+              />
+              <p className="text-xs text-muted-foreground">
+                {ceremonySpecialRequests.length}/400 characters
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
