@@ -111,7 +111,7 @@ export default function Block2DateTime({ preferredDate, backupDate, timeSlot, on
                   className="w-full justify-start text-left font-normal"
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
-                  {preferredDateObj ? format(preferredDateObj, "PPP") : <span>Pick a date</span>}
+                  {preferredDateObj ? format(preferredDateObj, "EEEE, MMMM d, yyyy") : <span>Pick a date</span>}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
@@ -170,7 +170,7 @@ export default function Block2DateTime({ preferredDate, backupDate, timeSlot, on
                   disabled={!preferredDate}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
-                  {backupDateObj ? format(backupDateObj, "PPP") : <span>Pick a date (optional)</span>}
+                  {backupDateObj ? format(backupDateObj, "EEEE, MMMM d, yyyy") : <span>Pick a date (optional)</span>}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">

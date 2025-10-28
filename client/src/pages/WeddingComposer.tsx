@@ -276,7 +276,8 @@ export default function WeddingComposer() {
   // Extract day of week from preferred date
   const getDayOfWeek = (dateString: string): string => {
     if (!dateString) return '';
-    const date = new Date(dateString);
+    // Add time component to ensure correct timezone parsing
+    const date = new Date(dateString + 'T12:00:00');
     const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     return days[date.getDay()];
   };
