@@ -34,7 +34,7 @@ export default function Home() {
           </h1>
           
           <div className="text-white/90 space-y-6 mb-8">
-            <p className="text-lg md:text-xl">
+            <p style={{ fontFamily: 'Arial, sans-serif', fontSize: '14pt' }}>
               Design, Save, and Return. Your selections are automatically saved with your email, so feel free to play and change things—nothing is final until you say it is.
             </p>
             
