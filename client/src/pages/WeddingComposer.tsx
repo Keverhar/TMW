@@ -179,11 +179,6 @@ export default function WeddingComposer() {
         const result = await response.json();
         setComposerId(result.id);
       }
-
-      toast({
-        title: "Progress saved",
-        description: "Your wedding composer progress has been saved.",
-      });
     } catch (error: any) {
       toast({
         title: "Error saving progress",
@@ -298,15 +293,17 @@ export default function WeddingComposer() {
                 Your personalized planning tool for designing a wedding day that feels entirely your own
               </p>
             </div>
-            <Button
-              onClick={saveProgress}
-              disabled={isSaving || !formData.eventType}
-              variant="outline"
-              data-testid="button-save-progress"
-            >
-              <Save className="h-4 w-4 mr-2" />
-              {isSaving ? 'Saving...' : 'Save Progress'}
-            </Button>
+            {currentStep > 1 && (
+              <Button
+                onClick={saveProgress}
+                disabled={isSaving || !formData.eventType}
+                variant="outline"
+                data-testid="button-save-progress"
+              >
+                <Save className="h-4 w-4 mr-2" />
+                {isSaving ? 'Saving...' : 'Save Progress'}
+              </Button>
+            )}
           </div>
 
           <div className="space-y-2">
