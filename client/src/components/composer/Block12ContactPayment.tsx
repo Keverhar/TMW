@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
-import { DollarSign, User, FileText, Info } from "lucide-react";
+import { DollarSign, User, FileText, Info, CreditCard } from "lucide-react";
 
 interface Block12ContactPaymentProps {
   customerName: string;
@@ -215,6 +215,32 @@ export default function Block12ContactPayment({
               <span className="text-primary">${(totalPrice / 100).toFixed(2)}</span>
             </div>
           </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <div className="flex items-center gap-2">
+            <CreditCard className="h-5 w-5" />
+            <CardTitle>Payment Options</CardTitle>
+          </div>
+          <CardDescription>Choose from multiple secure payment methods</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="flex items-center justify-center p-4 rounded-md border bg-card hover-elevate">
+              <span className="font-medium">Stripe</span>
+            </div>
+            <div className="flex items-center justify-center p-4 rounded-md border bg-card hover-elevate">
+              <span className="font-medium">PayPal</span>
+            </div>
+            <div className="flex items-center justify-center p-4 rounded-md border bg-card hover-elevate">
+              <span className="font-medium">Affirm</span>
+            </div>
+          </div>
+          <p className="text-sm text-muted-foreground mt-3">
+            You'll be able to choose your preferred payment method on the next screen. All payment methods are secure and encrypted.
+          </p>
         </CardContent>
       </Card>
 
