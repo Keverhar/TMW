@@ -136,9 +136,10 @@ export default function WeddingComposer() {
 
     // Block 12: Contact & Payment
     customerName: "",
+    customerName2: "",
     customerEmail: "",
     customerPhone: "",
-    billingAddress: "",
+    smsConsent: false,
     mailingAddress: "",
     termsAccepted: false,
 
@@ -156,7 +157,8 @@ export default function WeddingComposer() {
   const saveProgress = async () => {
     setIsSaving(true);
     try {
-      const basePrice = eventTypePricing[formData.eventType] || eventTypePricing['other'];
+      const dayOfWeek = getDayOfWeek(formData.preferredDate);
+      const basePrice = calculatePrice(formData.eventType, dayOfWeek);
       const addonsTotal =
         (formData.photoBookAddon ? 30000 : 0) +
         (formData.extraTimeAddon ? 100000 : 0) +
@@ -218,7 +220,7 @@ export default function WeddingComposer() {
       return;
     }
 
-    if (!formData.customerName || !formData.customerEmail || !formData.customerPhone) {
+    if (!formData.customerName || !formData.customerEmail) {
       toast({
         title: "Missing information",
         description: "Please fill in all required contact information.",
@@ -267,14 +269,6 @@ export default function WeddingComposer() {
     }
   };
 
-  const isSimplifiedFlow = formData.eventType === 'modest-elopement' || formData.eventType === 'vow-renewal';
-  const steps = allSteps.filter(step => 
-    step.availableFor.includes('all') || 
-    (!isSimplifiedFlow && step.availableFor.includes(formData.eventType))
-  );
-
-  const progress = (currentStep / steps.length) * 100;
-  
   // Extract day of week from preferred date
   const getDayOfWeek = (dateString: string): string => {
     if (!dateString) return '';
@@ -282,7 +276,14 @@ export default function WeddingComposer() {
     const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     return days[date.getDay()];
   };
-  
+
+  const isSimplifiedFlow = formData.eventType === 'modest-elopement' || formData.eventType === 'vow-renewal';
+  const steps = allSteps.filter(step => 
+    step.availableFor.includes('all') || 
+    (!isSimplifiedFlow && step.availableFor.includes(formData.eventType))
+  );
+
+  const progress = (currentStep / steps.length) * 100;
   const dayOfWeek = getDayOfWeek(formData.preferredDate);
   const basePrice = calculatePrice(formData.eventType, dayOfWeek);
 
@@ -458,9 +459,10 @@ export default function WeddingComposer() {
           {steps[currentStep - 1]?.id === 12 && (
             <Block12ContactPayment
               customerName={formData.customerName}
+              customerName2={formData.customerName2}
               customerEmail={formData.customerEmail}
               customerPhone={formData.customerPhone}
-              billingAddress={formData.billingAddress}
+              smsConsent={formData.smsConsent}
               mailingAddress={formData.mailingAddress}
               termsAccepted={formData.termsAccepted}
               photoBookAddon={formData.photoBookAddon}

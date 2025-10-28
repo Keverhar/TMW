@@ -102,9 +102,10 @@ export const weddingComposers = pgTable("wedding_composers", {
   
   // Block 12: Contact & Payment
   customerName: text("customer_name").notNull(),
+  customerName2: text("customer_name_2"),
   customerEmail: text("customer_email").notNull(),
-  customerPhone: text("customer_phone").notNull(),
-  billingAddress: text("billing_address"),
+  customerPhone: text("customer_phone"),
+  smsConsent: boolean("sms_consent").default(false),
   mailingAddress: text("mailing_address"),
   
   // Pricing & Add-ons
