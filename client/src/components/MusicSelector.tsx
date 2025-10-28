@@ -1,13 +1,16 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { Music } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Music, Play, Pause } from "lucide-react";
+import { useState, useRef } from "react";
 
 interface MusicOption {
   id: string;
   title: string;
   artist: string;
   moment: string;
+  previewUrl: string;
 }
 
 interface MusicSelectorProps {
@@ -21,6 +24,38 @@ export default function MusicSelector({
   selectedMusic,
   onToggleMusic,
 }: MusicSelectorProps) {
+  const [playingId, setPlayingId] = useState<string | null>(null);
+  const audioRefs = useRef<{ [key: string]: HTMLAudioElement | null }>({});
+
+  const handlePlayPause = (musicId: string, previewUrl: string) => {
+    const currentAudio = audioRefs.current[musicId];
+    
+    // Stop any currently playing audio
+    Object.entries(audioRefs.current).forEach(([id, audio]) => {
+      if (id !== musicId && audio && !audio.paused) {
+        audio.pause();
+        audio.currentTime = 0;
+      }
+    });
+
+    if (currentAudio) {
+      if (currentAudio.paused) {
+        currentAudio.play();
+        setPlayingId(musicId);
+      } else {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+        setPlayingId(null);
+      }
+    } else {
+      const audio = new Audio(previewUrl);
+      audioRefs.current[musicId] = audio;
+      audio.addEventListener('ended', () => setPlayingId(null));
+      audio.play();
+      setPlayingId(musicId);
+    }
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -50,6 +85,19 @@ export default function MusicSelector({
                   {music.artist} • {music.moment}
                 </p>
               </div>
+              <Button
+                type="button"
+                variant="outline"
+                size="icon"
+                onClick={() => handlePlayPause(music.id, music.previewUrl)}
+                data-testid={`button-preview-${music.id}`}
+              >
+                {playingId === music.id ? (
+                  <Pause className="h-4 w-4" />
+                ) : (
+                  <Play className="h-4 w-4" />
+                )}
+              </Button>
             </div>
           ))}
         </div>

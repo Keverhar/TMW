@@ -6,7 +6,7 @@ import DateTimeSelector from "@/components/DateTimeSelector";
 import CeremonyScriptSelector from "@/components/CeremonyScriptSelector";
 import VowsSelector from "@/components/VowsSelector";
 import MusicSelector from "@/components/MusicSelector";
-import ColorWheelSelector from "@/components/ColorWheelSelector";
+import ColorSelector from "@/components/ColorSelector";
 import CakeTopperSelector from "@/components/CakeTopperSelector";
 import BookingSummary from "@/components/BookingSummary";
 import ProgressSteps from "@/components/ProgressSteps";
@@ -73,19 +73,35 @@ const ceremonyScripts = [
 ];
 
 const vowsOptions = [
-  { id: 'classic', title: 'Classic Vows', excerpt: 'I promise to love you, honor you, and cherish you, in sickness and in health...' },
-  { id: 'modern', title: 'Modern Vows', excerpt: 'Today I choose you to be my partner in life, to share my dreams and support yours...' },
-  { id: 'romantic', title: 'Romantic Vows', excerpt: 'You are my today and all of my tomorrows, my adventure and my home...' },
-  { id: 'heartfelt', title: 'Heartfelt Vows', excerpt: 'I vow to be your constant friend, your faithful partner, and your love...' },
+  { 
+    id: 'classic', 
+    title: 'Classic Vows', 
+    preview: 'I promise to love you, honor you, and cherish you, in sickness and in health. I will stand by your side through all of life\'s joys and challenges. I choose you today and every day for the rest of my life. You are my best friend, my partner, and my soulmate. With this ring, I pledge my eternal love and commitment to you.'
+  },
+  { 
+    id: 'modern', 
+    title: 'Modern Vows', 
+    preview: 'Today I choose you to be my partner in life, to share my dreams and support yours. I promise to be your constant companion and your biggest cheerleader. I will love you fiercely and stand with you through every adventure. Together we will build a life filled with laughter, growth, and endless possibilities. I am honored to call you mine, today and always.'
+  },
+  { 
+    id: 'romantic', 
+    title: 'Romantic Vows', 
+    preview: 'You are my today and all of my tomorrows, my adventure and my home. From the moment I met you, I knew my heart had found its match. I promise to love you with every breath, to treasure every moment we share. You are the dream I never knew I had, and the reality that exceeds all dreams. I will love you endlessly, through this life and beyond.'
+  },
+  { 
+    id: 'heartfelt', 
+    title: 'Heartfelt Vows', 
+    preview: 'I vow to be your constant friend, your faithful partner, and your love from this day forward. I promise to support your dreams and celebrate your successes. In times of joy, I will rejoice with you; in times of sorrow, I will comfort you. I will respect you, trust you, and honor you all the days of my life. You have my heart, my soul, and my unwavering devotion.'
+  },
 ];
 
 const musicOptions = [
-  { id: 'processional-1', title: 'Canon in D', artist: 'Pachelbel', moment: 'Processional' },
-  { id: 'processional-2', title: 'A Thousand Years', artist: 'Christina Perri', moment: 'Processional' },
-  { id: 'ceremony-1', title: 'All of Me', artist: 'John Legend', moment: 'During Ceremony' },
-  { id: 'ceremony-2', title: 'Perfect', artist: 'Ed Sheeran', moment: 'During Ceremony' },
-  { id: 'recessional-1', title: 'Married Life', artist: 'Michael Giacchino', moment: 'Recessional' },
-  { id: 'recessional-2', title: 'Signed, Sealed, Delivered', artist: 'Stevie Wonder', moment: 'Recessional' },
+  { id: 'processional-1', title: 'Canon in D', artist: 'Pachelbel', moment: 'Processional', previewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' },
+  { id: 'processional-2', title: 'A Thousand Years', artist: 'Christina Perri', moment: 'Processional', previewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3' },
+  { id: 'ceremony-1', title: 'All of Me', artist: 'John Legend', moment: 'During Ceremony', previewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3' },
+  { id: 'ceremony-2', title: 'Perfect', artist: 'Ed Sheeran', moment: 'During Ceremony', previewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3' },
+  { id: 'recessional-1', title: 'Married Life', artist: 'Michael Giacchino', moment: 'Recessional', previewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3' },
+  { id: 'recessional-2', title: 'Signed, Sealed, Delivered', artist: 'Stevie Wonder', moment: 'Recessional', previewUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3' },
 ];
 
 const cakeToppers = [
@@ -296,7 +312,7 @@ export default function Booking() {
                       selectedMusic={selectedMusic}
                       onToggleMusic={handleToggleMusic}
                     />
-                    <ColorWheelSelector
+                    <ColorSelector
                       selectedColor={selectedColor}
                       onSelectColor={setSelectedColor}
                     />

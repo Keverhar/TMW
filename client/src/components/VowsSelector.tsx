@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 interface Vow {
   id: string;
   title: string;
-  excerpt: string;
+  preview: string;
 }
 
 interface VowsSelectorProps {
@@ -44,7 +44,7 @@ export default function VowsSelector({
                   <Label htmlFor={vow.id} className="text-base font-medium cursor-pointer">
                     {vow.title}
                   </Label>
-                  <p className="text-sm text-muted-foreground mt-1 italic">"{vow.excerpt}"</p>
+                  <p className="text-sm text-muted-foreground mt-2 italic leading-relaxed">"{vow.preview}"</p>
                 </div>
               </div>
             ))}
