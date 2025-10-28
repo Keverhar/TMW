@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import heroImage from '@assets/Copy of Composer banner_1761671065075.png';
-import { Heart, Calendar, Sparkles, CheckCircle } from "lucide-react";
 
 export default function Home() {
   return (
@@ -30,69 +29,6 @@ export default function Home() {
               </Button>
             </Link>
           </div>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 py-24">
-        <div className="text-center mb-16">
-          <h2 className="font-serif text-4xl md:text-5xl font-bold mb-4">
-            Why Choose The Modest Wedding
-          </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            We make your special day unforgettable with personalized attention to every detail
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-8 mb-24">
-          <div className="text-center space-y-4 p-6">
-            <div className="flex justify-center">
-              <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
-                <Heart className="h-8 w-8 text-primary" />
-              </div>
-            </div>
-            <h3 className="font-serif text-2xl font-semibold">Personalized Service</h3>
-            <p className="text-muted-foreground">
-              Choose from multiple ceremony styles, vows, and music to create a ceremony that's uniquely yours
-            </p>
-          </div>
-
-          <div className="text-center space-y-4 p-6">
-            <div className="flex justify-center">
-              <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
-                <Calendar className="h-8 w-8 text-primary" />
-              </div>
-            </div>
-            <h3 className="font-serif text-2xl font-semibold">Flexible Scheduling</h3>
-            <p className="text-muted-foreground">
-              Book your perfect date and time with our easy online scheduling system
-            </p>
-          </div>
-
-          <div className="text-center space-y-4 p-6">
-            <div className="flex justify-center">
-              <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
-                <Sparkles className="h-8 w-8 text-primary" />
-              </div>
-            </div>
-            <h3 className="font-serif text-2xl font-semibold">Beautiful Venue</h3>
-            <p className="text-muted-foreground">
-              Our elegant space provides the perfect backdrop for your special moment
-            </p>
-          </div>
-        </div>
-
-        <div className="bg-card rounded-lg border p-12 text-center">
-          <h2 className="font-serif text-3xl md:text-4xl font-bold mb-6">
-            Ready to Begin?
-          </h2>
-          <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Start planning your perfect ceremony today. Our simple booking process will guide you through every step.
-          </p>
-          <Link href="/booking">
-            <Button size="lg" className="text-lg px-8" data-testid="button-book-now">
-              The Wedding Composer
-            </Button>
-          </Link>
         </div>
       </div>
     </div>
