@@ -15,10 +15,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { loadStripe } from '@stripe/stripe-js';
 
-import elopementImg from '@assets/generated_images/Intimate_elopement_ceremony_setup_d5c87634.png';
-import vowRenewalImg from '@assets/generated_images/Vow_renewal_ceremony_decoration_3582a109.png';
-import fridaySundayImg from '@assets/generated_images/Friday_Sunday_wedding_setup_cb5aed4d.png';
-import saturdayImg from '@assets/generated_images/Saturday_wedding_ceremony_setup_870d9c76.png';
+import venueBackgroundImg from '@assets/generated_images/Intimate_indoor_wedding_venue_6ca435a6.png';
 import traditionalImg from '@assets/generated_images/Traditional_wedding_cake_topper_8cf92715.png';
 import gentlemenImg from '@assets/generated_images/Gentlemen_wedding_cake_topper_3a9bd51a.png';
 import ladiesImg from '@assets/generated_images/Ladies_wedding_cake_topper_e1b9db02.png';
@@ -39,7 +36,6 @@ const weddingTypes = [
     price: 'From $999',
     basePrice: 999,
     inclusions: ['90-minute ceremony', 'Up to 10 guests', 'Professional officiant', 'Professional photography included', 'Floral arrangements included', 'Full ceremony customization'],
-    image: elopementImg,
   },
   {
     id: 'vow-renewal',
@@ -48,7 +44,6 @@ const weddingTypes = [
     price: 'From $999',
     basePrice: 999,
     inclusions: ['90-minute ceremony', 'Up to 10 guests', 'Professional officiant', 'Professional photography included', 'Floral arrangements included', 'Custom vow assistance'],
-    image: vowRenewalImg,
   },
   {
     id: 'friday-sunday',
@@ -57,7 +52,6 @@ const weddingTypes = [
     price: '$3,900',
     basePrice: 3900,
     inclusions: ['3-hour event', 'Up to 30 guests', 'Professional officiant', 'Professional photography included', 'Floral arrangements included', 'Full customization'],
-    image: fridaySundayImg,
   },
   {
     id: 'saturday',
@@ -66,7 +60,6 @@ const weddingTypes = [
     price: '$4,500',
     basePrice: 4500,
     inclusions: ['3-hour event', 'Up to 30 guests', 'Professional officiant', 'Professional photography included', 'Floral arrangements included', 'Full customization'],
-    image: saturdayImg,
   },
 ];
 
@@ -231,7 +224,14 @@ export default function Booking() {
           <main className="flex-1">
             <div className="space-y-8">
               {currentStep === 0 && (
-                <div>
+                <div className="relative">
+                  <div className="absolute inset-0 rounded-lg overflow-hidden -z-10">
+                    <img
+                      src={venueBackgroundImg}
+                      alt="The Modest Wedding Venue"
+                      className="w-full h-full object-cover opacity-10"
+                    />
+                  </div>
                   <div className="mb-8">
                     <h2 className="font-serif text-3xl font-bold mb-2">Select Your Package</h2>
                     <p className="text-muted-foreground">Choose the wedding package that fits your vision</p>
@@ -244,7 +244,6 @@ export default function Booking() {
                         description={wedding.description}
                         price={wedding.price}
                         inclusions={wedding.inclusions}
-                        image={wedding.image}
                         selected={selectedPackage === wedding.id}
                         onSelect={() => setSelectedPackage(wedding.id)}
                       />

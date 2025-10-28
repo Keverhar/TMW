@@ -7,7 +7,6 @@ interface WeddingTypeCardProps {
   description: string;
   price: string;
   inclusions: string[];
-  image: string;
   selected?: boolean;
   onSelect: () => void;
 }
@@ -17,7 +16,6 @@ export default function WeddingTypeCard({
   description,
   price,
   inclusions,
-  image,
   selected = false,
   onSelect,
 }: WeddingTypeCardProps) {
@@ -28,14 +26,6 @@ export default function WeddingTypeCard({
       }`}
       data-testid={`card-wedding-${title.toLowerCase().replace(/\//g, '-')}`}
     >
-      <div className="aspect-[4/3] overflow-hidden">
-        <img
-          src={image}
-          alt={title}
-          className="w-full h-full object-cover"
-          data-testid={`img-wedding-${title.toLowerCase().replace(/\//g, '-')}`}
-        />
-      </div>
       <CardHeader className="gap-2">
         <div className="flex items-start justify-between gap-4">
           <CardTitle className="font-serif text-2xl">{title}</CardTitle>
