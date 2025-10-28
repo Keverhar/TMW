@@ -4,7 +4,7 @@ export default function CeremonyScriptSelectorExample() {
   const scripts = [
     {
       id: 'non-secular',
-      name: 'Non Secular',
+      name: 'Secular',
       description: 'A modern, non-religious ceremony',
       preview: 'We are gathered here today to celebrate the union of two individuals who have found in each other a love that transcends the ordinary...'
     },

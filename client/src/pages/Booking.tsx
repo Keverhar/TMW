@@ -71,7 +71,7 @@ const weddingTypes = [
 ];
 
 const ceremonyScripts = [
-  { id: 'non-secular', name: 'Non Secular', description: 'A modern, non-religious ceremony', preview: 'We are gathered here today to celebrate the union of two individuals who have found in each other a love that transcends the ordinary. This ceremony represents their commitment to building a life together based on mutual respect, understanding, and unwavering support.' },
+  { id: 'non-secular', name: 'Secular', description: 'A modern, non-religious ceremony', preview: 'We are gathered here today to celebrate the union of two individuals who have found in each other a love that transcends the ordinary. This ceremony represents their commitment to building a life together based on mutual respect, understanding, and unwavering support.' },
   { id: 'candle', name: 'Candle', description: 'Traditional unity candle ceremony', preview: 'As you light this candle together, you symbolize the joining of your lives and families. The two flames merge into one, representing the new union you are creating while maintaining your individual identities.' },
   { id: 'ribbon', name: 'Ribbon', description: 'Hand-binding ribbon ceremony', preview: 'The binding of your hands represents the intertwining of your lives. As these ribbons are wrapped around your hands, they symbolize the promises you make to each other and the strength of your bond.' },
   { id: 'religious-non-denominational', name: 'Religious Non Denominational', description: 'Faith-based but inclusive ceremony', preview: 'Under the guidance of a higher power, we gather to witness and bless this sacred union. May your marriage be filled with divine love, grace, and the strength to overcome any challenges together.' },
