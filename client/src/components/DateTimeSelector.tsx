@@ -35,6 +35,7 @@ export default function DateTimeSelector({
   const getAllowedDays = () => {
     switch (selectedPackage) {
       case 'elopement':
+        return [3]; // Wednesday only
       case 'vow-renewal':
         return [5]; // Friday only
       case 'friday-sunday':
