@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import WeddingTypeCard from "@/components/WeddingTypeCard";
 import DateTimeSelector from "@/components/DateTimeSelector";
@@ -10,10 +11,10 @@ import CakeTopperSelector from "@/components/CakeTopperSelector";
 import BookingSummary from "@/components/BookingSummary";
 import ProgressSteps from "@/components/ProgressSteps";
 import CustomerInfoForm from "@/components/CustomerInfoForm";
+import PaymentPage from "@/components/PaymentPage";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
-import { loadStripe } from '@stripe/stripe-js';
 
 import venueBackgroundImg from '@assets/generated_images/Intimate_indoor_wedding_venue_6ca435a6.png';
 import traditionalImg from '@assets/generated_images/Traditional_wedding_cake_topper_8cf92715.png';
@@ -94,7 +95,9 @@ const cakeToppers = [
 ];
 
 export default function Booking() {
+  const [, setLocation] = useLocation();
   const [currentStep, setCurrentStep] = useState(0);
+  const [showPayment, setShowPayment] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState<string>('');
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [selectedTime, setSelectedTime] = useState<string>('');
@@ -151,7 +154,11 @@ export default function Booking() {
   const getTotal = () => getSelectedPackage()?.basePrice || 0;
   const { toast } = useToast();
 
-  const handleProceedToPayment = async () => {
+  const handleProceedToPayment = () => {
+    setShowPayment(true);
+  };
+
+  const handlePaymentComplete = async () => {
     if (!selectedDate) return;
 
     setIsProcessing(true);
@@ -174,25 +181,13 @@ export default function Booking() {
       const bookingResponse = await apiRequest('POST', '/api/bookings', bookingData);
       const booking = await bookingResponse.json();
       
-      const checkoutResponse = await apiRequest('POST', '/api/create-checkout-session', {
-        bookingId: booking.id,
+      // Simulate successful payment by updating booking status
+      await apiRequest('PUT', `/api/bookings/${booking.id}`, {
+        paymentStatus: 'completed',
       });
-      const { sessionId } = await checkoutResponse.json();
 
-      if (!import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
-        throw new Error('Stripe public key not configured');
-      }
-
-      const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
-      if (!stripe) {
-        throw new Error('Failed to load Stripe');
-      }
-
-      const { error } = await (stripe as any).redirectToCheckout({ sessionId });
-      
-      if (error) {
-        throw error;
-      }
+      // Redirect to confirmation page
+      setLocation(`/confirmation/${booking.id}?simulated=true`);
     } catch (error: any) {
       console.error('Booking error:', error);
       toast({
@@ -200,9 +195,12 @@ export default function Booking() {
         description: error.message || "Failed to process booking. Please try again.",
         variant: "destructive",
       });
-    } finally {
       setIsProcessing(false);
     }
+  };
+
+  const handleBackToReview = () => {
+    setShowPayment(false);
   };
 
   return (
@@ -223,6 +221,14 @@ export default function Booking() {
 
           <main className="flex-1">
             <div className="space-y-8">
+              {showPayment ? (
+                <PaymentPage
+                  totalAmount={getTotal() * 100}
+                  onPaymentComplete={handlePaymentComplete}
+                  onBack={handleBackToReview}
+                />
+              ) : (
+                <>
               {currentStep === 0 && (
                 <div className="relative">
                   <div className="absolute inset-0 rounded-lg overflow-hidden -z-10">
@@ -369,6 +375,8 @@ export default function Booking() {
                   </Button>
                 )}
               </div>
+                </>
+              )}
             </div>
           </main>
         </div>
