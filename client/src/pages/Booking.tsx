@@ -9,7 +9,6 @@ import MusicSelector from "@/components/MusicSelector";
 import ColorSelector from "@/components/ColorSelector";
 import CakeTopperSelector from "@/components/CakeTopperSelector";
 import BookingSummary from "@/components/BookingSummary";
-import ProgressSteps from "@/components/ProgressSteps";
 import CustomerInfoForm from "@/components/CustomerInfoForm";
 import PaymentPage from "@/components/PaymentPage";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -20,6 +19,7 @@ import venueBackgroundImg from '@assets/generated_images/Intimate_indoor_wedding
 import traditionalImg from '@assets/generated_images/Traditional_wedding_cake_topper_8cf92715.png';
 import gentlemenImg from '@assets/generated_images/Gentlemen_wedding_cake_topper_3a9bd51a.png';
 import ladiesImg from '@assets/generated_images/Ladies_wedding_cake_topper_e1b9db02.png';
+import heroImage from '@assets/Copy of Composer banner_1761671065075.png';
 
 const steps = [
   { id: '1', title: 'Select Package', description: 'Choose your wedding type' },
@@ -229,13 +229,7 @@ export default function Booking() {
 
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
-          <aside className="lg:w-64 flex-shrink-0">
-            <div className="sticky top-24">
-              <ProgressSteps steps={steps} currentStep={currentStep} />
-            </div>
-          </aside>
-
-          <main className="flex-1">
+          <main className="flex-1 mx-auto w-full">
             <div className="space-y-8">
               {showPayment ? (
                 <PaymentPage
@@ -246,19 +240,20 @@ export default function Booking() {
               ) : (
                 <>
               {currentStep === 0 && (
-                <div className="relative">
-                  <div className="absolute inset-0 rounded-lg overflow-hidden -z-10">
+                <div className="relative min-h-screen -mx-4 px-4 -my-8 py-8">
+                  <div className="absolute inset-0 overflow-hidden">
                     <img
-                      src={venueBackgroundImg}
+                      src={heroImage}
                       alt="The Modest Wedding Venue"
-                      className="w-full h-full object-cover opacity-10"
+                      className="w-full h-full object-cover"
                     />
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70" />
                   </div>
-                  <div className="mb-8">
-                    <h2 className="font-serif text-3xl font-bold mb-2">Select Your Package</h2>
-                    <p className="text-muted-foreground">Choose the wedding package that fits your vision</p>
+                  <div className="relative z-10 mb-8">
+                    <h2 className="font-serif text-3xl font-bold mb-2" style={{ color: '#FAA0F0' }}>Select Your Package</h2>
+                    <p style={{ color: '#FAA0F0' }}>Choose the wedding package that fits your vision</p>
                   </div>
-                  <div className="grid md:grid-cols-2 gap-6">
+                  <div className="relative z-10 grid md:grid-cols-2 gap-6">
                     {weddingTypes.map((wedding) => (
                       <WeddingTypeCard
                         key={wedding.id}
