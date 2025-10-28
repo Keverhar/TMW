@@ -1,20 +1,9 @@
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useLocation } from "wouter";
-import { useState } from "react";
 import heroImage from '@assets/Copy of Composer banner_1761671065075.png';
 
 export default function Home() {
   const [, setLocation] = useLocation();
-  const [email, setEmail] = useState("");
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const form = e.currentTarget;
-    if (form.reportValidity()) {
-      setLocation("/booking");
-    }
-  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -65,27 +54,16 @@ export default function Home() {
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="max-w-md mx-auto space-y-4">
-            <div>
-              <Input
-                type="email"
-                placeholder="Email Address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="bg-white/90 backdrop-blur-sm text-foreground placeholder:text-muted-foreground border-white/20"
-                data-testid="input-email"
-              />
-            </div>
+          <div className="max-w-md mx-auto">
             <Button 
-              type="submit" 
+              onClick={() => setLocation("/booking")}
               size="lg" 
               className="text-lg px-8 bg-primary/90 hover:bg-primary backdrop-blur-sm w-full md:w-auto"
-              data-testid="button-submit"
+              data-testid="button-start-booking"
             >
-              Submit
+              Start Planning Your Wedding
             </Button>
-          </form>
+          </div>
         </div>
       </div>
     </div>
