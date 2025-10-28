@@ -29,7 +29,7 @@ export default function Home() {
         </div>
         
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
-          <h1 className="font-serif text-4xl md:text-6xl font-bold text-white mb-6">
+          <h1 className="font-serif text-4xl md:text-6xl font-bold text-white mb-6 md:whitespace-nowrap">
             Welcome to the Wedding Composer
           </h1>
           
@@ -38,18 +38,20 @@ export default function Home() {
               Design, Save, and Return. Your selections are automatically saved with your email, so feel free to play and change things—nothing is final until you say it is.
             </p>
             
-            <div className="text-left md:text-center text-base md:text-lg space-y-2 max-w-3xl mx-auto" style={{ fontFamily: '"Book Antiqua", Palatino, serif' }}>
-              <p className="font-semibold text-white">Your vision comes to life - perfectly on cue.</p>
-              <p><span className="font-semibold">Couple Information</span> – <span className="italic">Your love story, at the center.</span></p>
-              <p><span className="font-semibold">Wedding Date</span> – <span className="italic">No date? No problem.</span></p>
-              <p><span className="font-semibold">Guest Count</span> – <span className="italic">Estimate now, adjust later.</span></p>
-              <p><span className="font-semibold">Event Type</span> – <span className="italic">From intimate elopements to full celebrations.</span></p>
-              <p><span className="font-semibold">Signature Color</span> – <span className="italic">Choose your satin ribbon hue.</span></p>
-              <p><span className="font-semibold">Ceremony & Vows</span> – <span className="italic">Personalize the words that matter most.</span></p>
-              <p><span className="font-semibold">Music & Toasts</span> – <span className="italic">Every song and speech, orchestrated.</span></p>
-              <p><span className="font-semibold">Evite Templates</span> – <span className="italic">Stylish invites, ready to send.</span></p>
-              <p><span className="font-semibold">Photo Book Options</span> – <span className="italic">Cherish the memories forever.</span></p>
-              <p className="font-semibold italic">And much more!</p>
+            <div className="text-left md:text-center text-base md:text-lg max-w-3xl mx-auto" style={{ fontFamily: '"Book Antiqua", Palatino, serif' }}>
+              <p className="font-semibold text-white mb-2">Your vision comes to life - perfectly on cue.</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.325rem' }}>
+                <p><span className="font-semibold">Couple Information</span> – <span className="italic">Your love story, at the center.</span></p>
+                <p><span className="font-semibold">Wedding Date</span> – <span className="italic">No date? No problem.</span></p>
+                <p><span className="font-semibold">Guest Count</span> – <span className="italic">Estimate now, adjust later.</span></p>
+                <p><span className="font-semibold">Event Type</span> – <span className="italic">From intimate elopements to full celebrations.</span></p>
+                <p><span className="font-semibold">Signature Color</span> – <span className="italic">Choose your satin ribbon hue.</span></p>
+                <p><span className="font-semibold">Ceremony & Vows</span> – <span className="italic">Personalize the words that matter most.</span></p>
+                <p><span className="font-semibold">Music & Toasts</span> – <span className="italic">Every song and speech, orchestrated.</span></p>
+                <p><span className="font-semibold">Evite Templates</span> – <span className="italic">Stylish invites, ready to send.</span></p>
+                <p><span className="font-semibold">Photo Book Options</span> – <span className="italic">Cherish the memories forever.</span></p>
+                <p className="font-semibold italic">And much more!</p>
+              </div>
             </div>
           </div>
 
