@@ -9,6 +9,7 @@ interface Block2DateTimeProps {
   backupDate: string;
   timeSlot: string;
   onChange: (field: string, value: string) => void;
+  eventType?: string;
 }
 
 const timeSlots = [
@@ -18,7 +19,19 @@ const timeSlots = [
   { value: "flexible", label: "I'm flexible – show me all options", arrival: "" }
 ];
 
-export default function Block2DateTime({ preferredDate, backupDate, timeSlot, onChange }: Block2DateTimeProps) {
+export default function Block2DateTime({ preferredDate, backupDate, timeSlot, onChange, eventType = 'modest-wedding' }: Block2DateTimeProps) {
+  const isSimplifiedFlow = eventType === 'modest-elopement' || eventType === 'vow-renewal';
+  const allowedDays = isSimplifiedFlow 
+    ? [3, 5] // Wednesday (3), Friday (5)
+    : [5, 6, 0]; // Friday (5), Saturday (6), Sunday (0)
+  
+  const getDayName = (dayNumber: number): string => {
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    return days[dayNumber];
+  };
+  
+  const availableDaysText = allowedDays.map(d => getDayName(d)).join(', ');
+  
   return (
     <div className="space-y-6">
       <div>
@@ -35,7 +48,7 @@ export default function Block2DateTime({ preferredDate, backupDate, timeSlot, on
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="preferred-date">Preferred Date</Label>
+            <Label htmlFor="preferred-date">Preferred Date ({availableDaysText} only)</Label>
             <Input
               id="preferred-date"
               data-testid="input-preferred-date"
@@ -44,7 +57,7 @@ export default function Block2DateTime({ preferredDate, backupDate, timeSlot, on
               onChange={(e) => onChange('preferredDate', e.target.value)}
             />
             <p className="text-sm text-muted-foreground">
-              💡 Tip: For peak Saturday weddings, we recommend choosing as early as possible since dates fill quickly.
+              💡 Available days: {availableDaysText}
             </p>
           </div>
         </CardContent>

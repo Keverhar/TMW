@@ -35,11 +35,15 @@ const allSteps = [
   { id: 12, title: 'Contact & Payment', description: 'Finalize booking', availableFor: ['all'] },
 ];
 
-const eventTypePricing: Record<string, number> = {
-  'modest-wedding': 450000, // $4,500
-  'modest-elopement': 99900, // $999
-  'vow-renewal': 299900, // $2,999
-  'other': 350000, // $3,500 (default)
+const calculatePrice = (eventType: string, dayOfWeek: string): number => {
+  if (eventType === 'modest-wedding' || eventType === 'other') {
+    // Modest Wedding: Sunday = $4500, Friday/Saturday = $3900
+    return dayOfWeek === 'sunday' ? 450000 : 390000;
+  } else if (eventType === 'modest-elopement' || eventType === 'vow-renewal') {
+    // Elopement/Vow Renewal: Wednesday = $999, Friday = $1499
+    return dayOfWeek === 'wednesday' ? 99900 : 149900;
+  }
+  return 390000; // Default
 };
 
 export default function WeddingComposer() {
@@ -51,7 +55,7 @@ export default function WeddingComposer() {
 
   const [formData, setFormData] = useState({
     // Block 1: Event Type
-    eventType: "",
+    eventType: "modest-wedding",
     eventTypeOther: "",
 
     // Block 2: Date & Time
@@ -270,7 +274,17 @@ export default function WeddingComposer() {
   );
 
   const progress = (currentStep / steps.length) * 100;
-  const basePrice = eventTypePricing[formData.eventType] || 0;
+  
+  // Extract day of week from preferred date
+  const getDayOfWeek = (dateString: string): string => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    return days[date.getDay()];
+  };
+  
+  const dayOfWeek = getDayOfWeek(formData.preferredDate);
+  const basePrice = calculatePrice(formData.eventType, dayOfWeek);
 
   return (
     <div className="min-h-screen bg-background">
@@ -339,6 +353,7 @@ export default function WeddingComposer() {
               backupDate={formData.backupDate}
               timeSlot={formData.timeSlot}
               onChange={updateField}
+              eventType={formData.eventType}
             />
           )}
           {steps[currentStep - 1]?.id === 3 && (
