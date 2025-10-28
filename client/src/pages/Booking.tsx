@@ -20,13 +20,18 @@ import traditionalImg from '@assets/generated_images/Traditional_wedding_cake_to
 import gentlemenImg from '@assets/generated_images/Gentlemen_wedding_cake_topper_3a9bd51a.png';
 import ladiesImg from '@assets/generated_images/Ladies_wedding_cake_topper_e1b9db02.png';
 import heroImage from '@assets/Copy of Chapel_1761677843013.png';
+import customizeBackground from '@assets/Copy of four room image_1761678287286.png';
 
 const steps = [
   { id: '1', title: 'Select Package', description: 'Choose your wedding type' },
   { id: '2', title: 'Date & Time', description: 'Pick your ceremony date' },
-  { id: '3', title: 'Customize', description: 'Personalize your ceremony' },
-  { id: '4', title: 'Your Information', description: 'Enter contact details' },
-  { id: '5', title: 'Review', description: 'Confirm your selections' },
+  { id: '3', title: 'Ceremony Script', description: 'Choose your ceremony style' },
+  { id: '4', title: 'Wedding Vows', description: 'Select your vows' },
+  { id: '5', title: 'Ceremony Music', description: 'Pick your music' },
+  { id: '6', title: 'Wedding Colors', description: 'Choose your color theme' },
+  { id: '7', title: 'Cake Topper', description: 'Select your cake topper' },
+  { id: '8', title: 'Your Information', description: 'Enter contact details' },
+  { id: '9', title: 'Review', description: 'Confirm your selections' },
 ];
 
 const weddingTypes = [
@@ -156,10 +161,18 @@ export default function Booking() {
       case 1:
         return selectedDate && selectedTime;
       case 2:
-        return selectedScript && selectedVows && selectedTopper;
+        return selectedScript !== '';
       case 3:
-        return customerName && customerEmail && customerPhone;
+        return selectedVows !== '';
       case 4:
+        return selectedMusic.length > 0;
+      case 5:
+        return selectedColor !== '';
+      case 6:
+        return selectedTopper !== '';
+      case 7:
+        return customerName && customerEmail && customerPhone;
+      case 8:
         return true;
       default:
         return false;
@@ -286,31 +299,115 @@ export default function Booking() {
               )}
 
               {currentStep === 2 && (
-                <div>
-                  <div className="mb-8">
-                    <h2 className="font-serif text-3xl font-bold mb-2">Customize Your Ceremony</h2>
-                    <p className="text-muted-foreground">Personalize every detail of your special day</p>
+                <div className="relative min-h-screen -mx-4 px-4 -my-8 py-8">
+                  <div className="absolute inset-0 overflow-hidden">
+                    <img
+                      src={customizeBackground}
+                      alt="The Modest Wedding Venue"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70" />
                   </div>
-                  <div className="space-y-6">
+                  <div className="relative z-10 mb-8">
+                    <h2 className="font-serif text-3xl font-bold mb-2" style={{ color: '#FAA0F0' }}>Ceremony Script</h2>
+                    <p style={{ color: '#FAA0F0' }}>Choose your ceremony style</p>
+                  </div>
+                  <div className="relative z-10">
                     <CeremonyScriptSelector
                       scripts={ceremonyScripts}
                       selectedScript={selectedScript}
                       onSelectScript={setSelectedScript}
                     />
+                  </div>
+                </div>
+              )}
+
+              {currentStep === 3 && (
+                <div className="relative min-h-screen -mx-4 px-4 -my-8 py-8">
+                  <div className="absolute inset-0 overflow-hidden">
+                    <img
+                      src={customizeBackground}
+                      alt="The Modest Wedding Venue"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70" />
+                  </div>
+                  <div className="relative z-10 mb-8">
+                    <h2 className="font-serif text-3xl font-bold mb-2" style={{ color: '#FAA0F0' }}>Wedding Vows</h2>
+                    <p style={{ color: '#FAA0F0' }}>Select your vows</p>
+                  </div>
+                  <div className="relative z-10">
                     <VowsSelector
                       vows={vowsOptions}
                       selectedVow={selectedVows}
                       onSelectVow={setSelectedVows}
                     />
+                  </div>
+                </div>
+              )}
+
+              {currentStep === 4 && (
+                <div className="relative min-h-screen -mx-4 px-4 -my-8 py-8">
+                  <div className="absolute inset-0 overflow-hidden">
+                    <img
+                      src={customizeBackground}
+                      alt="The Modest Wedding Venue"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70" />
+                  </div>
+                  <div className="relative z-10 mb-8">
+                    <h2 className="font-serif text-3xl font-bold mb-2" style={{ color: '#FAA0F0' }}>Ceremony Music</h2>
+                    <p style={{ color: '#FAA0F0' }}>Pick your music</p>
+                  </div>
+                  <div className="relative z-10">
                     <MusicSelector
                       musicOptions={musicOptions}
                       selectedMusic={selectedMusic}
                       onToggleMusic={handleToggleMusic}
                     />
+                  </div>
+                </div>
+              )}
+
+              {currentStep === 5 && (
+                <div className="relative min-h-screen -mx-4 px-4 -my-8 py-8">
+                  <div className="absolute inset-0 overflow-hidden">
+                    <img
+                      src={customizeBackground}
+                      alt="The Modest Wedding Venue"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70" />
+                  </div>
+                  <div className="relative z-10 mb-8">
+                    <h2 className="font-serif text-3xl font-bold mb-2" style={{ color: '#FAA0F0' }}>Wedding Colors</h2>
+                    <p style={{ color: '#FAA0F0' }}>Choose your color theme</p>
+                  </div>
+                  <div className="relative z-10">
                     <ColorSelector
                       selectedColor={selectedColor}
                       onSelectColor={setSelectedColor}
                     />
+                  </div>
+                </div>
+              )}
+
+              {currentStep === 6 && (
+                <div className="relative min-h-screen -mx-4 px-4 -my-8 py-8">
+                  <div className="absolute inset-0 overflow-hidden">
+                    <img
+                      src={customizeBackground}
+                      alt="The Modest Wedding Venue"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70" />
+                  </div>
+                  <div className="relative z-10 mb-8">
+                    <h2 className="font-serif text-3xl font-bold mb-2" style={{ color: '#FAA0F0' }}>Cake Topper</h2>
+                    <p style={{ color: '#FAA0F0' }}>Select your cake topper</p>
+                  </div>
+                  <div className="relative z-10">
                     <CakeTopperSelector
                       toppers={cakeToppers}
                       selectedTopper={selectedTopper}
@@ -320,7 +417,7 @@ export default function Booking() {
                 </div>
               )}
 
-              {currentStep === 3 && (
+              {currentStep === 7 && (
                 <div>
                   <div className="mb-8">
                     <h2 className="font-serif text-3xl font-bold mb-2">Your Information</h2>
@@ -339,7 +436,7 @@ export default function Booking() {
                 </div>
               )}
 
-              {currentStep === 4 && (
+              {currentStep === 8 && (
                 <div>
                   <div className="mb-8">
                     <h2 className="font-serif text-3xl font-bold mb-2">Review Your Booking</h2>
@@ -351,11 +448,11 @@ export default function Booking() {
                         { label: 'Wedding Package', value: getSelectedPackage()?.title || '', onEdit: () => setCurrentStep(0) },
                         { label: 'Date & Time', value: selectedDate && selectedTime ? `${selectedDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} at ${selectedTime}` : '', onEdit: () => setCurrentStep(1) },
                         { label: 'Ceremony Script', value: ceremonyScripts.find(s => s.id === selectedScript)?.name || '', onEdit: () => setCurrentStep(2) },
-                        { label: 'Vows', value: vowsOptions.find(v => v.id === selectedVows)?.title || '', onEdit: () => setCurrentStep(2) },
-                        { label: 'Music Selections', value: `${selectedMusic.length} songs selected`, onEdit: () => setCurrentStep(2) },
-                        { label: 'Color Theme', value: selectedColor, onEdit: () => setCurrentStep(2) },
-                        { label: 'Cake Topper', value: cakeToppers.find(t => t.id === selectedTopper)?.name || '', onEdit: () => setCurrentStep(2) },
-                        { label: 'Contact', value: `${customerName} (${customerEmail})`, onEdit: () => setCurrentStep(3) },
+                        { label: 'Vows', value: vowsOptions.find(v => v.id === selectedVows)?.title || '', onEdit: () => setCurrentStep(3) },
+                        { label: 'Music Selections', value: `${selectedMusic.length} songs selected`, onEdit: () => setCurrentStep(4) },
+                        { label: 'Color Theme', value: selectedColor, onEdit: () => setCurrentStep(5) },
+                        { label: 'Cake Topper', value: cakeToppers.find(t => t.id === selectedTopper)?.name || '', onEdit: () => setCurrentStep(6) },
+                        { label: 'Contact', value: `${customerName} (${customerEmail})`, onEdit: () => setCurrentStep(7) },
                       ]}
                       basePrice={getTotal()}
                       total={getTotal()}
