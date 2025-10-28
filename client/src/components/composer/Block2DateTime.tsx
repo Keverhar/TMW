@@ -33,20 +33,57 @@ export default function Block2DateTime({ preferredDate, backupDate, timeSlot, on
     return days[dayNumber];
   };
   
+  // Get allowed backup days based on preferred date's price tier
+  const getAllowedBackupDays = (): number[] => {
+    if (!preferredDate) return allowedDays;
+    
+    const prefDateObj = new Date(preferredDate + 'T12:00:00');
+    const prefDayOfWeek = prefDateObj.getDay();
+    
+    if (isSimplifiedFlow) {
+      // Elopement/Vow Renewal: same day only (same price tier)
+      // Wednesday ($999) → only Wednesday
+      // Friday ($1499) → only Friday
+      return [prefDayOfWeek];
+    } else {
+      // Modest Wedding: same price tier days
+      // Saturday ($4500) → only Saturday
+      // Friday ($3900) → Friday or Sunday
+      // Sunday ($3900) → Friday or Sunday
+      if (prefDayOfWeek === 6) { // Saturday
+        return [6]; // Only Saturday
+      } else {
+        return [5, 0]; // Friday or Sunday (both $3900)
+      }
+    }
+  };
+  
+  const allowedBackupDays = getAllowedBackupDays();
   const availableDaysText = allowedDays.map(d => getDayName(d)).join(', ');
+  const availableBackupDaysText = allowedBackupDays.map(d => getDayName(d)).join(', ');
   
   // Convert string dates to Date objects
   const preferredDateObj = preferredDate ? new Date(preferredDate + 'T12:00:00') : undefined;
   const backupDateObj = backupDate ? new Date(backupDate + 'T12:00:00') : undefined;
   
-  // Matcher function to disable days not in allowedDays
+  // Matcher function to disable days not in allowedDays (for preferred date)
   const disabledDays = (date: Date) => {
     return !allowedDays.includes(date.getDay());
+  };
+  
+  // Matcher function to disable days not in allowedBackupDays (for backup date)
+  const disabledBackupDays = (date: Date) => {
+    return !allowedBackupDays.includes(date.getDay());
   };
   
   // Matcher function to highlight available days
   const highlightDays = (date: Date) => {
     return allowedDays.includes(date.getDay());
+  };
+  
+  // Matcher function to highlight available backup days
+  const highlightBackupDays = (date: Date) => {
+    return allowedBackupDays.includes(date.getDay());
   };
   
   return (
@@ -87,6 +124,17 @@ export default function Block2DateTime({ preferredDate, backupDate, timeSlot, on
                       const month = String(date.getMonth() + 1).padStart(2, '0');
                       const day = String(date.getDate()).padStart(2, '0');
                       onChange('preferredDate', `${year}-${month}-${day}`);
+                      // Clear backup date if it's no longer in the allowed price tier
+                      if (backupDate) {
+                        const backupDateObj = new Date(backupDate + 'T12:00:00');
+                        const backupDayOfWeek = backupDateObj.getDay();
+                        const newAllowedBackupDays = isSimplifiedFlow 
+                          ? [date.getDay()] 
+                          : (date.getDay() === 6 ? [6] : [5, 0]);
+                        if (!newAllowedBackupDays.includes(backupDayOfWeek)) {
+                          onChange('backupDate', '');
+                        }
+                      }
                     }
                   }}
                   disabled={disabledDays}
@@ -112,13 +160,14 @@ export default function Block2DateTime({ preferredDate, backupDate, timeSlot, on
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
-            <Label>Backup Date ({availableDaysText} only)</Label>
+            <Label>Backup Date ({preferredDate ? availableBackupDaysText : availableDaysText} only)</Label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
                   data-testid="button-backup-date"
                   className="w-full justify-start text-left font-normal"
+                  disabled={!preferredDate}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
                   {backupDateObj ? format(backupDateObj, "PPP") : <span>Pick a date (optional)</span>}
@@ -138,8 +187,8 @@ export default function Block2DateTime({ preferredDate, backupDate, timeSlot, on
                       onChange('backupDate', '');
                     }
                   }}
-                  disabled={disabledDays}
-                  modifiers={{ available: highlightDays }}
+                  disabled={disabledBackupDays}
+                  modifiers={{ available: highlightBackupDays }}
                   modifiersClassNames={{
                     available: "bg-primary/10 font-semibold"
                   }}
@@ -147,6 +196,16 @@ export default function Block2DateTime({ preferredDate, backupDate, timeSlot, on
                 />
               </PopoverContent>
             </Popover>
+            {!preferredDate && (
+              <p className="text-sm text-muted-foreground">
+                Please select a preferred date first
+              </p>
+            )}
+            {preferredDate && (
+              <p className="text-sm text-muted-foreground">
+                💡 Available days (same price tier): {availableBackupDaysText}
+              </p>
+            )}
           </div>
         </CardContent>
       </Card>
