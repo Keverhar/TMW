@@ -24,29 +24,29 @@ export default function WeddingTypeCard({
       className={`overflow-hidden transition-all hover-elevate ${
         selected ? "border-2 border-primary" : ""
       }`}
-      style={{ backgroundColor: 'rgba(0, 0, 0, 0.7)', backdropFilter: 'blur(10px)' }}
+      style={{ backgroundColor: 'rgba(0, 0, 0, 0.35)', backdropFilter: 'blur(20px) brightness(0.7)' }}
       data-testid={`card-wedding-${title.toLowerCase().replace(/\//g, '-')}`}
     >
       <CardHeader className="gap-2">
         <div className="flex items-start justify-between gap-4">
-          <CardTitle className="font-serif text-2xl" style={{ color: '#FAA0F0' }}>{title}</CardTitle>
+          <CardTitle className="font-serif text-2xl" style={{ color: '#787DBE' }}>{title}</CardTitle>
           {selected && (
             <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-primary-foreground">
               <Check className="h-4 w-4" />
             </div>
           )}
         </div>
-        <CardDescription className="text-base" style={{ color: '#FAA0F0' }}>{description}</CardDescription>
+        <CardDescription className="text-base" style={{ color: '#787DBE' }}>{description}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="text-3xl font-serif font-semibold" style={{ color: '#FAA0F0' }}>
+        <div className="text-3xl font-serif font-semibold" style={{ color: '#787DBE' }}>
           {price}
         </div>
         <div className="space-y-2">
           {inclusions.map((item, index) => (
             <div key={index} className="flex items-start gap-2">
-              <Check className="h-4 w-4 mt-0.5 flex-shrink-0" style={{ color: '#FAA0F0' }} />
-              <span className="text-sm" style={{ color: '#FAA0F0' }}>{item}</span>
+              <Check className="h-4 w-4 mt-0.5 flex-shrink-0" style={{ color: '#787DBE' }} />
+              <span className="text-sm" style={{ color: '#787DBE' }}>{item}</span>
             </div>
           ))}
         </div>
