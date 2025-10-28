@@ -54,7 +54,19 @@ export default function Block2DateTime({ preferredDate, backupDate, timeSlot, on
               data-testid="input-preferred-date"
               type="date"
               value={preferredDate}
-              onChange={(e) => onChange('preferredDate', e.target.value)}
+              onChange={(e) => {
+                const selectedDate = new Date(e.target.value);
+                const dayOfWeek = selectedDate.getDay();
+                if (allowedDays.includes(dayOfWeek)) {
+                  onChange('preferredDate', e.target.value);
+                }
+              }}
+              onKeyDown={(e) => {
+                // Prevent manual typing - force calendar selection
+                if (e.key !== 'Tab') {
+                  e.preventDefault();
+                }
+              }}
             />
             <p className="text-sm text-muted-foreground">
               💡 Available days: {availableDaysText}
@@ -70,13 +82,25 @@ export default function Block2DateTime({ preferredDate, backupDate, timeSlot, on
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
-            <Label htmlFor="backup-date">Backup Date</Label>
+            <Label htmlFor="backup-date">Backup Date ({availableDaysText} only)</Label>
             <Input
               id="backup-date"
               data-testid="input-backup-date"
               type="date"
               value={backupDate}
-              onChange={(e) => onChange('backupDate', e.target.value)}
+              onChange={(e) => {
+                const selectedDate = new Date(e.target.value);
+                const dayOfWeek = selectedDate.getDay();
+                if (allowedDays.includes(dayOfWeek)) {
+                  onChange('backupDate', e.target.value);
+                }
+              }}
+              onKeyDown={(e) => {
+                // Prevent manual typing - force calendar selection
+                if (e.key !== 'Tab') {
+                  e.preventDefault();
+                }
+              }}
             />
           </div>
         </CardContent>
