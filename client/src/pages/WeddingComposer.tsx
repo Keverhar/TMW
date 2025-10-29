@@ -284,10 +284,10 @@ export default function WeddingComposer() {
     }
 
     // Require swatch preview or final decision selection
-    if (formData.signatureColor && !['see-swatches-at-tour', 'final-decision'].includes(formData.colorSwatchDecision)) {
+    if (!formData.colorSwatchDecision) {
       toast({
         title: "Swatch decision required",
-        description: "Please select either 'I want to see the swatches during a tour' or 'Final Decision' before proceeding to payment.",
+        description: "Please select a swatch preview or final decision option before proceeding to payment.",
         variant: "destructive",
       });
       return;

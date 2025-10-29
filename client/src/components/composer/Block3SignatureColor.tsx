@@ -96,47 +96,37 @@ export default function Block3SignatureColor({ signatureColor, colorSwatchDecisi
             ))}
           </div>
 
-          {!signatureColor && (
-            <div className="flex gap-2 items-start bg-muted p-3 rounded-md">
-              <Info className="h-4 w-4 text-muted-foreground flex-shrink-0 mt-0.5" />
-              <p className="text-sm text-muted-foreground">
-                Not ready to choose yet? Select "We're not sure yet" and come back to this step later.
-              </p>
-            </div>
-          )}
         </CardContent>
       </Card>
 
-      {signatureColor && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Swatch Preview or Final Decision</CardTitle>
-            <CardDescription>Would you like to see the color in person before finalizing?</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <RadioGroup value={colorSwatchDecision} onValueChange={(value) => onChange('colorSwatchDecision', value)}>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="see-swatches-at-tour" id="swatch-tour" data-testid="radio-swatch-tour" />
-                <Label htmlFor="swatch-tour" className="cursor-pointer">
-                  I'm still deciding — I'd like to see swatches at my tour
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="final-decision" id="swatch-finalize" data-testid="radio-swatch-finalize" />
-                <Label htmlFor="swatch-finalize" className="cursor-pointer">
-                  I'm ready to finalize my selection now
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="not-sure-yet" id="swatch-not-sure" data-testid="radio-swatch-not-sure" />
-                <Label htmlFor="swatch-not-sure" className="cursor-pointer">
-                  Leave blank for now
-                </Label>
-              </div>
-            </RadioGroup>
-          </CardContent>
-        </Card>
-      )}
+      <Card>
+        <CardHeader>
+          <CardTitle>Swatch Preview or Final Decision</CardTitle>
+          <CardDescription>Would you like to see the color in person before finalizing?</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <RadioGroup value={colorSwatchDecision} onValueChange={(value) => onChange('colorSwatchDecision', value)}>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="see-swatches-at-tour" id="swatch-tour" data-testid="radio-swatch-tour" />
+              <Label htmlFor="swatch-tour" className="cursor-pointer">
+                I'm still deciding — I'd like to see swatches at my tour
+              </Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="final-decision" id="swatch-finalize" data-testid="radio-swatch-finalize" />
+              <Label htmlFor="swatch-finalize" className="cursor-pointer">
+                I'm ready to finalize my selection now
+              </Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="not-sure-yet" id="swatch-not-sure" data-testid="radio-swatch-not-sure" />
+              <Label htmlFor="swatch-not-sure" className="cursor-pointer">
+                Leave blank for now
+              </Label>
+            </div>
+          </RadioGroup>
+        </CardContent>
+      </Card>
     </div>
   );
 }
