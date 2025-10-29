@@ -104,7 +104,18 @@ export const weddingComposers = pgTable("wedding_composers", {
   departureVehicle: text("departure_vehicle"),
   personalTouchesSpecialInstructions: text("personal_touches_special_instructions"),
   
-  // Block 12: Contact & Payment
+  // Block 12: Evite & Save-the-Date
+  eviteDesignStyle: text("evite_design_style"),
+  eviteHeaderText: text("evite_header_text"),
+  eviteBodyText: text("evite_body_text"),
+  eviteRsvpOption: text("evite_rsvp_option"),
+  eviteRsvpCustomLink: text("evite_rsvp_custom_link"),
+  eviteDesignNoSpecialRequests: boolean("evite_design_no_special_requests").default(false),
+  eviteWordingNoSpecialRequests: boolean("evite_wording_no_special_requests").default(false),
+  eviteRsvpNoSpecialRequests: boolean("evite_rsvp_no_special_requests").default(false),
+  eviteCompletionStatus: text("evite_completion_status"),
+  
+  // Block 13: Contact & Payment
   customerName: text("customer_name").notNull(),
   customerName2: text("customer_name_2"),
   customerEmail: text("customer_email").notNull(),
