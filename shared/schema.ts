@@ -22,6 +22,7 @@ export type User = typeof users.$inferSelect;
 
 export const weddingComposers = pgTable("wedding_composers", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id"),
   
   // Block 1: Event Type
   eventType: text("event_type").notNull(),
