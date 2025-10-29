@@ -17,6 +17,7 @@ export interface IStorage {
   
   // Wedding Composer methods
   getWeddingComposer(id: string): Promise<WeddingComposer | undefined>;
+  getWeddingComposersByUserId(userId: string): Promise<WeddingComposer[]>;
   createWeddingComposer(composer: InsertWeddingComposer): Promise<WeddingComposer>;
   updateWeddingComposer(id: string, updates: Partial<InsertWeddingComposer>): Promise<WeddingComposer | undefined>;
   updateWeddingComposerPaymentStatus(id: string, paymentStatus: string, stripeSessionId?: string, stripePaymentIntentId?: string): Promise<WeddingComposer | undefined>;
@@ -104,6 +105,12 @@ export class MemStorage implements IStorage {
   // Wedding Composer methods
   async getWeddingComposer(id: string): Promise<WeddingComposer | undefined> {
     return this.weddingComposers.get(id);
+  }
+
+  async getWeddingComposersByUserId(userId: string): Promise<WeddingComposer[]> {
+    return Array.from(this.weddingComposers.values()).filter(
+      (composer) => composer.userId === userId
+    );
   }
 
   async createWeddingComposer(insertComposer: InsertWeddingComposer): Promise<WeddingComposer> {
@@ -293,6 +300,10 @@ export class DbStorage implements IStorage {
   async getWeddingComposer(id: string): Promise<WeddingComposer | undefined> {
     const result = await this.db.select().from(weddingComposers).where(eq(weddingComposers.id, id)).limit(1);
     return result[0];
+  }
+
+  async getWeddingComposersByUserId(userId: string): Promise<WeddingComposer[]> {
+    return await this.db.select().from(weddingComposers).where(eq(weddingComposers.userId, userId));
   }
 
   async createWeddingComposer(insertComposer: InsertWeddingComposer): Promise<WeddingComposer> {

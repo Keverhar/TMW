@@ -65,8 +65,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ message: "Invalid email or password" });
       }
       
+      // Get user's wedding composers
+      const composers = await storage.getWeddingComposersByUserId(user.id);
+      const latestComposer = composers.length > 0 
+        ? composers.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())[0]
+        : null;
+      
       const { password: _, ...userWithoutPassword } = user;
-      res.json({ user: userWithoutPassword });
+      res.json({ 
+        user: userWithoutPassword,
+        composer: latestComposer
+      });
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }
