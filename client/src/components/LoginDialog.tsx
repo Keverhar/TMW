@@ -43,19 +43,20 @@ export default function LoginDialog({
 
     setIsLoading(true);
     try {
-      const response: any = await apiRequest("POST", "/api/users/login", {
+      const response = await apiRequest("POST", "/api/users/login", {
         email,
         password,
       });
+      const data: any = await response.json();
 
       toast({
         title: "Welcome back!",
-        description: response.composer 
+        description: data.composer 
           ? "Loading your saved wedding plans..."
           : "You've successfully logged in",
       });
 
-      onLoginSuccess(response.user.id, response.user.email, response.composer);
+      onLoginSuccess(data.user.id, data.user.email, data.composer);
       onOpenChange(false);
     } catch (error: any) {
       toast({
