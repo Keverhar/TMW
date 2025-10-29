@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { DollarSign, User, FileText, Info, CreditCard } from "lucide-react";
 
-interface Block12ContactPaymentProps {
+interface Block13ContactPaymentProps {
   customerName: string;
   customerName2: string;
   customerEmail: string;
@@ -27,7 +27,7 @@ interface Block12ContactPaymentProps {
   basePackagePrice: number;
 }
 
-export default function Block12ContactPayment({
+export default function Block13ContactPayment({
   customerName,
   customerName2,
   customerEmail,
@@ -43,7 +43,7 @@ export default function Block12ContactPayment({
   onChange,
   eventType,
   basePackagePrice
-}: Block12ContactPaymentProps) {
+}: Block13ContactPaymentProps) {
   const [showTermsDialog, setShowTermsDialog] = useState(false);
   const [showRefundDialog, setShowRefundDialog] = useState(false);
   const [showByobDialog, setShowByobDialog] = useState(false);

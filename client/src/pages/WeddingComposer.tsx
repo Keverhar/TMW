@@ -21,7 +21,8 @@ import Block8Reception from "@/components/composer/Block8Reception";
 import Block9Photography from "@/components/composer/Block9Photography";
 import Block10PhotoProjection from "@/components/composer/Block10PhotoProjection";
 import Block11PersonalTouches from "@/components/composer/Block11PersonalTouches";
-import Block12ContactPayment from "@/components/composer/Block12ContactPayment";
+import Block12EviteSaveTheDate from "@/components/composer/Block12EviteSaveTheDate";
+import Block13ContactPayment from "@/components/composer/Block13ContactPayment";
 
 const allSteps = [
   { id: 1, title: 'Event Type', description: 'Choose your celebration', availableFor: ['all'] },
@@ -35,7 +36,8 @@ const allSteps = [
   { id: 9, title: 'Photography', description: 'Photo preferences', availableFor: ['modest-wedding', 'other'] },
   { id: 10, title: 'Photo Projection', description: 'Slideshow options', availableFor: ['modest-wedding', 'other'] },
   { id: 11, title: 'Personal Touches', description: 'Special details', availableFor: ['modest-wedding', 'other'] },
-  { id: 12, title: 'Contact & Payment', description: 'Finalize booking', availableFor: ['all'] },
+  { id: 12, title: 'Evite & Save-the-Date', description: 'Digital invitations', availableFor: ['all'] },
+  { id: 13, title: 'Contact & Payment', description: 'Finalize booking', availableFor: ['all'] },
 ];
 
 const calculatePrice = (eventType: string, dayOfWeek: string): number => {
@@ -142,7 +144,18 @@ export default function WeddingComposer() {
     departureVehicle: "",
     personalTouchesSpecialInstructions: "",
 
-    // Block 12: Contact & Payment
+    // Block 12: Evite & Save-the-Date
+    eviteDesignStyle: "",
+    eviteHeaderText: "",
+    eviteBodyText: "",
+    eviteRsvpOption: "",
+    eviteRsvpCustomLink: "",
+    eviteDesignNoSpecialRequests: false,
+    eviteWordingNoSpecialRequests: false,
+    eviteRsvpNoSpecialRequests: false,
+    eviteCompletionStatus: "",
+
+    // Block 13: Contact & Payment
     customerName: "",
     customerName2: "",
     customerEmail: "",
@@ -384,6 +397,15 @@ export default function WeddingComposer() {
         departureOrganizer: composer.departureOrganizer || "",
         departureVehicle: composer.departureVehicle || "",
         personalTouchesSpecialInstructions: composer.personalTouchesSpecialInstructions || "",
+        eviteDesignStyle: composer.eviteDesignStyle || "",
+        eviteHeaderText: composer.eviteHeaderText || "",
+        eviteBodyText: composer.eviteBodyText || "",
+        eviteRsvpOption: composer.eviteRsvpOption || "",
+        eviteRsvpCustomLink: composer.eviteRsvpCustomLink || "",
+        eviteDesignNoSpecialRequests: composer.eviteDesignNoSpecialRequests || false,
+        eviteWordingNoSpecialRequests: composer.eviteWordingNoSpecialRequests || false,
+        eviteRsvpNoSpecialRequests: composer.eviteRsvpNoSpecialRequests || false,
+        eviteCompletionStatus: composer.eviteCompletionStatus || "",
         customerName: composer.customerName || "",
         customerName2: composer.customerName2 || "",
         customerEmail: composer.customerEmail || email,
@@ -392,6 +414,7 @@ export default function WeddingComposer() {
         mailingAddress: composer.mailingAddress || "",
         termsAccepted: composer.termsAccepted || false,
         photoBookAddon: composer.photoBookAddon || false,
+        photoBookQuantity: composer.photoBookQuantity || 1,
         extraTimeAddon: composer.extraTimeAddon || false,
         byobBarAddon: composer.byobBarAddon || false,
         rehearsalAddon: composer.rehearsalAddon || false,
@@ -654,7 +677,25 @@ export default function WeddingComposer() {
             />
           )}
           {steps[currentStep - 1]?.id === 12 && (
-            <Block12ContactPayment
+            <Block12EviteSaveTheDate
+              eviteDesignStyle={formData.eviteDesignStyle}
+              eviteHeaderText={formData.eviteHeaderText}
+              eviteBodyText={formData.eviteBodyText}
+              eviteRsvpOption={formData.eviteRsvpOption}
+              eviteRsvpCustomLink={formData.eviteRsvpCustomLink}
+              eviteDesignNoSpecialRequests={formData.eviteDesignNoSpecialRequests}
+              eviteWordingNoSpecialRequests={formData.eviteWordingNoSpecialRequests}
+              eviteRsvpNoSpecialRequests={formData.eviteRsvpNoSpecialRequests}
+              eviteCompletionStatus={formData.eviteCompletionStatus}
+              onChange={updateField}
+              customerName={formData.customerName}
+              customerName2={formData.customerName2}
+              preferredDate={formData.preferredDate}
+              timeSlot={formData.timeSlot}
+            />
+          )}
+          {steps[currentStep - 1]?.id === 13 && (
+            <Block13ContactPayment
               customerName={formData.customerName}
               customerName2={formData.customerName2}
               customerEmail={formData.customerEmail}
@@ -697,7 +738,7 @@ export default function WeddingComposer() {
           ) : (
             <Button
               onClick={handleSubmit}
-              disabled={!formData.termsAccepted || !formData.customerName}
+              disabled={!formData.termsAccepted || !formData.customerName || !formData.eviteCompletionStatus}
               size="lg"
               data-testid="button-finalize-payment"
             >
