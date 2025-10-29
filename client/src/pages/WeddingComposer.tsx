@@ -473,7 +473,7 @@ export default function WeddingComposer() {
       <div className="sticky top-0 z-50 bg-background border-b">
         <div className="max-w-4xl mx-auto px-6 py-3">
           <div className="flex items-center gap-3">
-            <div className="flex-shrink-0 px-4 py-2 bg-blue-100 dark:bg-blue-900 text-blue-900 dark:text-blue-100 rounded-md font-semibold text-sm" data-testid="text-total-price">
+            <div className="flex-shrink-0 px-4 py-2 bg-background border rounded-md font-bold text-sm text-yellow-400" data-testid="text-total-price">
               ${(totalPrice / 100).toFixed(2)}
             </div>
             <div className="flex gap-2 overflow-x-auto pb-2">
@@ -503,29 +503,30 @@ export default function WeddingComposer() {
 
       <div className="max-w-4xl mx-auto p-6">
         <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-4 gap-4">
             <div>
               <h1 className="text-4xl font-serif mb-2">The Wedding Composer</h1>
               <p className="text-muted-foreground">
                 Your personalized planning tool for designing a wedding day that feels entirely your own
               </p>
             </div>
-            {currentStep > 1 && !userAccount && (
-              <Button
-                onClick={handleSaveProgress}
-                disabled={isSaving || !formData.eventType}
-                variant="outline"
-                data-testid="button-save-progress"
-              >
-                <Save className="h-4 w-4 mr-2" />
-                {isSaving ? 'Saving...' : 'Create Account'}
-              </Button>
-            )}
-            {userAccount && (
-              <div className="text-sm text-muted-foreground" data-testid="text-auto-save-indicator">
-                Auto-saving as {userAccount.email}
-              </div>
-            )}
+            <div className="flex flex-col gap-2 items-end shrink-0">
+              {!userAccount && (
+                <Button
+                  onClick={() => setShowLoginDialog(true)}
+                  className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold"
+                  data-testid="button-create-account-login-header"
+                >
+                  <UserPlus className="h-4 w-4 mr-2" />
+                  Create Account or Login
+                </Button>
+              )}
+              {userAccount && (
+                <div className="text-sm text-muted-foreground" data-testid="text-auto-save-indicator">
+                  Auto-saving as {userAccount.email}
+                </div>
+              )}
+            </div>
           </div>
 
           <div className="space-y-2">
@@ -548,7 +549,6 @@ export default function WeddingComposer() {
           {steps[currentStep - 1]?.id === 2 && (
             <Block2DateTime
               preferredDate={formData.preferredDate}
-              backupDate={formData.backupDate}
               timeSlot={formData.timeSlot}
               onChange={updateField}
               eventType={formData.eventType}

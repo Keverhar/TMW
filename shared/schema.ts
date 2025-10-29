@@ -115,6 +115,7 @@ export const weddingComposers = pgTable("wedding_composers", {
   // Pricing & Add-ons
   basePackagePrice: integer("base_package_price").notNull(),
   photoBookAddon: boolean("photo_book_addon").default(false),
+  photoBookQuantity: integer("photo_book_quantity").default(1),
   extraTimeAddon: boolean("extra_time_addon").default(false),
   byobBarAddon: boolean("byob_bar_addon").default(false),
   rehearsalAddon: boolean("rehearsal_addon").default(false),

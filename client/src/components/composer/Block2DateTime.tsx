@@ -9,7 +9,6 @@ import { format } from "date-fns";
 
 interface Block2DateTimeProps {
   preferredDate: string;
-  backupDate: string;
   timeSlot: string;
   onChange: (field: string, value: string) => void;
   eventType?: string;
@@ -45,7 +44,7 @@ const getTimeSlots = (preferredDate: string, eventType: string) => {
   ];
 };
 
-export default function Block2DateTime({ preferredDate, backupDate, timeSlot, onChange, eventType = 'modest-wedding' }: Block2DateTimeProps) {
+export default function Block2DateTime({ preferredDate, timeSlot, onChange, eventType = 'modest-wedding' }: Block2DateTimeProps) {
   const isSimplifiedFlow = eventType === 'modest-elopement' || eventType === 'vow-renewal';
   const allowedDays = isSimplifiedFlow 
     ? [3, 5] // Wednesday (3), Friday (5)
@@ -57,57 +56,19 @@ export default function Block2DateTime({ preferredDate, backupDate, timeSlot, on
     return days[dayNumber];
   };
   
-  // Get allowed backup days based on preferred date's price tier
-  const getAllowedBackupDays = (): number[] => {
-    if (!preferredDate) return allowedDays;
-    
-    const prefDateObj = new Date(preferredDate + 'T12:00:00');
-    const prefDayOfWeek = prefDateObj.getDay();
-    
-    if (isSimplifiedFlow) {
-      // Elopement/Vow Renewal: same day only (same price tier)
-      // Wednesday ($999) → only Wednesday
-      // Friday ($1499) → only Friday
-      return [prefDayOfWeek];
-    } else {
-      // Modest Wedding: same price tier days
-      // Saturday ($4500) → only Saturday
-      // Friday ($3900) → Friday or Sunday
-      // Sunday ($3900) → Friday or Sunday
-      if (prefDayOfWeek === 6) { // Saturday
-        return [6]; // Only Saturday
-      } else {
-        return [5, 0]; // Friday or Sunday (both $3900)
-      }
-    }
-  };
-  
-  const allowedBackupDays = getAllowedBackupDays();
   const availableDaysText = allowedDays.map(d => getDayName(d)).join(', ');
-  const availableBackupDaysText = allowedBackupDays.map(d => getDayName(d)).join(', ');
   
   // Convert string dates to Date objects
   const preferredDateObj = preferredDate ? new Date(preferredDate + 'T12:00:00') : undefined;
-  const backupDateObj = backupDate ? new Date(backupDate + 'T12:00:00') : undefined;
   
-  // Matcher function to disable days not in allowedDays (for preferred date)
+  // Matcher function to disable days not in allowedDays
   const disabledDays = (date: Date) => {
     return !allowedDays.includes(date.getDay());
-  };
-  
-  // Matcher function to disable days not in allowedBackupDays (for backup date)
-  const disabledBackupDays = (date: Date) => {
-    return !allowedBackupDays.includes(date.getDay());
   };
   
   // Matcher function to highlight available days
   const highlightDays = (date: Date) => {
     return allowedDays.includes(date.getDay());
-  };
-  
-  // Matcher function to highlight available backup days
-  const highlightBackupDays = (date: Date) => {
-    return allowedBackupDays.includes(date.getDay());
   };
   
   return (
@@ -148,17 +109,6 @@ export default function Block2DateTime({ preferredDate, backupDate, timeSlot, on
                       const month = String(date.getMonth() + 1).padStart(2, '0');
                       const day = String(date.getDate()).padStart(2, '0');
                       onChange('preferredDate', `${year}-${month}-${day}`);
-                      // Clear backup date if it's no longer in the allowed price tier
-                      if (backupDate) {
-                        const backupDateObj = new Date(backupDate + 'T12:00:00');
-                        const backupDayOfWeek = backupDateObj.getDay();
-                        const newAllowedBackupDays = isSimplifiedFlow 
-                          ? [date.getDay()] 
-                          : (date.getDay() === 6 ? [6] : [5, 0]);
-                        if (!newAllowedBackupDays.includes(backupDayOfWeek)) {
-                          onChange('backupDate', '');
-                        }
-                      }
                     }
                   }}
                   disabled={disabledDays}
