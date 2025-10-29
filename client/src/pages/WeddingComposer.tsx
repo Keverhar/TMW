@@ -268,6 +268,17 @@ export default function WeddingComposer() {
       return;
     }
 
+    // Require account creation before payment
+    if (!userAccount) {
+      toast({
+        title: "Account required",
+        description: "Please create an account or log in before proceeding to payment.",
+        variant: "destructive",
+      });
+      setShowAccountDialog(true);
+      return;
+    }
+
     // Save progress first
     await saveProgress();
 
@@ -280,41 +291,8 @@ export default function WeddingComposer() {
       return;
     }
 
-    try {
-      setIsSaving(true);
-      
-      // Create Stripe checkout session
-      const response: any = await apiRequest("POST", "/api/wedding-composers/create-checkout-session", {
-        composerId
-      });
-
-      // Redirect to Stripe checkout
-      if (response.sessionId && import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
-        const { loadStripe } = await import("@stripe/stripe-js");
-        const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
-        
-        if (stripe) {
-          const { error } = await stripe.redirectToCheckout({ sessionId: response.sessionId });
-          if (error) {
-            throw new Error(error.message);
-          }
-        }
-      } else {
-        toast({
-          title: "Payment not configured",
-          description: "Stripe is not configured. Redirecting to confirmation...",
-        });
-        // For demo purposes when Stripe is not configured
-        setTimeout(() => setLocation(`/confirmation/${composerId}`), 1500);
-      }
-    } catch (error: any) {
-      toast({
-        title: "Payment error",
-        description: error.message || "Failed to initiate payment. Please try again.",
-        variant: "destructive",
-      });
-      setIsSaving(false);
-    }
+    // Redirect to payment page
+    setLocation(`/payment/${composerId}`);
   };
 
   const handleSaveProgress = async () => {
