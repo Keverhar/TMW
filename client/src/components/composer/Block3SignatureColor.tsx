@@ -107,7 +107,7 @@ export default function Block3SignatureColor({ signatureColor, colorSwatchDecisi
         </CardContent>
       </Card>
 
-      {signatureColor && signatureColor !== '' && (
+      {signatureColor && (
         <Card>
           <CardHeader>
             <CardTitle>Swatch Preview or Final Decision</CardTitle>
