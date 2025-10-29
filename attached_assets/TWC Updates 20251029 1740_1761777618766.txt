@@ -1,0 +1,356 @@
+
+When account creation is attempted, the email address must be validated through standard 
+methods before the account is valid.  Unless the email is validated, the user will be treated as a 
+guest.
+
+On the login, there must be a "Forgot Password" option that uses the standard email or phone 
+validation to change the password.
+
+Change "Create Account" button to "Create Account or Login". 
+
+Change "Create Account or Login" button to bright yellow text.
+
+Display "Create Account or Login" button on every page if no account exists.
+
+The Section Selection boxes should be made thinner from top to bottom and all should display 
+on each page by Using two rows for the Section Selection Boxes.
+
+Transition to pages, the page must start at the top of the page every time.
+
+On the Price display box make the text bright yellow.
+
+The navigation banner at the top also has to be on the secure payment page. 
+
+On the "2. Date & Time" page, remove the "Backup Date (Optional)" box.
+
+On the "2. Date & Time" page, the availble times on Wednesday are 12:00 PM, 2:00 PM, 4:00 
+PM and 6:00 PM
+
+On the "2. Date & Time" page, instead of a drop down for date selection, just display the 
+calendar.
+
+On the "3. Signature Color" page, the "Swatch Preaiew or Final Decision" box does not appear in 
+for new accounts or in guest mode.
+
+On the "3. Signature Color" page, the "Swatch Preview or Final Decision" box is required before 
+payment.
+
+On the "4. Music Selection" make the "Processional" a dropdown box allowing four predefined 
+music selecions (add preview button for each) and a user input box for a Spotify link. 
+The selections with spotify links for preview are
+Canon in D (Johann Pachelbel) 
+https://open.spotify.com/track/54pg91e33yzM0KAcVHR7pQ?si=711700e581c04043
+At Last (Etta James / Instrumental)
+https://open.spotify.com/track/5oRC4XXAViNiQNuqN11Wbi?si=84707e3b854a4213
+Can’t Help Falling in Love (Elvis Presley / Instrumental) 
+https://open.spotify.com/track/5uoRpWr8tTlKQB54cg2lfU?si=eac5ab59998344a0
+All of Me (John Legend / Instrumental) 
+https://open.spotify.com/track/2PoWRtXm8B53jpqO8mdIF9?si=8d013c8dab9f4fbc
+
+On the "4. Music Selection" make the "Recessional" a dropdown box allowing four predefined 
+music selecions (add preview button for each) and a user input box for a Spotify link. 
+The selections with spotify links for preview are
+Toccata  Symphony No. 5  (Charles-Marie Widor)
+https://open.spotify.com/track/6SiwfTLDgaTi7O6fXvOu2X?si=ae4a54d247854c92
+The Four Seasons - Spring (Antonio Vivaldi)
+https://open.spotify.com/track/6cMvfWeDBdeE2UI3J6R019?si=0918eab73ba64ed0
+Wedding March (Felix Mendelssohn)
+https://open.spotify.com/track/6CyhZwhS6eG1UVeNv6N7VS?si=1c8ad1abac8f4847
+Signed, Sealed, Delivered (Stevie Wonder)
+https://open.spotify.com/track/2C5SI38AMmqckQGnD1H2FO?si=e7a7010886964e4a
+
+On the "4. Music Selection" make the "Reception Highlights" a dropdown box allowing four 
+predefined music selecions (add preview button for each) and a user input box for a Spotify 
+link. 
+The selections with spotify links for preview are 
+Crazy in Love (Beyoncé featuring JAY-Z) 
+https://open.spotify.com/track/5IVuqXILoxVWvWEPm82Jxr?si=12db5468ed0d4653
+You Make My Dreams Come True (Hall & Oates) 
+https://open.spotify.com/track/4o6BgsqLIBViaGVbx5rbRk?si=533deed2d9c942cb
+24K Magic (Bruno Mars)  
+https://open.spotify.com/track/6b8Be6ljOzmkOmFslEb23P?si=93a7dbc4100745fd 
+Come Fly With Me? (Frank Sinatra) 
+https://open.spotify.com/track/1GcPhT7osBb4LEJnQ0tmfj?si=931dc4e319764a69
+
+On the "4. Music Selection" make the "Reception Highlights" a dropdown box allowing four 
+predefined music selecions (add preview button for each) and a user input box for a Spotify 
+link. 
+The selections with spotify links for preview are
+I Can’t Help Myself / Sugar Pie, Honey Bunch (The Four Tops) 
+https://open.spotify.com/track/6b6IMqP565TbtFFZg9iFf3?si=a1f5eeb26e774a51
+How Sweet It Is (James Taylor) 
+https://open.spotify.com/track/4BiqtG2bW4JrNRd2T2mr0j?si=557a20af11164795
+Cake By The Ocean (DNCE) 
+https://open.spotify.com/track/76hfruVvmfQbw0eYn1nmeC?si=8d9fd2f250bf4fd6
+Honey Bee (Blake Shelton) 
+https://open.spotify.com/track/0gY2iq0xJPRoIB1PScKSw4?si=ce1b632233e94cc2
+
+On the "4. Music Selection" make the "Private Last Dance a dropdown box allowing four 
+predefined music selecions (add preview button for each) and a user input box for a Spotify 
+link. 
+The selections with spotify links for preview are
+Stand by Me (Ben E. King) 
+https://open.spotify.com/track/6OzAkuRDmEpd52RF1g1WvU?si=d882ff9dd77f4278
+Thinking Out Loud (Ed Sheeran) 
+https://open.spotify.com/track/34gCuhDGsG4bRPIf9bb02f?si=8b3bc11090ff41f2
+Your Song (Elton John) 
+https://open.spotify.com/track/38zsOOcu31XbbYj9BIPUF1?si=efe23b02a55c44ae
+Die a Happy Man (Thomas Rhett) 
+https://open.spotify.com/track/5kNe7PE09d6Kvw5pAsx23n?si=38e007f7f3794036
+
+On the "4. Music Selection" page If a selection has been made in each of the required categories 
+add a checkbox at the bottom "All done (for now)"
+
+On the "4. Music Selection" page If one or more of the required categories is not filled add a 
+checkbox at the bottom "We'll finish this later."
+
+On the "4. Music Selection" page the "All done (for now) box or the "We'll finish this later" box 
+is required for payment.
+
+On the "5. Announcements" page, If a selection has been made in each of the categories add a 
+checkbox at the bottom "All done (for now)"
+
+On the "5. Announcements" page, If one or more of the categories is not filled add a checkbox 
+at the bottom "We'll finish this later."
+
+On the "5. Announcements" page, the "All done (for now) box or the "We'll finish this later" box 
+is required for payment. 
+
+On the "6. Ceremony" page, for the "Ceremony Script" choices, when a selection is made, 
+display a scrollable and closeable popup that contains that selection's full ceremony script as 
+detailed in the uploaded file "Ceremony_Scripts.docx"
+
+On the "6. Ceremony" page, for the "Ceremony Script" choices,  add a "Vow Choices" selection 
+box 
+
+On the "6. Ceremony" page, under the "Passage Reading by the Officiant" put a character count 
+display and limit the count to 3500 characters.
+
+On the "6. Ceremony" page, under the "Other Special Requests" box, put the following text: 
+"(Examples: 'Please use gender-neutral language,' 'Do say husband and wife,' 'We don’t want to 
+exchange rings.')"
+
+On the "7. Processional" page, next to the "Yes, with someone" selection, put a "Name of 
+Escort" text box. Required if "Yes, with someone" is selected.
+
+On the "7. Processional" page, change  "Ring Bearer or Flower Girl"  to "Ring Bearer or Flower 
+Child"
+
+On the "7. Processional" page, at the top of the page, change "Will you include a ring bearer or 
+flower girl in your ceremony? " to "Will you include a ring bearer or flower child in your 
+ceremony?"
+
+On the "7. Processional" page, change the box "Ring Bearer / Flower Girl Details" to "Ring 
+Bearer / Flower Child Details"
+
+On the "7. Processional" page, at the top of the page, make "Will you include a ring bearer or 
+flower child in your ceremony?" a "Yes/No" buttons.  If "Yes" is selected the "Ring Bearer / 
+Flower Child Details" box and the "Organizer for Children" box are required.  If "No" is selected 
+the boxes do not appear.
+
+On the "7. Processional " page, If a selection has been made in each of the categories add a 
+checkbox at the bottom "All done (for now)"
+
+On the "7. Processional " page, If one or more of the categories is not filled add a checkbox at 
+the bottom "We'll finish this later."
+
+On the "7. Processional " page, the "All done (for now) box or the "We'll finish this later" box is 
+required for payment.
+
+On the "7. Processional" page, in the "Honored Guest Escorts" box, change the text removing 
+"or No - guests can seat themselves"
+
+On the "7. Processional" page, Under the "Honored Guest Escorts" box add a checkbox for "No - 
+Guests can seat themselves."
+
+On the "7. Processional" page, under the "Bride's Side Front Row" box, add a checkbox for 
+"N/A"
+
+On the "7. Processional" page, under the "Groom's Side Front Row" box, add a checkbox for 
+"N/A"
+
+On the "7. Processional" page, under the "Framed Photos of Honor" box, add a checkbox for 
+"N/A" 
+
+On the "7. Processional" page, under the "Special Seating or Mobility Needs" box, add a 
+checkbox for "N/A"
+
+On the "7. Processional" page, under the "Special Instructions & Notes " box, add a checkbox for 
+"N/A"
+
+On the "7. Processional"  page, If a selection has been made in each of the categories add a 
+checkbox at the bottom "All done (for now)"
+
+On the "7. Processional" page, If one or more of the categories is not filled add a checkbox at 
+the bottom "We'll finish this later."
+
+On the "7. Processional"  page, the "All done (for now) box or the "We'll finish this later" box is 
+required for payment.
+
+On the "8. Reception" page, remove the "Send-Off Style" box
+
+On the "8. Reception" page, change "Beverages & Hors d'oeuvres" to "Beverages"
+
+On the "8. Reception" page, change the "Beverage Preferences" box
+to a selection for "Alcoholic" or "Non Alcoholic" 
+
+On the "8. Reception" page, remove the "Hors d'oeuvres Preferences" box 
+
+On the "8. Reception" page, under the "Reception Special Requests" box
+add a checkbox "No special requests"
+
+On the "8. Reception"  page, If a selection has been made in each of the categories add a 
+checkbox at the bottom "All done (for now)"
+
+On the "8. Reception" page, If one or more of the categories is not filled add a checkbox at the 
+bottom "We'll finish this later."
+
+On the "8. Reception" page, the "All done (for now) box or the "We'll finish this later" box is 
+required for payment.
+
+On the "9. Photography" page, remove the "Photography Style" box
+
+On the "9. Photography" page, under each box add a checkbox "No special requests"
+
+On the "9. Photography" page, If a selection has been made in each of the categories add a 
+checkbox at the bottom "All done (for now)"
+
+On the "9. Photography" page, If one or more of the categories is not filled add a checkbox at 
+the bottom "We'll finish this later."
+
+On the "9. Photography" page, the "All done (for now) box or the "We'll finish this later" box is 
+required for payment.
+
+On the "10. Photo Projection" page, change all instances of "Photo Projection" to "Slideshow" 
+
+On the "10. Slideshow" page, remove "• Music or captions to accompany the slideshow"
+
+On the "10. Slideshow" page, add a place to upload photos. Up to 30 photos may be uploaded. 
+Individual photo size is not limited but the total of all photos must not exceed 1GB.  Display a 
+size counter by the upload option. Photo types are limited to JPEG/JPG, PNG, TIFF, BMP, GIF.
+
+On the "10. Slideshow" page, add a place to upload Engagement Photos. Up to 5 photos may be 
+uploaded. Maximum photo size must be a maximum of 5MB.  Photo types are limited to 
+JPEG/JPG, PNG, TIFF, BMP, GIF. 
+
+On the "10. Slideshow" page, under each box add a checkbox "No special requests"
+
+On the "10. Slideshow" page, If a selection has been made in each of the categories add a 
+checkbox at the bottom "All done (for now)"
+
+On the "10. Slideshow" page, If one or more of the categories is not filled add a checkbox at the 
+bottom "We'll finish this later."
+
+On the "10. Slideshow" page, the "All done (for now) box or the "We'll finish this later" box is 
+required for payment.
+
+On the "11. Personal Touches" page, under the "Fresh Florals" box, add a checkbox "No special 
+requests" 
+
+On the "11. Personal Touches" page, remove the "guest book" details box altogether and add 
+"Yes" or "No" options and keep the bottom comment. Default to "Yes"
+
+On the "11. Personal Touches" page, remove the "Cake Knife & Service Set" details box 
+altogether and add "Yes" or "No" options and keep the bottom comment. Default to "No" 
+
+On the "11. Personal Touches" page, under the "Departure Organization" box, put a checkbox 
+"To Be Decided Later"
+
+On the "11. Personal Touches" page, under the "Departure Vehicle" the selections are a button 
+"Yes" or "No"  If "Yes" is selected, display the "Departure Vehicle Details" box.
+
+On the "11. Personal Touches" page, under the "Additional Special Instructions" box, add a 
+checkbox "No special instructions"
+
+On the "11. Personal Touches" page, If a selection has been made in each of the categories add 
+a checkbox at the bottom "All done (for now)"
+
+On the "11. Personal Touches " page, If one or more of the categories is not filled add a 
+checkbox at the bottom "We'll finish this later."
+
+On the "11. Personal Touches" page, the "All done (for now) box or the "We'll finish this later" 
+box is required for payment.
+
+Add a new #12 for "Evite & Save-the-Date" and change "12. Contact & Payment" to "13. Contact 
+& Payment"
+
+ On the "12. Evite & Save-the-Date" page, add the following
+1. Choose Your Design Style
+Couple selects from pre-designed templates: 
+ - Classic Script 
+ - Modern Minimal 
+ - Garden Romance 
+ - Elegant Black & White 
+ - Boho Neutrals 
+ (Visual previews of each style will be shown within the software.)
+2. Customize Your Wording
+Two editable text blocks:
+• Header: (e.g., “Save the Date”, “We're Getting Married!”, “Formal Invitation”)
+• Body Text: Includes couple’s names, date, time, and location
+Example: 
+ Maya & Elena are getting married! 
+ Join us on Saturday, September 6 at The Modest Wedding Venue – Charlotte, NC 
+ Formal invitation to follow.
+3. Guest RSVP Link or Note
+Couples can optionally include one of the following lines: 
+ - “Formal invitation to follow” 
+ - “RSVP info to come” 
+ - Direct guests to the RSVP link if already available
+4. Send or Download
+• Download as an image (to text or email guests) 
+ • Generate a shareable link (hosted on a clean, ad-free webpage with their design)
+
+On the "12. Evite & Save-the-Date " page, under each box add a checkbox "No special requests"
+
+On the "12. Evite & Save-the-Date " page, If a selection has been made in each of the categories 
+add a checkbox at the bottom "All done (for now)"
+
+On the "12. Evite & Save-the-Date " page, If one or more of the categories is not filled add a 
+checkbox at the bottom "We'll finish this later."
+
+On the "12. Evite & Save-the-Date " page, the "All done (for now) box or the "We'll finish this 
+later" box is required for payment.
+
+On the "13. Contact & Payment" page, remove the "Payment Options" display box.
+
+On the "13. Contact & Payment" page, the phone number supplied must be validated through 
+standard validation methods.  Do the same with the email address.
+
+On the "13. Contact & Payment" page in the "Add-Ons (Optional)" section add a quantity 
+dropdown (1 - 10) for the "Photo Books" and multiply the $300 price by the selected quantity.
+
+On the "13. Contact & Payment" page, if BYOB is selected, display a legal popup that must be 
+accepted or the selection cannot be made.  For now, display a Lorem Ipsum text. 
+
+On the "13. Contact & Payment" page, in the "Terms & Policies" box, change "within 72 hours of 
+booking" to "within 3 days of making your payment"
+
+On the "13. Contact & Payment" page, the check box for " "I agree to..." should be blank 
+everytime a user enters the page - it must not persist if the user logs in again or makes any 
+changes.
+
+On the "13. Contact & Payment" page, in the text that reads "I agree to The Modest Wedding's 
+Terms & Conditions, including the refund and cancellation policy, and understand that my 
+selected date will be reserved only after full payment has been processed." change to "I have 
+read and I agree to The Modest Wedding's Terms & Conditions, including the Refund and 
+Cancellation Policy, and understand that my selected date will be reserved only after full 
+payment has been processed.
+All requests for refunds and cancellations must be made through email at 
+Support@TheModestWedding.com. "  "The Modest Wedding's Terms & Conditions" will be a 
+link to a legal document.  For now, display a Lorem Ipsum text.   Do the same with "Refund and 
+Cancellation Policy"
+
+On the "Secure Payment" page, the navigation banner must be displayed at the top.
+
+On the "Secure Payment" page, the "Order Summary" and pricing is not updating if the user 
+logs back in and makes certain changes, from Wedding to Elopement does not erase the Add-
+Ons charges.
+
+On the "Secure Payment" page, in the "Order Summary" box, only the items that add to the 
+price should be displayed.
+
+On the "Secure Payment" page, in the "Order Summary" box, display the items in Proper Text 
+without hyphens.
+ 
+
+

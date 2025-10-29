@@ -212,35 +212,9 @@ export default function Block12ContactPayment({
 
             <div className="flex justify-between pt-3 border-t text-lg font-semibold">
               <span>Total:</span>
-              <span className="text-primary">${(totalPrice / 100).toFixed(2)}</span>
+              <span className="text-yellow-400 font-bold">${(totalPrice / 100).toFixed(2)}</span>
             </div>
           </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <div className="flex items-center gap-2">
-            <CreditCard className="h-5 w-5" />
-            <CardTitle>Payment Options</CardTitle>
-          </div>
-          <CardDescription>Choose from multiple secure payment methods</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div className="flex items-center justify-center p-4 rounded-md border bg-card hover-elevate">
-              <span className="font-medium">Stripe</span>
-            </div>
-            <div className="flex items-center justify-center p-4 rounded-md border bg-card hover-elevate">
-              <span className="font-medium">PayPal</span>
-            </div>
-            <div className="flex items-center justify-center p-4 rounded-md border bg-card hover-elevate">
-              <span className="font-medium">Affirm</span>
-            </div>
-          </div>
-          <p className="text-sm text-muted-foreground mt-3">
-            You'll be able to choose your preferred payment method on the next screen. All payment methods are secure and encrypted.
-          </p>
         </CardContent>
       </Card>
 
@@ -253,7 +227,7 @@ export default function Block12ContactPayment({
           <div className="p-4 bg-muted rounded-md text-sm space-y-2">
             <p className="font-medium">Refund & Cancellation Policy:</p>
             <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-              <li>100% refund if canceled within 72 hours of booking</li>
+              <li>100% refund if canceled within 3 days of making your payment</li>
               <li>50% refund if canceled more than 30 days before your wedding</li>
               <li>Non-refundable within 30 days of your event</li>
               <li>Rescheduling available up to 14 days in advance (subject to availability)</li>
@@ -274,11 +248,11 @@ export default function Block12ContactPayment({
             <Checkbox
               id="terms-accepted"
               data-testid="checkbox-terms-accepted"
-              checked={termsAccepted}
+              checked={false}
               onCheckedChange={(checked) => onChange('termsAccepted', checked as boolean)}
             />
-            <Label htmlFor="terms-accepted" className="cursor-pointer">
-              I agree to The Modest Wedding's Terms & Conditions, including the refund and cancellation policy, and understand that my selected date will be reserved only after full payment has been processed.
+            <Label htmlFor="terms-accepted" className="cursor-pointer text-sm">
+              I have read and I agree to <button type="button" className="text-primary underline hover:no-underline">The Modest Wedding's Terms & Conditions</button>, including the <button type="button" className="text-primary underline hover:no-underline">Refund and Cancellation Policy</button>, and understand that my selected date will be reserved only after full payment has been processed. All requests for refunds and cancellations must be made through email at Support@TheModestWedding.com.
             </Label>
           </div>
 

@@ -49,11 +49,11 @@ export default function InitialAuthDialog({
             onClick={onCreateAccountClick}
             variant="default"
             size="lg"
-            className="w-full"
+            className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold"
             data-testid="button-create-account"
           >
             <UserPlus className="h-5 w-5 mr-2" />
-            Create a New Account
+            Create Account or Login
           </Button>
 
           <Button

@@ -155,63 +155,6 @@ export default function Block2DateTime({ preferredDate, backupDate, timeSlot, on
 
       <Card>
         <CardHeader>
-          <CardTitle>Backup Date (Optional)</CardTitle>
-          <CardDescription>If your first choice is unavailable, we'll check your backup date next</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-2">
-            <Label>Backup Date ({preferredDate ? availableBackupDaysText : availableDaysText} only)</Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  data-testid="button-backup-date"
-                  className="w-full justify-start text-left font-normal"
-                  disabled={!preferredDate}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {backupDateObj ? format(backupDateObj, "EEEE, MMMM d, yyyy") : <span>Pick a date (optional)</span>}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={backupDateObj}
-                  onSelect={(date) => {
-                    if (date) {
-                      const year = date.getFullYear();
-                      const month = String(date.getMonth() + 1).padStart(2, '0');
-                      const day = String(date.getDate()).padStart(2, '0');
-                      onChange('backupDate', `${year}-${month}-${day}`);
-                    } else {
-                      onChange('backupDate', '');
-                    }
-                  }}
-                  disabled={disabledBackupDays}
-                  modifiers={{ available: highlightBackupDays }}
-                  modifiersClassNames={{
-                    available: "bg-primary/10 font-semibold"
-                  }}
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
-            {!preferredDate && (
-              <p className="text-sm text-muted-foreground">
-                Please select a preferred date first
-              </p>
-            )}
-            {preferredDate && (
-              <p className="text-sm text-muted-foreground">
-                💡 Available days (same price tier): {availableBackupDaysText}
-              </p>
-            )}
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
           <CardTitle>Choose a Time Slot</CardTitle>
           <CardDescription>Select your preferred time for the celebration</CardDescription>
         </CardHeader>
