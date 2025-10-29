@@ -1,9 +1,12 @@
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { DollarSign, User, FileText, Info, CreditCard } from "lucide-react";
 
 interface Block12ContactPaymentProps {
@@ -18,7 +21,8 @@ interface Block12ContactPaymentProps {
   extraTimeAddon: boolean;
   byobBarAddon: boolean;
   rehearsalAddon: boolean;
-  onChange: (field: string, value: string | boolean) => void;
+  photoBookQuantity?: number;
+  onChange: (field: string, value: string | boolean | number) => void;
   eventType: string;
   basePackagePrice: number;
 }
@@ -35,17 +39,30 @@ export default function Block12ContactPayment({
   extraTimeAddon,
   byobBarAddon,
   rehearsalAddon,
+  photoBookQuantity = 1,
   onChange,
   eventType,
   basePackagePrice
 }: Block12ContactPaymentProps) {
+  const [showTermsDialog, setShowTermsDialog] = useState(false);
+  const [showRefundDialog, setShowRefundDialog] = useState(false);
+  const [showByobDialog, setShowByobDialog] = useState(false);
+  
   const isSimplifiedFlow = eventType === 'modest-elopement' || eventType === 'vow-renewal';
   const addons = [
-    { key: 'photoBookAddon', label: 'Photo Book', price: 30000, available: true },
-    { key: 'extraTimeAddon', label: 'Extra Time Block (Saturday 6PM only)', price: 100000, available: eventType === 'modest-wedding' },
-    { key: 'byobBarAddon', label: 'BYOB Bar Setup', price: 40000, available: eventType === 'modest-wedding' },
-    { key: 'rehearsalAddon', label: 'Rehearsal Hour', price: 15000, available: true }
+    { key: 'photoBookAddon', label: 'Photo Book', price: 30000, available: true, hasQuantity: true },
+    { key: 'extraTimeAddon', label: 'Extra Time Block (Saturday 6PM only)', price: 100000, available: eventType === 'modest-wedding', hasQuantity: false },
+    { key: 'byobBarAddon', label: 'BYOB Bar Setup', price: 40000, available: eventType === 'modest-wedding', hasQuantity: false },
+    { key: 'rehearsalAddon', label: 'Rehearsal Hour', price: 15000, available: true, hasQuantity: false }
   ];
+  
+  const handleByobChange = (checked: boolean) => {
+    if (checked) {
+      setShowByobDialog(true);
+    } else {
+      onChange('byobBarAddon', false);
+    }
+  };
 
   const selectedAddons = addons.filter(addon => 
     addon.available && (addon.key === 'photoBookAddon' ? photoBookAddon :
@@ -54,7 +71,12 @@ export default function Block12ContactPayment({
                        rehearsalAddon)
   );
 
-  const addonsTotal = selectedAddons.reduce((sum, addon) => sum + addon.price, 0);
+  const addonsTotal = selectedAddons.reduce((sum, addon) => {
+    if (addon.key === 'photoBookAddon' && addon.hasQuantity) {
+      return sum + (addon.price * photoBookQuantity);
+    }
+    return sum + addon.price;
+  }, 0);
   const totalPrice = basePackagePrice + addonsTotal;
 
   return (
@@ -155,22 +177,48 @@ export default function Block12ContactPayment({
           </CardHeader>
           <CardContent className="space-y-3">
             {addons.filter(addon => addon.available).map((addon) => (
-              <div key={addon.key} className="flex items-center justify-between p-3 rounded-md border">
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id={addon.key}
-                    data-testid={`checkbox-${addon.key}`}
-                    checked={addon.key === 'photoBookAddon' ? photoBookAddon :
-                            addon.key === 'extraTimeAddon' ? extraTimeAddon :
-                            addon.key === 'byobBarAddon' ? byobBarAddon :
-                            rehearsalAddon}
-                    onCheckedChange={(checked) => onChange(addon.key, checked as boolean)}
-                  />
-                  <Label htmlFor={addon.key} className="cursor-pointer">
-                    {addon.label}
-                  </Label>
+              <div key={addon.key} className="space-y-2">
+                <div className="flex items-center justify-between p-3 rounded-md border">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id={addon.key}
+                      data-testid={`checkbox-${addon.key}`}
+                      checked={addon.key === 'photoBookAddon' ? photoBookAddon :
+                              addon.key === 'extraTimeAddon' ? extraTimeAddon :
+                              addon.key === 'byobBarAddon' ? byobBarAddon :
+                              rehearsalAddon}
+                      onCheckedChange={(checked) => {
+                        if (addon.key === 'byobBarAddon') {
+                          handleByobChange(checked as boolean);
+                        } else {
+                          onChange(addon.key, checked as boolean);
+                        }
+                      }}
+                    />
+                    <Label htmlFor={addon.key} className="cursor-pointer">
+                      {addon.label}
+                    </Label>
+                  </div>
+                  <Badge variant="secondary">${(addon.price / 100).toFixed(2)}</Badge>
                 </div>
-                <Badge variant="secondary">${(addon.price / 100).toFixed(2)}</Badge>
+                {addon.key === 'photoBookAddon' && photoBookAddon && (
+                  <div className="ml-6 flex items-center gap-2">
+                    <Label htmlFor="photo-book-quantity" className="text-sm">Quantity:</Label>
+                    <Select value={String(photoBookQuantity)} onValueChange={(value) => onChange('photoBookQuantity', parseInt(value))}>
+                      <SelectTrigger className="w-20" id="photo-book-quantity" data-testid="select-photo-book-quantity">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {[...Array(10)].map((_, i) => (
+                          <SelectItem key={i + 1} value={String(i + 1)}>{i + 1}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <span className="text-sm text-muted-foreground">
+                      Total: ${((addon.price * photoBookQuantity) / 100).toFixed(2)}
+                    </span>
+                  </div>
+                )}
               </div>
             ))}
           </CardContent>
@@ -200,12 +248,20 @@ export default function Block12ContactPayment({
               <>
                 <div className="pt-2 border-t">
                   <p className="text-sm font-medium mb-2">Add-Ons:</p>
-                  {selectedAddons.map(addon => (
-                    <div key={addon.key} className="flex justify-between text-sm">
-                      <span>{addon.label}</span>
-                      <span>${(addon.price / 100).toFixed(2)}</span>
-                    </div>
-                  ))}
+                  {selectedAddons.map(addon => {
+                    const price = addon.key === 'photoBookAddon' && addon.hasQuantity 
+                      ? addon.price * photoBookQuantity 
+                      : addon.price;
+                    const label = addon.key === 'photoBookAddon' && photoBookQuantity > 1
+                      ? `${addon.label} (×${photoBookQuantity})`
+                      : addon.label;
+                    return (
+                      <div key={addon.key} className="flex justify-between text-sm">
+                        <span>{label}</span>
+                        <span>${(price / 100).toFixed(2)}</span>
+                      </div>
+                    );
+                  })}
                 </div>
               </>
             )}
@@ -252,7 +308,7 @@ export default function Block12ContactPayment({
               onCheckedChange={(checked) => onChange('termsAccepted', checked as boolean)}
             />
             <Label htmlFor="terms-accepted" className="cursor-pointer text-sm">
-              I have read and I agree to <button type="button" className="text-primary underline hover:no-underline">The Modest Wedding's Terms & Conditions</button>, including the <button type="button" className="text-primary underline hover:no-underline">Refund and Cancellation Policy</button>, and understand that my selected date will be reserved only after full payment has been processed. All requests for refunds and cancellations must be made through email at Support@TheModestWedding.com.
+              I have read and I agree to <button type="button" onClick={() => setShowTermsDialog(true)} className="text-primary underline hover:no-underline">The Modest Wedding's Terms & Conditions</button>, including the <button type="button" onClick={() => setShowRefundDialog(true)} className="text-primary underline hover:no-underline">Refund and Cancellation Policy</button>, and understand that my selected date will be reserved only after full payment has been processed. All requests for refunds and cancellations must be made through email at Support@TheModestWedding.com.
             </Label>
           </div>
 
@@ -264,6 +320,76 @@ export default function Block12ContactPayment({
           </div>
         </CardContent>
       </Card>
+
+      {/* Terms & Conditions Dialog */}
+      <Dialog open={showTermsDialog} onOpenChange={setShowTermsDialog}>
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Terms & Conditions</DialogTitle>
+            <DialogDescription>The Modest Wedding Service Agreement</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 text-sm">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Refund & Cancellation Policy Dialog */}
+      <Dialog open={showRefundDialog} onOpenChange={setShowRefundDialog}>
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Refund and Cancellation Policy</DialogTitle>
+            <DialogDescription>Understanding your refund and cancellation rights</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 text-sm">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* BYOB Legal Agreement Dialog */}
+      <Dialog open={showByobDialog} onOpenChange={(open) => {
+        setShowByobDialog(open);
+        if (!open && !byobBarAddon) {
+          // Dialog was closed without accepting
+        }
+      }}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>BYOB Bar Setup - Legal Agreement</DialogTitle>
+            <DialogDescription>Please review and accept this agreement to proceed</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 text-sm max-h-[50vh] overflow-y-auto">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+          </div>
+          <div className="flex gap-3 justify-end">
+            <button
+              onClick={() => {
+                setShowByobDialog(false);
+                onChange('byobBarAddon', false);
+              }}
+              className="px-4 py-2 text-sm border rounded-md hover-elevate"
+            >
+              Decline
+            </button>
+            <button
+              onClick={() => {
+                setShowByobDialog(false);
+                onChange('byobBarAddon', true);
+              }}
+              className="px-4 py-2 text-sm bg-primary text-primary-foreground rounded-md hover-elevate"
+            >
+              Accept & Continue
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

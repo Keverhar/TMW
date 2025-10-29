@@ -15,18 +15,42 @@ interface Block2DateTimeProps {
   eventType?: string;
 }
 
-const timeSlots = [
-  { value: "11am-2pm", label: "11:00 AM – 2:00 PM", arrival: "Bride arrival 9:30am" },
-  { value: "2:30pm-5:30pm", label: "2:30 PM – 5:30 PM", arrival: "Bride arrival 1:00pm" },
-  { value: "6pm-9pm", label: "6:00 PM – 9:00 PM", arrival: "Bride arrival 4:30pm" },
-  { value: "flexible", label: "I'm flexible – show me all options", arrival: "" }
-];
+// Time slots vary by day of week
+const getTimeSlots = (preferredDate: string, eventType: string) => {
+  if (!preferredDate) {
+    return [
+      { value: "flexible", label: "I'm flexible – show me all options", arrival: "" }
+    ];
+  }
+  
+  const dateObj = new Date(preferredDate + 'T12:00:00');
+  const dayOfWeek = dateObj.getDay();
+  
+  // Wednesday (3) has specific time slots for elopement/vow renewal
+  if (dayOfWeek === 3 && (eventType === 'modest-elopement' || eventType === 'vow-renewal')) {
+    return [
+      { value: "12pm", label: "12:00 PM", arrival: "" },
+      { value: "2pm", label: "2:00 PM", arrival: "" },
+      { value: "4pm", label: "4:00 PM", arrival: "" },
+      { value: "6pm", label: "6:00 PM", arrival: "" },
+    ];
+  }
+  
+  // Default time slots for other days
+  return [
+    { value: "11am-2pm", label: "11:00 AM – 2:00 PM", arrival: "Bride arrival 9:30am" },
+    { value: "2:30pm-5:30pm", label: "2:30 PM – 5:30 PM", arrival: "Bride arrival 1:00pm" },
+    { value: "6pm-9pm", label: "6:00 PM – 9:00 PM", arrival: "Bride arrival 4:30pm" },
+    { value: "flexible", label: "I'm flexible – show me all options", arrival: "" }
+  ];
+};
 
 export default function Block2DateTime({ preferredDate, backupDate, timeSlot, onChange, eventType = 'modest-wedding' }: Block2DateTimeProps) {
   const isSimplifiedFlow = eventType === 'modest-elopement' || eventType === 'vow-renewal';
   const allowedDays = isSimplifiedFlow 
     ? [3, 5] // Wednesday (3), Friday (5)
     : [5, 6, 0]; // Friday (5), Saturday (6), Sunday (0)
+  const timeSlots = getTimeSlots(preferredDate, eventType);
   
   const getDayName = (dayNumber: number): string => {
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];

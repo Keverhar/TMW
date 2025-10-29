@@ -153,12 +153,13 @@ export default function WeddingComposer() {
 
     // Add-ons
     photoBookAddon: false,
+    photoBookQuantity: 1,
     extraTimeAddon: false,
     byobBarAddon: false,
     rehearsalAddon: false,
   });
 
-  const updateField = (field: string, value: string | boolean) => {
+  const updateField = (field: string, value: string | boolean | number) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -177,7 +178,7 @@ export default function WeddingComposer() {
       const dayOfWeek = getDayOfWeek(formData.preferredDate);
       const basePrice = calculatePrice(formData.eventType, dayOfWeek);
       const addonsTotal =
-        (formData.photoBookAddon ? 30000 : 0) +
+        (formData.photoBookAddon ? 30000 * (formData.photoBookQuantity || 1) : 0) +
         (formData.extraTimeAddon ? 100000 : 0) +
         (formData.byobBarAddon ? 40000 : 0) +
         (formData.rehearsalAddon ? 15000 : 0);
@@ -662,6 +663,7 @@ export default function WeddingComposer() {
               mailingAddress={formData.mailingAddress}
               termsAccepted={formData.termsAccepted}
               photoBookAddon={formData.photoBookAddon}
+              photoBookQuantity={formData.photoBookQuantity}
               extraTimeAddon={formData.extraTimeAddon}
               byobBarAddon={formData.byobBarAddon}
               rehearsalAddon={formData.rehearsalAddon}
