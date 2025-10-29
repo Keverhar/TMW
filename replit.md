@@ -53,27 +53,29 @@ Preferred communication style: Simple, everyday language.
 - Error handling middleware for consistent error responses
 
 **Data Layer**
-- In-memory storage implementation (`MemStorage`) for development
-- Interface-based design (`IStorage`) allows easy swap to database
-- Drizzle ORM configured for PostgreSQL (schema defined, ready for migration)
+- PostgreSQL database storage via `DbStorage` implementation
+- Interface-based design (`IStorage`) allows flexibility in storage backend
+- Drizzle ORM for type-safe database queries
 
 ### Data Storage Solutions
 
-**Database (Configured, Not Yet Active)**
+**Database (Active)**
 - PostgreSQL via Neon serverless driver (@neondatabase/serverless)
 - Drizzle ORM for type-safe database queries
 - Schema includes:
-  - `users` table: id, username, password
-  - `bookings` table: comprehensive wedding booking data including customer info, ceremony preferences, pricing, and payment status
-- Migration setup via drizzle-kit (schema in `shared/schema.ts`, migrations in `./migrations`)
+  - `users` table: id, email, password, authProvider, displayName, createdAt
+  - `wedding_composers` table: comprehensive wedding booking data with 12 blocks of composer selections
+  - `bookings` table: legacy booking data (for backwards compatibility)
+- Migration setup via drizzle-kit (schema in `shared/schema.ts`)
 
 **Session Management**
-- connect-pg-simple for PostgreSQL-backed sessions (when database is active)
+- connect-pg-simple for PostgreSQL-backed sessions
 - Session configuration ready for authentication flows
 
 **Current Storage**
-- In-memory Maps for development/testing
-- Booking and user data stored temporarily in process memory
+- PostgreSQL database with persistent data storage
+- All user accounts and wedding composer selections saved permanently
+- Legacy MemStorage class available but not in use
 
 ### Authentication and Authorization
 
@@ -97,9 +99,10 @@ Preferred communication style: Simple, everyday language.
 - Raw body parsing for webhook signature verification
 
 **Database**
-- Neon serverless PostgreSQL (not yet provisioned)
+- Neon serverless PostgreSQL (active and provisioned)
 - Connection via `DATABASE_URL` environment variable
 - Drizzle ORM for schema management and queries
+- Database push command: `npm run db:push` (no manual migrations needed)
 
 **Development Tools**
 - Replit-specific plugins for development (cartographer, dev-banner, runtime-error-overlay)
