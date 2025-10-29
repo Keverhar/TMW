@@ -16,7 +16,7 @@ import { Loader2 } from "lucide-react";
 interface LoginDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onLoginSuccess: (userId: string, email: string) => void;
+  onLoginSuccess: (userId: string, email: string, composer?: any) => void;
 }
 
 export default function LoginDialog({
@@ -50,10 +50,12 @@ export default function LoginDialog({
 
       toast({
         title: "Welcome back!",
-        description: "You've successfully logged in",
+        description: response.composer 
+          ? "Loading your saved wedding plans..."
+          : "You've successfully logged in",
       });
 
-      onLoginSuccess(response.user.id, response.user.email);
+      onLoginSuccess(response.user.id, response.user.email, response.composer);
       onOpenChange(false);
     } catch (error: any) {
       toast({

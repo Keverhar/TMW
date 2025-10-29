@@ -187,6 +187,7 @@ export default function WeddingComposer() {
         ...formData,
         basePackagePrice: basePrice,
         totalPrice,
+        userId: userAccount?.id || null,
       };
 
       if (composerId) {
@@ -315,14 +316,96 @@ export default function WeddingComposer() {
     });
   };
 
-  const handleLoginSuccess = (userId: string, email: string) => {
+  const handleLoginSuccess = (userId: string, email: string, composer?: any) => {
     setUserAccount({ id: userId, email });
     setShowLoginDialog(false);
     setShowInitialDialog(false);
-    toast({
-      title: "Welcome back!",
-      description: "Loading your saved progress...",
-    });
+    
+    if (composer) {
+      // Load the composer data into the form
+      setComposerId(composer.id);
+      setFormData({
+        eventType: composer.eventType || "modest-wedding",
+        eventTypeOther: composer.eventTypeOther || "",
+        preferredDate: composer.preferredDate || "",
+        backupDate: composer.backupDate || "",
+        timeSlot: composer.timeSlot || "",
+        signatureColor: composer.signatureColor || "",
+        colorSwatchDecision: composer.colorSwatchDecision || "",
+        processionalSong: composer.processionalSong || "",
+        recessionalSong: composer.recessionalSong || "",
+        receptionEntranceSong: composer.receptionEntranceSong || "",
+        cakeCuttingSong: composer.cakeCuttingSong || "",
+        fatherDaughterDanceSong: composer.fatherDaughterDanceSong || "",
+        lastDanceSong: composer.lastDanceSong || "",
+        playlistUrl: composer.playlistUrl || "",
+        grandIntroduction: composer.grandIntroduction || "",
+        fatherDaughterDanceAnnouncement: composer.fatherDaughterDanceAnnouncement || "",
+        toastsSpeechesAnnouncement: composer.toastsSpeechesAnnouncement || "",
+        guestCallouts: composer.guestCallouts || "",
+        vibeCheck: composer.vibeCheck || "",
+        ceremonyScript: composer.ceremonyScript || "simple-modern",
+        unityCandle: composer.unityCandle || false,
+        sandCeremony: composer.sandCeremony || false,
+        handfasting: composer.handfasting || false,
+        guestReadingOrSong: composer.guestReadingOrSong || "",
+        guestReadingOrSongName: composer.guestReadingOrSongName || "",
+        officiantPassage: composer.officiantPassage || "",
+        includingChild: composer.includingChild || "",
+        petInvolvement: composer.petInvolvement || "",
+        ceremonySpecialRequests: composer.ceremonySpecialRequests || "",
+        walkingDownAisle: composer.walkingDownAisle || "",
+        ringBearerFlowerGirl: composer.ringBearerFlowerGirl || "",
+        ringBearerOrganizer: composer.ringBearerOrganizer || "",
+        honoredGuestEscorts: composer.honoredGuestEscorts || "",
+        brideSideFrontRow: composer.brideSideFrontRow || "",
+        groomSideFrontRow: composer.groomSideFrontRow || "",
+        framedPhotos: composer.framedPhotos || "",
+        specialSeatingNeeds: composer.specialSeatingNeeds || "",
+        processionalSpecialInstructions: composer.processionalSpecialInstructions || "",
+        firstDance: composer.firstDance || "",
+        motherSonDance: composer.motherSonDance || "",
+        specialDances: composer.specialDances || "",
+        toastGivers: composer.toastGivers || "",
+        beveragePreferences: composer.beveragePreferences || "",
+        horsDoeuvresPreferences: composer.horsDoeuvresPreferences || "",
+        sendOffStyle: composer.sendOffStyle || "",
+        receptionSpecialRequests: composer.receptionSpecialRequests || "",
+        photographyStyle: composer.photographyStyle || "",
+        mustHaveShots: composer.mustHaveShots || "",
+        vipList: composer.vipList || "",
+        groupPhotosRequested: composer.groupPhotosRequested || "",
+        photographySpecialRequests: composer.photographySpecialRequests || "",
+        photoProjectionPreferences: composer.photoProjectionPreferences || "",
+        freshFlorals: composer.freshFlorals || "",
+        guestBook: composer.guestBook || "",
+        cakeKnifeServiceSet: composer.cakeKnifeServiceSet || "",
+        departureOrganizer: composer.departureOrganizer || "",
+        departureVehicle: composer.departureVehicle || "",
+        personalTouchesSpecialInstructions: composer.personalTouchesSpecialInstructions || "",
+        customerName: composer.customerName || "",
+        customerName2: composer.customerName2 || "",
+        customerEmail: composer.customerEmail || email,
+        customerPhone: composer.customerPhone || "",
+        smsConsent: composer.smsConsent || false,
+        mailingAddress: composer.mailingAddress || "",
+        termsAccepted: composer.termsAccepted || false,
+        photoBookAddon: composer.photoBookAddon || false,
+        extraTimeAddon: composer.extraTimeAddon || false,
+        byobBarAddon: composer.byobBarAddon || false,
+        rehearsalAddon: composer.rehearsalAddon || false,
+      });
+      
+      toast({
+        title: "Welcome back!",
+        description: "Your saved wedding plans have been loaded.",
+      });
+    } else {
+      toast({
+        title: "Welcome back!",
+        description: "Start planning your wedding!",
+      });
+    }
   };
 
   const handleInitialDialogLogin = () => {

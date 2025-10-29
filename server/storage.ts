@@ -117,6 +117,7 @@ export class MemStorage implements IStorage {
     const id = randomUUID();
     const now = new Date();
     const composer: WeddingComposer = {
+      userId: null,
       eventTypeOther: null,
       preferredDate: null,
       backupDate: null,
@@ -171,6 +172,7 @@ export class MemStorage implements IStorage {
       departureVehicle: null,
       personalTouchesSpecialInstructions: null,
       ...insertComposer,
+      userId: insertComposer.userId ?? null,
       customerName2: insertComposer.customerName2 ?? null,
       customerPhone: insertComposer.customerPhone ?? null,
       mailingAddress: insertComposer.mailingAddress ?? null,
