@@ -1,5 +1,8 @@
-import { type User, type InsertUser, type Booking, type InsertBooking, type WeddingComposer, type InsertWeddingComposer } from "@shared/schema";
+import { type User, type InsertUser, type Booking, type InsertBooking, type WeddingComposer, type InsertWeddingComposer, users, bookings, weddingComposers } from "@shared/schema";
 import { randomUUID } from "crypto";
+import { neon } from "@neondatabase/serverless";
+import { drizzle } from "drizzle-orm/neon-http";
+import { eq } from "drizzle-orm";
 
 export interface IStorage {
   getUser(id: string): Promise<User | undefined>;
@@ -227,4 +230,115 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+export class DbStorage implements IStorage {
+  private db;
+
+  constructor() {
+    if (!process.env.DATABASE_URL) {
+      throw new Error("DATABASE_URL environment variable is not set");
+    }
+    const sql = neon(process.env.DATABASE_URL);
+    this.db = drizzle(sql);
+  }
+
+  async getUser(id: string): Promise<User | undefined> {
+    const result = await this.db.select().from(users).where(eq(users.id, id)).limit(1);
+    return result[0];
+  }
+
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const result = await this.db.select().from(users).where(eq(users.email, email)).limit(1);
+    return result[0];
+  }
+
+  async createUser(insertUser: InsertUser): Promise<User> {
+    const result = await this.db.insert(users).values(insertUser).returning();
+    return result[0];
+  }
+
+  // Legacy booking methods
+  async getBooking(id: string): Promise<Booking | undefined> {
+    const result = await this.db.select().from(bookings).where(eq(bookings.id, id)).limit(1);
+    return result[0];
+  }
+
+  async createBooking(insertBooking: InsertBooking): Promise<Booking> {
+    const result = await this.db.insert(bookings).values(insertBooking).returning();
+    return result[0];
+  }
+
+  async updateBookingPaymentStatus(
+    id: string,
+    paymentStatus: string,
+    stripeSessionId?: string,
+    stripePaymentIntentId?: string
+  ): Promise<Booking | undefined> {
+    const result = await this.db
+      .update(bookings)
+      .set({
+        paymentStatus,
+        stripeSessionId: stripeSessionId ?? undefined,
+        stripePaymentIntentId: stripePaymentIntentId ?? undefined,
+      })
+      .where(eq(bookings.id, id))
+      .returning();
+    return result[0];
+  }
+
+  async getAllBookings(): Promise<Booking[]> {
+    return await this.db.select().from(bookings);
+  }
+
+  // Wedding Composer methods
+  async getWeddingComposer(id: string): Promise<WeddingComposer | undefined> {
+    const result = await this.db.select().from(weddingComposers).where(eq(weddingComposers.id, id)).limit(1);
+    return result[0];
+  }
+
+  async createWeddingComposer(insertComposer: InsertWeddingComposer): Promise<WeddingComposer> {
+    const result = await this.db.insert(weddingComposers).values(insertComposer).returning();
+    return result[0];
+  }
+
+  async updateWeddingComposer(
+    id: string,
+    updates: Partial<InsertWeddingComposer>
+  ): Promise<WeddingComposer | undefined> {
+    const result = await this.db
+      .update(weddingComposers)
+      .set({
+        ...updates,
+        updatedAt: new Date(),
+        lastEditedAt: new Date(),
+      })
+      .where(eq(weddingComposers.id, id))
+      .returning();
+    return result[0];
+  }
+
+  async updateWeddingComposerPaymentStatus(
+    id: string,
+    paymentStatus: string,
+    stripeSessionId?: string,
+    stripePaymentIntentId?: string
+  ): Promise<WeddingComposer | undefined> {
+    const result = await this.db
+      .update(weddingComposers)
+      .set({
+        paymentStatus,
+        stripeSessionId: stripeSessionId ?? undefined,
+        stripePaymentIntentId: stripePaymentIntentId ?? undefined,
+        updatedAt: new Date(),
+      })
+      .where(eq(weddingComposers.id, id))
+      .returning();
+    return result[0];
+  }
+
+  async getAllWeddingComposers(): Promise<WeddingComposer[]> {
+    return await this.db.select().from(weddingComposers);
+  }
+}
+
+// Use DbStorage for database persistence
+export const storage = new DbStorage();
