@@ -107,7 +107,7 @@ export default function Block3SignatureColor({ signatureColor, colorSwatchDecisi
         </CardContent>
       </Card>
 
-      {signatureColor && (
+      {signatureColor && signatureColor !== '' && (
         <Card>
           <CardHeader>
             <CardTitle>Swatch Preview or Final Decision</CardTitle>
@@ -116,21 +116,21 @@ export default function Block3SignatureColor({ signatureColor, colorSwatchDecisi
           <CardContent>
             <RadioGroup value={colorSwatchDecision} onValueChange={(value) => onChange('colorSwatchDecision', value)}>
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="tour" id="swatch-tour" data-testid="radio-swatch-tour" />
+                <RadioGroupItem value="see-swatches-at-tour" id="swatch-tour" data-testid="radio-swatch-tour" />
                 <Label htmlFor="swatch-tour" className="cursor-pointer">
-                  I'm still deciding — I'd like to see swatches at my tour
+                  I want to see the swatches during a tour
                 </Label>
               </div>
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="finalize" id="swatch-finalize" data-testid="radio-swatch-finalize" />
+                <RadioGroupItem value="final-decision" id="swatch-finalize" data-testid="radio-swatch-finalize" />
                 <Label htmlFor="swatch-finalize" className="cursor-pointer">
-                  I'm ready to finalize my selection now
+                  Final Decision
                 </Label>
               </div>
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="blank" id="swatch-blank" data-testid="radio-swatch-blank" />
-                <Label htmlFor="swatch-blank" className="cursor-pointer">
-                  Leave blank for now
+                <RadioGroupItem value="not-sure-yet" id="swatch-not-sure" data-testid="radio-swatch-not-sure" />
+                <Label htmlFor="swatch-not-sure" className="cursor-pointer">
+                  We're not sure yet
                 </Label>
               </div>
             </RadioGroup>

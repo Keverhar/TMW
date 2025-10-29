@@ -86,41 +86,35 @@ export default function Block2DateTime({ preferredDate, timeSlot, onChange, even
           <CardDescription>Select the date you'd most love to celebrate your event</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="space-y-2">
+          <div className="space-y-3">
             <Label>Preferred Date ({availableDaysText} only)</Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  data-testid="button-preferred-date"
-                  className="w-full justify-start text-left font-normal"
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {preferredDateObj ? format(preferredDateObj, "EEEE, MMMM d, yyyy") : <span>Pick a date</span>}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={preferredDateObj}
-                  onSelect={(date) => {
-                    if (date) {
-                      const year = date.getFullYear();
-                      const month = String(date.getMonth() + 1).padStart(2, '0');
-                      const day = String(date.getDate()).padStart(2, '0');
-                      onChange('preferredDate', `${year}-${month}-${day}`);
-                    }
-                  }}
-                  disabled={disabledDays}
-                  modifiers={{ available: highlightDays }}
-                  modifiersClassNames={{
-                    available: "bg-primary/10 font-semibold"
-                  }}
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
-            <p className="text-sm text-muted-foreground">
+            {preferredDateObj && (
+              <div className="flex items-center gap-2 p-3 bg-primary/5 border border-primary/20 rounded-md" data-testid="text-selected-date">
+                <CalendarIcon className="h-4 w-4 text-primary" />
+                <span className="font-medium">{format(preferredDateObj, "EEEE, MMMM d, yyyy")}</span>
+              </div>
+            )}
+            <div className="flex justify-center">
+              <Calendar
+                mode="single"
+                selected={preferredDateObj}
+                onSelect={(date) => {
+                  if (date) {
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const day = String(date.getDate()).padStart(2, '0');
+                    onChange('preferredDate', `${year}-${month}-${day}`);
+                  }
+                }}
+                disabled={disabledDays}
+                modifiers={{ available: highlightDays }}
+                modifiersClassNames={{
+                  available: "bg-primary/10 font-semibold"
+                }}
+                className="border rounded-md"
+              />
+            </div>
+            <p className="text-sm text-muted-foreground text-center">
               💡 Available days: {availableDaysText}
             </p>
           </div>

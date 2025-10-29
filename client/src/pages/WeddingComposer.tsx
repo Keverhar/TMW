@@ -283,6 +283,16 @@ export default function WeddingComposer() {
       return;
     }
 
+    // Require swatch preview or final decision selection
+    if (formData.signatureColor && !['see-swatches-at-tour', 'final-decision'].includes(formData.colorSwatchDecision)) {
+      toast({
+        title: "Swatch decision required",
+        description: "Please select either 'I want to see the swatches during a tour' or 'Final Decision' before proceeding to payment.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     // Require account creation before payment
     if (!userAccount) {
       toast({
