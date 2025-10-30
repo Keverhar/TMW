@@ -617,15 +617,17 @@ export default function WeddingComposer() {
   };
 
   const isSimplifiedFlow = formData.eventType === 'modest-elopement' || formData.eventType === 'vow-renewal';
-  const steps = allSteps.filter(step => {
-    // Show all blocks when no event type is selected (default to full wedding view)
-    if (!formData.eventType) {
-      return true;
-    }
-    // Otherwise filter based on event type
-    return step.availableFor.includes('all') || 
-           (!isSimplifiedFlow && step.availableFor.includes(formData.eventType));
-  });
+  // Always show all steps - users can view all blocks even if some are read-only
+  const steps = allSteps;
+  
+  // Helper function to determine if a block should be read-only
+  const isBlockReadOnly = (blockId: number): boolean => {
+    if (!isSimplifiedFlow) return false; // Full wedding packages have full access
+    
+    // Blocks available for all event types (not read-only)
+    const alwaysAvailableBlocks = [1, 2, 3, 6, 13]; // Event Type, Date/Time, Color, Ceremony, Contact/Payment
+    return !alwaysAvailableBlocks.includes(blockId);
+  };
 
   // Function to determine completion status for each block
   const getBlockCompletionStatus = (blockId: number): 'complete' | 'partial' | 'none' => {
@@ -826,6 +828,7 @@ export default function WeddingComposer() {
               playlistUrl={formData.playlistUrl}
               musicCompletionStatus={formData.musicCompletionStatus}
               onChange={updateField}
+              readOnly={isBlockReadOnly(4)}
             />
           )}
           {steps[currentStep - 1]?.id === 5 && (
@@ -837,6 +840,7 @@ export default function WeddingComposer() {
               vibeCheck={formData.vibeCheck}
               announcementsCompletionStatus={formData.announcementsCompletionStatus}
               onChange={updateField}
+              readOnly={isBlockReadOnly(5)}
             />
           )}
           {steps[currentStep - 1]?.id === 6 && (
@@ -877,6 +881,7 @@ export default function WeddingComposer() {
               processionalSpecialInstructionsNA={formData.processionalSpecialInstructionsNA}
               processionalCompletionStatus={formData.processionalCompletionStatus}
               onChange={updateField}
+              readOnly={isBlockReadOnly(7)}
             />
           )}
           {steps[currentStep - 1]?.id === 8 && (
@@ -894,6 +899,7 @@ export default function WeddingComposer() {
               receptionSpecialRequestsNA={formData.receptionSpecialRequestsNA}
               receptionCompletionStatus={formData.receptionCompletionStatus}
               onChange={updateField}
+              readOnly={isBlockReadOnly(8)}
             />
           )}
           {steps[currentStep - 1]?.id === 9 && (
@@ -908,6 +914,7 @@ export default function WeddingComposer() {
               photographySpecialRequestsNA={formData.photographySpecialRequestsNA}
               photographyCompletionStatus={formData.photographyCompletionStatus}
               onChange={updateField}
+              readOnly={isBlockReadOnly(9)}
             />
           )}
           {steps[currentStep - 1]?.id === 10 && (
@@ -918,6 +925,7 @@ export default function WeddingComposer() {
               engagementPhotosNA={formData.engagementPhotosNA}
               slideshowCompletionStatus={formData.slideshowCompletionStatus}
               onChange={updateField}
+              readOnly={isBlockReadOnly(10)}
             />
           )}
           {steps[currentStep - 1]?.id === 11 && (
@@ -936,6 +944,7 @@ export default function WeddingComposer() {
               personalTouchesSpecialInstructionsNA={formData.personalTouchesSpecialInstructionsNA}
               personalTouchesCompletionStatus={formData.personalTouchesCompletionStatus}
               onChange={updateField}
+              readOnly={isBlockReadOnly(11)}
             />
           )}
           {steps[currentStep - 1]?.id === 12 && (
@@ -954,6 +963,7 @@ export default function WeddingComposer() {
               customerName2={formData.customerName2}
               preferredDate={formData.preferredDate}
               timeSlot={formData.timeSlot}
+              readOnly={isBlockReadOnly(12)}
             />
           )}
           {steps[currentStep - 1]?.id === 13 && (
