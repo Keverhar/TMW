@@ -51,7 +51,8 @@ export default function Block7Processional({
   onChange,
   readOnly = false
 }: Block7ProcessionalProps) {
-  // Determine if all required fields are filled
+  // Determine if all required fields are filled - "undecided" does not count as filled
+  const isWalkingDownAisleFilled = walkingDownAisle && walkingDownAisle !== 'undecided';
   const isRingBearerFilled = ringBearerIncluded === 'no' || (ringBearerIncluded === 'yes' && ringBearerFlowerGirl && ringBearerOrganizer);
   const isEscortFilled = walkingDownAisle !== 'with-someone' || (walkingDownAisle === 'with-someone' && escortName);
   const isHonoredGuestsFilled = honoredGuestEscortsNA || honoredGuestEscorts;
@@ -61,11 +62,11 @@ export default function Block7Processional({
   const isSpecialSeatingFilled = specialSeatingNeedsNA || specialSeatingNeeds;
   const isSpecialInstructionsFilled = processionalSpecialInstructionsNA || processionalSpecialInstructions;
 
-  const allRequiredFieldsFilled = walkingDownAisle && isEscortFilled && isRingBearerFilled && 
+  const allRequiredFieldsFilled = isWalkingDownAisleFilled && isEscortFilled && isRingBearerFilled && 
     isHonoredGuestsFilled && isBrideSideFilled && isGroomSideFilled && isFramedPhotosFilled && 
     isSpecialSeatingFilled && isSpecialInstructionsFilled;
 
-  const someFieldsEmpty = !walkingDownAisle || !isEscortFilled || !isRingBearerFilled || 
+  const someFieldsEmpty = !isWalkingDownAisleFilled || !isEscortFilled || !isRingBearerFilled || 
     !isHonoredGuestsFilled || !isBrideSideFilled || !isGroomSideFilled || !isFramedPhotosFilled || 
     !isSpecialSeatingFilled || !isSpecialInstructionsFilled;
 

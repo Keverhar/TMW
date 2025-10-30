@@ -41,11 +41,11 @@ export default function Block11PersonalTouches({
   onChange,
   readOnly = false
 }: Block11PersonalTouchesProps) {
-  // Check if fields are filled
+  // Check if fields are filled - "To Be Decided Later" does not count as filled
   const isFreshFloralsFilled = freshFloralsNA || freshFlorals.trim() !== '';
   const isGuestBookFilled = guestBookChoice !== '';
   const isCakeKnifeFilled = cakeKnifeChoice !== '';
-  const isDepartureOrganizerFilled = departureOrganizerTBD || departureOrganizer.trim() !== '';
+  const isDepartureOrganizerFilled = !departureOrganizerTBD && departureOrganizer.trim() !== '';
   const isDepartureVehicleFilled = departureVehicleChoice !== '' && (departureVehicleChoice === 'no' || departureVehicle.trim() !== '');
   const isSpecialInstructionsFilled = personalTouchesSpecialInstructionsNA || personalTouchesSpecialInstructions.trim() !== '';
   

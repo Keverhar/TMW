@@ -746,8 +746,8 @@ export default function WeddingComposer() {
         return 'none';
       
       case 3: // Signature Color
-        if (formData.colorSwatchDecision) return 'complete';
-        if (formData.signatureColor) return 'partial';
+        if (formData.colorSwatchDecision && formData.colorSwatchDecision !== 'see-swatches-at-tour') return 'complete';
+        if (formData.signatureColor || formData.colorSwatchDecision === 'see-swatches-at-tour') return 'partial';
         return 'none';
       
       case 4: // Music
@@ -785,8 +785,10 @@ export default function WeddingComposer() {
       
       case 11: // Personal Touches
         if (formData.personalTouchesCompletionStatus && formData.personalTouchesCompletionStatus !== 'finish-later') return 'complete';
-        if (formData.personalTouchesCompletionStatus === 'finish-later' || formData.freshFlorals || formData.guestBookChoice || formData.cakeKnifeChoice || 
-            formData.departureVehicleChoice || formData.departureOrganizer || formData.personalTouchesSpecialInstructions) return 'partial';
+        // Check for partial completion - exclude departureOrganizerTBD as it means "not decided"
+        const hasPersonalTouchesData = formData.freshFlorals || formData.guestBookChoice || formData.cakeKnifeChoice || 
+            formData.departureVehicleChoice || (formData.departureOrganizer && !formData.departureOrganizerTBD) || formData.personalTouchesSpecialInstructions;
+        if (formData.personalTouchesCompletionStatus === 'finish-later' || hasPersonalTouchesData) return 'partial';
         return 'none';
       
       case 12: // Evites
@@ -809,7 +811,7 @@ export default function WeddingComposer() {
   const basePrice = calculatePrice(formData.eventType, dayOfWeek);
 
   const addonsTotal =
-    (formData.photoBookAddon ? 30000 : 0) +
+    (formData.photoBookAddon ? 30000 * (formData.photoBookQuantity || 1) : 0) +
     (formData.extraTimeAddon ? 100000 : 0) +
     (formData.byobBarAddon ? 40000 : 0) +
     (formData.rehearsalAddon ? 15000 : 0);
