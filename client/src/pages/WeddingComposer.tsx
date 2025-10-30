@@ -840,16 +840,17 @@ export default function WeddingComposer() {
                   // Disabled blocks: dark grey background with dark red text
                   colorClasses = 'bg-[#4A4A4A] text-[#8B0000]';
                 } else {
+                  // Enabled blocks: all have bright white text
                   switch (completionStatus) {
                     case 'complete':
-                      colorClasses = 'bg-green-600/80 text-white hover-elevate';
+                      colorClasses = 'bg-green-600/80 text-[#FFFFFF] hover-elevate';
                       break;
                     case 'partial':
-                      colorClasses = 'bg-yellow-600/80 text-white hover-elevate';
+                      colorClasses = 'bg-yellow-600/80 text-[#FFFFFF] hover-elevate';
                       break;
                     case 'none':
                     default:
-                      colorClasses = 'bg-muted text-muted-foreground hover-elevate';
+                      colorClasses = 'bg-muted text-[#FFFFFF] hover-elevate';
                       break;
                   }
                 }
