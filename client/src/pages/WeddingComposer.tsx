@@ -625,7 +625,7 @@ export default function WeddingComposer() {
     if (!isSimplifiedFlow) return false; // Full wedding packages have full access
     
     // Blocks available for all event types (not read-only)
-    const alwaysAvailableBlocks = [1, 2, 3, 6, 13]; // Event Type, Date/Time, Color, Ceremony, Contact/Payment
+    const alwaysAvailableBlocks = [1, 2, 13]; // Event Type, Date/Time, Contact/Payment
     return !alwaysAvailableBlocks.includes(blockId);
   };
 
@@ -815,6 +815,7 @@ export default function WeddingComposer() {
               signatureColor={formData.signatureColor}
               colorSwatchDecision={formData.colorSwatchDecision}
               onChange={updateField}
+              readOnly={isBlockReadOnly(3)}
             />
           )}
           {steps[currentStep - 1]?.id === 4 && (
@@ -858,6 +859,7 @@ export default function WeddingComposer() {
               ceremonySpecialRequests={formData.ceremonySpecialRequests}
               onChange={updateField}
               showAddOns={!isSimplifiedFlow}
+              readOnly={isBlockReadOnly(6)}
             />
           )}
           {steps[currentStep - 1]?.id === 7 && (
