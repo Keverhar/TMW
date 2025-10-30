@@ -112,8 +112,12 @@ export const weddingComposers = pgTable("wedding_composers", {
   photographySpecialRequestsNA: boolean("photography_special_requests_na").default(false),
   photographyCompletionStatus: text("photography_completion_status"),
   
-  // Block 10: Photo Projection
-  photoProjectionPreferences: text("photo_projection_preferences"),
+  // Block 10: Slideshow
+  slideshowPhotos: text("slideshow_photos"), // JSON array of file metadata
+  slideshowPhotosNA: boolean("slideshow_photos_na").default(false),
+  engagementPhotos: text("engagement_photos"), // JSON array of file metadata
+  engagementPhotosNA: boolean("engagement_photos_na").default(false),
+  slideshowCompletionStatus: text("slideshow_completion_status"),
   
   // Block 11: Special Personal Touches
   freshFlorals: text("fresh_florals"),

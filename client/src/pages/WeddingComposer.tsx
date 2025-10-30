@@ -19,7 +19,7 @@ import Block6Ceremony from "@/components/composer/Block6Ceremony";
 import Block7Processional from "@/components/composer/Block7Processional";
 import Block8Reception from "@/components/composer/Block8Reception";
 import Block9Photography from "@/components/composer/Block9Photography";
-import Block10PhotoProjection from "@/components/composer/Block10PhotoProjection";
+import Block10Slideshow from "@/components/composer/Block10Slideshow";
 import Block11PersonalTouches from "@/components/composer/Block11PersonalTouches";
 import Block12EviteSaveTheDate from "@/components/composer/Block12EviteSaveTheDate";
 import Block13ContactPayment from "@/components/composer/Block13ContactPayment";
@@ -34,7 +34,7 @@ const allSteps = [
   { id: 7, title: 'Processional', description: 'Seating & procession', availableFor: ['modest-wedding', 'other'] },
   { id: 8, title: 'Reception', description: 'Reception details', availableFor: ['modest-wedding', 'other'] },
   { id: 9, title: 'Photography', description: 'Photo preferences', availableFor: ['modest-wedding', 'other'] },
-  { id: 10, title: 'Photo Projection', description: 'Slideshow options', availableFor: ['modest-wedding', 'other'] },
+  { id: 10, title: 'Slideshow', description: 'Upload photos', availableFor: ['modest-wedding', 'other'] },
   { id: 11, title: 'Personal Touches', description: 'Special details', availableFor: ['modest-wedding', 'other'] },
   { id: 12, title: 'Evite & Save-the-Date', description: 'Digital invitations', availableFor: ['all'] },
   { id: 13, title: 'Contact & Payment', description: 'Finalize booking', availableFor: ['all'] },
@@ -152,8 +152,12 @@ export default function WeddingComposer() {
     photographySpecialRequestsNA: false,
     photographyCompletionStatus: "",
 
-    // Block 10: Photo Projection
-    photoProjectionPreferences: "",
+    // Block 10: Slideshow
+    slideshowPhotos: "[]",
+    slideshowPhotosNA: false,
+    engagementPhotos: "[]",
+    engagementPhotosNA: false,
+    slideshowCompletionStatus: "",
 
     // Block 11: Personal Touches
     freshFlorals: "",
@@ -362,6 +366,16 @@ export default function WeddingComposer() {
       return;
     }
 
+    // Require slideshow completion status
+    if (!formData.slideshowCompletionStatus) {
+      toast({
+        title: "Slideshow planning status required",
+        description: "Please check 'All done (for now)' or 'We'll finish this later' in the Slideshow section before proceeding to payment.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     // Require account creation before payment
     if (!userAccount) {
       toast({
@@ -488,7 +502,11 @@ export default function WeddingComposer() {
         photographySpecialRequests: composer.photographySpecialRequests || "",
         photographySpecialRequestsNA: composer.photographySpecialRequestsNA || false,
         photographyCompletionStatus: composer.photographyCompletionStatus || "",
-        photoProjectionPreferences: composer.photoProjectionPreferences || "",
+        slideshowPhotos: composer.slideshowPhotos || "[]",
+        slideshowPhotosNA: composer.slideshowPhotosNA || false,
+        engagementPhotos: composer.engagementPhotos || "[]",
+        engagementPhotosNA: composer.engagementPhotosNA || false,
+        slideshowCompletionStatus: composer.slideshowCompletionStatus || "",
         freshFlorals: composer.freshFlorals || "",
         guestBook: composer.guestBook || "",
         cakeKnifeServiceSet: composer.cakeKnifeServiceSet || "",
@@ -777,8 +795,12 @@ export default function WeddingComposer() {
             />
           )}
           {steps[currentStep - 1]?.id === 10 && (
-            <Block10PhotoProjection
-              photoProjectionPreferences={formData.photoProjectionPreferences}
+            <Block10Slideshow
+              slideshowPhotos={formData.slideshowPhotos}
+              slideshowPhotosNA={formData.slideshowPhotosNA}
+              engagementPhotos={formData.engagementPhotos}
+              engagementPhotosNA={formData.engagementPhotosNA}
+              slideshowCompletionStatus={formData.slideshowCompletionStatus}
               onChange={updateField}
             />
           )}
