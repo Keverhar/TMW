@@ -304,7 +304,7 @@ export default function Block13ContactPayment({
             <Checkbox
               id="terms-accepted"
               data-testid="checkbox-terms-accepted"
-              checked={false}
+              checked={termsAccepted}
               onCheckedChange={(checked) => onChange('termsAccepted', checked as boolean)}
             />
             <Label htmlFor="terms-accepted" className="cursor-pointer text-sm">

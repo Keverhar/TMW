@@ -65,7 +65,7 @@ export default function WeddingComposer() {
 
   const [formData, setFormData] = useState({
     // Block 1: Event Type
-    eventType: "modest-wedding",
+    eventType: "",
     eventTypeOther: "",
 
     // Block 2: Date & Time
@@ -96,7 +96,7 @@ export default function WeddingComposer() {
     announcementsCompletionStatus: "",
 
     // Block 6: Ceremony
-    ceremonyScript: "simple-modern",
+    ceremonyScript: "",
     vowChoices: "",
     unityCandle: false,
     sandCeremony: false,

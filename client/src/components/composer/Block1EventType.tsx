@@ -55,7 +55,7 @@ export default function Block1EventType({ eventType, eventTypeOther, onChange }:
             <Label htmlFor="event-type">Select Your Event Type *</Label>
             <Select value={eventType} onValueChange={(value) => onChange('eventType', value)}>
               <SelectTrigger id="event-type" data-testid="select-event-type">
-                <SelectValue placeholder="Choose your event type" />
+                <SelectValue placeholder="Make Your Selection" />
               </SelectTrigger>
               <SelectContent>
                 {eventTypes.map((type) => (
