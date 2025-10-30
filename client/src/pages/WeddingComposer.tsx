@@ -109,14 +109,23 @@ export default function WeddingComposer() {
 
     // Block 7: Processional
     walkingDownAisle: "",
+    escortName: "",
+    ringBearerIncluded: "",
     ringBearerFlowerGirl: "",
     ringBearerOrganizer: "",
     honoredGuestEscorts: "",
+    honoredGuestEscortsNA: false,
     brideSideFrontRow: "",
+    brideSideFrontRowNA: false,
     groomSideFrontRow: "",
+    groomSideFrontRowNA: false,
     framedPhotos: "",
+    framedPhotosNA: false,
     specialSeatingNeeds: "",
+    specialSeatingNeedsNA: false,
     processionalSpecialInstructions: "",
+    processionalSpecialInstructionsNA: false,
+    processionalCompletionStatus: "",
 
     // Block 8: Reception
     firstDance: "",
@@ -315,6 +324,16 @@ export default function WeddingComposer() {
       return;
     }
 
+    // Require processional completion status
+    if (!formData.processionalCompletionStatus) {
+      toast({
+        title: "Processional planning status required",
+        description: "Please check 'All done (for now)' or 'We'll finish this later' in the Processional section before proceeding to payment.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     // Require account creation before payment
     if (!userAccount) {
       toast({
@@ -403,14 +422,23 @@ export default function WeddingComposer() {
         petInvolvement: composer.petInvolvement || "",
         ceremonySpecialRequests: composer.ceremonySpecialRequests || "",
         walkingDownAisle: composer.walkingDownAisle || "",
+        escortName: composer.escortName || "",
+        ringBearerIncluded: composer.ringBearerIncluded || "",
         ringBearerFlowerGirl: composer.ringBearerFlowerGirl || "",
         ringBearerOrganizer: composer.ringBearerOrganizer || "",
         honoredGuestEscorts: composer.honoredGuestEscorts || "",
+        honoredGuestEscortsNA: composer.honoredGuestEscortsNA || false,
         brideSideFrontRow: composer.brideSideFrontRow || "",
+        brideSideFrontRowNA: composer.brideSideFrontRowNA || false,
         groomSideFrontRow: composer.groomSideFrontRow || "",
+        groomSideFrontRowNA: composer.groomSideFrontRowNA || false,
         framedPhotos: composer.framedPhotos || "",
+        framedPhotosNA: composer.framedPhotosNA || false,
         specialSeatingNeeds: composer.specialSeatingNeeds || "",
+        specialSeatingNeedsNA: composer.specialSeatingNeedsNA || false,
         processionalSpecialInstructions: composer.processionalSpecialInstructions || "",
+        processionalSpecialInstructionsNA: composer.processionalSpecialInstructionsNA || false,
+        processionalCompletionStatus: composer.processionalCompletionStatus || "",
         firstDance: composer.firstDance || "",
         motherSonDance: composer.motherSonDance || "",
         specialDances: composer.specialDances || "",
@@ -661,14 +689,23 @@ export default function WeddingComposer() {
           {steps[currentStep - 1]?.id === 7 && (
             <Block7Processional
               walkingDownAisle={formData.walkingDownAisle}
+              escortName={formData.escortName}
+              ringBearerIncluded={formData.ringBearerIncluded}
               ringBearerFlowerGirl={formData.ringBearerFlowerGirl}
               ringBearerOrganizer={formData.ringBearerOrganizer}
               honoredGuestEscorts={formData.honoredGuestEscorts}
+              honoredGuestEscortsNA={formData.honoredGuestEscortsNA}
               brideSideFrontRow={formData.brideSideFrontRow}
+              brideSideFrontRowNA={formData.brideSideFrontRowNA}
               groomSideFrontRow={formData.groomSideFrontRow}
+              groomSideFrontRowNA={formData.groomSideFrontRowNA}
               framedPhotos={formData.framedPhotos}
+              framedPhotosNA={formData.framedPhotosNA}
               specialSeatingNeeds={formData.specialSeatingNeeds}
+              specialSeatingNeedsNA={formData.specialSeatingNeedsNA}
               processionalSpecialInstructions={formData.processionalSpecialInstructions}
+              processionalSpecialInstructionsNA={formData.processionalSpecialInstructionsNA}
+              processionalCompletionStatus={formData.processionalCompletionStatus}
               onChange={updateField}
             />
           )}

@@ -69,14 +69,23 @@ export const weddingComposers = pgTable("wedding_composers", {
   
   // Block 7: Processional & Seating
   walkingDownAisle: text("walking_down_aisle"),
+  escortName: text("escort_name"),
+  ringBearerIncluded: text("ring_bearer_included"),
   ringBearerFlowerGirl: text("ring_bearer_flower_girl"),
   ringBearerOrganizer: text("ring_bearer_organizer"),
   honoredGuestEscorts: text("honored_guest_escorts"),
+  honoredGuestEscortsNA: boolean("honored_guest_escorts_na").default(false),
   brideSideFrontRow: text("bride_side_front_row"),
+  brideSideFrontRowNA: boolean("bride_side_front_row_na").default(false),
   groomSideFrontRow: text("groom_side_front_row"),
+  groomSideFrontRowNA: boolean("groom_side_front_row_na").default(false),
   framedPhotos: text("framed_photos"),
+  framedPhotosNA: boolean("framed_photos_na").default(false),
   specialSeatingNeeds: text("special_seating_needs"),
+  specialSeatingNeedsNA: boolean("special_seating_needs_na").default(false),
   processionalSpecialInstructions: text("processional_special_instructions"),
+  processionalSpecialInstructionsNA: boolean("processional_special_instructions_na").default(false),
+  processionalCompletionStatus: text("processional_completion_status"),
   
   // Block 8: Reception Preferences
   firstDance: text("first_dance"),

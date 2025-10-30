@@ -1,0 +1,56 @@
+On the "7. Processional" page, next to the "Yes, with someone" selection, put a "Name of 
+Escort" text box. Required if "Yes, with someone" is selected.
+
+On the "7. Processional" page, change  "Ring Bearer or Flower Girl"  to "Ring Bearer or Flower 
+Child"
+
+On the "7. Processional" page, at the top of the page, change "Will you include a ring bearer or 
+flower girl in your ceremony? " to "Will you include a ring bearer or flower child in your 
+ceremony?"
+
+On the "7. Processional" page, change the box "Ring Bearer / Flower Girl Details" to "Ring 
+Bearer / Flower Child Details"
+
+On the "7. Processional" page, at the top of the page, make "Will you include a ring bearer or 
+flower child in your ceremony?" a "Yes/No" buttons.  If "Yes" is selected the "Ring Bearer / 
+Flower Child Details" box and the "Organizer for Children" box are required.  If "No" is selected 
+the boxes do not appear.
+
+On the "7. Processional " page, If a selection has been made in each of the categories add a 
+checkbox at the bottom "All done (for now)"
+
+On the "7. Processional " page, If one or more of the categories is not filled add a checkbox at 
+the bottom "We'll finish this later."
+
+On the "7. Processional " page, the "All done (for now) box or the "We'll finish this later" box is 
+required for payment.
+
+On the "7. Processional" page, in the "Honored Guest Escorts" box, change the text removing 
+"or No - guests can seat themselves"
+
+On the "7. Processional" page, Under the "Honored Guest Escorts" box add a checkbox for "No - 
+Guests can seat themselves."
+
+On the "7. Processional" page, under the "Bride's Side Front Row" box, add a checkbox for 
+"N/A"
+
+On the "7. Processional" page, under the "Groom's Side Front Row" box, add a checkbox for 
+"N/A"
+
+On the "7. Processional" page, under the "Framed Photos of Honor" box, add a checkbox for 
+"N/A" 
+
+On the "7. Processional" page, under the "Special Seating or Mobility Needs" box, add a 
+checkbox for "N/A"
+
+On the "7. Processional" page, under the "Special Instructions & Notes " box, add a checkbox for 
+"N/A"
+
+On the "7. Processional"  page, If a selection has been made in each of the categories add a 
+checkbox at the bottom "All done (for now)"
+
+On the "7. Processional" page, If one or more of the categories is not filled add a checkbox at 
+the bottom "We'll finish this later."
+
+On the "7. Processional"  page, the "All done (for now) box or the "We'll finish this later" box is 
+required for payment.
