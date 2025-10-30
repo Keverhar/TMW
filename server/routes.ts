@@ -243,6 +243,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get all wedding composers for a user
+  app.get("/api/wedding-composers/by-user", async (req, res) => {
+    try {
+      const userId = req.query.userId as string;
+      if (!userId) {
+        return res.status(400).json({ message: "User ID is required" });
+      }
+      const composers = await storage.getWeddingComposersByUserId(userId);
+      res.json(composers);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
   // Get a wedding composer by ID
   app.get("/api/wedding-composers/:id", async (req, res) => {
     try {

@@ -169,8 +169,11 @@ export default function Confirmation() {
               </CardContent>
             </Card>
 
-            <div className="text-center pt-6">
-              <Button onClick={() => setLocation("/")} size="lg" data-testid="button-return-home">
+            <div className="text-center pt-6 space-y-3">
+              <Button onClick={() => setLocation("/dashboard")} size="lg" className="w-full max-w-md" data-testid="button-view-dashboard">
+                View My Dashboard
+              </Button>
+              <Button onClick={() => setLocation("/")} size="lg" variant="outline" className="w-full max-w-md" data-testid="button-return-home">
                 Return to Home
               </Button>
             </div>
