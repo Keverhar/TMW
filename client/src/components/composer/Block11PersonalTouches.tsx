@@ -357,44 +357,23 @@ export default function Block11PersonalTouches({
                   </p>
                 </div>
                 
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <Checkbox
-                      id="personal-touches-complete-done"
-                      data-testid="checkbox-personal-touches-complete-done"
-                      checked={personalTouchesCompletionStatus === 'done'}
-                      onCheckedChange={(checked) => {
-                        if (checked) {
-                          onChange('personalTouchesCompletionStatus', 'done');
-                        } else {
-                          onChange('personalTouchesCompletionStatus', '');
-                        }
-                      }}
-                      disabled={readOnly}
-                    />
-                    <Label htmlFor="personal-touches-complete-done" className="text-sm font-normal cursor-pointer">
-                      All done (for now)
-                    </Label>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <Checkbox
-                      id="personal-touches-complete-later"
-                      data-testid="checkbox-personal-touches-complete-later"
-                      checked={personalTouchesCompletionStatus === 'later'}
-                      onCheckedChange={(checked) => {
-                        if (checked) {
-                          onChange('personalTouchesCompletionStatus', 'later');
-                        } else {
-                          onChange('personalTouchesCompletionStatus', '');
-                        }
-                      }}
-                      disabled={readOnly}
-                    />
-                    <Label htmlFor="personal-touches-complete-later" className="text-sm font-normal cursor-pointer">
-                      We'll finish this later
-                    </Label>
-                  </div>
+                <div className="flex items-center gap-2">
+                  <Checkbox
+                    id="personal-touches-complete-done"
+                    data-testid="checkbox-personal-touches-complete-done"
+                    checked={personalTouchesCompletionStatus === 'done'}
+                    onCheckedChange={(checked) => {
+                      if (checked) {
+                        onChange('personalTouchesCompletionStatus', 'done');
+                      } else {
+                        onChange('personalTouchesCompletionStatus', '');
+                      }
+                    }}
+                    disabled={readOnly}
+                  />
+                  <Label htmlFor="personal-touches-complete-done" className="text-sm font-normal cursor-pointer">
+                    All done (for now)
+                  </Label>
                 </div>
               </div>
             </div>

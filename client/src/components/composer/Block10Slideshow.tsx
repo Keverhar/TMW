@@ -390,44 +390,23 @@ export default function Block10Slideshow({
                   </p>
                 </div>
                 
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <Checkbox
-                      id="slideshow-complete-done"
-                      data-testid="checkbox-slideshow-complete-done"
-                      checked={slideshowCompletionStatus === 'done'}
-                      disabled={readOnly}
-                      onCheckedChange={(checked) => {
-                        if (checked) {
-                          onChange('slideshowCompletionStatus', 'done');
-                        } else {
-                          onChange('slideshowCompletionStatus', '');
-                        }
-                      }}
-                    />
-                    <Label htmlFor="slideshow-complete-done" className="text-sm font-normal cursor-pointer">
-                      All done (for now)
-                    </Label>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <Checkbox
-                      id="slideshow-complete-later"
-                      data-testid="checkbox-slideshow-complete-later"
-                      checked={slideshowCompletionStatus === 'later'}
-                      disabled={readOnly}
-                      onCheckedChange={(checked) => {
-                        if (checked) {
-                          onChange('slideshowCompletionStatus', 'later');
-                        } else {
-                          onChange('slideshowCompletionStatus', '');
-                        }
-                      }}
-                    />
-                    <Label htmlFor="slideshow-complete-later" className="text-sm font-normal cursor-pointer">
-                      We'll finish this later
-                    </Label>
-                  </div>
+                <div className="flex items-center gap-2">
+                  <Checkbox
+                    id="slideshow-complete-done"
+                    data-testid="checkbox-slideshow-complete-done"
+                    checked={slideshowCompletionStatus === 'done'}
+                    disabled={readOnly}
+                    onCheckedChange={(checked) => {
+                      if (checked) {
+                        onChange('slideshowCompletionStatus', 'done');
+                      } else {
+                        onChange('slideshowCompletionStatus', '');
+                      }
+                    }}
+                  />
+                  <Label htmlFor="slideshow-complete-done" className="text-sm font-normal cursor-pointer">
+                    All done (for now)
+                  </Label>
                 </div>
               </div>
             </div>
