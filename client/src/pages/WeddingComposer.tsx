@@ -142,11 +142,15 @@ export default function WeddingComposer() {
     receptionCompletionStatus: "",
 
     // Block 9: Photography
-    photographyStyle: "",
     mustHaveShots: "",
+    mustHaveShotsNA: false,
     vipList: "",
+    vipListNA: false,
     groupPhotosRequested: "",
+    groupPhotosRequestedNA: false,
     photographySpecialRequests: "",
+    photographySpecialRequestsNA: false,
+    photographyCompletionStatus: "",
 
     // Block 10: Photo Projection
     photoProjectionPreferences: "",
@@ -348,6 +352,16 @@ export default function WeddingComposer() {
       return;
     }
 
+    // Require photography completion status
+    if (!formData.photographyCompletionStatus) {
+      toast({
+        title: "Photography planning status required",
+        description: "Please check 'All done (for now)' or 'We'll finish this later' in the Photography section before proceeding to payment.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     // Require account creation before payment
     if (!userAccount) {
       toast({
@@ -465,11 +479,15 @@ export default function WeddingComposer() {
         receptionSpecialRequests: composer.receptionSpecialRequests || "",
         receptionSpecialRequestsNA: composer.receptionSpecialRequestsNA || false,
         receptionCompletionStatus: composer.receptionCompletionStatus || "",
-        photographyStyle: composer.photographyStyle || "",
         mustHaveShots: composer.mustHaveShots || "",
+        mustHaveShotsNA: composer.mustHaveShotsNA || false,
         vipList: composer.vipList || "",
+        vipListNA: composer.vipListNA || false,
         groupPhotosRequested: composer.groupPhotosRequested || "",
+        groupPhotosRequestedNA: composer.groupPhotosRequestedNA || false,
         photographySpecialRequests: composer.photographySpecialRequests || "",
+        photographySpecialRequestsNA: composer.photographySpecialRequestsNA || false,
+        photographyCompletionStatus: composer.photographyCompletionStatus || "",
         photoProjectionPreferences: composer.photoProjectionPreferences || "",
         freshFlorals: composer.freshFlorals || "",
         guestBook: composer.guestBook || "",
@@ -746,11 +764,15 @@ export default function WeddingComposer() {
           )}
           {steps[currentStep - 1]?.id === 9 && (
             <Block9Photography
-              photographyStyle={formData.photographyStyle}
               mustHaveShots={formData.mustHaveShots}
+              mustHaveShotsNA={formData.mustHaveShotsNA}
               vipList={formData.vipList}
+              vipListNA={formData.vipListNA}
               groupPhotosRequested={formData.groupPhotosRequested}
+              groupPhotosRequestedNA={formData.groupPhotosRequestedNA}
               photographySpecialRequests={formData.photographySpecialRequests}
+              photographySpecialRequestsNA={formData.photographySpecialRequestsNA}
+              photographyCompletionStatus={formData.photographyCompletionStatus}
               onChange={updateField}
             />
           )}

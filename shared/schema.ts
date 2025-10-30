@@ -102,11 +102,15 @@ export const weddingComposers = pgTable("wedding_composers", {
   receptionCompletionStatus: text("reception_completion_status"),
   
   // Block 9: Photography Preferences
-  photographyStyle: text("photography_style"),
   mustHaveShots: text("must_have_shots"),
+  mustHaveShotsNA: boolean("must_have_shots_na").default(false),
   vipList: text("vip_list"),
+  vipListNA: boolean("vip_list_na").default(false),
   groupPhotosRequested: text("group_photos_requested"),
+  groupPhotosRequestedNA: boolean("group_photos_requested_na").default(false),
   photographySpecialRequests: text("photography_special_requests"),
+  photographySpecialRequestsNA: boolean("photography_special_requests_na").default(false),
+  photographyCompletionStatus: text("photography_completion_status"),
   
   // Block 10: Photo Projection
   photoProjectionPreferences: text("photo_projection_preferences"),
