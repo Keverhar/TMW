@@ -52,6 +52,14 @@ const cakeCuttingOptions = [
   { label: "Custom (Enter Spotify link below)", value: "custom", spotifyUrl: "" },
 ];
 
+const fatherDaughterDanceOptions = [
+  { label: "The Way You Look Tonight (Frank Sinatra)", value: "way-you-look-tonight", spotifyUrl: "https://open.spotify.com/track/0shGCs5AkhwJIgUb0SSz2B?si=6c9d87df6fa24b42" },
+  { label: "Isn't She Lovely (Stevie Wonder)", value: "isnt-she-lovely", spotifyUrl: "https://open.spotify.com/track/6RANU8AS5ICU5PEHh8BYtH?si=7cd5af17da5a4f17" },
+  { label: "Daughters (John Mayer)", value: "daughters", spotifyUrl: "https://open.spotify.com/track/5FPnjikbwlDMULCCCa6ZCJ?si=1beceb0f7ce14205" },
+  { label: "I Loved Her First (Heartland)", value: "i-loved-her-first", spotifyUrl: "https://open.spotify.com/track/7KeVXnlNls1D3BMa0oxgUW?si=050ea6a8de064bdd" },
+  { label: "Custom (Enter Spotify link below)", value: "custom", spotifyUrl: "" },
+];
+
 const lastDanceOptions = [
   { label: "Stand by Me (Ben E. King)", value: "stand-by-me", spotifyUrl: "https://open.spotify.com/track/6OzAkuRDmEpd52RF1g1WvU?si=d882ff9dd77f4278" },
   { label: "Thinking Out Loud (Ed Sheeran)", value: "thinking-out-loud", spotifyUrl: "https://open.spotify.com/track/34gCuhDGsG4bRPIf9bb02f?si=8b3bc11090ff41f2" },
@@ -84,6 +92,9 @@ export default function Block4Music({
   );
   const [cakeCuttingSelection, setCakeCuttingSelection] = useState(
     cakeCuttingOptions.find(opt => cakeCuttingSong === opt.label)?.value || (cakeCuttingSong && cakeCuttingSong.startsWith('http') ? 'custom' : '')
+  );
+  const [fatherDaughterDanceSelection, setFatherDaughterDanceSelection] = useState(
+    fatherDaughterDanceOptions.find(opt => fatherDaughterDanceSong === opt.label)?.value || (fatherDaughterDanceSong && fatherDaughterDanceSong.startsWith('http') ? 'custom' : '')
   );
   const [lastDanceSelection, setLastDanceSelection] = useState(
     lastDanceOptions.find(opt => lastDanceSong === opt.label)?.value || (lastDanceSong && lastDanceSong.startsWith('http') ? 'custom' : '')
@@ -132,6 +143,16 @@ export default function Block4Music({
       onChange('cakeCuttingSong', selected.label);
     } else if (value === 'custom') {
       onChange('cakeCuttingSong', '');
+    }
+  };
+
+  const handleFatherDaughterDanceChange = (value: string) => {
+    setFatherDaughterDanceSelection(value);
+    const selected = fatherDaughterDanceOptions.find(opt => opt.value === value);
+    if (selected && value !== 'custom') {
+      onChange('fatherDaughterDanceSong', selected.label);
+    } else if (value === 'custom') {
+      onChange('fatherDaughterDanceSong', '');
     }
   };
 
@@ -411,13 +432,58 @@ export default function Block4Music({
 
           <div className="space-y-3">
             <Label htmlFor="father-daughter-dance-song">Father-Daughter Dance (Optional)</Label>
-            <Input
-              id="father-daughter-dance-song"
-              data-testid="input-father-daughter-dance-song"
-              placeholder="A song that reflects your bond"
-              value={fatherDaughterDanceSong}
-              onChange={(e) => onChange('fatherDaughterDanceSong', e.target.value)}
-            />
+            <div className="flex gap-2">
+              <Select value={fatherDaughterDanceSelection} onValueChange={handleFatherDaughterDanceChange}>
+                <SelectTrigger id="father-daughter-dance-song" data-testid="select-father-daughter-dance-song" className="flex-1">
+                  <SelectValue placeholder="Select a song or custom option" />
+                </SelectTrigger>
+                <SelectContent>
+                  {fatherDaughterDanceOptions.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {fatherDaughterDanceSelection && fatherDaughterDanceSelection !== 'custom' && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  data-testid="button-preview-father-daughter-dance"
+                  onClick={() => {
+                    const selected = fatherDaughterDanceOptions.find(opt => opt.value === fatherDaughterDanceSelection);
+                    if (selected?.spotifyUrl) {
+                      openSpotifyPreview(selected.spotifyUrl);
+                    }
+                  }}
+                >
+                  <Music2 className="h-4 w-4" />
+                </Button>
+              )}
+            </div>
+            {fatherDaughterDanceSelection === 'custom' && (
+              <div className="flex gap-2">
+                <Input
+                  data-testid="input-father-daughter-dance-custom"
+                  placeholder="Paste Spotify link here"
+                  value={fatherDaughterDanceSong}
+                  onChange={(e) => onChange('fatherDaughterDanceSong', e.target.value)}
+                  className="flex-1"
+                />
+                {fatherDaughterDanceSong && fatherDaughterDanceSong.includes('spotify.com') && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    data-testid="button-preview-father-daughter-dance-custom"
+                    onClick={() => openSpotifyPreview(fatherDaughterDanceSong)}
+                  >
+                    <Music2 className="h-4 w-4" />
+                  </Button>
+                )}
+              </div>
+            )}
           </div>
 
           <div className="space-y-3">
