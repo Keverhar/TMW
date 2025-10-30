@@ -839,18 +839,18 @@ export default function WeddingComposer() {
                 switch (completionStatus) {
                   case 'complete':
                     colorClasses = isReadOnly 
-                      ? 'bg-green-600/80 text-black'
+                      ? 'bg-green-600/80 !text-black'
                       : 'bg-green-600/80 text-white hover-elevate';
                     break;
                   case 'partial':
                     colorClasses = isReadOnly
-                      ? 'bg-yellow-600/80 text-black'
+                      ? 'bg-yellow-600/80 !text-black'
                       : 'bg-yellow-600/80 text-white hover-elevate';
                     break;
                   case 'none':
                   default:
                     colorClasses = isReadOnly
-                      ? 'bg-muted text-black'
+                      ? 'bg-muted !text-black'
                       : 'bg-muted text-muted-foreground hover-elevate';
                     break;
                 }
