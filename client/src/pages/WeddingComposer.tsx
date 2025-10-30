@@ -622,6 +622,75 @@ export default function WeddingComposer() {
     (!isSimplifiedFlow && step.availableFor.includes(formData.eventType))
   );
 
+  // Function to determine completion status for each block
+  const getBlockCompletionStatus = (blockId: number): 'complete' | 'partial' | 'none' => {
+    switch (blockId) {
+      case 1: // Event Type - always complete (has default)
+        return formData.eventType ? 'complete' : 'none';
+      
+      case 2: // Date & Time
+        if (formData.preferredDate && formData.timeSlot) return 'complete';
+        if (formData.preferredDate || formData.timeSlot) return 'partial';
+        return 'none';
+      
+      case 3: // Signature Color
+        if (formData.colorSwatchDecision) return 'complete';
+        if (formData.signatureColor) return 'partial';
+        return 'none';
+      
+      case 4: // Music
+        if (formData.musicCompletionStatus) return 'complete';
+        if (formData.processionalSong || formData.recessionalSong || formData.playlistUrl) return 'partial';
+        return 'none';
+      
+      case 5: // Announcements
+        if (formData.announcementsCompletionStatus) return 'complete';
+        if (formData.grandIntroduction || formData.vibeCheck) return 'partial';
+        return 'none';
+      
+      case 6: // Ceremony - always complete (has default)
+        return formData.ceremonyScript ? 'complete' : 'none';
+      
+      case 7: // Processional
+        if (formData.processionalCompletionStatus) return 'complete';
+        if (formData.walkingDownAisle || formData.ringBearerIncluded) return 'partial';
+        return 'none';
+      
+      case 8: // Reception
+        if (formData.receptionCompletionStatus) return 'complete';
+        if (formData.firstDance || formData.beveragePreferences) return 'partial';
+        return 'none';
+      
+      case 9: // Photography
+        if (formData.photographyCompletionStatus) return 'complete';
+        if (formData.mustHaveShots || formData.vipList) return 'partial';
+        return 'none';
+      
+      case 10: // Slideshow
+        if (formData.slideshowCompletionStatus) return 'complete';
+        if (formData.slideshowPhotos !== '[]' || formData.engagementPhotos !== '[]') return 'partial';
+        return 'none';
+      
+      case 11: // Personal Touches
+        if (formData.personalTouchesCompletionStatus) return 'complete';
+        if (formData.freshFlorals || formData.departureOrganizer) return 'partial';
+        return 'none';
+      
+      case 12: // Evites
+        if (formData.eviteCompletionStatus) return 'complete';
+        if (formData.eviteDesignStyle || formData.eviteHeaderText) return 'partial';
+        return 'none';
+      
+      case 13: // Contact Information
+        if (formData.customerName && formData.customerEmail && formData.customerPhone && formData.termsAccepted) return 'complete';
+        if (formData.customerName || formData.customerEmail || formData.customerPhone) return 'partial';
+        return 'none';
+      
+      default:
+        return 'none';
+    }
+  };
+
   const progress = (currentStep / steps.length) * 100;
   const dayOfWeek = getDayOfWeek(formData.preferredDate);
   const basePrice = calculatePrice(formData.eventType, dayOfWeek);
@@ -644,18 +713,33 @@ export default function WeddingComposer() {
             <div className="flex flex-wrap gap-2 flex-1">
               {steps.map((step, index) => {
                 const stepNumber = index + 1;
+                const completionStatus = getBlockCompletionStatus(step.id);
+                
+                // Determine color based on completion status
+                let colorClasses = '';
+                if (currentStep === stepNumber) {
+                  colorClasses = 'bg-primary text-primary-foreground';
+                } else {
+                  switch (completionStatus) {
+                    case 'complete':
+                      colorClasses = 'bg-green-600/80 text-white hover-elevate';
+                      break;
+                    case 'partial':
+                      colorClasses = 'bg-yellow-600/80 text-white hover-elevate';
+                      break;
+                    case 'none':
+                    default:
+                      colorClasses = 'bg-muted text-muted-foreground hover-elevate';
+                      break;
+                  }
+                }
+                
                 return (
                   <button
                     key={step.id}
                     onClick={() => setCurrentStep(stepNumber)}
                     data-testid={`button-step-${stepNumber}`}
-                    className={`px-2 py-0.5 rounded-md text-xs font-medium transition-colors whitespace-nowrap ${
-                      currentStep === stepNumber
-                        ? 'bg-primary text-primary-foreground'
-                        : currentStep > stepNumber
-                        ? 'bg-muted text-muted-foreground hover-elevate'
-                        : 'bg-background text-muted-foreground border hover-elevate'
-                    }`}
+                    className={`px-2 py-0.5 rounded-md text-xs font-medium transition-colors whitespace-nowrap ${colorClasses}`}
                   >
                     <span className="block">{step.title}</span>
                   </button>
