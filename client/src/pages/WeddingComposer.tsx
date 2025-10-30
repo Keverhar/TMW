@@ -133,9 +133,9 @@ export default function WeddingComposer() {
     specialDances: "",
     toastGivers: "",
     beveragePreferences: "",
-    horsDoeuvresPreferences: "",
-    sendOffStyle: "",
     receptionSpecialRequests: "",
+    receptionSpecialRequestsNA: false,
+    receptionCompletionStatus: "",
 
     // Block 9: Photography
     photographyStyle: "",
@@ -334,6 +334,16 @@ export default function WeddingComposer() {
       return;
     }
 
+    // Require reception completion status
+    if (!formData.receptionCompletionStatus) {
+      toast({
+        title: "Reception planning status required",
+        description: "Please check 'All done (for now)' or 'We'll finish this later' in the Reception section before proceeding to payment.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     // Require account creation before payment
     if (!userAccount) {
       toast({
@@ -444,9 +454,9 @@ export default function WeddingComposer() {
         specialDances: composer.specialDances || "",
         toastGivers: composer.toastGivers || "",
         beveragePreferences: composer.beveragePreferences || "",
-        horsDoeuvresPreferences: composer.horsDoeuvresPreferences || "",
-        sendOffStyle: composer.sendOffStyle || "",
         receptionSpecialRequests: composer.receptionSpecialRequests || "",
+        receptionSpecialRequestsNA: composer.receptionSpecialRequestsNA || false,
+        receptionCompletionStatus: composer.receptionCompletionStatus || "",
         photographyStyle: composer.photographyStyle || "",
         mustHaveShots: composer.mustHaveShots || "",
         vipList: composer.vipList || "",
@@ -716,9 +726,9 @@ export default function WeddingComposer() {
               specialDances={formData.specialDances}
               toastGivers={formData.toastGivers}
               beveragePreferences={formData.beveragePreferences}
-              horsDoeuvresPreferences={formData.horsDoeuvresPreferences}
-              sendOffStyle={formData.sendOffStyle}
               receptionSpecialRequests={formData.receptionSpecialRequests}
+              receptionSpecialRequestsNA={formData.receptionSpecialRequestsNA}
+              receptionCompletionStatus={formData.receptionCompletionStatus}
               onChange={updateField}
             />
           )}

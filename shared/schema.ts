@@ -93,9 +93,9 @@ export const weddingComposers = pgTable("wedding_composers", {
   specialDances: text("special_dances"),
   toastGivers: text("toast_givers"),
   beveragePreferences: text("beverage_preferences"),
-  horsDoeuvresPreferences: text("hors_doeuvres_preferences"),
-  sendOffStyle: text("send_off_style"),
   receptionSpecialRequests: text("reception_special_requests"),
+  receptionSpecialRequestsNA: boolean("reception_special_requests_na").default(false),
+  receptionCompletionStatus: text("reception_completion_status"),
   
   // Block 9: Photography Preferences
   photographyStyle: text("photography_style"),
