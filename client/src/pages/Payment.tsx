@@ -29,6 +29,16 @@ export default function Payment() {
     enabled: !!composerId,
   });
 
+  // Calculate total price with ACH or Affirm discount if applicable
+  const calculateTotalPrice = () => {
+    if (!composer) return 0;
+    const achDiscount = paymentMethod === 'ach' ? 5000 : 0; // $50 discount for ACH
+    const affirmDiscount = paymentMethod === 'affirm' ? 5000 : 0; // $50 discount for Affirm
+    return composer.totalPrice - achDiscount - affirmDiscount;
+  };
+
+  const displayTotal = calculateTotalPrice();
+
   const formatCardNumber = (value: string) => {
     const cleaned = value.replace(/\s/g, "");
     const chunks = cleaned.match(/.{1,4}/g);
@@ -364,7 +374,7 @@ export default function Payment() {
                         Processing...
                       </>
                     ) : (
-                      `Pay $${(composer.totalPrice / 100).toFixed(2)}`
+                      `Pay $${(displayTotal / 100).toFixed(2)}`
                     )}
                   </Button>
                 </form>
@@ -403,9 +413,15 @@ export default function Payment() {
                     <span>Subtotal</span>
                     <span>${(composer.totalPrice / 100).toFixed(2)}</span>
                   </div>
+                  {(paymentMethod === 'ach' || paymentMethod === 'affirm') && (
+                    <div className="flex justify-between text-sm text-green-600 dark:text-green-400">
+                      <span>{paymentMethod === 'ach' ? 'ACH' : 'Affirm'} Discount</span>
+                      <span>-$50.00</span>
+                    </div>
+                  )}
                   <div className="flex justify-between font-semibold text-lg">
                     <span>Total</span>
-                    <span className="text-primary">${(composer.totalPrice / 100).toFixed(2)}</span>
+                    <span className="text-primary">${(displayTotal / 100).toFixed(2)}</span>
                   </div>
                 </div>
 

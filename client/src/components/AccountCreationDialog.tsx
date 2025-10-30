@@ -28,9 +28,10 @@ interface AccountCreationDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onAccountCreated?: (userId: string, email: string) => void;
+  onSwitchToLogin?: () => void;
 }
 
-export default function AccountCreationDialog({ open, onOpenChange, onAccountCreated }: AccountCreationDialogProps) {
+export default function AccountCreationDialog({ open, onOpenChange, onAccountCreated, onSwitchToLogin }: AccountCreationDialogProps) {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -219,6 +220,20 @@ export default function AccountCreationDialog({ open, onOpenChange, onAccountCre
             Facebook
           </Button>
         </div>
+
+        {onSwitchToLogin && (
+          <div className="text-center text-sm">
+            <span className="text-muted-foreground">Already have an account? </span>
+            <button
+              type="button"
+              className="text-primary hover:underline"
+              onClick={onSwitchToLogin}
+              data-testid="link-switch-to-login"
+            >
+              Log in instead
+            </button>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );

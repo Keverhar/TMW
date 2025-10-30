@@ -1161,12 +1161,20 @@ export default function WeddingComposer() {
         open={showLoginDialog}
         onOpenChange={setShowLoginDialog}
         onLoginSuccess={handleLoginSuccess}
+        onSwitchToSignup={() => {
+          setShowLoginDialog(false);
+          setShowAccountDialog(true);
+        }}
       />
 
       <AccountCreationDialog
         open={showAccountDialog}
         onOpenChange={setShowAccountDialog}
         onAccountCreated={handleAccountCreated}
+        onSwitchToLogin={() => {
+          setShowAccountDialog(false);
+          setShowLoginDialog(true);
+        }}
       />
     </div>
   );

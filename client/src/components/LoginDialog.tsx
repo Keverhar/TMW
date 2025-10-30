@@ -17,12 +17,14 @@ interface LoginDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onLoginSuccess: (userId: string, email: string, composer?: any) => void;
+  onSwitchToSignup?: () => void;
 }
 
 export default function LoginDialog({
   open,
   onOpenChange,
   onLoginSuccess,
+  onSwitchToSignup,
 }: LoginDialogProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -134,6 +136,20 @@ export default function LoginDialog({
             </Button>
           </div>
         </form>
+
+        {onSwitchToSignup && (
+          <div className="text-center text-sm">
+            <span className="text-muted-foreground">Don't have an account? </span>
+            <button
+              type="button"
+              className="text-primary hover:underline"
+              onClick={onSwitchToSignup}
+              data-testid="link-switch-to-signup"
+            >
+              Create account
+            </button>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );
