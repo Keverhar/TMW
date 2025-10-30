@@ -617,10 +617,15 @@ export default function WeddingComposer() {
   };
 
   const isSimplifiedFlow = formData.eventType === 'modest-elopement' || formData.eventType === 'vow-renewal';
-  const steps = allSteps.filter(step => 
-    step.availableFor.includes('all') || 
-    (!isSimplifiedFlow && step.availableFor.includes(formData.eventType))
-  );
+  const steps = allSteps.filter(step => {
+    // Show all blocks when no event type is selected (default to full wedding view)
+    if (!formData.eventType) {
+      return true;
+    }
+    // Otherwise filter based on event type
+    return step.availableFor.includes('all') || 
+           (!isSimplifiedFlow && step.availableFor.includes(formData.eventType));
+  });
 
   // Function to determine completion status for each block
   const getBlockCompletionStatus = (blockId: number): 'complete' | 'partial' | 'none' => {
