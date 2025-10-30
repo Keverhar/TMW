@@ -36,7 +36,7 @@ const allSteps = [
   { id: 9, title: 'Photography', description: 'Photo preferences', availableFor: ['modest-wedding', 'other'] },
   { id: 10, title: 'Slideshow', description: 'Upload photos', availableFor: ['modest-wedding', 'other'] },
   { id: 11, title: 'Personal Touches', description: 'Special details', availableFor: ['modest-wedding', 'other'] },
-  { id: 12, title: 'Evite & Save-the-Date', description: 'Digital invitations', availableFor: ['all'] },
+  { id: 12, title: 'Evites', description: 'Digital invitations', availableFor: ['all'] },
   { id: 13, title: 'Contact & Payment', description: 'Finalize booking', availableFor: ['all'] },
 ];
 
@@ -649,7 +649,7 @@ export default function WeddingComposer() {
                     key={step.id}
                     onClick={() => setCurrentStep(stepNumber)}
                     data-testid={`button-step-${stepNumber}`}
-                    className={`px-2 py-1 rounded-md text-xs font-medium transition-colors ${
+                    className={`px-2 py-0.5 rounded-md text-xs font-medium transition-colors ${
                       currentStep === stepNumber
                         ? 'bg-primary text-primary-foreground'
                         : currentStep > stepNumber
@@ -657,7 +657,7 @@ export default function WeddingComposer() {
                         : 'bg-background text-muted-foreground border hover-elevate'
                     }`}
                   >
-                    <span className="block">{stepNumber}. {step.title}</span>
+                    <span className="block">{step.title}</span>
                   </button>
                 );
               })}
