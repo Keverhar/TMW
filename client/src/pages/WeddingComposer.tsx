@@ -827,32 +827,32 @@ export default function WeddingComposer() {
               {steps.map((step, index) => {
                 const stepNumber = index + 1;
                 const completionStatus = getBlockCompletionStatus(step.id);
+                const isCurrentStep = currentStep === stepNumber;
                 
-                // Determine color based on completion status
+                // Determine color based on completion status - always show status color
                 let colorClasses = '';
-                if (currentStep === stepNumber) {
-                  colorClasses = 'bg-primary text-primary-foreground';
-                } else {
-                  switch (completionStatus) {
-                    case 'complete':
-                      colorClasses = 'bg-green-600/80 text-white hover-elevate';
-                      break;
-                    case 'partial':
-                      colorClasses = 'bg-yellow-600/80 text-white hover-elevate';
-                      break;
-                    case 'none':
-                    default:
-                      colorClasses = 'bg-muted text-muted-foreground hover-elevate';
-                      break;
-                  }
+                switch (completionStatus) {
+                  case 'complete':
+                    colorClasses = 'bg-green-600/80 text-white hover-elevate';
+                    break;
+                  case 'partial':
+                    colorClasses = 'bg-yellow-600/80 text-white hover-elevate';
+                    break;
+                  case 'none':
+                  default:
+                    colorClasses = 'bg-muted text-muted-foreground hover-elevate';
+                    break;
                 }
+                
+                // Add border to indicate current step
+                const borderClass = isCurrentStep ? 'ring-2 ring-primary ring-offset-2 ring-offset-background' : '';
                 
                 return (
                   <button
                     key={step.id}
                     onClick={() => navigateToStep(stepNumber)}
                     data-testid={`button-step-${stepNumber}`}
-                    className={`px-2 py-0.5 rounded-md text-xs font-medium transition-colors whitespace-nowrap ${colorClasses}`}
+                    className={`px-2 py-0.5 rounded-md text-xs font-medium transition-colors whitespace-nowrap ${colorClasses} ${borderClass}`}
                   >
                     <span className="block">{step.title}</span>
                   </button>
