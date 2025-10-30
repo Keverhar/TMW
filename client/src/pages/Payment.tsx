@@ -148,8 +148,23 @@ export default function Payment() {
   }
 
   return (
-    <div className="min-h-screen bg-background p-4">
-      <div className="max-w-4xl mx-auto py-8">
+    <div className="min-h-screen bg-background">
+      <div className="sticky top-0 z-50 bg-background border-b">
+        <div className="max-w-4xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-xl font-serif font-bold">The Wedding Composer</h2>
+              <p className="text-sm text-muted-foreground">Secure Payment</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <Lock className="h-4 w-4 text-green-600 dark:text-green-400" />
+              <span className="text-xs text-muted-foreground">Encrypted Connection</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-4xl mx-auto p-4 py-8">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-serif mb-2">Secure Payment</h1>
           <p className="text-muted-foreground">Complete your wedding booking</p>
