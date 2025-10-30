@@ -834,25 +834,25 @@ export default function WeddingComposer() {
                 const isCurrentStep = currentStep === stepNumber;
                 const isReadOnly = isBlockReadOnly(step.id);
                 
-                // Determine color based on read-only status or completion status
+                // Determine color based on completion status, with text override for read-only blocks
                 let colorClasses = '';
-                if (isReadOnly) {
-                  // Disabled blocks: #5A5A5A background with #000000 text
-                  colorClasses = 'bg-[#5A5A5A] text-[#000000]';
-                } else {
-                  // Active blocks: show completion status colors
-                  switch (completionStatus) {
-                    case 'complete':
-                      colorClasses = 'bg-green-600/80 text-white hover-elevate';
-                      break;
-                    case 'partial':
-                      colorClasses = 'bg-yellow-600/80 text-white hover-elevate';
-                      break;
-                    case 'none':
-                    default:
-                      colorClasses = 'bg-muted text-muted-foreground hover-elevate';
-                      break;
-                  }
+                switch (completionStatus) {
+                  case 'complete':
+                    colorClasses = isReadOnly 
+                      ? 'bg-green-600/80 text-black'
+                      : 'bg-green-600/80 text-white hover-elevate';
+                    break;
+                  case 'partial':
+                    colorClasses = isReadOnly
+                      ? 'bg-yellow-600/80 text-black'
+                      : 'bg-yellow-600/80 text-white hover-elevate';
+                    break;
+                  case 'none':
+                  default:
+                    colorClasses = isReadOnly
+                      ? 'bg-muted text-black'
+                      : 'bg-muted text-muted-foreground hover-elevate';
+                    break;
                 }
                 
                 // Add border to indicate current step
