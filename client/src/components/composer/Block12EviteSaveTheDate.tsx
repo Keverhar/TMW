@@ -5,7 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Button } from "@/components/ui/button";
-import { Mail, Download, Share2, Sparkles } from "lucide-react";
+import { Mail, Download, Share2, Sparkles, Lock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface Block12EviteSaveTheDateProps {
@@ -23,6 +23,7 @@ interface Block12EviteSaveTheDateProps {
   customerName2: string;
   preferredDate: string;
   timeSlot: string;
+  readOnly?: boolean;
 }
 
 const designTemplates = [
@@ -83,7 +84,8 @@ export default function Block12EviteSaveTheDate({
   customerName,
   customerName2,
   preferredDate,
-  timeSlot
+  timeSlot,
+  readOnly = false
 }: Block12EviteSaveTheDateProps) {
   const { toast } = useToast();
 
@@ -124,6 +126,18 @@ export default function Block12EviteSaveTheDate({
         </p>
       </div>
 
+      {readOnly && (
+        <div className="flex gap-3 items-start bg-amber-50 dark:bg-amber-950 p-4 rounded-md border border-amber-200 dark:border-amber-800">
+          <Lock className="h-5 w-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+          <div>
+            <p className="font-medium text-amber-900 dark:text-amber-100">Available with Full Wedding Package</p>
+            <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
+              This section is included in our Saturday, Friday/Sunday wedding packages. You can view all options but selections are not available for elopement and vow renewal packages.
+            </p>
+          </div>
+        </div>
+      )}
+
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
@@ -137,12 +151,12 @@ export default function Block12EviteSaveTheDate({
             {designTemplates.map((template) => (
               <div
                 key={template.id}
-                onClick={() => !eviteDesignNoSpecialRequests && onChange('eviteDesignStyle', template.id)}
+                onClick={() => !eviteDesignNoSpecialRequests && !readOnly && onChange('eviteDesignStyle', template.id)}
                 className={`cursor-pointer rounded-md border-2 transition-all hover-elevate ${
                   eviteDesignStyle === template.id && !eviteDesignNoSpecialRequests
                     ? 'border-primary ring-2 ring-primary ring-offset-2'
                     : 'border-border'
-                } ${eviteDesignNoSpecialRequests ? 'opacity-50 cursor-not-allowed' : ''}`}
+                } ${eviteDesignNoSpecialRequests || readOnly ? 'opacity-50 cursor-not-allowed' : ''}`}
                 data-testid={`design-template-${template.id}`}
               >
                 <div className={`${template.preview} h-32 rounded-t-md flex items-center justify-center p-4`}>
@@ -167,6 +181,7 @@ export default function Block12EviteSaveTheDate({
                 onChange('eviteDesignNoSpecialRequests', checked as boolean);
                 if (checked) onChange('eviteDesignStyle', '');
               }}
+              disabled={readOnly}
             />
             <Label htmlFor="evite-design-no-special-requests" className="cursor-pointer text-sm">
               No special requests
@@ -192,7 +207,7 @@ export default function Block12EviteSaveTheDate({
               placeholder="e.g., Save the Date, We're Getting Married!, Formal Invitation"
               value={eviteHeaderText}
               onChange={(e) => onChange('eviteHeaderText', e.target.value)}
-              disabled={eviteWordingNoSpecialRequests}
+              disabled={readOnly || eviteWordingNoSpecialRequests}
             />
             <p className="text-xs text-muted-foreground">Examples: "Save the Date", "We're Getting Married!", "Formal Invitation"</p>
           </div>
@@ -219,7 +234,7 @@ export default function Block12EviteSaveTheDate({
               value={eviteBodyText}
               onChange={(e) => onChange('eviteBodyText', e.target.value)}
               rows={5}
-              disabled={eviteWordingNoSpecialRequests}
+              disabled={readOnly || eviteWordingNoSpecialRequests}
             />
             <p className="text-xs text-muted-foreground">
               Example: "Maya & Elena are getting married! Join us on Saturday, September 6 at The Modest Wedding Venue – Charlotte, NC. Formal invitation to follow."
@@ -238,6 +253,7 @@ export default function Block12EviteSaveTheDate({
                   onChange('eviteBodyText', '');
                 }
               }}
+              disabled={readOnly}
             />
             <Label htmlFor="evite-wording-no-special-requests" className="cursor-pointer text-sm">
               No special requests
@@ -257,8 +273,8 @@ export default function Block12EviteSaveTheDate({
         <CardContent className="space-y-4">
           <RadioGroup
             value={eviteRsvpOption}
-            onValueChange={(value) => !eviteRsvpNoSpecialRequests && onChange('eviteRsvpOption', value)}
-            disabled={eviteRsvpNoSpecialRequests}
+            onValueChange={(value) => !eviteRsvpNoSpecialRequests && !readOnly && onChange('eviteRsvpOption', value)}
+            disabled={readOnly || eviteRsvpNoSpecialRequests}
           >
             {rsvpOptions.map((option) => (
               <div key={option.id} className="flex items-center space-x-2">
@@ -266,7 +282,7 @@ export default function Block12EviteSaveTheDate({
                   value={option.id}
                   id={option.id}
                   data-testid={`radio-rsvp-${option.id}`}
-                  disabled={eviteRsvpNoSpecialRequests}
+                  disabled={readOnly || eviteRsvpNoSpecialRequests}
                 />
                 <Label
                   htmlFor={option.id}
@@ -288,6 +304,7 @@ export default function Block12EviteSaveTheDate({
                 value={eviteRsvpCustomLink}
                 onChange={(e) => onChange('eviteRsvpCustomLink', e.target.value)}
                 type="url"
+                disabled={readOnly}
               />
             </div>
           )}
@@ -304,6 +321,7 @@ export default function Block12EviteSaveTheDate({
                   onChange('eviteRsvpCustomLink', '');
                 }
               }}
+              disabled={readOnly}
             />
             <Label htmlFor="evite-rsvp-no-special-requests" className="cursor-pointer text-sm">
               No special requests
@@ -387,6 +405,7 @@ export default function Block12EviteSaveTheDate({
                     onChange('eviteCompletionStatus', '');
                   }
                 }}
+                disabled={readOnly}
               />
               <Label htmlFor="evite-all-done" className="cursor-pointer">
                 All done (for now) – I'm ready to proceed
@@ -405,6 +424,7 @@ export default function Block12EviteSaveTheDate({
                     onChange('eviteCompletionStatus', '');
                   }
                 }}
+                disabled={readOnly}
               />
               <Label htmlFor="evite-finish-later" className="cursor-pointer">
                 We'll finish this later – I want to proceed for now

@@ -2,7 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Camera, Info } from "lucide-react";
+import { Camera, Info, Lock } from "lucide-react";
 
 interface Block9PhotographyProps {
   mustHaveShots: string;
@@ -15,6 +15,7 @@ interface Block9PhotographyProps {
   photographySpecialRequestsNA: boolean;
   photographyCompletionStatus: string;
   onChange: (field: string, value: string | boolean) => void;
+  readOnly?: boolean;
 }
 
 export default function Block9Photography({
@@ -27,7 +28,8 @@ export default function Block9Photography({
   photographySpecialRequests,
   photographySpecialRequestsNA,
   photographyCompletionStatus,
-  onChange
+  onChange,
+  readOnly = false
 }: Block9PhotographyProps) {
   const isMustHaveShotsFilled = mustHaveShotsNA || mustHaveShots;
   const isVipListFilled = vipListNA || vipList;
@@ -57,6 +59,18 @@ export default function Block9Photography({
         </p>
       </div>
 
+      {readOnly && (
+        <div className="flex gap-3 items-start bg-amber-50 dark:bg-amber-950 p-4 rounded-md border border-amber-200 dark:border-amber-800">
+          <Lock className="h-5 w-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+          <div>
+            <p className="font-medium text-amber-900 dark:text-amber-100">Available with Full Wedding Package</p>
+            <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
+              This section is included in our Saturday, Friday/Sunday wedding packages. You can view all options but selections are not available for elopement and vow renewal packages.
+            </p>
+          </div>
+        </div>
+      )}
+
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
@@ -75,7 +89,7 @@ export default function Block9Photography({
               value={mustHaveShots}
               onChange={(e) => onChange('mustHaveShots', e.target.value)}
               rows={4}
-              disabled={mustHaveShotsNA}
+              disabled={mustHaveShotsNA || readOnly}
             />
           </div>
 
@@ -90,6 +104,7 @@ export default function Block9Photography({
                   onChange('mustHaveShots', '');
                 }
               }}
+              disabled={readOnly}
             />
             <Label htmlFor="must-have-shots-na" className="cursor-pointer text-sm">
               No special requests
@@ -113,7 +128,7 @@ export default function Block9Photography({
               value={vipList}
               onChange={(e) => onChange('vipList', e.target.value)}
               rows={4}
-              disabled={vipListNA}
+              disabled={vipListNA || readOnly}
             />
           </div>
 
@@ -128,6 +143,7 @@ export default function Block9Photography({
                   onChange('vipList', '');
                 }
               }}
+              disabled={readOnly}
             />
             <Label htmlFor="vip-list-na" className="cursor-pointer text-sm">
               No special requests
@@ -151,7 +167,7 @@ export default function Block9Photography({
               value={groupPhotosRequested}
               onChange={(e) => onChange('groupPhotosRequested', e.target.value)}
               rows={4}
-              disabled={groupPhotosRequestedNA}
+              disabled={groupPhotosRequestedNA || readOnly}
             />
           </div>
 
@@ -166,6 +182,7 @@ export default function Block9Photography({
                   onChange('groupPhotosRequested', '');
                 }
               }}
+              disabled={readOnly}
             />
             <Label htmlFor="group-photos-requested-na" className="cursor-pointer text-sm">
               No special requests
@@ -186,7 +203,7 @@ export default function Block9Photography({
             value={photographySpecialRequests}
             onChange={(e) => onChange('photographySpecialRequests', e.target.value)}
             rows={3}
-            disabled={photographySpecialRequestsNA}
+            disabled={photographySpecialRequestsNA || readOnly}
           />
 
           <div className="flex items-center space-x-2">
@@ -200,6 +217,7 @@ export default function Block9Photography({
                   onChange('photographySpecialRequests', '');
                 }
               }}
+              disabled={readOnly}
             />
             <Label htmlFor="photography-special-requests-na" className="cursor-pointer text-sm">
               No special requests
@@ -221,6 +239,7 @@ export default function Block9Photography({
                 data-testid="checkbox-photography-all-done"
                 checked={photographyCompletionStatus === 'all-done'}
                 onCheckedChange={() => handleCompletionStatusChange('all-done')}
+                disabled={readOnly}
               />
               <Label htmlFor="photography-all-done" className="cursor-pointer font-medium">
                 All done (for now)
@@ -235,6 +254,7 @@ export default function Block9Photography({
                 data-testid="checkbox-photography-finish-later"
                 checked={photographyCompletionStatus === 'finish-later'}
                 onCheckedChange={() => handleCompletionStatusChange('finish-later')}
+                disabled={readOnly}
               />
               <Label htmlFor="photography-finish-later" className="cursor-pointer font-medium">
                 We'll finish this later

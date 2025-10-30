@@ -2,7 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import { Images, Upload, X, AlertCircle, CheckCircle2 } from "lucide-react";
+import { Images, Upload, X, AlertCircle, CheckCircle2, Lock } from "lucide-react";
 import { useState, useRef } from "react";
 
 interface FileMetadata {
@@ -18,6 +18,7 @@ interface Block10SlideshowProps {
   engagementPhotosNA: boolean;
   slideshowCompletionStatus: string;
   onChange: (field: string, value: string | boolean) => void;
+  readOnly?: boolean;
 }
 
 const ALLOWED_FILE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/tiff', 'image/bmp', 'image/gif'];
@@ -33,7 +34,8 @@ export default function Block10Slideshow({
   engagementPhotos,
   engagementPhotosNA,
   slideshowCompletionStatus,
-  onChange
+  onChange,
+  readOnly = false
 }: Block10SlideshowProps) {
   const slideshowInputRef = useRef<HTMLInputElement>(null);
   const engagementInputRef = useRef<HTMLInputElement>(null);
@@ -176,6 +178,18 @@ export default function Block10Slideshow({
         </p>
       </div>
 
+      {readOnly && (
+        <div className="flex gap-3 items-start bg-amber-50 dark:bg-amber-950 p-4 rounded-md border border-amber-200 dark:border-amber-800">
+          <Lock className="h-5 w-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+          <div>
+            <p className="font-medium text-amber-900 dark:text-amber-100">Available with Full Wedding Package</p>
+            <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
+              This section is included in our Saturday, Friday/Sunday wedding packages. You can view all options but selections are not available for elopement and vow renewal packages.
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Slideshow Photos */}
       <Card>
         <CardHeader>
@@ -212,7 +226,7 @@ export default function Block10Slideshow({
               type="button"
               variant="outline"
               onClick={() => slideshowInputRef.current?.click()}
-              disabled={slideshowPhotosNA || slideshowPhotosList.length >= MAX_SLIDESHOW_PHOTOS}
+              disabled={readOnly || slideshowPhotosNA || slideshowPhotosList.length >= MAX_SLIDESHOW_PHOTOS}
               data-testid="button-upload-slideshow-photos"
               className="w-full"
             >
@@ -233,6 +247,7 @@ export default function Block10Slideshow({
                       variant="ghost"
                       size="icon"
                       onClick={() => removeSlideshowPhoto(index)}
+                      disabled={readOnly}
                       data-testid={`button-remove-slideshow-photo-${index}`}
                     >
                       <X className="h-4 w-4" />
@@ -253,6 +268,7 @@ export default function Block10Slideshow({
               id="slideshow-photos-na"
               data-testid="checkbox-slideshow-photos-na"
               checked={slideshowPhotosNA}
+              disabled={readOnly}
               onCheckedChange={(checked) => {
                 onChange('slideshowPhotosNA', checked as boolean);
                 if (checked) {
@@ -303,7 +319,7 @@ export default function Block10Slideshow({
               type="button"
               variant="outline"
               onClick={() => engagementInputRef.current?.click()}
-              disabled={engagementPhotosNA || engagementPhotosList.length >= MAX_ENGAGEMENT_PHOTOS}
+              disabled={readOnly || engagementPhotosNA || engagementPhotosList.length >= MAX_ENGAGEMENT_PHOTOS}
               data-testid="button-upload-engagement-photos"
               className="w-full"
             >
@@ -324,6 +340,7 @@ export default function Block10Slideshow({
                       variant="ghost"
                       size="icon"
                       onClick={() => removeEngagementPhoto(index)}
+                      disabled={readOnly}
                       data-testid={`button-remove-engagement-photo-${index}`}
                     >
                       <X className="h-4 w-4" />
@@ -344,6 +361,7 @@ export default function Block10Slideshow({
               id="engagement-photos-na"
               data-testid="checkbox-engagement-photos-na"
               checked={engagementPhotosNA}
+              disabled={readOnly}
               onCheckedChange={(checked) => {
                 onChange('engagementPhotosNA', checked as boolean);
                 if (checked) {
@@ -378,6 +396,7 @@ export default function Block10Slideshow({
                       id="slideshow-complete-done"
                       data-testid="checkbox-slideshow-complete-done"
                       checked={slideshowCompletionStatus === 'done'}
+                      disabled={readOnly}
                       onCheckedChange={(checked) => {
                         if (checked) {
                           onChange('slideshowCompletionStatus', 'done');
@@ -396,6 +415,7 @@ export default function Block10Slideshow({
                       id="slideshow-complete-later"
                       data-testid="checkbox-slideshow-complete-later"
                       checked={slideshowCompletionStatus === 'later'}
+                      disabled={readOnly}
                       onCheckedChange={(checked) => {
                         if (checked) {
                           onChange('slideshowCompletionStatus', 'later');
@@ -433,6 +453,7 @@ export default function Block10Slideshow({
                     id="slideshow-incomplete-later"
                     data-testid="checkbox-slideshow-incomplete-later"
                     checked={slideshowCompletionStatus === 'later'}
+                    disabled={readOnly}
                     onCheckedChange={(checked) => {
                       if (checked) {
                         onChange('slideshowCompletionStatus', 'later');

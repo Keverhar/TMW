@@ -3,7 +3,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import { Heart, CheckCircle2, AlertCircle } from "lucide-react";
+import { Heart, CheckCircle2, AlertCircle, Lock } from "lucide-react";
 
 interface Block11PersonalTouchesProps {
   freshFlorals: string;
@@ -20,6 +20,7 @@ interface Block11PersonalTouchesProps {
   personalTouchesSpecialInstructionsNA: boolean;
   personalTouchesCompletionStatus: string;
   onChange: (field: string, value: string | boolean) => void;
+  readOnly?: boolean;
 }
 
 export default function Block11PersonalTouches({
@@ -36,7 +37,8 @@ export default function Block11PersonalTouches({
   personalTouchesSpecialInstructions,
   personalTouchesSpecialInstructionsNA,
   personalTouchesCompletionStatus,
-  onChange
+  onChange,
+  readOnly = false
 }: Block11PersonalTouchesProps) {
   // Check if fields are filled
   const isFreshFloralsFilled = freshFloralsNA || freshFlorals.trim() !== '';
@@ -59,6 +61,18 @@ export default function Block11PersonalTouches({
         </p>
       </div>
 
+      {readOnly && (
+        <div className="flex gap-3 items-start bg-amber-50 dark:bg-amber-950 p-4 rounded-md border border-amber-200 dark:border-amber-800">
+          <Lock className="h-5 w-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+          <div>
+            <p className="font-medium text-amber-900 dark:text-amber-100">Available with Full Wedding Package</p>
+            <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
+              This section is included in our Saturday, Friday/Sunday wedding packages. You can view all options but selections are not available for elopement and vow renewal packages.
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Fresh Florals */}
       <Card>
         <CardHeader>
@@ -78,7 +92,7 @@ export default function Block11PersonalTouches({
               value={freshFlorals}
               onChange={(e) => onChange('freshFlorals', e.target.value)}
               rows={3}
-              disabled={freshFloralsNA}
+              disabled={freshFloralsNA || readOnly}
             />
             <p className="text-xs text-muted-foreground">
               We'll receive deliveries directly from your florist, refrigerate them on arrival, and present them at the perfect time.
@@ -96,6 +110,7 @@ export default function Block11PersonalTouches({
                   onChange('freshFlorals', '');
                 }
               }}
+              disabled={readOnly}
             />
             <Label htmlFor="fresh-florals-na" className="text-sm font-normal cursor-pointer">
               No special requests
@@ -118,6 +133,7 @@ export default function Block11PersonalTouches({
               onClick={() => onChange('guestBookChoice', 'yes')}
               data-testid="button-guest-book-yes"
               className="flex-1"
+              disabled={readOnly}
             >
               Yes
             </Button>
@@ -127,6 +143,7 @@ export default function Block11PersonalTouches({
               onClick={() => onChange('guestBookChoice', 'no')}
               data-testid="button-guest-book-no"
               className="flex-1"
+              disabled={readOnly}
             >
               No
             </Button>
@@ -151,6 +168,7 @@ export default function Block11PersonalTouches({
               onClick={() => onChange('cakeKnifeChoice', 'yes')}
               data-testid="button-cake-knife-yes"
               className="flex-1"
+              disabled={readOnly}
             >
               Yes
             </Button>
@@ -160,6 +178,7 @@ export default function Block11PersonalTouches({
               onClick={() => onChange('cakeKnifeChoice', 'no')}
               data-testid="button-cake-knife-no"
               className="flex-1"
+              disabled={readOnly}
             >
               No
             </Button>
@@ -186,7 +205,7 @@ export default function Block11PersonalTouches({
               value={departureOrganizer}
               onChange={(e) => onChange('departureOrganizer', e.target.value)}
               rows={2}
-              disabled={departureOrganizerTBD}
+              disabled={departureOrganizerTBD || readOnly}
             />
           </div>
 
@@ -201,6 +220,7 @@ export default function Block11PersonalTouches({
                   onChange('departureOrganizer', '');
                 }
               }}
+              disabled={readOnly}
             />
             <Label htmlFor="departure-organizer-tbd" className="text-sm font-normal cursor-pointer">
               To Be Decided Later
@@ -239,6 +259,7 @@ export default function Block11PersonalTouches({
               }}
               data-testid="button-departure-vehicle-yes"
               className="flex-1"
+              disabled={readOnly}
             >
               Yes
             </Button>
@@ -251,6 +272,7 @@ export default function Block11PersonalTouches({
               }}
               data-testid="button-departure-vehicle-no"
               className="flex-1"
+              disabled={readOnly}
             >
               No
             </Button>
@@ -266,6 +288,7 @@ export default function Block11PersonalTouches({
                 value={departureVehicle}
                 onChange={(e) => onChange('departureVehicle', e.target.value)}
                 rows={3}
+                disabled={readOnly}
               />
               <p className="text-xs text-muted-foreground">
                 If arranged, our team will help guide your guests outside and ensure your departure goes smoothly.
@@ -288,7 +311,7 @@ export default function Block11PersonalTouches({
             value={personalTouchesSpecialInstructions}
             onChange={(e) => onChange('personalTouchesSpecialInstructions', e.target.value)}
             rows={3}
-            disabled={personalTouchesSpecialInstructionsNA}
+            disabled={personalTouchesSpecialInstructionsNA || readOnly}
           />
 
           <div className="flex items-center gap-2">
@@ -302,6 +325,7 @@ export default function Block11PersonalTouches({
                   onChange('personalTouchesSpecialInstructions', '');
                 }
               }}
+              disabled={readOnly}
             />
             <Label htmlFor="personal-touches-special-instructions-na" className="text-sm font-normal cursor-pointer">
               No special instructions
@@ -337,6 +361,7 @@ export default function Block11PersonalTouches({
                           onChange('personalTouchesCompletionStatus', '');
                         }
                       }}
+                      disabled={readOnly}
                     />
                     <Label htmlFor="personal-touches-complete-done" className="text-sm font-normal cursor-pointer">
                       All done (for now)
@@ -355,6 +380,7 @@ export default function Block11PersonalTouches({
                           onChange('personalTouchesCompletionStatus', '');
                         }
                       }}
+                      disabled={readOnly}
                     />
                     <Label htmlFor="personal-touches-complete-later" className="text-sm font-normal cursor-pointer">
                       We'll finish this later
@@ -392,6 +418,7 @@ export default function Block11PersonalTouches({
                         onChange('personalTouchesCompletionStatus', '');
                       }
                     }}
+                    disabled={readOnly}
                   />
                   <Label htmlFor="personal-touches-incomplete-later" className="text-sm font-normal cursor-pointer">
                     We'll finish this later
