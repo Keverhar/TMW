@@ -118,6 +118,7 @@ export default function Block2DateTime({ preferredDate, timeSlot, onChange, even
                 modifiersClassNames={{
                   available: "bg-primary/10 font-semibold"
                 }}
+                numberOfMonths={2}
                 className="border rounded-md"
               />
             </div>
