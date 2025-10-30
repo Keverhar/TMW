@@ -832,20 +832,27 @@ export default function WeddingComposer() {
                 const stepNumber = index + 1;
                 const completionStatus = getBlockCompletionStatus(step.id);
                 const isCurrentStep = currentStep === stepNumber;
+                const isReadOnly = isBlockReadOnly(step.id);
                 
-                // Determine color based on completion status - always show status color
+                // Determine color based on read-only status or completion status
                 let colorClasses = '';
-                switch (completionStatus) {
-                  case 'complete':
-                    colorClasses = 'bg-green-600/80 text-white hover-elevate';
-                    break;
-                  case 'partial':
-                    colorClasses = 'bg-yellow-600/80 text-white hover-elevate';
-                    break;
-                  case 'none':
-                  default:
-                    colorClasses = 'bg-muted text-muted-foreground hover-elevate';
-                    break;
+                if (isReadOnly) {
+                  // Disabled blocks: dark grey background with solid black text
+                  colorClasses = 'bg-gray-500 dark:bg-gray-600 text-black dark:text-gray-300';
+                } else {
+                  // Active blocks: show completion status colors
+                  switch (completionStatus) {
+                    case 'complete':
+                      colorClasses = 'bg-green-600/80 text-white hover-elevate';
+                      break;
+                    case 'partial':
+                      colorClasses = 'bg-yellow-600/80 text-white hover-elevate';
+                      break;
+                    case 'none':
+                    default:
+                      colorClasses = 'bg-muted text-muted-foreground hover-elevate';
+                      break;
+                  }
                 }
                 
                 // Add border to indicate current step
