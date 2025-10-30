@@ -85,6 +85,7 @@ export default function WeddingComposer() {
     fatherDaughterDanceSong: "",
     lastDanceSong: "",
     playlistUrl: "",
+    musicCompletionStatus: "",
 
     // Block 5: Announcements
     grandIntroduction: "",
@@ -293,6 +294,16 @@ export default function WeddingComposer() {
       return;
     }
 
+    // Require music completion status
+    if (!formData.musicCompletionStatus) {
+      toast({
+        title: "Music selection status required",
+        description: "Please check 'All done (for now)' or 'We'll finish this later' in the Music Selection section before proceeding to payment.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     // Require account creation before payment
     if (!userAccount) {
       toast({
@@ -363,6 +374,7 @@ export default function WeddingComposer() {
         fatherDaughterDanceSong: composer.fatherDaughterDanceSong || "",
         lastDanceSong: composer.lastDanceSong || "",
         playlistUrl: composer.playlistUrl || "",
+        musicCompletionStatus: composer.musicCompletionStatus || "",
         grandIntroduction: composer.grandIntroduction || "",
         fatherDaughterDanceAnnouncement: composer.fatherDaughterDanceAnnouncement || "",
         toastsSpeechesAnnouncement: composer.toastsSpeechesAnnouncement || "",
@@ -603,6 +615,7 @@ export default function WeddingComposer() {
               fatherDaughterDanceSong={formData.fatherDaughterDanceSong}
               lastDanceSong={formData.lastDanceSong}
               playlistUrl={formData.playlistUrl}
+              musicCompletionStatus={formData.musicCompletionStatus}
               onChange={updateField}
             />
           )}

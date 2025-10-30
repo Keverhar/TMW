@@ -45,6 +45,7 @@ export const weddingComposers = pgTable("wedding_composers", {
   fatherDaughterDanceSong: text("father_daughter_dance_song"),
   lastDanceSong: text("last_dance_song"),
   playlistUrl: text("playlist_url"),
+  musicCompletionStatus: text("music_completion_status"),
   
   // Block 5: Announcements & Special Moments
   grandIntroduction: text("grand_introduction"),
