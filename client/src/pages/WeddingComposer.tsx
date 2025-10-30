@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -62,6 +62,8 @@ export default function WeddingComposer() {
   const [showLoginDialog, setShowLoginDialog] = useState(false);
   const [userAccount, setUserAccount] = useState<{ id: string; email: string } | null>(null);
   const [hasSeenInitialDialog, setHasSeenInitialDialog] = useState(false);
+  const [savedStepBeforeSimplification, setSavedStepBeforeSimplification] = useState<number | null>(null);
+  const previousEventTypeRef = useRef<string>("");
 
   const [formData, setFormData] = useState({
     // Block 1: Event Type
@@ -221,6 +223,45 @@ export default function WeddingComposer() {
       preferredDate: "",
       backupDate: "",
     }));
+  }, [formData.eventType]);
+
+  // Preserve and restore navigation position when switching between package types
+  useEffect(() => {
+    const currentEventType = formData.eventType;
+    const previousEventType = previousEventTypeRef.current;
+    
+    // Only act if event type actually changed
+    if (currentEventType && currentEventType !== previousEventType) {
+      const wasFullPackage = previousEventType === 'modest-wedding' || previousEventType === 'other';
+      const isNowSimplified = currentEventType === 'modest-elopement' || currentEventType === 'vow-renewal';
+      const wasSimplified = previousEventType === 'modest-elopement' || previousEventType === 'vow-renewal';
+      const isNowFull = currentEventType === 'modest-wedding' || currentEventType === 'other';
+      
+      // Transitioning from full package to simplified package
+      if (wasFullPackage && isNowSimplified) {
+        const currentStepInfo = allSteps.find(s => s.id === currentStep);
+        
+        // Save current step if it won't be available in simplified package
+        if (currentStepInfo && !currentStepInfo.availableFor.includes('all')) {
+          setSavedStepBeforeSimplification(currentStep);
+          
+          // Navigate to Block 6 (Ceremony) - first read-only block
+          setCurrentStep(6);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }
+      
+      // Transitioning from simplified package back to full package
+      if (wasSimplified && isNowFull && savedStepBeforeSimplification !== null) {
+        // Restore the previously saved step
+        setCurrentStep(savedStepBeforeSimplification);
+        setSavedStepBeforeSimplification(null);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      
+      // Update ref for next comparison
+      previousEventTypeRef.current = currentEventType;
+    }
   }, [formData.eventType]);
 
   const saveProgress = async () => {
