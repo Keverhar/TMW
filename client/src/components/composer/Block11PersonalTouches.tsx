@@ -3,6 +3,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Heart, CheckCircle2, AlertCircle, Lock } from "lucide-react";
 
 interface Block11PersonalTouchesProps {
@@ -126,31 +127,34 @@ export default function Block11PersonalTouches({
           <CardDescription>Will you be bringing a guest book for your celebration?</CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
-          <div className="flex gap-3">
-            <Button
-              type="button"
+          <div className="flex gap-2">
+            <Badge
               variant={guestBookChoice === 'yes' ? 'default' : 'outline'}
-              onClick={() => onChange('guestBookChoice', 'yes')}
-              data-testid="button-guest-book-yes"
-              className="flex-1"
-              disabled={readOnly}
+              onClick={() => !readOnly && onChange('guestBookChoice', 'yes')}
+              data-testid="badge-guest-book-yes"
+              className={`cursor-pointer ${readOnly ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               Yes
-            </Button>
-            <Button
-              type="button"
+            </Badge>
+            <Badge
               variant={guestBookChoice === 'no' ? 'default' : 'outline'}
-              onClick={() => onChange('guestBookChoice', 'no')}
-              data-testid="button-guest-book-no"
-              className="flex-1"
-              disabled={readOnly}
+              onClick={() => !readOnly && onChange('guestBookChoice', 'no')}
+              data-testid="badge-guest-book-no"
+              className={`cursor-pointer ${readOnly ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               No
-            </Button>
+            </Badge>
           </div>
-          <p className="text-xs text-muted-foreground">
-            We'll make sure it's displayed thoughtfully and ready for guests to sign. We provide a designated gift table and card box.
-          </p>
+          {guestBookChoice === 'yes' && (
+            <p className="text-xs text-muted-foreground">
+              OK. We'll make sure it's displayed thoughtfully and ready for guests to sign. We will provide a designated gift table and card box.
+            </p>
+          )}
+          {guestBookChoice === 'no' && (
+            <p className="text-xs text-muted-foreground">
+              OK. If you change your mind it's no problem, just let us know and we'll make sure it's displayed thoughtfully and ready for guests to sign. We will provide a designated gift table and card box.
+            </p>
+          )}
         </CardContent>
       </Card>
 
@@ -161,31 +165,34 @@ export default function Block11PersonalTouches({
           <CardDescription>Would you like us to use a special cake knife or service set you're bringing?</CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
-          <div className="flex gap-3">
-            <Button
-              type="button"
+          <div className="flex gap-2">
+            <Badge
               variant={cakeKnifeChoice === 'yes' ? 'default' : 'outline'}
-              onClick={() => onChange('cakeKnifeChoice', 'yes')}
-              data-testid="button-cake-knife-yes"
-              className="flex-1"
-              disabled={readOnly}
+              onClick={() => !readOnly && onChange('cakeKnifeChoice', 'yes')}
+              data-testid="badge-cake-knife-yes"
+              className={`cursor-pointer ${readOnly ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               Yes
-            </Button>
-            <Button
-              type="button"
+            </Badge>
+            <Badge
               variant={cakeKnifeChoice === 'no' ? 'default' : 'outline'}
-              onClick={() => onChange('cakeKnifeChoice', 'no')}
-              data-testid="button-cake-knife-no"
-              className="flex-1"
-              disabled={readOnly}
+              onClick={() => !readOnly && onChange('cakeKnifeChoice', 'no')}
+              data-testid="badge-cake-knife-no"
+              className={`cursor-pointer ${readOnly ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               No
-            </Button>
+            </Badge>
           </div>
-          <p className="text-xs text-muted-foreground">
-            We'll place your knife and server next to the cake display before the cake-cutting moment.
-          </p>
+          {cakeKnifeChoice === 'yes' && (
+            <p className="text-xs text-muted-foreground">
+              Great, we'll place your knife and server next to the cake display before the cake-cutting moment.
+            </p>
+          )}
+          {cakeKnifeChoice === 'no' && (
+            <p className="text-xs text-muted-foreground">
+              No problem. If you change your mind just let us know and we'll place your knife and server next to the cake display before the cake-cutting moment.
+            </p>
+          )}
         </CardContent>
       </Card>
 
