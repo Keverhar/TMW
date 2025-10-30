@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Heart, Sparkles, Eye } from "lucide-react";
+import { Heart, Sparkles, Eye, Lock } from "lucide-react";
 import { useState } from "react";
 
 interface Block6CeremonyProps {
@@ -25,6 +25,7 @@ interface Block6CeremonyProps {
   ceremonySpecialRequests: string;
   onChange: (field: string, value: string | boolean) => void;
   showAddOns?: boolean;
+  readOnly?: boolean;
 }
 
 const FULL_CEREMONY_SCRIPTS: Record<string, string> = {
@@ -325,7 +326,8 @@ export default function Block6Ceremony({
   petInvolvement,
   ceremonySpecialRequests,
   onChange,
-  showAddOns = true
+  showAddOns = true,
+  readOnly = false
 }: Block6CeremonyProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedScriptForPreview, setSelectedScriptForPreview] = useState<string>("");
@@ -347,6 +349,18 @@ export default function Block6Ceremony({
         </p>
       </div>
 
+      {readOnly && (
+        <div className="flex gap-3 items-start bg-amber-50 dark:bg-amber-950 p-4 rounded-md border border-amber-200 dark:border-amber-800">
+          <Lock className="h-5 w-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+          <div>
+            <p className="font-medium text-amber-900 dark:text-amber-100">Available with Full Wedding Package</p>
+            <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
+              The Elopement and Vow Renewal packages include a basic, secular ceremony but you are welcome to review these options are available with the Modest Wedding packages.
+            </p>
+          </div>
+        </div>
+      )}
+
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
@@ -356,10 +370,10 @@ export default function Block6Ceremony({
           <CardDescription>Choose the words, mood, and meaning of the moment when you officially say "I do"</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <RadioGroup value={ceremonyScript} onValueChange={(value) => onChange('ceremonyScript', value)}>
+          <RadioGroup value={ceremonyScript} onValueChange={(value) => onChange('ceremonyScript', value)} disabled={readOnly}>
             {ceremonyScripts.map((script) => (
               <div key={script.value} className="flex items-start space-x-2 p-4 rounded-md border hover-elevate">
-                <RadioGroupItem value={script.value} id={`script-${script.value}`} data-testid={`radio-script-${script.value}`} className="mt-1" />
+                <RadioGroupItem value={script.value} id={`script-${script.value}`} data-testid={`radio-script-${script.value}`} className="mt-1" disabled={readOnly} />
                 <Label htmlFor={`script-${script.value}`} className="flex-1 cursor-pointer">
                   <span className="font-medium block text-lg">{script.icon} {script.label}</span>
                   <span className="text-sm text-muted-foreground block mt-1">{script.description}</span>
@@ -380,7 +394,7 @@ export default function Block6Ceremony({
 
           <div className="space-y-2">
             <Label htmlFor="vow-choices">Vow Choices</Label>
-            <Select value={vowChoices} onValueChange={(value) => onChange('vowChoices', value)}>
+            <Select value={vowChoices} onValueChange={(value) => onChange('vowChoices', value)} disabled={readOnly}>
               <SelectTrigger id="vow-choices" data-testid="select-vow-choices">
                 <SelectValue placeholder="Select vow style" />
               </SelectTrigger>
@@ -427,6 +441,7 @@ export default function Block6Ceremony({
               data-testid="checkbox-unity-candle"
               checked={unityCandle}
               onCheckedChange={(checked) => onChange('unityCandle', checked as boolean)}
+              disabled={readOnly}
             />
             <Label htmlFor="unity-candle" className="cursor-pointer">
               Unity Candle (we'll bring a unity candle set)
@@ -439,6 +454,7 @@ export default function Block6Ceremony({
               data-testid="checkbox-sand-ceremony"
               checked={sandCeremony}
               onCheckedChange={(checked) => onChange('sandCeremony', checked as boolean)}
+              disabled={readOnly}
             />
             <Label htmlFor="sand-ceremony" className="cursor-pointer">
               Sand Ceremony (we'll bring sand and vessels)
@@ -451,6 +467,7 @@ export default function Block6Ceremony({
               data-testid="checkbox-handfasting"
               checked={handfasting}
               onCheckedChange={(checked) => onChange('handfasting', checked as boolean)}
+              disabled={readOnly}
             />
             <Label htmlFor="handfasting" className="cursor-pointer">
               Handfasting (we'll bring a handfasting ribbon or cord)
@@ -477,6 +494,7 @@ export default function Block6Ceremony({
                 placeholder="Name of guest"
                 value={guestReadingOrSongName}
                 onChange={(e) => onChange('guestReadingOrSongName', e.target.value)}
+                disabled={readOnly}
               />
               <Textarea
                 id="guest-reading-or-song"
@@ -485,6 +503,7 @@ export default function Block6Ceremony({
                 value={guestReadingOrSong}
                 onChange={(e) => onChange('guestReadingOrSong', e.target.value)}
                 rows={2}
+                disabled={readOnly}
               />
             </div>
 
@@ -503,6 +522,7 @@ export default function Block6Ceremony({
                 }}
                 rows={3}
                 maxLength={maxOfficiantPassageChars}
+                disabled={readOnly}
               />
               <p className="text-xs text-muted-foreground">
                 {officiantPassageCharCount}/{maxOfficiantPassageChars} characters
@@ -518,6 +538,7 @@ export default function Block6Ceremony({
                 value={includingChild}
                 onChange={(e) => onChange('includingChild', e.target.value)}
                 rows={2}
+                disabled={readOnly}
               />
             </div>
 
@@ -530,6 +551,7 @@ export default function Block6Ceremony({
                 value={petInvolvement}
                 onChange={(e) => onChange('petInvolvement', e.target.value)}
                 rows={2}
+                disabled={readOnly}
               />
             </div>
 
@@ -546,6 +568,7 @@ export default function Block6Ceremony({
                 onChange={(e) => onChange('ceremonySpecialRequests', e.target.value)}
                 rows={2}
                 maxLength={400}
+                disabled={readOnly}
               />
               <p className="text-xs text-muted-foreground">
                 {ceremonySpecialRequests.length}/400 characters

@@ -2,12 +2,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Badge } from "@/components/ui/badge";
-import { Info, Palette } from "lucide-react";
+import { Info, Palette, Lock } from "lucide-react";
 
 interface Block3SignatureColorProps {
   signatureColor: string;
   colorSwatchDecision: string;
   onChange: (field: string, value: string) => void;
+  readOnly?: boolean;
 }
 
 const colors = [
@@ -33,7 +34,7 @@ const colors = [
   { value: "light-lavender", label: "Light Lavender", hex: "#E6E6FA" },
 ];
 
-export default function Block3SignatureColor({ signatureColor, colorSwatchDecision, onChange }: Block3SignatureColorProps) {
+export default function Block3SignatureColor({ signatureColor, colorSwatchDecision, onChange, readOnly = false }: Block3SignatureColorProps) {
   return (
     <div className="space-y-6">
       <div>
@@ -42,6 +43,18 @@ export default function Block3SignatureColor({ signatureColor, colorSwatchDecisi
           Your signature color sets the mood for your celebration and helps tie together the floral, décor, and photography aesthetic.
         </p>
       </div>
+
+      {readOnly && (
+        <div className="flex gap-3 items-start bg-amber-50 dark:bg-amber-950 p-4 rounded-md border border-amber-200 dark:border-amber-800">
+          <Lock className="h-5 w-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+          <div>
+            <p className="font-medium text-amber-900 dark:text-amber-100">Available with Full Wedding Package</p>
+            <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
+              This section is included in our Saturday, Friday/Sunday wedding packages. You can view all options but selections are not available for Elopement and Vow Renewal packages.
+            </p>
+          </div>
+        </div>
+      )}
 
       <Card>
         <CardHeader>
@@ -80,12 +93,13 @@ export default function Block3SignatureColor({ signatureColor, colorSwatchDecisi
               <button
                 key={color.value}
                 data-testid={`button-color-${color.value}`}
-                onClick={() => onChange('signatureColor', color.value)}
+                onClick={() => !readOnly && onChange('signatureColor', color.value)}
+                disabled={readOnly}
                 className={`p-3 rounded-md border-2 transition-all hover-elevate active-elevate-2 ${
                   signatureColor === color.value
                     ? 'border-primary bg-primary/5'
                     : 'border-border'
-                }`}
+                } ${readOnly ? 'opacity-60 cursor-not-allowed' : ''}`}
               >
                 <div
                   className="w-full h-12 rounded-md mb-2"
@@ -105,21 +119,21 @@ export default function Block3SignatureColor({ signatureColor, colorSwatchDecisi
           <CardDescription>Would you like to see the color in person before finalizing?</CardDescription>
         </CardHeader>
         <CardContent>
-          <RadioGroup value={colorSwatchDecision} onValueChange={(value) => onChange('colorSwatchDecision', value)}>
+          <RadioGroup value={colorSwatchDecision} onValueChange={(value) => onChange('colorSwatchDecision', value)} disabled={readOnly}>
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value="see-swatches-at-tour" id="swatch-tour" data-testid="radio-swatch-tour" />
+              <RadioGroupItem value="see-swatches-at-tour" id="swatch-tour" data-testid="radio-swatch-tour" disabled={readOnly} />
               <Label htmlFor="swatch-tour" className="cursor-pointer">
                 I'm still deciding — I'd like to see swatches at my tour
               </Label>
             </div>
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value="final-decision" id="swatch-finalize" data-testid="radio-swatch-finalize" />
+              <RadioGroupItem value="final-decision" id="swatch-finalize" data-testid="radio-swatch-finalize" disabled={readOnly} />
               <Label htmlFor="swatch-finalize" className="cursor-pointer">
                 I'm ready to finalize my selection now
               </Label>
             </div>
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value="not-sure-yet" id="swatch-not-sure" data-testid="radio-swatch-not-sure" />
+              <RadioGroupItem value="not-sure-yet" id="swatch-not-sure" data-testid="radio-swatch-not-sure" disabled={readOnly} />
               <Label htmlFor="swatch-not-sure" className="cursor-pointer">
                 Leave blank for now
               </Label>
