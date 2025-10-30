@@ -14,7 +14,7 @@ interface PaymentPageProps {
 }
 
 export default function PaymentPage({ totalAmount, onPaymentComplete, onBack }: PaymentPageProps) {
-  const [paymentMethod, setPaymentMethod] = useState<'card' | 'affirm'>('card');
+  const [paymentMethod, setPaymentMethod] = useState<'card' | 'affirm' | 'ach'>('card');
   const [isProcessing, setIsProcessing] = useState(false);
   
   const [cardNumber, setCardNumber] = useState('');
@@ -72,7 +72,7 @@ export default function PaymentPage({ totalAmount, onPaymentComplete, onBack }: 
             <CardDescription>Choose how you'd like to pay</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <RadioGroup value={paymentMethod} onValueChange={(value) => setPaymentMethod(value as 'card' | 'affirm')}>
+            <RadioGroup value={paymentMethod} onValueChange={(value) => setPaymentMethod(value as 'card' | 'affirm' | 'ach')}>
               <div className="flex items-start space-x-3 p-4 border rounded-lg hover-elevate">
                 <RadioGroupItem value="card" id="card" data-testid="radio-payment-card" />
                 <div className="flex-1">
@@ -90,17 +90,30 @@ export default function PaymentPage({ totalAmount, onPaymentComplete, onBack }: 
                 <RadioGroupItem value="affirm" id="affirm" data-testid="radio-payment-affirm" />
                 <div className="flex-1">
                   <Label htmlFor="affirm" className="cursor-pointer">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="font-bold text-lg text-[#0FA0EA]">affirm</span>
+                    <div className="mb-2">
+                      <span className="font-semibold">Pay Over Time with Affirm</span>
                     </div>
-                    <p className="text-sm text-muted-foreground mb-2">
-                      Pay over time with flexible monthly payments
-                    </p>
-                    <div className="text-sm space-y-1">
-                      <p className="font-medium">As low as ${((totalAmount / 100) / 12).toFixed(2)}/month at 0% APR</p>
-                      <p className="text-muted-foreground">• No hidden fees</p>
-                      <p className="text-muted-foreground">• Easy application process</p>
-                      <p className="text-muted-foreground">• Instant decision</p>
+                    <div className="text-sm text-muted-foreground space-y-1">
+                      <p>- Flexible: split your $5,000 wedding into smaller monthly payments.</p>
+                      <p>- Quick decision, no late fees, and clear terms.</p>
+                      <p>- Trusted brand used by millions.</p>
+                      <p className="font-medium text-foreground">- **Special savings: Receive a $50 discount on your wedding package when you choose Affirm.**</p>
+                    </div>
+                  </Label>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-3 p-4 border rounded-lg hover-elevate">
+                <RadioGroupItem value="ach" id="ach" data-testid="radio-payment-ach" />
+                <div className="flex-1">
+                  <Label htmlFor="ach" className="cursor-pointer">
+                    <div className="mb-2">
+                      <span className="font-semibold">Pay by ACH (Bank Transfer)</span>
+                    </div>
+                    <div className="text-sm text-muted-foreground space-y-1">
+                      <p>- Simple and secure: pay directly from your bank account using your routing and account number.</p>
+                      <p>- Funds take 2–3 days to clear, but your date is secured once payment is received.</p>
+                      <p className="font-medium text-foreground">- **Special savings: Receive a $50 discount on your wedding package when you choose ACH.**</p>
                     </div>
                   </Label>
                 </div>
@@ -115,6 +128,42 @@ export default function PaymentPage({ totalAmount, onPaymentComplete, onBack }: 
                   Your booking will be confirmed once approved.
                 </AlertDescription>
               </Alert>
+            )}
+
+            {paymentMethod === 'ach' && (
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="routingNumber">Routing Number</Label>
+                  <Input
+                    id="routingNumber"
+                    placeholder="9 digits"
+                    maxLength={9}
+                    data-testid="input-routing-number"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="accountNumber">Account Number</Label>
+                  <Input
+                    id="accountNumber"
+                    placeholder="Account number"
+                    data-testid="input-account-number"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="accountName">Name on Account</Label>
+                  <Input
+                    id="accountName"
+                    placeholder="Account holder name"
+                    data-testid="input-account-name"
+                  />
+                </div>
+                <Alert>
+                  <Info className="h-4 w-4" />
+                  <AlertDescription>
+                    Your bank information is encrypted and secure. Payment will be processed within 2-3 business days.
+                  </AlertDescription>
+                </Alert>
+              </div>
             )}
           </CardContent>
         </Card>

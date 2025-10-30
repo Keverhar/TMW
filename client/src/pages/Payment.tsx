@@ -17,7 +17,7 @@ export default function Payment() {
   const composerId = params?.composerId;
   const { toast } = useToast();
 
-  const [paymentMethod, setPaymentMethod] = useState<"card" | "paypal" | "affirm">("card");
+  const [paymentMethod, setPaymentMethod] = useState<"card" | "paypal" | "affirm" | "ach">("card");
   const [cardNumber, setCardNumber] = useState("");
   const [cardName, setCardName] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
@@ -213,13 +213,32 @@ export default function Payment() {
                         </Label>
                       </div>
 
-                      <div className="flex items-center space-x-2 p-3 border rounded-md hover-elevate">
-                        <RadioGroupItem value="affirm" id="affirm" data-testid="radio-affirm" />
-                        <Label htmlFor="affirm" className="flex-1 cursor-pointer flex items-center gap-3">
-                          <div className="px-3 py-1 bg-blue-600 text-white text-sm font-bold rounded">
-                            affirm
+                      <div className="flex items-start space-x-2 p-3 border rounded-md hover-elevate">
+                        <RadioGroupItem value="affirm" id="affirm" data-testid="radio-affirm" className="mt-1" />
+                        <Label htmlFor="affirm" className="flex-1 cursor-pointer">
+                          <div className="mb-2">
+                            <span className="font-semibold">Pay Over Time with Affirm</span>
                           </div>
-                          <span className="text-sm text-muted-foreground">Pay over time</span>
+                          <div className="text-sm text-muted-foreground space-y-1">
+                            <p>- Flexible: split your $5,000 wedding into smaller monthly payments.</p>
+                            <p>- Quick decision, no late fees, and clear terms.</p>
+                            <p>- Trusted brand used by millions.</p>
+                            <p className="font-medium text-foreground">- **Special savings: Receive a $50 discount on your wedding package when you choose Affirm.**</p>
+                          </div>
+                        </Label>
+                      </div>
+
+                      <div className="flex items-start space-x-2 p-3 border rounded-md hover-elevate">
+                        <RadioGroupItem value="ach" id="ach" data-testid="radio-ach" className="mt-1" />
+                        <Label htmlFor="ach" className="flex-1 cursor-pointer">
+                          <div className="mb-2">
+                            <span className="font-semibold">Pay by ACH (Bank Transfer)</span>
+                          </div>
+                          <div className="text-sm text-muted-foreground space-y-1">
+                            <p>- Simple and secure: pay directly from your bank account using your routing and account number.</p>
+                            <p>- Funds take 2–3 days to clear, but your date is secured once payment is received.</p>
+                            <p className="font-medium text-foreground">- **Special savings: Receive a $50 discount on your wedding package when you choose ACH.**</p>
+                          </div>
                         </Label>
                       </div>
                     </RadioGroup>
@@ -288,10 +307,46 @@ export default function Payment() {
                   {paymentMethod === "affirm" && (
                     <div className="p-6 bg-muted rounded-md text-center space-y-2">
                       <div className="px-4 py-2 bg-blue-600 text-white text-xl font-bold rounded inline-block">
-                        affirm
+                        Affirm
                       </div>
                       <p className="text-sm text-muted-foreground">
                         You will be redirected to Affirm to set up your payment plan
+                      </p>
+                    </div>
+                  )}
+
+                  {paymentMethod === "ach" && (
+                    <div className="p-6 bg-muted rounded-md space-y-4">
+                      <p className="text-sm font-semibold text-center">Bank Account Information</p>
+                      <div className="space-y-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="routingNumber">Routing Number</Label>
+                          <Input
+                            id="routingNumber"
+                            placeholder="9 digits"
+                            maxLength={9}
+                            data-testid="input-routing-number"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="accountNumber">Account Number</Label>
+                          <Input
+                            id="accountNumber"
+                            placeholder="Account number"
+                            data-testid="input-account-number"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="accountName">Name on Account</Label>
+                          <Input
+                            id="accountName"
+                            placeholder="Account holder name"
+                            data-testid="input-account-name"
+                          />
+                        </div>
+                      </div>
+                      <p className="text-xs text-muted-foreground text-center">
+                        Your bank information is encrypted and secure. Payment will be processed within 2-3 business days.
                       </p>
                     </div>
                   )}
