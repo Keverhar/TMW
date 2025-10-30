@@ -121,11 +121,18 @@ export const weddingComposers = pgTable("wedding_composers", {
   
   // Block 11: Special Personal Touches
   freshFlorals: text("fresh_florals"),
-  guestBook: text("guest_book"),
-  cakeKnifeServiceSet: text("cake_knife_service_set"),
+  freshFloralsNA: boolean("fresh_florals_na").default(false),
+  guestBookChoice: text("guest_book_choice").default("yes"),
+  guestBook: text("guest_book"), // Details/comments
+  cakeKnifeChoice: text("cake_knife_choice").default("no"),
+  cakeKnifeServiceSet: text("cake_knife_service_set"), // Details/comments
   departureOrganizer: text("departure_organizer"),
-  departureVehicle: text("departure_vehicle"),
+  departureOrganizerTBD: boolean("departure_organizer_tbd").default(false),
+  departureVehicleChoice: text("departure_vehicle_choice"),
+  departureVehicle: text("departure_vehicle"), // Details if choice is yes
   personalTouchesSpecialInstructions: text("personal_touches_special_instructions"),
+  personalTouchesSpecialInstructionsNA: boolean("personal_touches_special_instructions_na").default(false),
+  personalTouchesCompletionStatus: text("personal_touches_completion_status"),
   
   // Block 12: Evite & Save-the-Date
   eviteDesignStyle: text("evite_design_style"),

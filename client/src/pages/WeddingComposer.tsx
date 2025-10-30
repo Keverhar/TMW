@@ -161,11 +161,18 @@ export default function WeddingComposer() {
 
     // Block 11: Personal Touches
     freshFlorals: "",
+    freshFloralsNA: false,
+    guestBookChoice: "yes",
     guestBook: "",
+    cakeKnifeChoice: "no",
     cakeKnifeServiceSet: "",
     departureOrganizer: "",
+    departureOrganizerTBD: false,
+    departureVehicleChoice: "",
     departureVehicle: "",
     personalTouchesSpecialInstructions: "",
+    personalTouchesSpecialInstructionsNA: false,
+    personalTouchesCompletionStatus: "",
 
     // Block 12: Evite & Save-the-Date
     eviteDesignStyle: "",
@@ -376,6 +383,16 @@ export default function WeddingComposer() {
       return;
     }
 
+    // Require personal touches completion status
+    if (!formData.personalTouchesCompletionStatus) {
+      toast({
+        title: "Personal touches planning status required",
+        description: "Please check 'All done (for now)' or 'We'll finish this later' in the Personal Touches section before proceeding to payment.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     // Require account creation before payment
     if (!userAccount) {
       toast({
@@ -508,11 +525,18 @@ export default function WeddingComposer() {
         engagementPhotosNA: composer.engagementPhotosNA || false,
         slideshowCompletionStatus: composer.slideshowCompletionStatus || "",
         freshFlorals: composer.freshFlorals || "",
+        freshFloralsNA: composer.freshFloralsNA || false,
+        guestBookChoice: composer.guestBookChoice || "yes",
         guestBook: composer.guestBook || "",
+        cakeKnifeChoice: composer.cakeKnifeChoice || "no",
         cakeKnifeServiceSet: composer.cakeKnifeServiceSet || "",
         departureOrganizer: composer.departureOrganizer || "",
+        departureOrganizerTBD: composer.departureOrganizerTBD || false,
+        departureVehicleChoice: composer.departureVehicleChoice || "",
         departureVehicle: composer.departureVehicle || "",
         personalTouchesSpecialInstructions: composer.personalTouchesSpecialInstructions || "",
+        personalTouchesSpecialInstructionsNA: composer.personalTouchesSpecialInstructionsNA || false,
+        personalTouchesCompletionStatus: composer.personalTouchesCompletionStatus || "",
         eviteDesignStyle: composer.eviteDesignStyle || "",
         eviteHeaderText: composer.eviteHeaderText || "",
         eviteBodyText: composer.eviteBodyText || "",
@@ -807,11 +831,18 @@ export default function WeddingComposer() {
           {steps[currentStep - 1]?.id === 11 && (
             <Block11PersonalTouches
               freshFlorals={formData.freshFlorals}
+              freshFloralsNA={formData.freshFloralsNA}
+              guestBookChoice={formData.guestBookChoice}
               guestBook={formData.guestBook}
+              cakeKnifeChoice={formData.cakeKnifeChoice}
               cakeKnifeServiceSet={formData.cakeKnifeServiceSet}
               departureOrganizer={formData.departureOrganizer}
+              departureOrganizerTBD={formData.departureOrganizerTBD}
+              departureVehicleChoice={formData.departureVehicleChoice}
               departureVehicle={formData.departureVehicle}
               personalTouchesSpecialInstructions={formData.personalTouchesSpecialInstructions}
+              personalTouchesSpecialInstructionsNA={formData.personalTouchesSpecialInstructionsNA}
+              personalTouchesCompletionStatus={formData.personalTouchesCompletionStatus}
               onChange={updateField}
             />
           )}
