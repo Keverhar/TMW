@@ -129,9 +129,13 @@ export default function WeddingComposer() {
 
     // Block 8: Reception
     firstDance: "",
+    firstDanceNA: false,
     motherSonDance: "",
+    motherSonDanceNA: false,
     specialDances: "",
+    specialDancesNA: false,
     toastGivers: "",
+    toastGiversNA: false,
     beveragePreferences: "",
     receptionSpecialRequests: "",
     receptionSpecialRequestsNA: false,
@@ -450,9 +454,13 @@ export default function WeddingComposer() {
         processionalSpecialInstructionsNA: composer.processionalSpecialInstructionsNA || false,
         processionalCompletionStatus: composer.processionalCompletionStatus || "",
         firstDance: composer.firstDance || "",
+        firstDanceNA: composer.firstDanceNA || false,
         motherSonDance: composer.motherSonDance || "",
+        motherSonDanceNA: composer.motherSonDanceNA || false,
         specialDances: composer.specialDances || "",
+        specialDancesNA: composer.specialDancesNA || false,
         toastGivers: composer.toastGivers || "",
+        toastGiversNA: composer.toastGiversNA || false,
         beveragePreferences: composer.beveragePreferences || "",
         receptionSpecialRequests: composer.receptionSpecialRequests || "",
         receptionSpecialRequestsNA: composer.receptionSpecialRequestsNA || false,
@@ -722,9 +730,13 @@ export default function WeddingComposer() {
           {steps[currentStep - 1]?.id === 8 && (
             <Block8Reception
               firstDance={formData.firstDance}
+              firstDanceNA={formData.firstDanceNA}
               motherSonDance={formData.motherSonDance}
+              motherSonDanceNA={formData.motherSonDanceNA}
               specialDances={formData.specialDances}
+              specialDancesNA={formData.specialDancesNA}
               toastGivers={formData.toastGivers}
+              toastGiversNA={formData.toastGiversNA}
               beveragePreferences={formData.beveragePreferences}
               receptionSpecialRequests={formData.receptionSpecialRequests}
               receptionSpecialRequestsNA={formData.receptionSpecialRequestsNA}

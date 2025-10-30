@@ -7,9 +7,13 @@ import { PartyPopper, Info } from "lucide-react";
 
 interface Block8ReceptionProps {
   firstDance: string;
+  firstDanceNA: boolean;
   motherSonDance: string;
+  motherSonDanceNA: boolean;
   specialDances: string;
+  specialDancesNA: boolean;
   toastGivers: string;
+  toastGiversNA: boolean;
   beveragePreferences: string;
   receptionSpecialRequests: string;
   receptionSpecialRequestsNA: boolean;
@@ -19,22 +23,30 @@ interface Block8ReceptionProps {
 
 export default function Block8Reception({
   firstDance,
+  firstDanceNA,
   motherSonDance,
+  motherSonDanceNA,
   specialDances,
+  specialDancesNA,
   toastGivers,
+  toastGiversNA,
   beveragePreferences,
   receptionSpecialRequests,
   receptionSpecialRequestsNA,
   receptionCompletionStatus,
   onChange
 }: Block8ReceptionProps) {
+  const isFirstDanceFilled = firstDanceNA || firstDance;
+  const isMotherSonDanceFilled = motherSonDanceNA || motherSonDance;
+  const isSpecialDancesFilled = specialDancesNA || specialDances;
+  const isToastGiversFilled = toastGiversNA || toastGivers;
   const isSpecialRequestsFilled = receptionSpecialRequestsNA || receptionSpecialRequests;
 
-  const allRequiredFieldsFilled = firstDance && motherSonDance && specialDances && 
-    toastGivers && beveragePreferences && isSpecialRequestsFilled;
+  const allRequiredFieldsFilled = isFirstDanceFilled && isMotherSonDanceFilled && 
+    isSpecialDancesFilled && isToastGiversFilled && beveragePreferences && isSpecialRequestsFilled;
 
-  const someFieldsEmpty = !firstDance || !motherSonDance || !specialDances || 
-    !toastGivers || !beveragePreferences || !isSpecialRequestsFilled;
+  const someFieldsEmpty = !isFirstDanceFilled || !isMotherSonDanceFilled || !isSpecialDancesFilled || 
+    !isToastGiversFilled || !beveragePreferences || !isSpecialRequestsFilled;
 
   const handleCompletionStatusChange = (status: string) => {
     if (receptionCompletionStatus === status) {
@@ -71,7 +83,24 @@ export default function Block8Reception({
               value={firstDance}
               onChange={(e) => onChange('firstDance', e.target.value)}
               rows={2}
+              disabled={firstDanceNA}
             />
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="first-dance-na"
+                data-testid="checkbox-first-dance-na"
+                checked={firstDanceNA}
+                onCheckedChange={(checked) => {
+                  onChange('firstDanceNA', checked as boolean);
+                  if (checked) {
+                    onChange('firstDance', '');
+                  }
+                }}
+              />
+              <Label htmlFor="first-dance-na" className="cursor-pointer text-sm">
+                No Special Instructions
+              </Label>
+            </div>
           </div>
 
           <div className="space-y-2">
@@ -83,7 +112,24 @@ export default function Block8Reception({
               value={motherSonDance}
               onChange={(e) => onChange('motherSonDance', e.target.value)}
               rows={2}
+              disabled={motherSonDanceNA}
             />
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="mother-son-dance-na"
+                data-testid="checkbox-mother-son-dance-na"
+                checked={motherSonDanceNA}
+                onCheckedChange={(checked) => {
+                  onChange('motherSonDanceNA', checked as boolean);
+                  if (checked) {
+                    onChange('motherSonDance', '');
+                  }
+                }}
+              />
+              <Label htmlFor="mother-son-dance-na" className="cursor-pointer text-sm">
+                No Special Instructions
+              </Label>
+            </div>
           </div>
 
           <div className="space-y-2">
@@ -95,7 +141,24 @@ export default function Block8Reception({
               value={specialDances}
               onChange={(e) => onChange('specialDances', e.target.value)}
               rows={2}
+              disabled={specialDancesNA}
             />
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="special-dances-na"
+                data-testid="checkbox-special-dances-na"
+                checked={specialDancesNA}
+                onCheckedChange={(checked) => {
+                  onChange('specialDancesNA', checked as boolean);
+                  if (checked) {
+                    onChange('specialDances', '');
+                  }
+                }}
+              />
+              <Label htmlFor="special-dances-na" className="cursor-pointer text-sm">
+                No Special Instructions
+              </Label>
+            </div>
           </div>
 
           <div className="space-y-2">
@@ -107,7 +170,24 @@ export default function Block8Reception({
               value={toastGivers}
               onChange={(e) => onChange('toastGivers', e.target.value)}
               rows={2}
+              disabled={toastGiversNA}
             />
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="toast-givers-na"
+                data-testid="checkbox-toast-givers-na"
+                checked={toastGiversNA}
+                onCheckedChange={(checked) => {
+                  onChange('toastGiversNA', checked as boolean);
+                  if (checked) {
+                    onChange('toastGivers', '');
+                  }
+                }}
+              />
+              <Label htmlFor="toast-givers-na" className="cursor-pointer text-sm">
+                No Introductions Needed
+              </Label>
+            </div>
           </div>
         </CardContent>
       </Card>

@@ -89,9 +89,13 @@ export const weddingComposers = pgTable("wedding_composers", {
   
   // Block 8: Reception Preferences
   firstDance: text("first_dance"),
+  firstDanceNA: boolean("first_dance_na").default(false),
   motherSonDance: text("mother_son_dance"),
+  motherSonDanceNA: boolean("mother_son_dance_na").default(false),
   specialDances: text("special_dances"),
+  specialDancesNA: boolean("special_dances_na").default(false),
   toastGivers: text("toast_givers"),
+  toastGiversNA: boolean("toast_givers_na").default(false),
   beveragePreferences: text("beverage_preferences"),
   receptionSpecialRequests: text("reception_special_requests"),
   receptionSpecialRequestsNA: boolean("reception_special_requests_na").default(false),
