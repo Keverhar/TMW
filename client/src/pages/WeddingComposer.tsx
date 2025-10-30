@@ -412,84 +412,87 @@ export default function WeddingComposer() {
       return;
     }
 
-    // Require swatch preview or final decision selection
-    if (!formData.colorSwatchDecision) {
-      toast({
-        title: "Swatch decision required",
-        description: "Please select a swatch preview or final decision option before proceeding to payment.",
-        variant: "destructive",
-      });
-      return;
-    }
+    // For full wedding packages (not Elopement/Vow Renewal), require completion of all planning sections
+    if (!isSimplifiedFlow) {
+      // Require swatch preview or final decision selection
+      if (!formData.colorSwatchDecision) {
+        toast({
+          title: "Swatch decision required",
+          description: "Please select a swatch preview or final decision option before proceeding to payment.",
+          variant: "destructive",
+        });
+        return;
+      }
 
-    // Require music completion status - "finish-later" is not acceptable for payment
-    if (!formData.musicCompletionStatus || formData.musicCompletionStatus === 'finish-later') {
-      toast({
-        title: "Music selection required",
-        description: "Please complete your music selections and check 'All done (for now)' in the Music section before proceeding to payment.",
-        variant: "destructive",
-      });
-      return;
-    }
+      // Require music completion status - "finish-later" is not acceptable for payment
+      if (!formData.musicCompletionStatus || formData.musicCompletionStatus === 'finish-later') {
+        toast({
+          title: "Music selection required",
+          description: "Please complete your music selections and check 'All done (for now)' in the Music section before proceeding to payment.",
+          variant: "destructive",
+        });
+        return;
+      }
 
-    // Require announcements completion status - "finish-later" is not acceptable for payment
-    if (!formData.announcementsCompletionStatus || formData.announcementsCompletionStatus === 'finish-later') {
-      toast({
-        title: "Announcements selection required",
-        description: "Please complete your announcements selections and check 'All done (for now)' in the Announcements section before proceeding to payment.",
-        variant: "destructive",
-      });
-      return;
-    }
+      // Require announcements completion status - "finish-later" is not acceptable for payment
+      if (!formData.announcementsCompletionStatus || formData.announcementsCompletionStatus === 'finish-later') {
+        toast({
+          title: "Announcements selection required",
+          description: "Please complete your announcements selections and check 'All done (for now)' in the Announcements section before proceeding to payment.",
+          variant: "destructive",
+        });
+        return;
+      }
 
-    // Require processional completion status - "finish-later" is not acceptable for payment
-    if (!formData.processionalCompletionStatus || formData.processionalCompletionStatus === 'finish-later') {
-      toast({
-        title: "Processional planning required",
-        description: "Please complete your processional planning and check 'All done (for now)' in the Processional section before proceeding to payment.",
-        variant: "destructive",
-      });
-      return;
-    }
+      // Require processional completion status - "finish-later" is not acceptable for payment
+      if (!formData.processionalCompletionStatus || formData.processionalCompletionStatus === 'finish-later') {
+        toast({
+          title: "Processional planning required",
+          description: "Please complete your processional planning and check 'All done (for now)' in the Processional section before proceeding to payment.",
+          variant: "destructive",
+        });
+        return;
+      }
 
-    // Require reception completion status - "finish-later" is not acceptable for payment
-    if (!formData.receptionCompletionStatus || formData.receptionCompletionStatus === 'finish-later') {
-      toast({
-        title: "Reception planning required",
-        description: "Please complete your reception planning and check 'All done (for now)' in the Reception section before proceeding to payment.",
-        variant: "destructive",
-      });
-      return;
-    }
+      // Require reception completion status - "finish-later" is not acceptable for payment
+      if (!formData.receptionCompletionStatus || formData.receptionCompletionStatus === 'finish-later') {
+        toast({
+          title: "Reception planning required",
+          description: "Please complete your reception planning and check 'All done (for now)' in the Reception section before proceeding to payment.",
+          variant: "destructive",
+        });
+        return;
+      }
 
-    // Require photography completion status - "finish-later" is not acceptable for payment
-    if (!formData.photographyCompletionStatus || formData.photographyCompletionStatus === 'finish-later') {
-      toast({
-        title: "Photography planning required",
-        description: "Please complete your photography planning and check 'All done (for now)' in the Photography section before proceeding to payment.",
-        variant: "destructive",
-      });
-      return;
-    }
+      // Require photography completion status - "finish-later" is not acceptable for payment
+      if (!formData.photographyCompletionStatus || formData.photographyCompletionStatus === 'finish-later') {
+        toast({
+          title: "Photography planning required",
+          description: "Please complete your photography planning and check 'All done (for now)' in the Photography section before proceeding to payment.",
+          variant: "destructive",
+        });
+        return;
+      }
 
-    // Require slideshow completion status - "finish-later" is not acceptable for payment
-    if (!formData.slideshowCompletionStatus || formData.slideshowCompletionStatus === 'finish-later') {
-      toast({
-        title: "Slideshow planning required",
-        description: "Please complete your slideshow planning and check 'All done (for now)' in the Slideshow section before proceeding to payment.",
-        variant: "destructive",
-      });
-      return;
-    }
+      // Require slideshow completion status - "finish-later" is not acceptable for payment
+      if (!formData.slideshowCompletionStatus || formData.slideshowCompletionStatus === 'finish-later') {
+        toast({
+          title: "Slideshow planning required",
+          description: "Please complete your slideshow planning and check 'All done (for now)' in the Slideshow section before proceeding to payment.",
+          variant: "destructive",
+        });
+        return;
+      }
 
-    // Require personal touches completion status - "finish-later" is not acceptable for payment
-    if (!formData.personalTouchesCompletionStatus || formData.personalTouchesCompletionStatus === 'finish-later') {
-      toast({
-        title: "Personal touches planning required",
-        description: "Please complete your personal touches planning and check 'All done (for now)' in the Personal Touches section before proceeding to payment.",
-        variant: "destructive",
-      });
-      return;
+      // Require personal touches completion status - "finish-later" is not acceptable for payment
+      if (!formData.personalTouchesCompletionStatus || formData.personalTouchesCompletionStatus === 'finish-later') {
+        toast({
+          title: "Personal touches planning required",
+          description: "Please complete your personal touches planning and check 'All done (for now)' in the Personal Touches section before proceeding to payment.",
+          variant: "destructive",
+        });
+        return;
+      }
     }
 
     // Require account creation before payment
@@ -1136,7 +1139,7 @@ export default function WeddingComposer() {
           ) : (
             <Button
               onClick={handleSubmit}
-              disabled={!formData.termsAccepted || !formData.customerName || !formData.eviteCompletionStatus}
+              disabled={!formData.termsAccepted || !formData.customerName || (!isSimplifiedFlow && !formData.eviteCompletionStatus)}
               size="lg"
               data-testid="button-finalize-payment"
             >
