@@ -367,6 +367,51 @@ export default function WeddingComposer() {
       return;
     }
 
+    // Validate ceremony add-ons if "Yes" is selected
+    if (formData.guestReadingOrSongChoice === 'yes' && (!formData.guestReadingOrSongName || !formData.guestReadingOrSong)) {
+      toast({
+        title: "Guest reading or song details required",
+        description: "Please provide the guest name and describe their involvement in the Ceremony section.",
+        variant: "destructive",
+      });
+      setCurrentStep(6); // Navigate to ceremony block
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    if (formData.officiantPassageChoice === 'yes' && !formData.officiantPassage) {
+      toast({
+        title: "Officiant passage required",
+        description: "Please provide the passage text in the Ceremony section.",
+        variant: "destructive",
+      });
+      setCurrentStep(6);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    if (formData.includingChildChoice === 'yes' && (!formData.includingChild || !formData.childrenOrganizer)) {
+      toast({
+        title: "Child involvement details required",
+        description: "Please describe how children will be involved and provide the organizer name in the Ceremony section.",
+        variant: "destructive",
+      });
+      setCurrentStep(6);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    if (formData.petInvolvementChoice === 'yes' && !formData.petInvolvement) {
+      toast({
+        title: "Pet involvement details required",
+        description: "Please provide the pet name, role, and handler details in the Ceremony section.",
+        variant: "destructive",
+      });
+      setCurrentStep(6);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
     // Require swatch preview or final decision selection
     if (!formData.colorSwatchDecision) {
       toast({
@@ -377,71 +422,71 @@ export default function WeddingComposer() {
       return;
     }
 
-    // Require music completion status
-    if (!formData.musicCompletionStatus) {
+    // Require music completion status - "finish-later" is not acceptable for payment
+    if (!formData.musicCompletionStatus || formData.musicCompletionStatus === 'finish-later') {
       toast({
-        title: "Music selection status required",
-        description: "Please check 'All done (for now)' or 'We'll finish this later' in the Music Selection section before proceeding to payment.",
+        title: "Music selection required",
+        description: "Please complete your music selections and check 'All done (for now)' in the Music section before proceeding to payment.",
         variant: "destructive",
       });
       return;
     }
 
-    // Require announcements completion status
-    if (!formData.announcementsCompletionStatus) {
+    // Require announcements completion status - "finish-later" is not acceptable for payment
+    if (!formData.announcementsCompletionStatus || formData.announcementsCompletionStatus === 'finish-later') {
       toast({
-        title: "Announcements selection status required",
-        description: "Please check 'All done (for now)' or 'We'll finish this later' in the Announcements section before proceeding to payment.",
+        title: "Announcements selection required",
+        description: "Please complete your announcements selections and check 'All done (for now)' in the Announcements section before proceeding to payment.",
         variant: "destructive",
       });
       return;
     }
 
-    // Require processional completion status
-    if (!formData.processionalCompletionStatus) {
+    // Require processional completion status - "finish-later" is not acceptable for payment
+    if (!formData.processionalCompletionStatus || formData.processionalCompletionStatus === 'finish-later') {
       toast({
-        title: "Processional planning status required",
-        description: "Please check 'All done (for now)' or 'We'll finish this later' in the Processional section before proceeding to payment.",
+        title: "Processional planning required",
+        description: "Please complete your processional planning and check 'All done (for now)' in the Processional section before proceeding to payment.",
         variant: "destructive",
       });
       return;
     }
 
-    // Require reception completion status
-    if (!formData.receptionCompletionStatus) {
+    // Require reception completion status - "finish-later" is not acceptable for payment
+    if (!formData.receptionCompletionStatus || formData.receptionCompletionStatus === 'finish-later') {
       toast({
-        title: "Reception planning status required",
-        description: "Please check 'All done (for now)' or 'We'll finish this later' in the Reception section before proceeding to payment.",
+        title: "Reception planning required",
+        description: "Please complete your reception planning and check 'All done (for now)' in the Reception section before proceeding to payment.",
         variant: "destructive",
       });
       return;
     }
 
-    // Require photography completion status
-    if (!formData.photographyCompletionStatus) {
+    // Require photography completion status - "finish-later" is not acceptable for payment
+    if (!formData.photographyCompletionStatus || formData.photographyCompletionStatus === 'finish-later') {
       toast({
-        title: "Photography planning status required",
-        description: "Please check 'All done (for now)' or 'We'll finish this later' in the Photography section before proceeding to payment.",
+        title: "Photography planning required",
+        description: "Please complete your photography planning and check 'All done (for now)' in the Photography section before proceeding to payment.",
         variant: "destructive",
       });
       return;
     }
 
-    // Require slideshow completion status
-    if (!formData.slideshowCompletionStatus) {
+    // Require slideshow completion status - "finish-later" is not acceptable for payment
+    if (!formData.slideshowCompletionStatus || formData.slideshowCompletionStatus === 'finish-later') {
       toast({
-        title: "Slideshow planning status required",
-        description: "Please check 'All done (for now)' or 'We'll finish this later' in the Slideshow section before proceeding to payment.",
+        title: "Slideshow planning required",
+        description: "Please complete your slideshow planning and check 'All done (for now)' in the Slideshow section before proceeding to payment.",
         variant: "destructive",
       });
       return;
     }
 
-    // Require personal touches completion status
-    if (!formData.personalTouchesCompletionStatus) {
+    // Require personal touches completion status - "finish-later" is not acceptable for payment
+    if (!formData.personalTouchesCompletionStatus || formData.personalTouchesCompletionStatus === 'finish-later') {
       toast({
-        title: "Personal touches planning status required",
-        description: "Please check 'All done (for now)' or 'We'll finish this later' in the Personal Touches section before proceeding to payment.",
+        title: "Personal touches planning required",
+        description: "Please complete your personal touches planning and check 'All done (for now)' in the Personal Touches section before proceeding to payment.",
         variant: "destructive",
       });
       return;
@@ -706,46 +751,47 @@ export default function WeddingComposer() {
         return 'none';
       
       case 4: // Music
-        if (formData.musicCompletionStatus) return 'complete';
-        if (formData.processionalSong || formData.recessionalSong || formData.playlistUrl) return 'partial';
+        if (formData.musicCompletionStatus && formData.musicCompletionStatus !== 'finish-later') return 'complete';
+        if (formData.musicCompletionStatus === 'finish-later' || formData.processionalSong || formData.recessionalSong || formData.playlistUrl) return 'partial';
         return 'none';
       
       case 5: // Announcements
-        if (formData.announcementsCompletionStatus) return 'complete';
-        if (formData.grandIntroduction || formData.vibeCheck) return 'partial';
+        if (formData.announcementsCompletionStatus && formData.announcementsCompletionStatus !== 'finish-later') return 'complete';
+        if (formData.announcementsCompletionStatus === 'finish-later' || formData.grandIntroduction || formData.vibeCheck) return 'partial';
         return 'none';
       
       case 6: // Ceremony - always complete (has default)
         return formData.ceremonyScript ? 'complete' : 'none';
       
       case 7: // Processional
-        if (formData.processionalCompletionStatus) return 'complete';
-        if (formData.walkingDownAisle || formData.ringBearerIncluded) return 'partial';
+        if (formData.processionalCompletionStatus && formData.processionalCompletionStatus !== 'finish-later') return 'complete';
+        if (formData.processionalCompletionStatus === 'finish-later' || formData.walkingDownAisle || formData.ringBearerIncluded) return 'partial';
         return 'none';
       
       case 8: // Reception
-        if (formData.receptionCompletionStatus) return 'complete';
-        if (formData.firstDance || formData.beveragePreferences) return 'partial';
+        if (formData.receptionCompletionStatus && formData.receptionCompletionStatus !== 'finish-later') return 'complete';
+        if (formData.receptionCompletionStatus === 'finish-later' || formData.firstDance || formData.beveragePreferences) return 'partial';
         return 'none';
       
       case 9: // Photography
-        if (formData.photographyCompletionStatus) return 'complete';
-        if (formData.mustHaveShots || formData.vipList) return 'partial';
+        if (formData.photographyCompletionStatus && formData.photographyCompletionStatus !== 'finish-later') return 'complete';
+        if (formData.photographyCompletionStatus === 'finish-later' || formData.mustHaveShots || formData.vipList) return 'partial';
         return 'none';
       
       case 10: // Slideshow
-        if (formData.slideshowCompletionStatus) return 'complete';
-        if (formData.slideshowPhotos !== '[]' || formData.engagementPhotos !== '[]') return 'partial';
+        if (formData.slideshowCompletionStatus && formData.slideshowCompletionStatus !== 'finish-later') return 'complete';
+        if (formData.slideshowCompletionStatus === 'finish-later' || formData.slideshowPhotos !== '[]' || formData.engagementPhotos !== '[]') return 'partial';
         return 'none';
       
       case 11: // Personal Touches
-        if (formData.personalTouchesCompletionStatus) return 'complete';
-        if (formData.freshFlorals || formData.departureOrganizer) return 'partial';
+        if (formData.personalTouchesCompletionStatus && formData.personalTouchesCompletionStatus !== 'finish-later') return 'complete';
+        if (formData.personalTouchesCompletionStatus === 'finish-later' || formData.freshFlorals || formData.guestBookChoice || formData.cakeKnifeChoice || 
+            formData.departureVehicleChoice || formData.departureOrganizer || formData.personalTouchesSpecialInstructions) return 'partial';
         return 'none';
       
       case 12: // Evites
-        if (formData.eviteCompletionStatus) return 'complete';
-        if (formData.eviteDesignStyle || formData.eviteHeaderText) return 'partial';
+        if (formData.eviteCompletionStatus && formData.eviteCompletionStatus !== 'finish-later') return 'complete';
+        if (formData.eviteCompletionStatus === 'finish-later' || formData.eviteDesignStyle || formData.eviteHeaderText) return 'partial';
         return 'none';
       
       case 13: // Contact Information

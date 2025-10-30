@@ -132,12 +132,6 @@ export default function Block3SignatureColor({ signatureColor, colorSwatchDecisi
                 I'm ready to finalize my selection now
               </Label>
             </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="not-sure-yet" id="swatch-not-sure" data-testid="radio-swatch-not-sure" disabled={readOnly} />
-              <Label htmlFor="swatch-not-sure" className="cursor-pointer">
-                Leave blank for now
-              </Label>
-            </div>
           </RadioGroup>
         </CardContent>
       </Card>

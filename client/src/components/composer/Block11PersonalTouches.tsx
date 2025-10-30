@@ -147,12 +147,12 @@ export default function Block11PersonalTouches({
           </div>
           {guestBookChoice === 'yes' && (
             <p className="text-xs text-muted-foreground">
-              OK. We'll make sure it's displayed thoughtfully and ready for guests to sign. We will provide a designated gift table and card box.
+              We'll make sure it's displayed thoughtfully and ready for guests to sign. We will provide a designated gift table and card box.
             </p>
           )}
           {guestBookChoice === 'no' && (
             <p className="text-xs text-muted-foreground">
-              OK. If you change your mind it's no problem, just let us know and we'll make sure it's displayed thoughtfully and ready for guests to sign. We will provide a designated gift table and card box.
+              If you change your mind it's no problem, just let us know and we'll make sure it's displayed thoughtfully and ready for guests to sign. We will provide a designated gift table and card box.
             </p>
           )}
         </CardContent>
