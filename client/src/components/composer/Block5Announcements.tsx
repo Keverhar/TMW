@@ -3,7 +3,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Mic, Sparkles, Info } from "lucide-react";
+import { Mic, Sparkles, Info, Lock } from "lucide-react";
 
 interface Block5AnnouncementsProps {
   grandIntroduction: string;
@@ -13,6 +13,7 @@ interface Block5AnnouncementsProps {
   vibeCheck: string;
   announcementsCompletionStatus: string;
   onChange: (field: string, value: string) => void;
+  readOnly?: boolean;
 }
 
 const vibeOptions = [
@@ -40,7 +41,8 @@ export default function Block5Announcements({
   guestCallouts,
   vibeCheck,
   announcementsCompletionStatus,
-  onChange
+  onChange,
+  readOnly = false
 }: Block5AnnouncementsProps) {
   const allRequiredFieldsFilled = grandIntroduction && fatherDaughterDanceAnnouncement && toastsSpeechesAnnouncement && vibeCheck;
   const someFieldsEmpty = !grandIntroduction || !fatherDaughterDanceAnnouncement || !toastsSpeechesAnnouncement || !vibeCheck;
@@ -62,6 +64,18 @@ export default function Block5Announcements({
         </p>
       </div>
 
+      {readOnly && (
+        <div className="flex gap-3 items-start bg-amber-50 dark:bg-amber-950 p-4 rounded-md border border-amber-200 dark:border-amber-800">
+          <Lock className="h-5 w-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+          <div>
+            <p className="font-medium text-amber-900 dark:text-amber-100">Available with Full Wedding Package</p>
+            <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
+              This section is included in our Saturday, Friday/Sunday wedding packages. You can view all options but selections are not available for elopement and vow renewal packages.
+            </p>
+          </div>
+        </div>
+      )}
+
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
@@ -80,6 +94,7 @@ export default function Block5Announcements({
               value={grandIntroduction}
               onChange={(e) => onChange('grandIntroduction', e.target.value)}
               rows={3}
+              disabled={readOnly}
             />
           </div>
           
@@ -109,6 +124,7 @@ export default function Block5Announcements({
               value={fatherDaughterDanceAnnouncement}
               onChange={(e) => onChange('fatherDaughterDanceAnnouncement', e.target.value)}
               rows={2}
+              disabled={readOnly}
             />
           </div>
 
@@ -121,6 +137,7 @@ export default function Block5Announcements({
               value={toastsSpeechesAnnouncement}
               onChange={(e) => onChange('toastsSpeechesAnnouncement', e.target.value)}
               rows={2}
+              disabled={readOnly}
             />
           </div>
 
@@ -133,6 +150,7 @@ export default function Block5Announcements({
               value={guestCallouts}
               onChange={(e) => onChange('guestCallouts', e.target.value)}
               rows={2}
+              disabled={readOnly}
             />
           </div>
         </CardContent>
@@ -147,10 +165,10 @@ export default function Block5Announcements({
           <CardDescription>This guides how your emcee speaks, how transitions feel, and how the whole celebration flows</CardDescription>
         </CardHeader>
         <CardContent>
-          <RadioGroup value={vibeCheck} onValueChange={(value) => onChange('vibeCheck', value)}>
+          <RadioGroup value={vibeCheck} onValueChange={(value) => onChange('vibeCheck', value)} disabled={readOnly}>
             {vibeOptions.map((vibe) => (
               <div key={vibe.value} className="flex items-start space-x-2 p-3 rounded-md hover-elevate">
-                <RadioGroupItem value={vibe.value} id={`vibe-${vibe.value}`} data-testid={`radio-vibe-${vibe.value}`} className="mt-1" />
+                <RadioGroupItem value={vibe.value} id={`vibe-${vibe.value}`} data-testid={`radio-vibe-${vibe.value}`} className="mt-1" disabled={readOnly} />
                 <Label htmlFor={`vibe-${vibe.value}`} className="flex-1 cursor-pointer">
                   <span className="font-medium block">{vibe.label}</span>
                   <span className="text-sm text-muted-foreground">{vibe.description}</span>
@@ -174,6 +192,7 @@ export default function Block5Announcements({
                 data-testid="checkbox-announcements-all-done"
                 checked={announcementsCompletionStatus === 'all-done'}
                 onCheckedChange={() => handleCompletionStatusChange('all-done')}
+                disabled={readOnly}
               />
               <Label htmlFor="announcements-all-done" className="cursor-pointer font-medium">
                 All done (for now)
@@ -188,6 +207,7 @@ export default function Block5Announcements({
                 data-testid="checkbox-announcements-finish-later"
                 checked={announcementsCompletionStatus === 'finish-later'}
                 onCheckedChange={() => handleCompletionStatusChange('finish-later')}
+                disabled={readOnly}
               />
               <Label htmlFor="announcements-finish-later" className="cursor-pointer font-medium">
                 We'll finish this later

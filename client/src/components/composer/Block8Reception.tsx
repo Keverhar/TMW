@@ -3,7 +3,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
-import { PartyPopper, Info } from "lucide-react";
+import { PartyPopper, Info, Lock } from "lucide-react";
 
 interface Block8ReceptionProps {
   firstDance: string;
@@ -19,6 +19,7 @@ interface Block8ReceptionProps {
   receptionSpecialRequestsNA: boolean;
   receptionCompletionStatus: string;
   onChange: (field: string, value: string | boolean) => void;
+  readOnly?: boolean;
 }
 
 export default function Block8Reception({
@@ -34,7 +35,8 @@ export default function Block8Reception({
   receptionSpecialRequests,
   receptionSpecialRequestsNA,
   receptionCompletionStatus,
-  onChange
+  onChange,
+  readOnly = false
 }: Block8ReceptionProps) {
   const isFirstDanceFilled = firstDanceNA || firstDance;
   const isMotherSonDanceFilled = motherSonDanceNA || motherSonDance;
@@ -65,6 +67,18 @@ export default function Block8Reception({
         </p>
       </div>
 
+      {readOnly && (
+        <div className="flex gap-3 items-start bg-amber-50 dark:bg-amber-950 p-4 rounded-md border border-amber-200 dark:border-amber-800">
+          <Lock className="h-5 w-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+          <div>
+            <p className="font-medium text-amber-900 dark:text-amber-100">Available with Full Wedding Package</p>
+            <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
+              This section is included in our Saturday, Friday/Sunday wedding packages. You can view all options but selections are not available for elopement and vow renewal packages.
+            </p>
+          </div>
+        </div>
+      )}
+
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
@@ -83,7 +97,7 @@ export default function Block8Reception({
               value={firstDance}
               onChange={(e) => onChange('firstDance', e.target.value)}
               rows={2}
-              disabled={firstDanceNA}
+              disabled={firstDanceNA || readOnly}
             />
             <div className="flex items-center space-x-2">
               <Checkbox
@@ -96,6 +110,7 @@ export default function Block8Reception({
                     onChange('firstDance', '');
                   }
                 }}
+                disabled={readOnly}
               />
               <Label htmlFor="first-dance-na" className="cursor-pointer text-sm">
                 No Special Instructions
@@ -112,7 +127,7 @@ export default function Block8Reception({
               value={motherSonDance}
               onChange={(e) => onChange('motherSonDance', e.target.value)}
               rows={2}
-              disabled={motherSonDanceNA}
+              disabled={motherSonDanceNA || readOnly}
             />
             <div className="flex items-center space-x-2">
               <Checkbox
@@ -125,6 +140,7 @@ export default function Block8Reception({
                     onChange('motherSonDance', '');
                   }
                 }}
+                disabled={readOnly}
               />
               <Label htmlFor="mother-son-dance-na" className="cursor-pointer text-sm">
                 No Special Instructions
@@ -141,7 +157,7 @@ export default function Block8Reception({
               value={specialDances}
               onChange={(e) => onChange('specialDances', e.target.value)}
               rows={2}
-              disabled={specialDancesNA}
+              disabled={specialDancesNA || readOnly}
             />
             <div className="flex items-center space-x-2">
               <Checkbox
@@ -154,6 +170,7 @@ export default function Block8Reception({
                     onChange('specialDances', '');
                   }
                 }}
+                disabled={readOnly}
               />
               <Label htmlFor="special-dances-na" className="cursor-pointer text-sm">
                 No Special Instructions
@@ -170,7 +187,7 @@ export default function Block8Reception({
               value={toastGivers}
               onChange={(e) => onChange('toastGivers', e.target.value)}
               rows={2}
-              disabled={toastGiversNA}
+              disabled={toastGiversNA || readOnly}
             />
             <div className="flex items-center space-x-2">
               <Checkbox
@@ -183,6 +200,7 @@ export default function Block8Reception({
                     onChange('toastGivers', '');
                   }
                 }}
+                disabled={readOnly}
               />
               <Label htmlFor="toast-givers-na" className="cursor-pointer text-sm">
                 No Introductions Needed
@@ -200,13 +218,13 @@ export default function Block8Reception({
         <CardContent className="space-y-4">
           <div className="space-y-3">
             <Label>Beverage Preferences</Label>
-            <RadioGroup value={beveragePreferences} onValueChange={(value) => onChange('beveragePreferences', value)}>
+            <RadioGroup value={beveragePreferences} onValueChange={(value) => onChange('beveragePreferences', value)} disabled={readOnly}>
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="alcoholic" id="beverage-alcoholic" data-testid="radio-beverage-alcoholic" />
+                <RadioGroupItem value="alcoholic" id="beverage-alcoholic" data-testid="radio-beverage-alcoholic" disabled={readOnly} />
                 <Label htmlFor="beverage-alcoholic" className="cursor-pointer">Alcoholic</Label>
               </div>
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="non-alcoholic" id="beverage-non-alcoholic" data-testid="radio-beverage-non-alcoholic" />
+                <RadioGroupItem value="non-alcoholic" id="beverage-non-alcoholic" data-testid="radio-beverage-non-alcoholic" disabled={readOnly} />
                 <Label htmlFor="beverage-non-alcoholic" className="cursor-pointer">Non Alcoholic</Label>
               </div>
             </RadioGroup>
@@ -229,7 +247,7 @@ export default function Block8Reception({
             value={receptionSpecialRequests}
             onChange={(e) => onChange('receptionSpecialRequests', e.target.value)}
             rows={3}
-            disabled={receptionSpecialRequestsNA}
+            disabled={receptionSpecialRequestsNA || readOnly}
           />
           
           <div className="flex items-center space-x-2">
@@ -243,6 +261,7 @@ export default function Block8Reception({
                   onChange('receptionSpecialRequests', '');
                 }
               }}
+              disabled={readOnly}
             />
             <Label htmlFor="reception-special-requests-na" className="cursor-pointer">
               No special requests
@@ -264,6 +283,7 @@ export default function Block8Reception({
                 data-testid="checkbox-reception-all-done"
                 checked={receptionCompletionStatus === 'all-done'}
                 onCheckedChange={() => handleCompletionStatusChange('all-done')}
+                disabled={readOnly}
               />
               <Label htmlFor="reception-all-done" className="cursor-pointer font-medium">
                 All done (for now)
@@ -278,6 +298,7 @@ export default function Block8Reception({
                 data-testid="checkbox-reception-finish-later"
                 checked={receptionCompletionStatus === 'finish-later'}
                 onCheckedChange={() => handleCompletionStatusChange('finish-later')}
+                disabled={readOnly}
               />
               <Label htmlFor="reception-finish-later" className="cursor-pointer font-medium">
                 We'll finish this later

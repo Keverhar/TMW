@@ -4,7 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Users, Info } from "lucide-react";
+import { Users, Info, Lock } from "lucide-react";
 
 interface Block7ProcessionalProps {
   walkingDownAisle: string;
@@ -26,6 +26,7 @@ interface Block7ProcessionalProps {
   processionalSpecialInstructionsNA: boolean;
   processionalCompletionStatus: string;
   onChange: (field: string, value: string | boolean) => void;
+  readOnly?: boolean;
 }
 
 export default function Block7Processional({
@@ -47,7 +48,8 @@ export default function Block7Processional({
   processionalSpecialInstructions,
   processionalSpecialInstructionsNA,
   processionalCompletionStatus,
-  onChange
+  onChange,
+  readOnly = false
 }: Block7ProcessionalProps) {
   // Determine if all required fields are filled
   const isRingBearerFilled = ringBearerIncluded === 'no' || (ringBearerIncluded === 'yes' && ringBearerFlowerGirl && ringBearerOrganizer);
@@ -84,6 +86,18 @@ export default function Block7Processional({
         </p>
       </div>
 
+      {readOnly && (
+        <div className="flex gap-3 items-start bg-amber-50 dark:bg-amber-950 p-4 rounded-md border border-amber-200 dark:border-amber-800">
+          <Lock className="h-5 w-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+          <div>
+            <p className="font-medium text-amber-900 dark:text-amber-100">Available with Full Wedding Package</p>
+            <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
+              This section is included in our Saturday, Friday/Sunday wedding packages. You can view all options but selections are not available for elopement and vow renewal packages.
+            </p>
+          </div>
+        </div>
+      )}
+
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
@@ -93,7 +107,7 @@ export default function Block7Processional({
           <CardDescription>Who will walk you down the aisle?</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <RadioGroup value={walkingDownAisle} onValueChange={(value) => onChange('walkingDownAisle', value)}>
+          <RadioGroup value={walkingDownAisle} onValueChange={(value) => onChange('walkingDownAisle', value)} disabled={readOnly}>
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="solo" id="walk-solo" data-testid="radio-walk-solo" />
               <Label htmlFor="walk-solo" className="cursor-pointer">I'll walk solo</Label>
@@ -117,6 +131,7 @@ export default function Block7Processional({
                 placeholder="Name & relationship (e.g., 'Father, John Smith')"
                 value={escortName}
                 onChange={(e) => onChange('escortName', e.target.value)}
+                disabled={readOnly}
               />
             </div>
           )}
@@ -129,7 +144,7 @@ export default function Block7Processional({
           <CardDescription>Will you include a ring bearer or flower child in your ceremony?</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <RadioGroup value={ringBearerIncluded} onValueChange={(value) => onChange('ringBearerIncluded', value)}>
+          <RadioGroup value={ringBearerIncluded} onValueChange={(value) => onChange('ringBearerIncluded', value)} disabled={readOnly}>
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="yes" id="ring-bearer-yes" data-testid="radio-ring-bearer-yes" />
               <Label htmlFor="ring-bearer-yes" className="cursor-pointer">Yes</Label>
@@ -151,6 +166,7 @@ export default function Block7Processional({
                   value={ringBearerFlowerGirl}
                   onChange={(e) => onChange('ringBearerFlowerGirl', e.target.value)}
                   rows={2}
+                  disabled={readOnly}
                 />
               </div>
 
@@ -163,6 +179,7 @@ export default function Block7Processional({
                   value={ringBearerOrganizer}
                   onChange={(e) => onChange('ringBearerOrganizer', e.target.value)}
                   rows={2}
+                  disabled={readOnly}
                 />
               </div>
             </>
@@ -182,7 +199,7 @@ export default function Block7Processional({
             value={honoredGuestEscorts}
             onChange={(e) => onChange('honoredGuestEscorts', e.target.value)}
             rows={3}
-            disabled={honoredGuestEscortsNA}
+            disabled={honoredGuestEscortsNA || readOnly}
           />
           
           <div className="flex items-center space-x-2">
@@ -196,6 +213,7 @@ export default function Block7Processional({
                   onChange('honoredGuestEscorts', '');
                 }
               }}
+              disabled={readOnly}
             />
             <Label htmlFor="honored-guest-escorts-na" className="cursor-pointer">
               No - Guests can seat themselves
@@ -219,7 +237,7 @@ export default function Block7Processional({
               value={brideSideFrontRow}
               onChange={(e) => onChange('brideSideFrontRow', e.target.value)}
               rows={2}
-              disabled={brideSideFrontRowNA}
+              disabled={brideSideFrontRowNA || readOnly}
             />
             <div className="flex items-center space-x-2">
               <Checkbox
@@ -232,6 +250,7 @@ export default function Block7Processional({
                     onChange('brideSideFrontRow', '');
                   }
                 }}
+                disabled={readOnly}
               />
               <Label htmlFor="bride-side-front-row-na" className="cursor-pointer">
                 N/A
@@ -248,7 +267,7 @@ export default function Block7Processional({
               value={groomSideFrontRow}
               onChange={(e) => onChange('groomSideFrontRow', e.target.value)}
               rows={2}
-              disabled={groomSideFrontRowNA}
+              disabled={groomSideFrontRowNA || readOnly}
             />
             <div className="flex items-center space-x-2">
               <Checkbox
@@ -261,6 +280,7 @@ export default function Block7Processional({
                     onChange('groomSideFrontRow', '');
                   }
                 }}
+                disabled={readOnly}
               />
               <Label htmlFor="groom-side-front-row-na" className="cursor-pointer">
                 N/A
@@ -277,7 +297,7 @@ export default function Block7Processional({
               value={framedPhotos}
               onChange={(e) => onChange('framedPhotos', e.target.value)}
               rows={2}
-              disabled={framedPhotosNA}
+              disabled={framedPhotosNA || readOnly}
             />
             <div className="flex items-center space-x-2">
               <Checkbox
@@ -290,6 +310,7 @@ export default function Block7Processional({
                     onChange('framedPhotos', '');
                   }
                 }}
+                disabled={readOnly}
               />
               <Label htmlFor="framed-photos-na" className="cursor-pointer">
                 N/A
@@ -311,7 +332,7 @@ export default function Block7Processional({
             value={specialSeatingNeeds}
             onChange={(e) => onChange('specialSeatingNeeds', e.target.value)}
             rows={2}
-            disabled={specialSeatingNeedsNA}
+            disabled={specialSeatingNeedsNA || readOnly}
           />
           <div className="flex items-center space-x-2">
             <Checkbox
@@ -324,6 +345,7 @@ export default function Block7Processional({
                   onChange('specialSeatingNeeds', '');
                 }
               }}
+              disabled={readOnly}
             />
             <Label htmlFor="special-seating-needs-na" className="cursor-pointer">
               N/A
@@ -344,7 +366,7 @@ export default function Block7Processional({
             value={processionalSpecialInstructions}
             onChange={(e) => onChange('processionalSpecialInstructions', e.target.value)}
             rows={3}
-            disabled={processionalSpecialInstructionsNA}
+            disabled={processionalSpecialInstructionsNA || readOnly}
           />
           <div className="flex items-center space-x-2">
             <Checkbox
@@ -357,6 +379,7 @@ export default function Block7Processional({
                   onChange('processionalSpecialInstructions', '');
                 }
               }}
+              disabled={readOnly}
             />
             <Label htmlFor="processional-special-instructions-na" className="cursor-pointer">
               N/A
@@ -385,6 +408,7 @@ export default function Block7Processional({
                 data-testid="checkbox-processional-all-done"
                 checked={processionalCompletionStatus === 'all-done'}
                 onCheckedChange={() => handleCompletionStatusChange('all-done')}
+                disabled={readOnly}
               />
               <Label htmlFor="processional-all-done" className="cursor-pointer font-medium">
                 All done (for now)
@@ -399,6 +423,7 @@ export default function Block7Processional({
                 data-testid="checkbox-processional-finish-later"
                 checked={processionalCompletionStatus === 'finish-later'}
                 onCheckedChange={() => handleCompletionStatusChange('finish-later')}
+                disabled={readOnly}
               />
               <Label htmlFor="processional-finish-later" className="cursor-pointer font-medium">
                 We'll finish this later
