@@ -3,7 +3,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
-import { PartyPopper, Info, Lock } from "lucide-react";
+import { PartyPopper, Lock } from "lucide-react";
 
 interface Block8ReceptionProps {
   firstDance: string;
@@ -304,14 +304,6 @@ export default function Block8Reception({
             </div>
           )}
 
-          {!receptionCompletionStatus && (
-            <div className="flex gap-2 items-start bg-amber-50 dark:bg-amber-950 p-3 rounded-md">
-              <Info className="h-4 w-4 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
-              <p className="text-sm text-amber-900 dark:text-amber-100">
-                <strong>Required for payment:</strong> Please check one of the completion status boxes above before proceeding.
-              </p>
-            </div>
-          )}
         </CardContent>
       </Card>
     </div>
