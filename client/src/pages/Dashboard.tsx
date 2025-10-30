@@ -108,19 +108,16 @@ export default function Dashboard() {
           <Card>
             <CardHeader className="text-center">
               <Heart className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-              <CardTitle className="font-serif text-3xl">Welcome to Your Dashboard</CardTitle>
-              <CardDescription>You haven't started planning your wedding yet</CardDescription>
+              <CardTitle className="font-serif text-3xl">Start Planning Your Wedding</CardTitle>
+              <CardDescription>Create your perfect celebration with the Wedding Composer</CardDescription>
             </CardHeader>
             <CardContent className="text-center space-y-4">
-              <p className="text-muted-foreground">
-                Start creating your perfect wedding celebration by using the Wedding Composer.
-              </p>
               <Button 
                 onClick={() => setLocation("/composer")} 
                 size="lg"
                 data-testid="button-start-planning"
               >
-                Start Planning Your Wedding
+                Begin Planning
               </Button>
               <Button 
                 variant="outline" 
