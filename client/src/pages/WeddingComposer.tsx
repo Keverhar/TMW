@@ -37,7 +37,7 @@ const allSteps = [
   { id: 10, title: 'Slideshow', description: 'Upload photos', availableFor: ['modest-wedding', 'other'] },
   { id: 11, title: 'Personal Touches', description: 'Special details', availableFor: ['modest-wedding', 'other'] },
   { id: 12, title: 'Evites', description: 'Digital invitations', availableFor: ['all'] },
-  { id: 13, title: 'Contact & Payment', description: 'Finalize booking', availableFor: ['all'] },
+  { id: 13, title: 'Contact Information', description: 'Finalize booking', availableFor: ['all'] },
 ];
 
 const calculatePrice = (eventType: string, dayOfWeek: string): number => {
