@@ -369,10 +369,20 @@ export default function WeddingComposer() {
       return;
     }
 
-    if (!formData.eventType || !formData.ceremonyScript) {
+    if (!formData.eventType) {
       toast({
         title: "Missing information",
-        description: "Please select an event type and ceremony script.",
+        description: "Please select an event type.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // For full wedding packages, require ceremony script selection
+    if (!isSimplifiedFlow && !formData.ceremonyScript) {
+      toast({
+        title: "Ceremony script required",
+        description: "Please select a ceremony script before proceeding to payment.",
         variant: "destructive",
       });
       return;
