@@ -17,9 +17,7 @@ interface Block2DateTimeProps {
 // Time slots vary by day of week
 const getTimeSlots = (preferredDate: string, eventType: string) => {
   if (!preferredDate) {
-    return [
-      { value: "flexible", label: "I'm flexible – show me all options", arrival: "" }
-    ];
+    return [];
   }
   
   const dateObj = new Date(preferredDate + 'T12:00:00');
@@ -39,8 +37,7 @@ const getTimeSlots = (preferredDate: string, eventType: string) => {
   return [
     { value: "11am-2pm", label: "11:00 AM – 2:00 PM", arrival: "Bride arrival 9:30am" },
     { value: "2:30pm-5:30pm", label: "2:30 PM – 5:30 PM", arrival: "Bride arrival 1:00pm" },
-    { value: "6pm-9pm", label: "6:00 PM – 9:00 PM", arrival: "Bride arrival 4:30pm" },
-    { value: "flexible", label: "I'm flexible – show me all options", arrival: "" }
+    { value: "6pm-9pm", label: "6:00 PM – 9:00 PM", arrival: "Bride arrival 4:30pm" }
   ];
 };
 
@@ -61,14 +58,24 @@ export default function Block2DateTime({ preferredDate, timeSlot, onChange, even
   // Convert string dates to Date objects
   const preferredDateObj = preferredDate ? new Date(preferredDate + 'T12:00:00') : undefined;
   
-  // Matcher function to disable days not in allowedDays
+  // Minimum days in advance: 7 for elopement/vow renewal, 14 for weddings
+  const minDaysInAdvance = isSimplifiedFlow ? 7 : 14;
+  const minDate = new Date();
+  minDate.setDate(minDate.getDate() + minDaysInAdvance);
+  minDate.setHours(0, 0, 0, 0);
+  
+  // Matcher function to disable days not in allowedDays or too soon
   const disabledDays = (date: Date) => {
-    return !allowedDays.includes(date.getDay());
+    const isTooSoon = date < minDate;
+    const isWrongDay = !allowedDays.includes(date.getDay());
+    return isTooSoon || isWrongDay;
   };
   
-  // Matcher function to highlight available days
+  // Matcher function to highlight available days (must be right day AND not too soon)
   const highlightDays = (date: Date) => {
-    return allowedDays.includes(date.getDay());
+    const isRightDay = allowedDays.includes(date.getDay());
+    const isNotTooSoon = date >= minDate;
+    return isRightDay && isNotTooSoon;
   };
   
   return (
