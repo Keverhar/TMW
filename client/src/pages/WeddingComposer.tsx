@@ -27,8 +27,8 @@ import Block13ContactPayment from "@/components/composer/Block13ContactPayment";
 const allSteps = [
   { id: 1, title: 'Event Type', description: 'Choose your celebration', availableFor: ['all'] },
   { id: 2, title: 'Date & Time', description: 'Pick your ceremony date', availableFor: ['all'] },
-  { id: 3, title: 'Signature Color', description: 'Choose your color theme', availableFor: ['modest-wedding', 'other'] },
-  { id: 4, title: 'Music Selection', description: 'Pick your songs', availableFor: ['modest-wedding', 'other'] },
+  { id: 3, title: 'Colors', description: 'Choose your color theme', availableFor: ['modest-wedding', 'other'] },
+  { id: 4, title: 'Music', description: 'Pick your songs', availableFor: ['modest-wedding', 'other'] },
   { id: 5, title: 'Announcements', description: 'Special moments', availableFor: ['modest-wedding', 'other'] },
   { id: 6, title: 'Ceremony', description: 'Ceremony preferences', availableFor: ['all'] },
   { id: 7, title: 'Processional', description: 'Seating & procession', availableFor: ['modest-wedding', 'other'] },
