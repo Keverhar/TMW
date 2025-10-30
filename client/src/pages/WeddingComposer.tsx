@@ -679,7 +679,7 @@ export default function WeddingComposer() {
               {!userAccount && (
                 <Button
                   onClick={() => setShowLoginDialog(true)}
-                  className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold"
+                  className="bg-zinc-700 hover:bg-zinc-800 text-yellow-400 font-semibold border-0"
                   data-testid="button-create-account-login-header"
                 >
                   <UserPlus className="h-4 w-4 mr-2" />

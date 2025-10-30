@@ -174,7 +174,7 @@ export default function AccountCreationDialog({ open, onOpenChange, onAccountCre
 
             <Button 
               type="submit" 
-              className="w-full" 
+              className="w-full bg-zinc-700 hover:bg-zinc-800 text-yellow-400 font-semibold border-0" 
               disabled={isSubmitting}
               data-testid="button-create-account"
             >
