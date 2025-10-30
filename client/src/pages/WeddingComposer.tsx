@@ -97,6 +97,7 @@ export default function WeddingComposer() {
 
     // Block 6: Ceremony
     ceremonyScript: "simple-modern",
+    vowChoices: "",
     unityCandle: false,
     sandCeremony: false,
     handfasting: false,
@@ -471,6 +472,7 @@ export default function WeddingComposer() {
         vibeCheck: composer.vibeCheck || "",
         announcementsCompletionStatus: composer.announcementsCompletionStatus || "",
         ceremonyScript: composer.ceremonyScript || "simple-modern",
+        vowChoices: composer.vowChoices || "",
         unityCandle: composer.unityCandle || false,
         sandCeremony: composer.sandCeremony || false,
         handfasting: composer.handfasting || false,
@@ -751,6 +753,7 @@ export default function WeddingComposer() {
           {steps[currentStep - 1]?.id === 6 && (
             <Block6Ceremony
               ceremonyScript={formData.ceremonyScript}
+              vowChoices={formData.vowChoices}
               unityCandle={formData.unityCandle}
               sandCeremony={formData.sandCeremony}
               handfasting={formData.handfasting}

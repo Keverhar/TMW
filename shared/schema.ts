@@ -57,6 +57,7 @@ export const weddingComposers = pgTable("wedding_composers", {
   
   // Block 6: Ceremony Preferences
   ceremonyScript: text("ceremony_script").notNull(),
+  vowChoices: text("vow_choices"),
   unityCandle: boolean("unity_candle").default(false),
   sandCeremony: boolean("sand_ceremony").default(false),
   handfasting: boolean("handfasting").default(false),
