@@ -834,25 +834,24 @@ export default function WeddingComposer() {
                 const isCurrentStep = currentStep === stepNumber;
                 const isReadOnly = isBlockReadOnly(step.id);
                 
-                // Determine color based on completion status, with text override for read-only blocks
+                // Determine color based on completion status or read-only status
                 let colorClasses = '';
-                switch (completionStatus) {
-                  case 'complete':
-                    colorClasses = isReadOnly 
-                      ? 'bg-green-600/80 !text-black'
-                      : 'bg-green-600/80 text-white hover-elevate';
-                    break;
-                  case 'partial':
-                    colorClasses = isReadOnly
-                      ? 'bg-yellow-600/80 !text-black'
-                      : 'bg-yellow-600/80 text-white hover-elevate';
-                    break;
-                  case 'none':
-                  default:
-                    colorClasses = isReadOnly
-                      ? 'bg-muted !text-black'
-                      : 'bg-muted text-muted-foreground hover-elevate';
-                    break;
+                if (isReadOnly) {
+                  // Disabled blocks: dark grey background with dark red text
+                  colorClasses = 'bg-[#4A4A4A] text-[#8B0000]';
+                } else {
+                  switch (completionStatus) {
+                    case 'complete':
+                      colorClasses = 'bg-green-600/80 text-white hover-elevate';
+                      break;
+                    case 'partial':
+                      colorClasses = 'bg-yellow-600/80 text-white hover-elevate';
+                      break;
+                    case 'none':
+                    default:
+                      colorClasses = 'bg-muted text-muted-foreground hover-elevate';
+                      break;
+                  }
                 }
                 
                 // Add border to indicate current step
