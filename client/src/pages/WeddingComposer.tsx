@@ -322,6 +322,17 @@ export default function WeddingComposer() {
   };
 
   const handleSubmit = async () => {
+    // Require account creation before payment - check this first for guests
+    if (!userAccount) {
+      toast({
+        title: "Account required",
+        description: "You must create an account to continue.",
+        variant: "destructive",
+      });
+      setShowAccountDialog(true);
+      return;
+    }
+
     if (!formData.preferredDate) {
       toast({
         title: "Date required",
@@ -493,17 +504,6 @@ export default function WeddingComposer() {
         });
         return;
       }
-    }
-
-    // Require account creation before payment
-    if (!userAccount) {
-      toast({
-        title: "Account required",
-        description: "Please create an account or log in before proceeding to payment.",
-        variant: "destructive",
-      });
-      setShowAccountDialog(true);
-      return;
     }
 
     // Save progress first
