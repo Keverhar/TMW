@@ -159,6 +159,15 @@ export default function Payment() {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Non-closeable placeholder notice */}
+      <div className="fixed top-4 right-4 z-[100] max-w-xs" data-testid="notice-placeholder">
+        <div className="bg-amber-500/90 dark:bg-amber-600/90 backdrop-blur-sm text-white p-4 rounded-md shadow-lg border-2 border-amber-600 dark:border-amber-500">
+          <p className="text-sm font-semibold leading-tight">
+            This is a placeholder page and does not process payments. Enter gibberish to view the results.
+          </p>
+        </div>
+      </div>
+
       <div className="sticky top-0 z-50 bg-background border-b">
         <div className="max-w-4xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
