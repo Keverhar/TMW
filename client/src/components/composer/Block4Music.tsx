@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Music, Info, Play } from "lucide-react";
+import { Music, Info, Music2 } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -202,17 +202,31 @@ export default function Block4Music({
                     }
                   }}
                 >
-                  <Play className="h-4 w-4" />
+                  <Music2 className="h-4 w-4" />
                 </Button>
               )}
             </div>
             {processionalSelection === 'custom' && (
-              <Input
-                data-testid="input-processional-custom"
-                placeholder="Paste Spotify link here"
-                value={processionalSong}
-                onChange={(e) => onChange('processionalSong', e.target.value)}
-              />
+              <div className="flex gap-2">
+                <Input
+                  data-testid="input-processional-custom"
+                  placeholder="Paste Spotify link here"
+                  value={processionalSong}
+                  onChange={(e) => onChange('processionalSong', e.target.value)}
+                  className="flex-1"
+                />
+                {processionalSong && processionalSong.includes('spotify.com') && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    data-testid="button-preview-processional-custom"
+                    onClick={() => openSpotifyPreview(processionalSong)}
+                  >
+                    <Music2 className="h-4 w-4" />
+                  </Button>
+                )}
+              </div>
             )}
           </div>
 
@@ -244,17 +258,31 @@ export default function Block4Music({
                     }
                   }}
                 >
-                  <Play className="h-4 w-4" />
+                  <Music2 className="h-4 w-4" />
                 </Button>
               )}
             </div>
             {recessionalSelection === 'custom' && (
-              <Input
-                data-testid="input-recessional-custom"
-                placeholder="Paste Spotify link here"
-                value={recessionalSong}
-                onChange={(e) => onChange('recessionalSong', e.target.value)}
-              />
+              <div className="flex gap-2">
+                <Input
+                  data-testid="input-recessional-custom"
+                  placeholder="Paste Spotify link here"
+                  value={recessionalSong}
+                  onChange={(e) => onChange('recessionalSong', e.target.value)}
+                  className="flex-1"
+                />
+                {recessionalSong && recessionalSong.includes('spotify.com') && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    data-testid="button-preview-recessional-custom"
+                    onClick={() => openSpotifyPreview(recessionalSong)}
+                  >
+                    <Music2 className="h-4 w-4" />
+                  </Button>
+                )}
+              </div>
             )}
           </div>
         </CardContent>
@@ -297,17 +325,31 @@ export default function Block4Music({
                     }
                   }}
                 >
-                  <Play className="h-4 w-4" />
+                  <Music2 className="h-4 w-4" />
                 </Button>
               )}
             </div>
             {receptionEntranceSelection === 'custom' && (
-              <Input
-                data-testid="input-reception-entrance-custom"
-                placeholder="Paste Spotify link here"
-                value={receptionEntranceSong}
-                onChange={(e) => onChange('receptionEntranceSong', e.target.value)}
-              />
+              <div className="flex gap-2">
+                <Input
+                  data-testid="input-reception-entrance-custom"
+                  placeholder="Paste Spotify link here"
+                  value={receptionEntranceSong}
+                  onChange={(e) => onChange('receptionEntranceSong', e.target.value)}
+                  className="flex-1"
+                />
+                {receptionEntranceSong && receptionEntranceSong.includes('spotify.com') && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    data-testid="button-preview-reception-entrance-custom"
+                    onClick={() => openSpotifyPreview(receptionEntranceSong)}
+                  >
+                    <Music2 className="h-4 w-4" />
+                  </Button>
+                )}
+              </div>
             )}
           </div>
 
@@ -339,17 +381,31 @@ export default function Block4Music({
                     }
                   }}
                 >
-                  <Play className="h-4 w-4" />
+                  <Music2 className="h-4 w-4" />
                 </Button>
               )}
             </div>
             {cakeCuttingSelection === 'custom' && (
-              <Input
-                data-testid="input-cake-cutting-custom"
-                placeholder="Paste Spotify link here"
-                value={cakeCuttingSong}
-                onChange={(e) => onChange('cakeCuttingSong', e.target.value)}
-              />
+              <div className="flex gap-2">
+                <Input
+                  data-testid="input-cake-cutting-custom"
+                  placeholder="Paste Spotify link here"
+                  value={cakeCuttingSong}
+                  onChange={(e) => onChange('cakeCuttingSong', e.target.value)}
+                  className="flex-1"
+                />
+                {cakeCuttingSong && cakeCuttingSong.includes('spotify.com') && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    data-testid="button-preview-cake-cutting-custom"
+                    onClick={() => openSpotifyPreview(cakeCuttingSong)}
+                  >
+                    <Music2 className="h-4 w-4" />
+                  </Button>
+                )}
+              </div>
             )}
           </div>
 
@@ -392,17 +448,31 @@ export default function Block4Music({
                     }
                   }}
                 >
-                  <Play className="h-4 w-4" />
+                  <Music2 className="h-4 w-4" />
                 </Button>
               )}
             </div>
             {lastDanceSelection === 'custom' && (
-              <Input
-                data-testid="input-last-dance-custom"
-                placeholder="Paste Spotify link here"
-                value={lastDanceSong}
-                onChange={(e) => onChange('lastDanceSong', e.target.value)}
-              />
+              <div className="flex gap-2">
+                <Input
+                  data-testid="input-last-dance-custom"
+                  placeholder="Paste Spotify link here"
+                  value={lastDanceSong}
+                  onChange={(e) => onChange('lastDanceSong', e.target.value)}
+                  className="flex-1"
+                />
+                {lastDanceSong && lastDanceSong.includes('spotify.com') && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    data-testid="button-preview-last-dance-custom"
+                    onClick={() => openSpotifyPreview(lastDanceSong)}
+                  >
+                    <Music2 className="h-4 w-4" />
+                  </Button>
+                )}
+              </div>
             )}
           </div>
         </CardContent>
