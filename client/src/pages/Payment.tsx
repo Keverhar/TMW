@@ -323,17 +323,6 @@ export default function Payment() {
                     </div>
                   )}
 
-                  {paymentMethod === "affirm" && (
-                    <div className="p-6 bg-muted rounded-md text-center space-y-2">
-                      <div className="px-4 py-2 bg-blue-600 text-white text-xl font-bold rounded inline-block">
-                        Affirm
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        You will be redirected to Affirm to set up your payment plan
-                      </p>
-                    </div>
-                  )}
-
                   {paymentMethod === "ach" && (
                     <div className="p-6 bg-muted rounded-md space-y-4">
                       <p className="text-sm font-semibold text-center">Bank Account Information</p>

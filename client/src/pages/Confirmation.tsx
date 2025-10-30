@@ -92,7 +92,13 @@ export default function Confirmation() {
               <CardContent className="space-y-3">
                 <div>
                   <p className="text-sm font-medium">Event Type:</p>
-                  <p className="text-sm text-muted-foreground">{composer.eventType}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {composer.eventType === 'modest-elopement' ? 'Modest Elopement' :
+                     composer.eventType === 'vow-renewal' ? 'Vow Renewal' :
+                     composer.eventType === 'modest-wedding-friday-sunday' ? 'Modest Wedding (Friday/Sunday)' :
+                     composer.eventType === 'modest-wedding-saturday' ? 'Modest Wedding (Saturday)' :
+                     composer.eventType}
+                  </p>
                 </div>
 
                 {composer.signatureColor && (
@@ -169,11 +175,8 @@ export default function Confirmation() {
               </CardContent>
             </Card>
 
-            <div className="text-center pt-6 space-y-3">
-              <Button onClick={() => setLocation("/dashboard")} size="lg" className="w-full max-w-md" data-testid="button-view-dashboard">
-                View My Dashboard
-              </Button>
-              <Button onClick={() => setLocation("/")} size="lg" variant="outline" className="w-full max-w-md" data-testid="button-return-home">
+            <div className="text-center pt-6">
+              <Button onClick={() => setLocation("/")} size="lg" className="w-full max-w-md" data-testid="button-return-home">
                 Return to Home
               </Button>
             </div>
