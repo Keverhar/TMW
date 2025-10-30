@@ -641,7 +641,7 @@ export default function WeddingComposer() {
             <div className="flex-shrink-0 px-4 py-1.5 bg-background border rounded-md font-bold text-sm text-yellow-400" data-testid="text-total-price">
               ${(totalPrice / 100).toFixed(2)}
             </div>
-            <div className="grid grid-cols-7 gap-2 flex-1">
+            <div className="flex flex-wrap gap-2 flex-1">
               {steps.map((step, index) => {
                 const stepNumber = index + 1;
                 return (
@@ -649,7 +649,7 @@ export default function WeddingComposer() {
                     key={step.id}
                     onClick={() => setCurrentStep(stepNumber)}
                     data-testid={`button-step-${stepNumber}`}
-                    className={`px-2 py-0.5 rounded-md text-xs font-medium transition-colors ${
+                    className={`px-2 py-0.5 rounded-md text-xs font-medium transition-colors whitespace-nowrap ${
                       currentStep === stepNumber
                         ? 'bg-primary text-primary-foreground'
                         : currentStep > stepNumber
