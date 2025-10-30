@@ -276,22 +276,20 @@ export default function Block8Reception({
           <CardDescription>Let us know if you're ready to move forward or need more time</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {allRequiredFieldsFilled && (
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="reception-all-done"
-                data-testid="checkbox-reception-all-done"
-                checked={receptionCompletionStatus === 'all-done'}
-                onCheckedChange={() => handleCompletionStatusChange('all-done')}
-                disabled={readOnly}
-              />
-              <Label htmlFor="reception-all-done" className="cursor-pointer font-medium">
-                All done (for now)
-              </Label>
-            </div>
-          )}
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="reception-all-done"
+              data-testid="checkbox-reception-all-done"
+              checked={receptionCompletionStatus === 'all-done'}
+              onCheckedChange={() => handleCompletionStatusChange('all-done')}
+              disabled={readOnly || !allRequiredFieldsFilled}
+            />
+            <Label htmlFor="reception-all-done" className={`cursor-pointer font-medium ${!allRequiredFieldsFilled ? 'opacity-50' : ''}`}>
+              All done (for now)
+            </Label>
+          </div>
           
-          {someFieldsEmpty && (
+          {!allRequiredFieldsFilled && (
             <div className="flex items-center space-x-2">
               <Checkbox
                 id="reception-finish-later"

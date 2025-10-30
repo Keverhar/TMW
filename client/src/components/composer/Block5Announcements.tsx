@@ -185,22 +185,20 @@ export default function Block5Announcements({
           <CardDescription>Let us know if you're ready to move forward or need more time</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {allRequiredFieldsFilled && (
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="announcements-all-done"
-                data-testid="checkbox-announcements-all-done"
-                checked={announcementsCompletionStatus === 'all-done'}
-                onCheckedChange={() => handleCompletionStatusChange('all-done')}
-                disabled={readOnly}
-              />
-              <Label htmlFor="announcements-all-done" className="cursor-pointer font-medium">
-                All done (for now)
-              </Label>
-            </div>
-          )}
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="announcements-all-done"
+              data-testid="checkbox-announcements-all-done"
+              checked={announcementsCompletionStatus === 'all-done'}
+              onCheckedChange={() => handleCompletionStatusChange('all-done')}
+              disabled={readOnly || !allRequiredFieldsFilled}
+            />
+            <Label htmlFor="announcements-all-done" className={`cursor-pointer font-medium ${!allRequiredFieldsFilled ? 'opacity-50' : ''}`}>
+              All done (for now)
+            </Label>
+          </div>
           
-          {someFieldsEmpty && (
+          {!allRequiredFieldsFilled && (
             <div className="flex items-center space-x-2">
               <Checkbox
                 id="announcements-finish-later"

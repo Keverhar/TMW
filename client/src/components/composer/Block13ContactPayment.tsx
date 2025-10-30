@@ -260,11 +260,13 @@ export default function Block13ContactPayment({
           {paymentMethod === 'ach' && (
             <div className="flex gap-2 items-start bg-green-50 dark:bg-green-950 p-3 rounded-md border border-green-200 dark:border-green-800">
               <Info className="h-4 w-4 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
-              <div className="text-sm text-green-900 dark:text-green-100">
-                <p className="font-medium">Save $50 with ACH payment!</p>
-                <p className="text-xs text-green-700 dark:text-green-300 mt-1">
-                  Funds take 2–3 days to clear, but your date is secured once payment is received.
-                </p>
+              <div className="text-sm text-green-900 dark:text-green-100 space-y-2">
+                <p className="font-medium">Pay by ACH (Bank Transfer)</p>
+                <ul className="text-xs text-green-700 dark:text-green-300 space-y-1">
+                  <li>• Simple and secure: pay directly from your bank account using your routing and account number.</li>
+                  <li>• Funds take 2–3 days to clear, but your date is secured once payment is received.</li>
+                  <li><strong>• Special savings: Receive a $50 discount on your wedding package when you choose ACH.</strong></li>
+                </ul>
               </div>
             </div>
           )}

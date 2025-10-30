@@ -785,9 +785,11 @@ export default function WeddingComposer() {
       
       case 11: // Personal Touches
         if (formData.personalTouchesCompletionStatus && formData.personalTouchesCompletionStatus !== 'finish-later') return 'complete';
-        // Check for partial completion - exclude departureOrganizerTBD as it means "not decided"
-        const hasPersonalTouchesData = formData.freshFlorals || formData.guestBookChoice || formData.cakeKnifeChoice || 
-            formData.departureVehicleChoice || (formData.departureOrganizer && !formData.departureOrganizerTBD) || formData.personalTouchesSpecialInstructions;
+        // Check for partial completion - exclude departureOrganizerTBD and checkbox-only flags as they don't represent actual data
+        const hasPersonalTouchesData = (formData.freshFlorals && formData.freshFlorals.trim() !== '') || 
+            formData.guestBookChoice || formData.cakeKnifeChoice || 
+            formData.departureVehicleChoice || (formData.departureOrganizer && formData.departureOrganizer.trim() !== '' && !formData.departureOrganizerTBD) || 
+            (formData.personalTouchesSpecialInstructions && formData.personalTouchesSpecialInstructions.trim() !== '');
         if (formData.personalTouchesCompletionStatus === 'finish-later' || hasPersonalTouchesData) return 'partial';
         return 'none';
       

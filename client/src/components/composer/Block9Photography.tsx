@@ -232,22 +232,20 @@ export default function Block9Photography({
           <CardDescription>Let us know if you're ready to move forward or need more time</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {allRequiredFieldsFilled && (
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="photography-all-done"
-                data-testid="checkbox-photography-all-done"
-                checked={photographyCompletionStatus === 'all-done'}
-                onCheckedChange={() => handleCompletionStatusChange('all-done')}
-                disabled={readOnly}
-              />
-              <Label htmlFor="photography-all-done" className="cursor-pointer font-medium">
-                All done (for now)
-              </Label>
-            </div>
-          )}
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="photography-all-done"
+              data-testid="checkbox-photography-all-done"
+              checked={photographyCompletionStatus === 'all-done'}
+              onCheckedChange={() => handleCompletionStatusChange('all-done')}
+              disabled={readOnly || !allRequiredFieldsFilled}
+            />
+            <Label htmlFor="photography-all-done" className={`cursor-pointer font-medium ${!allRequiredFieldsFilled ? 'opacity-50' : ''}`}>
+              All done (for now)
+            </Label>
+          </div>
           
-          {someFieldsEmpty && (
+          {!allRequiredFieldsFilled && (
             <div className="flex items-center space-x-2">
               <Checkbox
                 id="photography-finish-later"
