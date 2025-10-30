@@ -60,8 +60,14 @@ export default function WeddingComposer() {
   const [showAccountDialog, setShowAccountDialog] = useState(false);
   const [showInitialDialog, setShowInitialDialog] = useState(true);
   const [showLoginDialog, setShowLoginDialog] = useState(false);
-  const [userAccount, setUserAccount] = useState<{ id: string; email: string } | null>(null);
-  const [hasSeenInitialDialog, setHasSeenInitialDialog] = useState(false);
+  const [userAccount, setUserAccount] = useState<{ id: string; email: string } | null>(() => {
+    const savedUser = localStorage.getItem("user");
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
+  const [hasSeenInitialDialog, setHasSeenInitialDialog] = useState(() => {
+    const savedUser = localStorage.getItem("user");
+    return !!savedUser;
+  });
   const [savedStepBeforeSimplification, setSavedStepBeforeSimplification] = useState<number | null>(null);
   const previousEventTypeRef = useRef<string>("");
 
@@ -463,7 +469,9 @@ export default function WeddingComposer() {
   };
 
   const handleAccountCreated = (userId: string, email: string) => {
-    setUserAccount({ id: userId, email });
+    const user = { id: userId, email };
+    setUserAccount(user);
+    localStorage.setItem("user", JSON.stringify(user));
     toast({
       title: "Account created!",
       description: "Your progress will now be saved automatically",
@@ -471,7 +479,9 @@ export default function WeddingComposer() {
   };
 
   const handleLoginSuccess = (userId: string, email: string, composer?: any) => {
-    setUserAccount({ id: userId, email });
+    const user = { id: userId, email };
+    setUserAccount(user);
+    localStorage.setItem("user", JSON.stringify(user));
     setShowLoginDialog(false);
     setShowInitialDialog(false);
     
