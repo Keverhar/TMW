@@ -16,6 +16,7 @@ interface Block13ContactPaymentProps {
   customerPhone: string;
   smsConsent: boolean;
   mailingAddress: string;
+  paymentMethod: string;
   termsAccepted: boolean;
   photoBookAddon: boolean;
   extraTimeAddon: boolean;
@@ -34,6 +35,7 @@ export default function Block13ContactPayment({
   customerPhone,
   smsConsent,
   mailingAddress,
+  paymentMethod,
   termsAccepted,
   photoBookAddon,
   extraTimeAddon,
@@ -77,7 +79,10 @@ export default function Block13ContactPayment({
     }
     return sum + addon.price;
   }, 0);
-  const totalPrice = basePackagePrice + addonsTotal;
+  
+  // Apply ACH discount if payment method is ACH
+  const achDiscount = paymentMethod === 'ach' ? 5000 : 0; // $50 discount in cents
+  const totalPrice = basePackagePrice + addonsTotal - achDiscount;
 
   return (
     <div className="space-y-6">
@@ -228,6 +233,47 @@ export default function Block13ContactPayment({
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
+            <CreditCard className="h-5 w-5" />
+            <CardTitle>Payment Method</CardTitle>
+          </div>
+          <CardDescription>Choose how you'd like to pay</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <div className="flex gap-2">
+            <Badge
+              variant={paymentMethod === 'credit_card' ? 'default' : 'outline'}
+              onClick={() => onChange('paymentMethod', 'credit_card')}
+              data-testid="badge-payment-credit-card"
+              className="cursor-pointer flex-1 justify-center py-2 text-sm"
+            >
+              Credit Card
+            </Badge>
+            <Badge
+              variant={paymentMethod === 'ach' ? 'default' : 'outline'}
+              onClick={() => onChange('paymentMethod', 'ach')}
+              data-testid="badge-payment-ach"
+              className="cursor-pointer flex-1 justify-center py-2 text-sm"
+            >
+              Pay by ACH (Bank Transfer)
+            </Badge>
+          </div>
+          {paymentMethod === 'ach' && (
+            <div className="flex gap-2 items-start bg-green-50 dark:bg-green-950 p-3 rounded-md border border-green-200 dark:border-green-800">
+              <Info className="h-4 w-4 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
+              <div className="text-sm text-green-900 dark:text-green-100">
+                <p className="font-medium">Save $50 with ACH payment!</p>
+                <p className="text-xs text-green-700 dark:text-green-300 mt-1">
+                  Funds take 2–3 days to clear, but your date is secured once payment is received.
+                </p>
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <div className="flex items-center gap-2">
             <FileText className="h-5 w-5" />
             <CardTitle>Booking Summary</CardTitle>
           </div>
@@ -264,6 +310,13 @@ export default function Block13ContactPayment({
                   })}
                 </div>
               </>
+            )}
+
+            {achDiscount > 0 && (
+              <div className="flex justify-between pt-2 border-t text-sm text-green-600 dark:text-green-400">
+                <span>ACH Payment Discount:</span>
+                <span>-${(achDiscount / 100).toFixed(2)}</span>
+              </div>
             )}
 
             <div className="flex justify-between pt-3 border-t text-lg font-semibold">

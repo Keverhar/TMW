@@ -4,11 +4,12 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Heart, Sparkles, Eye, Lock } from "lucide-react";
+import { Heart, Sparkles, Eye, Lock, Info } from "lucide-react";
 import { useState } from "react";
 
 interface Block6CeremonyProps {
@@ -17,10 +18,16 @@ interface Block6CeremonyProps {
   unityCandle: boolean;
   sandCeremony: boolean;
   handfasting: boolean;
+  guestReadingOrSongChoice: string;
   guestReadingOrSong: string;
   guestReadingOrSongName: string;
+  officiantPassageChoice: string;
   officiantPassage: string;
+  includingChildChoice: string;
   includingChild: string;
+  childrenOrganizer: string;
+  petInvolvementChoice: string;
+  petPolicyAccepted: boolean;
   petInvolvement: string;
   ceremonySpecialRequests: string;
   onChange: (field: string, value: string | boolean) => void;
@@ -319,10 +326,16 @@ export default function Block6Ceremony({
   unityCandle,
   sandCeremony,
   handfasting,
+  guestReadingOrSongChoice,
   guestReadingOrSong,
   guestReadingOrSongName,
+  officiantPassageChoice,
   officiantPassage,
+  includingChildChoice,
   includingChild,
+  childrenOrganizer,
+  petInvolvementChoice,
+  petPolicyAccepted,
   petInvolvement,
   ceremonySpecialRequests,
   onChange,
@@ -331,6 +344,7 @@ export default function Block6Ceremony({
 }: Block6CeremonyProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedScriptForPreview, setSelectedScriptForPreview] = useState<string>("");
+  const [showPetPolicyDialog, setShowPetPolicyDialog] = useState(false);
 
   const handlePreviewClick = (scriptValue: string) => {
     setSelectedScriptForPreview(scriptValue);
@@ -485,74 +499,204 @@ export default function Block6Ceremony({
             </div>
             <CardDescription>Personalize your ceremony with special touches (all completely optional)</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="guest-reading-or-song">Singing, Reading or Poem by a Guest</Label>
-              <Input
-                id="guest-reading-or-song-name"
-                data-testid="input-guest-reading-or-song-name"
-                placeholder="Name of guest"
-                value={guestReadingOrSongName}
-                onChange={(e) => onChange('guestReadingOrSongName', e.target.value)}
-                disabled={readOnly}
-              />
-              <Textarea
-                id="guest-reading-or-song"
-                data-testid="input-guest-reading-or-song"
-                placeholder="Please describe how you'd like them involved and when"
-                value={guestReadingOrSong}
-                onChange={(e) => onChange('guestReadingOrSong', e.target.value)}
-                rows={2}
-                disabled={readOnly}
-              />
+          <CardContent className="space-y-6">
+            {/* Singing, Reading or Poem by a Guest */}
+            <div className="space-y-3">
+              <Label>Singing, Reading or Poem by a Guest</Label>
+              <div className="flex gap-2">
+                <Badge
+                  variant={guestReadingOrSongChoice === 'yes' ? 'default' : 'outline'}
+                  onClick={() => !readOnly && onChange('guestReadingOrSongChoice', 'yes')}
+                  data-testid="badge-guest-reading-yes"
+                  className={`cursor-pointer ${readOnly ? 'opacity-50 cursor-not-allowed' : ''}`}
+                >
+                  Yes
+                </Badge>
+                <Badge
+                  variant={guestReadingOrSongChoice === 'no' ? 'default' : 'outline'}
+                  onClick={() => {
+                    if (!readOnly) {
+                      onChange('guestReadingOrSongChoice', 'no');
+                      onChange('guestReadingOrSong', '');
+                      onChange('guestReadingOrSongName', '');
+                    }
+                  }}
+                  data-testid="badge-guest-reading-no"
+                  className={`cursor-pointer ${readOnly ? 'opacity-50 cursor-not-allowed' : ''}`}
+                >
+                  No
+                </Badge>
+              </div>
+              {guestReadingOrSongChoice === 'yes' && (
+                <div className="space-y-2">
+                  <Input
+                    id="guest-reading-or-song-name"
+                    data-testid="input-guest-reading-or-song-name"
+                    placeholder="Name of guest"
+                    value={guestReadingOrSongName}
+                    onChange={(e) => onChange('guestReadingOrSongName', e.target.value)}
+                    disabled={readOnly}
+                  />
+                  <Textarea
+                    id="guest-reading-or-song"
+                    data-testid="input-guest-reading-or-song"
+                    placeholder="Please describe how you'd like them involved and when"
+                    value={guestReadingOrSong}
+                    onChange={(e) => onChange('guestReadingOrSong', e.target.value)}
+                    rows={2}
+                    disabled={readOnly}
+                  />
+                </div>
+              )}
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="officiant-passage">Passage Reading by the Officiant</Label>
-              <Textarea
-                id="officiant-passage"
-                data-testid="input-officiant-passage"
-                placeholder="Upload or paste the passage here (10 minute max)"
-                value={officiantPassage}
-                onChange={(e) => {
-                  const newValue = e.target.value;
-                  if (newValue.length <= maxOfficiantPassageChars) {
-                    onChange('officiantPassage', newValue);
-                  }
-                }}
-                rows={3}
-                maxLength={maxOfficiantPassageChars}
-                disabled={readOnly}
-              />
-              <p className="text-xs text-muted-foreground">
-                {officiantPassageCharCount}/{maxOfficiantPassageChars} characters
-              </p>
+            {/* Passage Reading by the Officiant */}
+            <div className="space-y-3">
+              <Label>Passage Reading by the Officiant</Label>
+              <div className="flex gap-2">
+                <Badge
+                  variant={officiantPassageChoice === 'yes' ? 'default' : 'outline'}
+                  onClick={() => !readOnly && onChange('officiantPassageChoice', 'yes')}
+                  data-testid="badge-officiant-passage-yes"
+                  className={`cursor-pointer ${readOnly ? 'opacity-50 cursor-not-allowed' : ''}`}
+                >
+                  Yes
+                </Badge>
+                <Badge
+                  variant={officiantPassageChoice === 'no' ? 'default' : 'outline'}
+                  onClick={() => {
+                    if (!readOnly) {
+                      onChange('officiantPassageChoice', 'no');
+                      onChange('officiantPassage', '');
+                    }
+                  }}
+                  data-testid="badge-officiant-passage-no"
+                  className={`cursor-pointer ${readOnly ? 'opacity-50 cursor-not-allowed' : ''}`}
+                >
+                  No
+                </Badge>
+              </div>
+              {officiantPassageChoice === 'yes' && (
+                <div className="space-y-2">
+                  <Textarea
+                    id="officiant-passage"
+                    data-testid="input-officiant-passage"
+                    placeholder="Upload or paste the passage here (10 minute max)"
+                    value={officiantPassage}
+                    onChange={(e) => {
+                      const newValue = e.target.value;
+                      if (newValue.length <= maxOfficiantPassageChars) {
+                        onChange('officiantPassage', newValue);
+                      }
+                    }}
+                    rows={3}
+                    maxLength={maxOfficiantPassageChars}
+                    disabled={readOnly}
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    {officiantPassageCharCount}/{maxOfficiantPassageChars} characters
+                  </p>
+                </div>
+              )}
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="including-child">Including a Child or Children</Label>
-              <Textarea
-                id="including-child"
-                data-testid="input-including-child"
-                placeholder="Please describe how you'd like them involved (family vow, unity ritual, gift presentation, etc.)"
-                value={includingChild}
-                onChange={(e) => onChange('includingChild', e.target.value)}
-                rows={2}
-                disabled={readOnly}
-              />
+            {/* Including a Child or Children */}
+            <div className="space-y-3">
+              <Label>Including a Child or Children</Label>
+              <div className="flex gap-2">
+                <Badge
+                  variant={includingChildChoice === 'yes' ? 'default' : 'outline'}
+                  onClick={() => !readOnly && onChange('includingChildChoice', 'yes')}
+                  data-testid="badge-including-child-yes"
+                  className={`cursor-pointer ${readOnly ? 'opacity-50 cursor-not-allowed' : ''}`}
+                >
+                  Yes
+                </Badge>
+                <Badge
+                  variant={includingChildChoice === 'no' ? 'default' : 'outline'}
+                  onClick={() => {
+                    if (!readOnly) {
+                      onChange('includingChildChoice', 'no');
+                      onChange('includingChild', '');
+                      onChange('childrenOrganizer', '');
+                    }
+                  }}
+                  data-testid="badge-including-child-no"
+                  className={`cursor-pointer ${readOnly ? 'opacity-50 cursor-not-allowed' : ''}`}
+                >
+                  No
+                </Badge>
+              </div>
+              {includingChildChoice === 'yes' && (
+                <div className="space-y-2">
+                  <Textarea
+                    id="including-child"
+                    data-testid="input-including-child"
+                    placeholder="Please describe how you'd like them involved (family vow, unity ritual, gift presentation, etc.)"
+                    value={includingChild}
+                    onChange={(e) => onChange('includingChild', e.target.value)}
+                    rows={2}
+                    disabled={readOnly}
+                  />
+                  <Input
+                    id="children-organizer"
+                    data-testid="input-children-organizer"
+                    placeholder="Organizer for Children"
+                    value={childrenOrganizer}
+                    onChange={(e) => onChange('childrenOrganizer', e.target.value)}
+                    disabled={readOnly}
+                  />
+                </div>
+              )}
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="pet-involvement">Pet Involvement</Label>
-              <Textarea
-                id="pet-involvement"
-                data-testid="input-pet-involvement"
-                placeholder="Name, role, and handler details (Note: pets only allowed in chapel area, not reception)"
-                value={petInvolvement}
-                onChange={(e) => onChange('petInvolvement', e.target.value)}
-                rows={2}
-                disabled={readOnly}
-              />
+            {/* Pet Involvement */}
+            <div className="space-y-3">
+              <Label>Pet Involvement</Label>
+              <div className="flex gap-2">
+                <Badge
+                  variant={petInvolvementChoice === 'yes' ? 'default' : 'outline'}
+                  onClick={() => {
+                    if (!readOnly) {
+                      if (petPolicyAccepted) {
+                        onChange('petInvolvementChoice', 'yes');
+                      } else {
+                        setShowPetPolicyDialog(true);
+                      }
+                    }
+                  }}
+                  data-testid="badge-pet-involvement-yes"
+                  className={`cursor-pointer ${readOnly ? 'opacity-50 cursor-not-allowed' : ''}`}
+                >
+                  Yes
+                </Badge>
+                <Badge
+                  variant={petInvolvementChoice === 'no' ? 'default' : 'outline'}
+                  onClick={() => {
+                    if (!readOnly) {
+                      onChange('petInvolvementChoice', 'no');
+                      onChange('petInvolvement', '');
+                    }
+                  }}
+                  data-testid="badge-pet-involvement-no"
+                  className={`cursor-pointer ${readOnly ? 'opacity-50 cursor-not-allowed' : ''}`}
+                >
+                  No
+                </Badge>
+              </div>
+              {petInvolvementChoice === 'yes' && petPolicyAccepted && (
+                <div className="space-y-2">
+                  <Textarea
+                    id="pet-involvement"
+                    data-testid="input-pet-involvement"
+                    placeholder="Name, role, and handler details (Note: pets only allowed in chapel area, not reception)"
+                    value={petInvolvement}
+                    onChange={(e) => onChange('petInvolvement', e.target.value)}
+                    rows={2}
+                    disabled={readOnly}
+                  />
+                </div>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -577,6 +721,51 @@ export default function Block6Ceremony({
           </CardContent>
         </Card>
       )}
+
+      {/* Pet Policy Dialog */}
+      <Dialog open={showPetPolicyDialog} onOpenChange={setShowPetPolicyDialog}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Dogs Welcome</DialogTitle>
+            <DialogDescription>
+              Please review our pet policy before proceeding
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <p>
+              We're happy to include your furry family members in your special day! Dogs are very welcome to attend your Ceremony (not permitted in the Reception room), provided, of course, they are well-behaved and remain leashed throughout the event. For everyone's safety, we cannot accommodate dogs showing signs of aggression.
+            </p>
+            <p>
+              Service dogs performing work or tasks for individuals with disabilities are always welcome.
+            </p>
+            <p className="font-medium">
+              At this time, only dogs are permitted on the premises.
+            </p>
+            <div className="flex gap-3 justify-end pt-4">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setShowPetPolicyDialog(false);
+                  onChange('petInvolvementChoice', 'no');
+                }}
+                data-testid="button-pet-policy-decline"
+              >
+                Decline
+              </Button>
+              <Button
+                onClick={() => {
+                  onChange('petPolicyAccepted', true);
+                  onChange('petInvolvementChoice', 'yes');
+                  setShowPetPolicyDialog(false);
+                }}
+                data-testid="button-pet-policy-accept"
+              >
+                Accept
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

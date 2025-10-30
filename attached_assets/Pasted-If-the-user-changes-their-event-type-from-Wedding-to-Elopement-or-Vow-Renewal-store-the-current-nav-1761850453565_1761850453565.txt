@@ -1,0 +1,31 @@
+If the user changes their event type from Wedding to Elopement or Vow Renewal, store the current navigation button settings and set the unavailable navigation buttons to their original white on grey. If they change back to Wedding, revert the nav button colors to what they were before.
+
+On the "Personal Touches" page, for the "Guest Book" choices, instead of the large Yes/No boxes, change to multi-select chips and don't automatically display the text at the bottom of the box.
+When "Yes" is chosen, display the text "We'll make sure it's displayed thoughtfully and ready for guests to sign. We will provide a designated gift table and card box." 
+
+On the "Personal Touches" page, for the "Departure Vehicle" choices, instead of the large Yes/No boxes, change to multi-select chips and don't automatically display the text at the bottom of the box.
+
+For payments we also offer Pay by ACH (Bank Transfer) and give a $50 discount with that selection. - Funds take 2–3 days to clear, but your date is secured once payment is received.
+
+
+Additional Ceremony Add-Ons
+for the "Singing, Reading or Poem by a Guest" option, show Yes/No chips. Default to "No" but if "Yes" is selected display the "Name of guest" and "Please describe how you'd like them involved and when" boxes that are required for payment.
+
+For the "Passage Reading by the Officiant" option show Yes/No. Default to "No" but if "Yes" is selected display the "Upload or paste the passage here (10 minute max)" box and counter which is required for payment.
+
+for the "Including a Child or Children" option treat this the way the "Ring Bearer or Flower Child" is done in "Processional". Default to "No" but if "Yes" is selected display the "Please describe how you'd like them involved (family vow, unity ritual, gift presentation, etc.)" ALSO display a "Organizer for Children" box.  If "Yes" is selected these are required for payment.
+
+For "Pet Involvement" display the Yes/No choices.  Default to "No"
+If "Yes" is chosen display the following text as a popup with an "Accept/Decline" choice (similar to the BYOB option on the contact page).
+
+"Dogs Welcome
+
+We're happy to include your furry family members in your special day! Dogs are very welcome to attend your Ceremony (not permitted in the Reception room), provided, of course, they are well-behaved and remain leashed throughout the event. For everyone's safety, we cannot accommodate dogs showing signs of aggression.
+
+Service dogs performing work or tasks for individuals with disabilities are always welcome.
+
+At this time, only dogs are permitted on the premises."
+
+If "Agree" display the text boxes:
+
+"Name, role, and handler details (Note: pets only allowed in chapel area, not reception)" required for payment.

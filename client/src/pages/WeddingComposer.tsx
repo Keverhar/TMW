@@ -101,10 +101,16 @@ export default function WeddingComposer() {
     unityCandle: false,
     sandCeremony: false,
     handfasting: false,
+    guestReadingOrSongChoice: "no",
     guestReadingOrSong: "",
     guestReadingOrSongName: "",
+    officiantPassageChoice: "no",
     officiantPassage: "",
+    includingChildChoice: "no",
     includingChild: "",
+    childrenOrganizer: "",
+    petInvolvementChoice: "no",
+    petPolicyAccepted: false,
     petInvolvement: "",
     ceremonySpecialRequests: "",
 
@@ -193,6 +199,7 @@ export default function WeddingComposer() {
     customerPhone: "",
     smsConsent: false,
     mailingAddress: "",
+    paymentMethod: "credit_card",
     termsAccepted: false,
 
     // Add-ons
@@ -266,6 +273,11 @@ export default function WeddingComposer() {
       setCurrentStep(currentStep - 1);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+  };
+
+  const navigateToStep = (stepNumber: number) => {
+    setCurrentStep(stepNumber);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleSubmit = async () => {
@@ -476,10 +488,16 @@ export default function WeddingComposer() {
         unityCandle: composer.unityCandle || false,
         sandCeremony: composer.sandCeremony || false,
         handfasting: composer.handfasting || false,
+        guestReadingOrSongChoice: composer.guestReadingOrSongChoice || "no",
         guestReadingOrSong: composer.guestReadingOrSong || "",
         guestReadingOrSongName: composer.guestReadingOrSongName || "",
+        officiantPassageChoice: composer.officiantPassageChoice || "no",
         officiantPassage: composer.officiantPassage || "",
+        includingChildChoice: composer.includingChildChoice || "no",
         includingChild: composer.includingChild || "",
+        childrenOrganizer: composer.childrenOrganizer || "",
+        petInvolvementChoice: composer.petInvolvementChoice || "no",
+        petPolicyAccepted: composer.petPolicyAccepted || false,
         petInvolvement: composer.petInvolvement || "",
         ceremonySpecialRequests: composer.ceremonySpecialRequests || "",
         walkingDownAisle: composer.walkingDownAisle || "",
@@ -554,6 +572,7 @@ export default function WeddingComposer() {
         customerPhone: composer.customerPhone || "",
         smsConsent: composer.smsConsent || false,
         mailingAddress: composer.mailingAddress || "",
+        paymentMethod: composer.paymentMethod || "credit_card",
         termsAccepted: composer.termsAccepted || false,
         photoBookAddon: composer.photoBookAddon || false,
         photoBookQuantity: composer.photoBookQuantity || 1,
@@ -744,7 +763,7 @@ export default function WeddingComposer() {
                 return (
                   <button
                     key={step.id}
-                    onClick={() => setCurrentStep(stepNumber)}
+                    onClick={() => navigateToStep(stepNumber)}
                     data-testid={`button-step-${stepNumber}`}
                     className={`px-2 py-0.5 rounded-md text-xs font-medium transition-colors whitespace-nowrap ${colorClasses}`}
                   >
@@ -851,10 +870,16 @@ export default function WeddingComposer() {
               unityCandle={formData.unityCandle}
               sandCeremony={formData.sandCeremony}
               handfasting={formData.handfasting}
+              guestReadingOrSongChoice={formData.guestReadingOrSongChoice}
               guestReadingOrSong={formData.guestReadingOrSong}
               guestReadingOrSongName={formData.guestReadingOrSongName}
+              officiantPassageChoice={formData.officiantPassageChoice}
               officiantPassage={formData.officiantPassage}
+              includingChildChoice={formData.includingChildChoice}
               includingChild={formData.includingChild}
+              childrenOrganizer={formData.childrenOrganizer}
+              petInvolvementChoice={formData.petInvolvementChoice}
+              petPolicyAccepted={formData.petPolicyAccepted}
               petInvolvement={formData.petInvolvement}
               ceremonySpecialRequests={formData.ceremonySpecialRequests}
               onChange={updateField}
@@ -976,6 +1001,7 @@ export default function WeddingComposer() {
               customerPhone={formData.customerPhone}
               smsConsent={formData.smsConsent}
               mailingAddress={formData.mailingAddress}
+              paymentMethod={formData.paymentMethod}
               termsAccepted={formData.termsAccepted}
               photoBookAddon={formData.photoBookAddon}
               photoBookQuantity={formData.photoBookQuantity}

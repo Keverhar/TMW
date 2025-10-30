@@ -61,10 +61,16 @@ export const weddingComposers = pgTable("wedding_composers", {
   unityCandle: boolean("unity_candle").default(false),
   sandCeremony: boolean("sand_ceremony").default(false),
   handfasting: boolean("handfasting").default(false),
+  guestReadingOrSongChoice: text("guest_reading_or_song_choice").default("no"),
   guestReadingOrSong: text("guest_reading_or_song"),
   guestReadingOrSongName: text("guest_reading_or_song_name"),
+  officiantPassageChoice: text("officiant_passage_choice").default("no"),
   officiantPassage: text("officiant_passage"),
+  includingChildChoice: text("including_child_choice").default("no"),
   includingChild: text("including_child"),
+  childrenOrganizer: text("children_organizer"),
+  petInvolvementChoice: text("pet_involvement_choice").default("no"),
+  petPolicyAccepted: boolean("pet_policy_accepted").default(false),
   petInvolvement: text("pet_involvement"),
   ceremonySpecialRequests: text("ceremony_special_requests"),
   
@@ -153,6 +159,7 @@ export const weddingComposers = pgTable("wedding_composers", {
   customerPhone: text("customer_phone"),
   smsConsent: boolean("sms_consent").default(false),
   mailingAddress: text("mailing_address"),
+  paymentMethod: text("payment_method").default("credit_card"),
   
   // Pricing & Add-ons
   basePackagePrice: integer("base_package_price").notNull(),

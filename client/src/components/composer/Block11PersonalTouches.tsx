@@ -257,32 +257,28 @@ export default function Block11PersonalTouches({
           <CardDescription>Are you planning a special send-off vehicle?</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex gap-3">
-            <Button
-              type="button"
+          <div className="flex gap-2">
+            <Badge
               variant={departureVehicleChoice === 'yes' ? 'default' : 'outline'}
-              onClick={() => {
-                onChange('departureVehicleChoice', 'yes');
-              }}
-              data-testid="button-departure-vehicle-yes"
-              className="flex-1"
-              disabled={readOnly}
+              onClick={() => !readOnly && onChange('departureVehicleChoice', 'yes')}
+              data-testid="badge-departure-vehicle-yes"
+              className={`cursor-pointer ${readOnly ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               Yes
-            </Button>
-            <Button
-              type="button"
+            </Badge>
+            <Badge
               variant={departureVehicleChoice === 'no' ? 'default' : 'outline'}
               onClick={() => {
-                onChange('departureVehicleChoice', 'no');
-                onChange('departureVehicle', '');
+                if (!readOnly) {
+                  onChange('departureVehicleChoice', 'no');
+                  onChange('departureVehicle', '');
+                }
               }}
-              data-testid="button-departure-vehicle-no"
-              className="flex-1"
-              disabled={readOnly}
+              data-testid="badge-departure-vehicle-no"
+              className={`cursor-pointer ${readOnly ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               No
-            </Button>
+            </Badge>
           </div>
 
           {departureVehicleChoice === 'yes' && (
@@ -301,6 +297,12 @@ export default function Block11PersonalTouches({
                 If arranged, our team will help guide your guests outside and ensure your departure goes smoothly.
               </p>
             </div>
+          )}
+
+          {departureVehicleChoice === 'no' && (
+            <p className="text-xs text-muted-foreground">
+              No problem. If you change your mind, just let us know and our team will help guide your guests outside and ensure your departure goes smoothly.
+            </p>
           )}
         </CardContent>
       </Card>
