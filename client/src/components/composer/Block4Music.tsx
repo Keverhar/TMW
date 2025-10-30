@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Music, Info, Music2 } from "lucide-react";
+import { Music, Info, Music2, Lock } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -18,6 +18,7 @@ interface Block4MusicProps {
   playlistUrl: string;
   musicCompletionStatus: string;
   onChange: (field: string, value: string) => void;
+  readOnly?: boolean;
 }
 
 const processionalOptions = [
@@ -77,7 +78,8 @@ export default function Block4Music({
   lastDanceSong,
   playlistUrl,
   musicCompletionStatus,
-  onChange
+  onChange,
+  readOnly = false
 }: Block4MusicProps) {
   const { toast } = useToast();
   
@@ -186,6 +188,18 @@ export default function Block4Music({
         </p>
       </div>
 
+      {readOnly && (
+        <div className="flex gap-3 items-start bg-amber-50 dark:bg-amber-950 p-4 rounded-md border border-amber-200 dark:border-amber-800">
+          <Lock className="h-5 w-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+          <div>
+            <p className="font-medium text-amber-900 dark:text-amber-100">Available with Full Wedding Package</p>
+            <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
+              This section is included in our Saturday, Friday/Sunday wedding packages. You can view all options but selections are not available for elopement and vow renewal packages.
+            </p>
+          </div>
+        </div>
+      )}
+
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
@@ -198,7 +212,7 @@ export default function Block4Music({
           <div className="space-y-3">
             <Label htmlFor="processional-song">Processional</Label>
             <div className="flex gap-2">
-              <Select value={processionalSelection} onValueChange={handleProcessionalChange}>
+              <Select value={processionalSelection} onValueChange={handleProcessionalChange} disabled={readOnly}>
                 <SelectTrigger id="processional-song" data-testid="select-processional-song" className="flex-1">
                   <SelectValue placeholder="Select a song or custom option" />
                 </SelectTrigger>
@@ -235,6 +249,7 @@ export default function Block4Music({
                   value={processionalSong}
                   onChange={(e) => onChange('processionalSong', e.target.value)}
                   className="flex-1"
+                  disabled={readOnly}
                 />
                 {processionalSong && processionalSong.includes('spotify.com') && (
                   <Button
@@ -254,7 +269,7 @@ export default function Block4Music({
           <div className="space-y-3">
             <Label htmlFor="recessional-song">Recessional</Label>
             <div className="flex gap-2">
-              <Select value={recessionalSelection} onValueChange={handleRecessionalChange}>
+              <Select value={recessionalSelection} onValueChange={handleRecessionalChange} disabled={readOnly}>
                 <SelectTrigger id="recessional-song" data-testid="select-recessional-song" className="flex-1">
                   <SelectValue placeholder="Select a song or custom option" />
                 </SelectTrigger>
@@ -291,6 +306,7 @@ export default function Block4Music({
                   value={recessionalSong}
                   onChange={(e) => onChange('recessionalSong', e.target.value)}
                   className="flex-1"
+                  disabled={readOnly}
                 />
                 {recessionalSong && recessionalSong.includes('spotify.com') && (
                   <Button
@@ -321,7 +337,7 @@ export default function Block4Music({
           <div className="space-y-3">
             <Label htmlFor="reception-entrance-song">Reception Entrance</Label>
             <div className="flex gap-2">
-              <Select value={receptionEntranceSelection} onValueChange={handleReceptionEntranceChange}>
+              <Select value={receptionEntranceSelection} onValueChange={handleReceptionEntranceChange} disabled={readOnly}>
                 <SelectTrigger id="reception-entrance-song" data-testid="select-reception-entrance-song" className="flex-1">
                   <SelectValue placeholder="Select a song or custom option" />
                 </SelectTrigger>
@@ -358,6 +374,7 @@ export default function Block4Music({
                   value={receptionEntranceSong}
                   onChange={(e) => onChange('receptionEntranceSong', e.target.value)}
                   className="flex-1"
+                  disabled={readOnly}
                 />
                 {receptionEntranceSong && receptionEntranceSong.includes('spotify.com') && (
                   <Button
@@ -377,7 +394,7 @@ export default function Block4Music({
           <div className="space-y-3">
             <Label htmlFor="cake-cutting-song">Cake Cutting</Label>
             <div className="flex gap-2">
-              <Select value={cakeCuttingSelection} onValueChange={handleCakeCuttingChange}>
+              <Select value={cakeCuttingSelection} onValueChange={handleCakeCuttingChange} disabled={readOnly}>
                 <SelectTrigger id="cake-cutting-song" data-testid="select-cake-cutting-song" className="flex-1">
                   <SelectValue placeholder="Select a song or custom option" />
                 </SelectTrigger>
@@ -414,6 +431,7 @@ export default function Block4Music({
                   value={cakeCuttingSong}
                   onChange={(e) => onChange('cakeCuttingSong', e.target.value)}
                   className="flex-1"
+                  disabled={readOnly}
                 />
                 {cakeCuttingSong && cakeCuttingSong.includes('spotify.com') && (
                   <Button
@@ -433,7 +451,7 @@ export default function Block4Music({
           <div className="space-y-3">
             <Label htmlFor="father-daughter-dance-song">Father-Daughter Dance (Optional)</Label>
             <div className="flex gap-2">
-              <Select value={fatherDaughterDanceSelection} onValueChange={handleFatherDaughterDanceChange}>
+              <Select value={fatherDaughterDanceSelection} onValueChange={handleFatherDaughterDanceChange} disabled={readOnly}>
                 <SelectTrigger id="father-daughter-dance-song" data-testid="select-father-daughter-dance-song" className="flex-1">
                   <SelectValue placeholder="Select a song or custom option" />
                 </SelectTrigger>
@@ -470,6 +488,7 @@ export default function Block4Music({
                   value={fatherDaughterDanceSong}
                   onChange={(e) => onChange('fatherDaughterDanceSong', e.target.value)}
                   className="flex-1"
+                  disabled={readOnly}
                 />
                 {fatherDaughterDanceSong && fatherDaughterDanceSong.includes('spotify.com') && (
                   <Button
@@ -489,7 +508,7 @@ export default function Block4Music({
           <div className="space-y-3">
             <Label htmlFor="last-dance-song">Private Last Dance</Label>
             <div className="flex gap-2">
-              <Select value={lastDanceSelection} onValueChange={handleLastDanceChange}>
+              <Select value={lastDanceSelection} onValueChange={handleLastDanceChange} disabled={readOnly}>
                 <SelectTrigger id="last-dance-song" data-testid="select-last-dance-song" className="flex-1">
                   <SelectValue placeholder="Select a song or custom option" />
                 </SelectTrigger>
@@ -526,6 +545,7 @@ export default function Block4Music({
                   value={lastDanceSong}
                   onChange={(e) => onChange('lastDanceSong', e.target.value)}
                   className="flex-1"
+                  disabled={readOnly}
                 />
                 {lastDanceSong && lastDanceSong.includes('spotify.com') && (
                   <Button
@@ -558,6 +578,7 @@ export default function Block4Music({
               placeholder="Paste your Spotify playlist URL here"
               value={playlistUrl}
               onChange={(e) => onChange('playlistUrl', e.target.value)}
+              disabled={readOnly}
             />
           </div>
 
@@ -583,6 +604,7 @@ export default function Block4Music({
                 data-testid="checkbox-music-all-done"
                 checked={musicCompletionStatus === 'all-done'}
                 onCheckedChange={() => handleCompletionStatusChange('all-done')}
+                disabled={readOnly}
               />
               <Label htmlFor="music-all-done" className="cursor-pointer font-medium">
                 All done (for now)
@@ -597,6 +619,7 @@ export default function Block4Music({
                 data-testid="checkbox-music-finish-later"
                 checked={musicCompletionStatus === 'finish-later'}
                 onCheckedChange={() => handleCompletionStatusChange('finish-later')}
+                disabled={readOnly}
               />
               <Label htmlFor="music-finish-later" className="cursor-pointer font-medium">
                 We'll finish this later
