@@ -65,7 +65,7 @@ export default function Block9Photography({
           <div>
             <p className="font-medium text-amber-900 dark:text-amber-100">Available with Full Wedding Package</p>
             <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
-              This section is included in our Saturday, Friday/Sunday wedding packages. You can view all options but selections are not available for elopement and vow renewal packages.
+              The Elopement and Vow Renewal packages include a standard photography set but you are welcome to review these options that are available with the Modest Wedding packages.
             </p>
           </div>
         </div>

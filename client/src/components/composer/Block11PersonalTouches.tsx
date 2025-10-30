@@ -67,7 +67,7 @@ export default function Block11PersonalTouches({
           <div>
             <p className="font-medium text-amber-900 dark:text-amber-100">Available with Full Wedding Package</p>
             <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
-              This section is included in our Saturday, Friday/Sunday wedding packages. You can view all options but selections are not available for elopement and vow renewal packages.
+              This section is included in our Saturday, Friday/Sunday wedding packages. You can view all options but selections are not available for Elopement and Vow Renewal packages.
             </p>
           </div>
         </div>
