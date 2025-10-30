@@ -53,6 +53,7 @@ export const weddingComposers = pgTable("wedding_composers", {
   toastsSpeechesAnnouncement: text("toasts_speeches_announcement"),
   guestCallouts: text("guest_callouts"),
   vibeCheck: text("vibe_check"),
+  announcementsCompletionStatus: text("announcements_completion_status"),
   
   // Block 6: Ceremony Preferences
   ceremonyScript: text("ceremony_script").notNull(),

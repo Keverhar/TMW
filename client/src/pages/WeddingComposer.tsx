@@ -93,6 +93,7 @@ export default function WeddingComposer() {
     toastsSpeechesAnnouncement: "",
     guestCallouts: "",
     vibeCheck: "",
+    announcementsCompletionStatus: "",
 
     // Block 6: Ceremony
     ceremonyScript: "simple-modern",
@@ -304,6 +305,16 @@ export default function WeddingComposer() {
       return;
     }
 
+    // Require announcements completion status
+    if (!formData.announcementsCompletionStatus) {
+      toast({
+        title: "Announcements selection status required",
+        description: "Please check 'All done (for now)' or 'We'll finish this later' in the Announcements section before proceeding to payment.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     // Require account creation before payment
     if (!userAccount) {
       toast({
@@ -380,6 +391,7 @@ export default function WeddingComposer() {
         toastsSpeechesAnnouncement: composer.toastsSpeechesAnnouncement || "",
         guestCallouts: composer.guestCallouts || "",
         vibeCheck: composer.vibeCheck || "",
+        announcementsCompletionStatus: composer.announcementsCompletionStatus || "",
         ceremonyScript: composer.ceremonyScript || "simple-modern",
         unityCandle: composer.unityCandle || false,
         sandCeremony: composer.sandCeremony || false,
@@ -626,6 +638,7 @@ export default function WeddingComposer() {
               toastsSpeechesAnnouncement={formData.toastsSpeechesAnnouncement}
               guestCallouts={formData.guestCallouts}
               vibeCheck={formData.vibeCheck}
+              announcementsCompletionStatus={formData.announcementsCompletionStatus}
               onChange={updateField}
             />
           )}

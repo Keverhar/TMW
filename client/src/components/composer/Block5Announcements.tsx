@@ -2,7 +2,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Mic, Sparkles } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Mic, Sparkles, Info } from "lucide-react";
 
 interface Block5AnnouncementsProps {
   grandIntroduction: string;
@@ -10,6 +11,7 @@ interface Block5AnnouncementsProps {
   toastsSpeechesAnnouncement: string;
   guestCallouts: string;
   vibeCheck: string;
+  announcementsCompletionStatus: string;
   onChange: (field: string, value: string) => void;
 }
 
@@ -37,8 +39,20 @@ export default function Block5Announcements({
   toastsSpeechesAnnouncement,
   guestCallouts,
   vibeCheck,
+  announcementsCompletionStatus,
   onChange
 }: Block5AnnouncementsProps) {
+  const allRequiredFieldsFilled = grandIntroduction && fatherDaughterDanceAnnouncement && toastsSpeechesAnnouncement && vibeCheck;
+  const someFieldsEmpty = !grandIntroduction || !fatherDaughterDanceAnnouncement || !toastsSpeechesAnnouncement || !vibeCheck;
+
+  const handleCompletionStatusChange = (status: string) => {
+    if (announcementsCompletionStatus === status) {
+      onChange('announcementsCompletionStatus', '');
+    } else {
+      onChange('announcementsCompletionStatus', status);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div>
@@ -144,6 +158,49 @@ export default function Block5Announcements({
               </div>
             ))}
           </RadioGroup>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Announcements Selection Status</CardTitle>
+          <CardDescription>Let us know if you're ready to move forward or need more time</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {allRequiredFieldsFilled && (
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="announcements-all-done"
+                data-testid="checkbox-announcements-all-done"
+                checked={announcementsCompletionStatus === 'all-done'}
+                onCheckedChange={() => handleCompletionStatusChange('all-done')}
+              />
+              <Label htmlFor="announcements-all-done" className="cursor-pointer font-medium">
+                All done (for now)
+              </Label>
+            </div>
+          )}
+          
+          {someFieldsEmpty && (
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="announcements-finish-later"
+                data-testid="checkbox-announcements-finish-later"
+                checked={announcementsCompletionStatus === 'finish-later'}
+                onCheckedChange={() => handleCompletionStatusChange('finish-later')}
+              />
+              <Label htmlFor="announcements-finish-later" className="cursor-pointer font-medium">
+                We'll finish this later
+              </Label>
+            </div>
+          )}
+
+          <div className="flex gap-2 items-start bg-amber-50 dark:bg-amber-950 p-3 rounded-md">
+            <Info className="h-4 w-4 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+            <p className="text-sm text-amber-900 dark:text-amber-100">
+              <strong>Required for payment:</strong> Please check one of the completion status boxes above before proceeding.
+            </p>
+          </div>
         </CardContent>
       </Card>
     </div>
