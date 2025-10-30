@@ -7,7 +7,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { DollarSign, User, FileText, Info, CreditCard } from "lucide-react";
+import { DollarSign, User, FileText, Info } from "lucide-react";
 
 interface Block13ContactPaymentProps {
   customerName: string;
@@ -229,49 +229,6 @@ export default function Block13ContactPayment({
           </CardContent>
         </Card>
       )}
-
-      <Card>
-        <CardHeader>
-          <div className="flex items-center gap-2">
-            <CreditCard className="h-5 w-5" />
-            <CardTitle>Payment Method</CardTitle>
-          </div>
-          <CardDescription>Choose how you'd like to pay</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          <div className="flex gap-2">
-            <Badge
-              variant={paymentMethod === 'credit_card' ? 'default' : 'outline'}
-              onClick={() => onChange('paymentMethod', 'credit_card')}
-              data-testid="badge-payment-credit-card"
-              className="cursor-pointer flex-1 justify-center py-2 text-sm"
-            >
-              Credit Card
-            </Badge>
-            <Badge
-              variant={paymentMethod === 'ach' ? 'default' : 'outline'}
-              onClick={() => onChange('paymentMethod', 'ach')}
-              data-testid="badge-payment-ach"
-              className="cursor-pointer flex-1 justify-center py-2 text-sm"
-            >
-              Pay by ACH (Bank Transfer)
-            </Badge>
-          </div>
-          {paymentMethod === 'ach' && (
-            <div className="flex gap-2 items-start bg-green-50 dark:bg-green-950 p-3 rounded-md border border-green-200 dark:border-green-800">
-              <Info className="h-4 w-4 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
-              <div className="text-sm text-green-900 dark:text-green-100 space-y-2">
-                <p className="font-medium">Pay by ACH (Bank Transfer)</p>
-                <ul className="text-xs text-green-700 dark:text-green-300 space-y-1">
-                  <li>• Simple and secure: pay directly from your bank account using your routing and account number.</li>
-                  <li>• Funds take 2–3 days to clear, but your date is secured once payment is received.</li>
-                  <li><strong>• Special savings: Receive a $50 discount on your wedding package when you choose ACH.</strong></li>
-                </ul>
-              </div>
-            </div>
-          )}
-        </CardContent>
-      </Card>
 
       <Card>
         <CardHeader>
