@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation, useRoute } from "wouter";
 import { useQuery } from "@tanstack/react-query";
+import { queryClient } from "@/lib/queryClient";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,6 +29,28 @@ export default function Payment() {
     queryKey: ["/api/wedding-composers", composerId],
     enabled: !!composerId,
   });
+
+  // Handle payment method change and save to database
+  const handlePaymentMethodChange = async (method: "card" | "paypal" | "affirm" | "ach") => {
+    setPaymentMethod(method);
+    
+    // Save the payment method to the database immediately
+    if (composerId) {
+      try {
+        const paymentMethodValue = method === 'card' ? 'credit_card' : method;
+        await fetch(`/api/wedding-composers/${composerId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ paymentMethod: paymentMethodValue }),
+        });
+        
+        // Invalidate the query cache to refresh composer data
+        queryClient.invalidateQueries({ queryKey: ["/api/wedding-composers", composerId] });
+      } catch (error) {
+        console.error('Error saving payment method:', error);
+      }
+    }
+  };
 
   // Calculate balance due (total - amount already paid) with ACH or Affirm discount if applicable
   const calculateTotalPrice = () => {
@@ -254,7 +277,7 @@ export default function Payment() {
                   {/* Payment Method Selection */}
                   <div className="space-y-3">
                     <Label>Payment Method</Label>
-                    <RadioGroup value={paymentMethod} onValueChange={(value: any) => setPaymentMethod(value)}>
+                    <RadioGroup value={paymentMethod} onValueChange={(value: any) => handlePaymentMethodChange(value)}>
                       <div className="flex items-center space-x-2 p-3 border rounded-md hover-elevate">
                         <RadioGroupItem value="card" id="card" data-testid="radio-card" />
                         <Label htmlFor="card" className="flex-1 cursor-pointer">
