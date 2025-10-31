@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { getAddonPrice } from "@shared/pricing";
 import { ShoppingBag } from "lucide-react";
 
@@ -24,12 +27,31 @@ export default function BlockAddOns({
   onChange,
   eventType,
 }: BlockAddOnsProps) {
+  const [showByobDialog, setShowByobDialog] = useState(false);
   const isSimplifiedFlow = eventType === 'modest-elopement' || eventType === 'vow-renewal';
   
   const photoBookPrice = getAddonPrice('photoBook');
   const extraTimePrice = getAddonPrice('extraTime');
   const byobBarPrice = getAddonPrice('byobBar');
   const rehearsalPrice = getAddonPrice('rehearsal');
+
+  const handleByobChange = (checked: boolean) => {
+    if (checked) {
+      setShowByobDialog(true);
+    } else {
+      onChange('byobBarAddon', false);
+    }
+  };
+
+  const handleByobAccept = () => {
+    onChange('byobBarAddon', true);
+    setShowByobDialog(false);
+  };
+
+  const handleByobDecline = () => {
+    onChange('byobBarAddon', false);
+    setShowByobDialog(false);
+  };
 
   return (
     <div className="space-y-6">
@@ -107,7 +129,7 @@ export default function BlockAddOns({
                 <Checkbox
                   id="byob-bar-addon"
                   checked={byobBarAddon}
-                  onCheckedChange={(checked) => onChange('byobBarAddon', checked as boolean)}
+                  onCheckedChange={(checked) => handleByobChange(checked as boolean)}
                   data-testid="checkbox-byob-bar-addon"
                 />
                 <div className="flex-1">
@@ -145,6 +167,25 @@ export default function BlockAddOns({
           )}
         </CardContent>
       </Card>
+
+      <Dialog open={showByobDialog} onOpenChange={setShowByobDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Legal Stuff</DialogTitle>
+            <DialogDescription>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex gap-2">
+            <Button variant="outline" onClick={handleByobDecline} data-testid="button-byob-decline">
+              Decline
+            </Button>
+            <Button onClick={handleByobAccept} data-testid="button-byob-accept">
+              Accept
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
