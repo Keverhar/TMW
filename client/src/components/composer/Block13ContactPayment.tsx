@@ -268,21 +268,21 @@ export default function Block13ContactPayment({
 
             <div className="border-t my-2"></div>
 
-            <div className="flex justify-between">
+            <div className="flex justify-between" data-testid="row-subtotal">
               <span>Subtotal</span>
-              <span>${((basePackagePrice + addonsTotal) / 100).toFixed(2)}</span>
+              <span data-testid="text-subtotal">${((basePackagePrice + addonsTotal) / 100).toFixed(2)}</span>
             </div>
 
-            <div className="flex justify-between">
+            <div className="flex justify-between" data-testid="row-amount-paid">
               <span>Amount Paid</span>
-              <span>${(amountPaid / 100).toFixed(2)}</span>
+              <span data-testid="text-amount-paid">${(amountPaid / 100).toFixed(2)}</span>
             </div>
 
             <div className="border-t my-2"></div>
 
-            <div className="flex justify-between font-semibold text-lg">
+            <div className="flex justify-between font-semibold text-lg" data-testid="row-balance-due">
               <span>Balance Due</span>
-              <span>${((basePackagePrice + addonsTotal - amountPaid) / 100).toFixed(2)}</span>
+              <span data-testid="text-balance-due">${((basePackagePrice + addonsTotal - amountPaid) / 100).toFixed(2)}</span>
             </div>
           </div>
         </CardContent>
