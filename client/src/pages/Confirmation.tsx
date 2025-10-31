@@ -72,6 +72,8 @@ export default function Confirmation() {
                     <p className="font-medium">Event Date & Time</p>
                     <p className="text-sm text-muted-foreground">
                       {composer.preferredDate || "To be determined"} at {composer.timeSlot || "TBD"}
+                      {(composer.eventType === 'modest-wedding' || composer.eventType === 'other') && 
+                        " (Bride can arrive 30 minutes before the start time.)"}
                     </p>
                   </div>
                 </div>
