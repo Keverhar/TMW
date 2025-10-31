@@ -1078,40 +1078,28 @@ export default function WeddingComposer() {
             <div className="flex flex-wrap gap-2 flex-1 min-w-0">
               {steps.map((step, index) => {
                 const stepNumber = index + 1;
-                const completionStatus = getBlockCompletionStatus(step.id);
                 const isCurrentStep = currentStep === stepNumber;
                 const isReadOnly = isBlockReadOnly(step.id);
                 
-                // Determine color based on completion status or read-only status
+                // Determine color based on current step or read-only status
                 let colorClasses = '';
                 if (isReadOnly) {
                   // Disabled blocks: dark grey background with dark red text
                   colorClasses = 'bg-[#4A4A4A] text-[#8B0000]';
+                } else if (isCurrentStep) {
+                  // Current step: highlighted with primary color
+                  colorClasses = 'bg-primary text-primary-foreground';
                 } else {
-                  // Enabled blocks: all have bright white text
-                  switch (completionStatus) {
-                    case 'complete':
-                      colorClasses = 'bg-green-600/80 text-[#FFFFFF] hover-elevate';
-                      break;
-                    case 'partial':
-                      colorClasses = 'bg-yellow-600/80 text-[#FFFFFF] hover-elevate';
-                      break;
-                    case 'none':
-                    default:
-                      colorClasses = 'bg-muted text-[#FFFFFF] hover-elevate';
-                      break;
-                  }
+                  // Other enabled steps: neutral muted color
+                  colorClasses = 'bg-muted text-[#FFFFFF] hover-elevate';
                 }
-                
-                // Add border to indicate current step
-                const borderClass = isCurrentStep ? 'ring-2 ring-primary ring-offset-2 ring-offset-background' : '';
                 
                 return (
                   <button
                     key={step.id}
                     onClick={() => navigateToStep(stepNumber)}
                     data-testid={`button-step-${stepNumber}`}
-                    className={`px-2 py-0.5 rounded-md text-xs font-medium transition-colors whitespace-nowrap ${colorClasses} ${borderClass}`}
+                    className={`px-2 py-0.5 rounded-md text-xs font-medium transition-colors whitespace-nowrap ${colorClasses}`}
                   >
                     <span className="block">{step.title}</span>
                   </button>
