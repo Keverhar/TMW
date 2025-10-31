@@ -333,6 +333,18 @@ export default function Block13ContactPayment({
               <span data-testid="text-subtotal">${((basePackagePrice + addonsTotal) / 100).toFixed(2)}</span>
             </div>
 
+            <div className="flex justify-between" data-testid="row-tax">
+              <span>Tax</span>
+              <span data-testid="text-tax">$0.00</span>
+            </div>
+
+            <div className="border-t my-2"></div>
+
+            <div className="flex justify-between font-semibold" data-testid="row-total">
+              <span>Total</span>
+              <span data-testid="text-total">${((basePackagePrice + addonsTotal - discount) / 100).toFixed(2)}</span>
+            </div>
+
             <div className="flex justify-between" data-testid="row-amount-paid">
               <span>Amount Paid</span>
               <span data-testid="text-amount-paid">${(amountPaid / 100).toFixed(2)}</span>
