@@ -63,11 +63,22 @@ export default function Block13ContactPayment({
     if (!preferredDate || !timeSlot) return false;
     
     // Parse the date to check if it's a Saturday
-    const date = new Date(preferredDate);
+    // Add time component to ensure correct timezone parsing
+    const date = new Date(preferredDate + 'T12:00:00');
     const isSaturday = date.getDay() === 6;
     
     // Check if time is 6:00 PM
     const is6PM = timeSlot === '6:00 PM';
+    
+    console.log('Extra Time Eligibility Check:', {
+      preferredDate,
+      timeSlot,
+      parsedDate: date,
+      dayOfWeek: date.getDay(),
+      isSaturday,
+      is6PM,
+      eligible: isSaturday && is6PM
+    });
     
     return isSaturday && is6PM;
   };
