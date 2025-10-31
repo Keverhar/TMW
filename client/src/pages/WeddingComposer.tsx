@@ -29,6 +29,7 @@ import Block9Photography from "@/components/composer/Block9Photography";
 import Block10Slideshow from "@/components/composer/Block10Slideshow";
 import Block11PersonalTouches from "@/components/composer/Block11PersonalTouches";
 import Block12EviteSaveTheDate from "@/components/composer/Block12EviteSaveTheDate";
+import BlockAddOns from "@/components/composer/BlockAddOns";
 import Block13ContactPayment from "@/components/composer/Block13ContactPayment";
 
 const allSteps = [
@@ -43,7 +44,8 @@ const allSteps = [
   { id: 9, title: 'Slideshow', description: 'Upload photos', availableFor: ['modest-wedding', 'other'] },
   { id: 10, title: 'Personal Touches', description: 'Special details', availableFor: ['modest-wedding', 'other'] },
   { id: 11, title: 'Evites', description: 'Digital invitations', availableFor: ['all'] },
-  { id: 12, title: 'Contact Information', description: 'Finalize booking', availableFor: ['all'] },
+  { id: 12, title: 'Add-Ons', description: 'Enhance your celebration', availableFor: ['all'] },
+  { id: 13, title: 'Contact Information', description: 'Finalize booking', availableFor: ['all'] },
 ];
 
 const calculatePrice = (eventType: string, dayOfWeek: string): number => {
@@ -1362,6 +1364,17 @@ export default function WeddingComposer() {
             />
           )}
           {steps[currentStep - 1]?.id === 12 && (
+            <BlockAddOns
+              photoBookAddon={formData.photoBookAddon}
+              photoBookQuantity={formData.photoBookQuantity}
+              extraTimeAddon={formData.extraTimeAddon}
+              byobBarAddon={formData.byobBarAddon}
+              rehearsalAddon={formData.rehearsalAddon}
+              onChange={updateField}
+              eventType={formData.eventType}
+            />
+          )}
+          {steps[currentStep - 1]?.id === 13 && (
             <Block13ContactPayment
               customerName={formData.customerName}
               customerName2={formData.customerName2}
