@@ -1144,9 +1144,13 @@ export default function WeddingComposer() {
                       variant="default"
                       size="sm"
                       data-testid="button-auth-menu"
+                      className="h-auto py-2"
                     >
-                      <User className="h-4 w-4 mr-2" />
-                      Login / Create Account
+                      <User className="h-4 w-4 mr-2 self-start mt-0.5" />
+                      <div className="flex flex-col items-start leading-tight">
+                        <span>Login or</span>
+                        <span>Create Account</span>
+                      </div>
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
