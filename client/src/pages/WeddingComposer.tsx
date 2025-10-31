@@ -33,18 +33,17 @@ import Block13ContactPayment from "@/components/composer/Block13ContactPayment";
 
 const allSteps = [
   { id: 1, title: 'Event Type', description: 'Choose your celebration', availableFor: ['all'] },
-  { id: 2, title: 'Date & Time', description: 'Pick your ceremony date', availableFor: ['all'] },
-  { id: 3, title: 'Colors', description: 'Choose your color theme', availableFor: ['modest-wedding', 'other'] },
-  { id: 4, title: 'Music', description: 'Pick your songs', availableFor: ['modest-wedding', 'other'] },
-  { id: 5, title: 'Announcements', description: 'Special moments', availableFor: ['modest-wedding', 'other'] },
-  { id: 6, title: 'Ceremony', description: 'Ceremony preferences', availableFor: ['all'] },
-  { id: 7, title: 'Processional', description: 'Seating & procession', availableFor: ['modest-wedding', 'other'] },
-  { id: 8, title: 'Reception', description: 'Reception details', availableFor: ['modest-wedding', 'other'] },
-  { id: 9, title: 'Photography', description: 'Photo preferences', availableFor: ['modest-wedding', 'other'] },
-  { id: 10, title: 'Slideshow', description: 'Upload photos', availableFor: ['modest-wedding', 'other'] },
-  { id: 11, title: 'Personal Touches', description: 'Special details', availableFor: ['modest-wedding', 'other'] },
-  { id: 12, title: 'Evites', description: 'Digital invitations', availableFor: ['all'] },
-  { id: 13, title: 'Contact Information', description: 'Finalize booking', availableFor: ['all'] },
+  { id: 2, title: 'Colors', description: 'Choose your color theme', availableFor: ['modest-wedding', 'other'] },
+  { id: 3, title: 'Music', description: 'Pick your songs', availableFor: ['modest-wedding', 'other'] },
+  { id: 4, title: 'Announcements', description: 'Special moments', availableFor: ['modest-wedding', 'other'] },
+  { id: 5, title: 'Ceremony', description: 'Ceremony preferences', availableFor: ['all'] },
+  { id: 6, title: 'Processional', description: 'Seating & procession', availableFor: ['modest-wedding', 'other'] },
+  { id: 7, title: 'Reception', description: 'Reception details', availableFor: ['modest-wedding', 'other'] },
+  { id: 8, title: 'Photography', description: 'Photo preferences', availableFor: ['modest-wedding', 'other'] },
+  { id: 9, title: 'Slideshow', description: 'Upload photos', availableFor: ['modest-wedding', 'other'] },
+  { id: 10, title: 'Personal Touches', description: 'Special details', availableFor: ['modest-wedding', 'other'] },
+  { id: 11, title: 'Evites', description: 'Digital invitations', availableFor: ['all'] },
+  { id: 12, title: 'Contact Information', description: 'Finalize booking', availableFor: ['all'] },
 ];
 
 const calculatePrice = (eventType: string, dayOfWeek: string): number => {
@@ -1199,22 +1198,14 @@ export default function WeddingComposer() {
             />
           )}
           {steps[currentStep - 1]?.id === 2 && (
-            <Block2DateTime
-              preferredDate={formData.preferredDate}
-              timeSlot={formData.timeSlot}
-              onChange={updateField}
-              eventType={formData.eventType}
-            />
-          )}
-          {steps[currentStep - 1]?.id === 3 && (
             <Block3SignatureColor
               signatureColor={formData.signatureColor}
               colorSwatchDecision={formData.colorSwatchDecision}
               onChange={updateField}
-              readOnly={isBlockReadOnly(3)}
+              readOnly={isBlockReadOnly(2)}
             />
           )}
-          {steps[currentStep - 1]?.id === 4 && (
+          {steps[currentStep - 1]?.id === 3 && (
             <Block4Music
               processionalSong={formData.processionalSong}
               recessionalSong={formData.recessionalSong}
@@ -1225,10 +1216,10 @@ export default function WeddingComposer() {
               playlistUrl={formData.playlistUrl}
               musicCompletionStatus={formData.musicCompletionStatus}
               onChange={updateField}
-              readOnly={isBlockReadOnly(4)}
+              readOnly={isBlockReadOnly(3)}
             />
           )}
-          {steps[currentStep - 1]?.id === 5 && (
+          {steps[currentStep - 1]?.id === 4 && (
             <Block5Announcements
               grandIntroduction={formData.grandIntroduction}
               fatherDaughterDanceAnnouncement={formData.fatherDaughterDanceAnnouncement}
@@ -1237,10 +1228,10 @@ export default function WeddingComposer() {
               vibeCheck={formData.vibeCheck}
               announcementsCompletionStatus={formData.announcementsCompletionStatus}
               onChange={updateField}
-              readOnly={isBlockReadOnly(5)}
+              readOnly={isBlockReadOnly(4)}
             />
           )}
-          {steps[currentStep - 1]?.id === 6 && (
+          {steps[currentStep - 1]?.id === 5 && (
             <Block6Ceremony
               ceremonyScript={formData.ceremonyScript}
               vowChoices={formData.vowChoices}
@@ -1261,10 +1252,10 @@ export default function WeddingComposer() {
               ceremonySpecialRequests={formData.ceremonySpecialRequests}
               onChange={updateField}
               showAddOns={!isSimplifiedFlow}
-              readOnly={isBlockReadOnly(6)}
+              readOnly={isBlockReadOnly(5)}
             />
           )}
-          {steps[currentStep - 1]?.id === 7 && (
+          {steps[currentStep - 1]?.id === 6 && (
             <Block7Processional
               walkingDownAisle={formData.walkingDownAisle}
               escortName={formData.escortName}
@@ -1285,10 +1276,10 @@ export default function WeddingComposer() {
               processionalSpecialInstructionsNA={formData.processionalSpecialInstructionsNA}
               processionalCompletionStatus={formData.processionalCompletionStatus}
               onChange={updateField}
-              readOnly={isBlockReadOnly(7)}
+              readOnly={isBlockReadOnly(6)}
             />
           )}
-          {steps[currentStep - 1]?.id === 8 && (
+          {steps[currentStep - 1]?.id === 7 && (
             <Block8Reception
               firstDance={formData.firstDance}
               firstDanceNA={formData.firstDanceNA}
@@ -1303,10 +1294,10 @@ export default function WeddingComposer() {
               receptionSpecialRequestsNA={formData.receptionSpecialRequestsNA}
               receptionCompletionStatus={formData.receptionCompletionStatus}
               onChange={updateField}
-              readOnly={isBlockReadOnly(8)}
+              readOnly={isBlockReadOnly(7)}
             />
           )}
-          {steps[currentStep - 1]?.id === 9 && (
+          {steps[currentStep - 1]?.id === 8 && (
             <Block9Photography
               mustHaveShots={formData.mustHaveShots}
               mustHaveShotsNA={formData.mustHaveShotsNA}
@@ -1318,10 +1309,10 @@ export default function WeddingComposer() {
               photographySpecialRequestsNA={formData.photographySpecialRequestsNA}
               photographyCompletionStatus={formData.photographyCompletionStatus}
               onChange={updateField}
-              readOnly={isBlockReadOnly(9)}
+              readOnly={isBlockReadOnly(8)}
             />
           )}
-          {steps[currentStep - 1]?.id === 10 && (
+          {steps[currentStep - 1]?.id === 9 && (
             <Block10Slideshow
               slideshowPhotos={formData.slideshowPhotos}
               slideshowPhotosNA={formData.slideshowPhotosNA}
@@ -1329,10 +1320,10 @@ export default function WeddingComposer() {
               engagementPhotosNA={formData.engagementPhotosNA}
               slideshowCompletionStatus={formData.slideshowCompletionStatus}
               onChange={updateField}
-              readOnly={isBlockReadOnly(10)}
+              readOnly={isBlockReadOnly(9)}
             />
           )}
-          {steps[currentStep - 1]?.id === 11 && (
+          {steps[currentStep - 1]?.id === 10 && (
             <Block11PersonalTouches
               freshFlorals={formData.freshFlorals}
               freshFloralsNA={formData.freshFloralsNA}
@@ -1348,10 +1339,10 @@ export default function WeddingComposer() {
               personalTouchesSpecialInstructionsNA={formData.personalTouchesSpecialInstructionsNA}
               personalTouchesCompletionStatus={formData.personalTouchesCompletionStatus}
               onChange={updateField}
-              readOnly={isBlockReadOnly(11)}
+              readOnly={isBlockReadOnly(10)}
             />
           )}
-          {steps[currentStep - 1]?.id === 12 && (
+          {steps[currentStep - 1]?.id === 11 && (
             <Block12EviteSaveTheDate
               eviteDesignStyle={formData.eviteDesignStyle}
               eviteHeaderText={formData.eviteHeaderText}
@@ -1367,10 +1358,10 @@ export default function WeddingComposer() {
               customerName2={formData.customerName2}
               preferredDate={formData.preferredDate}
               timeSlot={formData.timeSlot}
-              readOnly={isBlockReadOnly(12)}
+              readOnly={isBlockReadOnly(11)}
             />
           )}
-          {steps[currentStep - 1]?.id === 13 && (
+          {steps[currentStep - 1]?.id === 12 && (
             <Block13ContactPayment
               customerName={formData.customerName}
               customerName2={formData.customerName2}
