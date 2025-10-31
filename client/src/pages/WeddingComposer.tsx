@@ -385,16 +385,6 @@ export default function WeddingComposer() {
       return;
     }
 
-    // For full wedding packages, require ceremony script selection
-    if (!isSimplifiedFlow && !formData.ceremonyScript) {
-      toast({
-        title: "Ceremony script required",
-        description: "Please select a ceremony script before proceeding to payment.",
-        variant: "destructive",
-      });
-      return;
-    }
-
     // Validate ceremony add-ons if "Yes" is selected
     if (formData.guestReadingOrSongChoice === 'yes' && (!formData.guestReadingOrSongName || !formData.guestReadingOrSong)) {
       toast({
