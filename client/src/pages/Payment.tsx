@@ -445,25 +445,49 @@ export default function Payment() {
                 )}
 
                 <div className="pt-4 border-t space-y-2">
-                  <div className="flex justify-between text-sm text-green-600 dark:text-green-400">
+                  <div className="flex justify-between text-sm">
+                    <span>Package</span>
+                    <span>${((composer.basePackagePrice || 0) / 100).toFixed(2)}</span>
+                  </div>
+                  
+                  <div className="flex justify-between text-sm text-green-600 dark:text-green-400" data-testid="row-payment-discount">
                     <span>{paymentMethod === 'ach' ? 'ACH' : paymentMethod === 'affirm' ? 'Affirm' : 'Payment'} Discount</span>
-                    <span>{(paymentMethod === 'ach' ? (composer.achDiscountAmount || 0) : paymentMethod === 'affirm' ? (composer.affirmDiscountAmount || 0) : 0) > 0 ? '-' : ''}${((paymentMethod === 'ach' ? (composer.achDiscountAmount || 0) : paymentMethod === 'affirm' ? (composer.affirmDiscountAmount || 0) : 0) / 100).toFixed(2)}</span>
+                    <span data-testid="text-payment-discount">{(paymentMethod === 'ach' ? (composer.achDiscountAmount || 0) : paymentMethod === 'affirm' ? (composer.affirmDiscountAmount || 0) : 0) > 0 ? '-' : ''}${((paymentMethod === 'ach' ? (composer.achDiscountAmount || 0) : paymentMethod === 'affirm' ? (composer.affirmDiscountAmount || 0) : 0) / 100).toFixed(2)}</span>
                   </div>
+                  
                   <div className="border-t my-2"></div>
-                  <div className="flex justify-between text-sm">
+                  
+                  <div className="flex justify-between text-sm" data-testid="row-subtotal">
                     <span>Subtotal</span>
-                    <span>${(composer.totalPrice / 100).toFixed(2)}</span>
+                    <span data-testid="text-subtotal">${((composer.basePackagePrice || 0) / 100).toFixed(2)}</span>
                   </div>
-                  <div className="flex justify-between text-sm">
+                  
+                  <div className="flex justify-between text-sm" data-testid="row-tax">
+                    <span>Tax</span>
+                    <span data-testid="text-tax">$0.00</span>
+                  </div>
+                  
+                  <div className="border-t my-2"></div>
+                  
+                  <div className="flex justify-between text-sm font-semibold" data-testid="row-total">
+                    <span>Total</span>
+                    <span data-testid="text-total">${(((composer.basePackagePrice || 0) - (paymentMethod === 'ach' ? (composer.achDiscountAmount || 0) : paymentMethod === 'affirm' ? (composer.affirmDiscountAmount || 0) : 0)) / 100).toFixed(2)}</span>
+                  </div>
+                  
+                  <div className="flex justify-between text-sm" data-testid="row-amount-paid">
                     <span>Amount Paid</span>
-                    <span>-${((composer.amountPaid || 0) / 100).toFixed(2)}</span>
+                    <span data-testid="text-amount-paid">${((composer.amountPaid || 0) / 100).toFixed(2)}</span>
                   </div>
+                  
                   <div className="border-t my-2"></div>
-                  <div className="flex justify-between text-sm">
+                  
+                  <div className="flex justify-between text-sm" data-testid="row-balance-due">
                     <span>Balance Due</span>
-                    <span>${((composer.totalPrice - (composer.amountPaid || 0)) / 100).toFixed(2)}</span>
+                    <span data-testid="text-balance-due">${((composer.totalPrice - (composer.amountPaid || 0)) / 100).toFixed(2)}</span>
                   </div>
+                  
                   <div className="border-t my-2"></div>
+                  
                   <div className="flex justify-between font-semibold text-lg">
                     <span>Total Due Now</span>
                     <span className="text-primary">${(displayTotal / 100).toFixed(2)}</span>
