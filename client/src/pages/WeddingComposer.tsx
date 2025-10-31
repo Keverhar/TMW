@@ -297,13 +297,6 @@ export default function WeddingComposer() {
   }, [formData.eventType]);
 
   const saveProgress = async () => {
-    console.log('saveProgress called, payment status:', composerPaymentStatus);
-    console.log('Current formData date/time:', {
-      preferredDate: formData.preferredDate,
-      backupDate: formData.backupDate,
-      timeSlot: formData.timeSlot
-    });
-    
     setIsSaving(true);
     try {
       const dayOfWeek = getDayOfWeek(formData.preferredDate);
@@ -320,7 +313,6 @@ export default function WeddingComposer() {
       // For paid/initiated composers: preserve date/time
       // For pending composers: exclude date/time (only save on payment)
       if (composerPaymentStatus === "completed" || composerPaymentStatus === "payment_initiated") {
-        console.log('Preserving date/time for paid composer');
         composerData = {
           ...formData,
           basePackagePrice: basePrice,
@@ -328,7 +320,6 @@ export default function WeddingComposer() {
           userId: userAccount?.id || null,
         };
       } else {
-        console.log('Excluding date/time for pending composer');
         composerData = {
           ...formData,
           preferredDate: "", // Exclude date/time for unpaid composers
@@ -739,14 +730,6 @@ export default function WeddingComposer() {
                 new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
               )[0];
               
-              console.log('Loading composer:', composer.id, 'with eventType:', composer.eventType);
-              console.log('Composer payment status:', composer.paymentStatus);
-              console.log('Composer date/time data:', {
-                preferredDate: composer.preferredDate,
-                backupDate: composer.backupDate,
-                timeSlot: composer.timeSlot
-              });
-              
               // Load the composer data into the form
               setComposerId(composer.id);
               setComposerPaymentStatus(composer.paymentStatus || "pending");
@@ -873,11 +856,6 @@ export default function WeddingComposer() {
                 extraTimeAddon: composer.extraTimeAddon || false,
                 byobBarAddon: composer.byobBarAddon || false,
                 rehearsalAddon: composer.rehearsalAddon || false,
-              });
-              
-              console.log('Form data set with date/time:', {
-                preferredDate: composer.preferredDate || "",
-                timeSlot: composer.timeSlot || ""
               });
               
               // Release hydration flag after a brief delay to ensure effect has run
