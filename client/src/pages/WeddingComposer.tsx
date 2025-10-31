@@ -289,6 +289,13 @@ export default function WeddingComposer() {
   }, [formData.eventType]);
 
   const saveProgress = async () => {
+    console.log('saveProgress called, payment status:', composerPaymentStatus);
+    console.log('Current formData date/time:', {
+      preferredDate: formData.preferredDate,
+      backupDate: formData.backupDate,
+      timeSlot: formData.timeSlot
+    });
+    
     setIsSaving(true);
     try {
       const dayOfWeek = getDayOfWeek(formData.preferredDate);
@@ -310,6 +317,8 @@ export default function WeddingComposer() {
         totalPrice,
         userId: userAccount?.id || null,
       };
+      
+      console.log('Saving with empty date/time (autosave)');
 
       if (composerId) {
         await apiRequest("PATCH", `/api/wedding-composers/${composerId}`, composerData);
@@ -701,6 +710,12 @@ export default function WeddingComposer() {
               )[0];
               
               console.log('Loading composer:', composer.id, 'with eventType:', composer.eventType);
+              console.log('Composer payment status:', composer.paymentStatus);
+              console.log('Composer date/time data:', {
+                preferredDate: composer.preferredDate,
+                backupDate: composer.backupDate,
+                timeSlot: composer.timeSlot
+              });
               
               // Load the composer data into the form
               setComposerId(composer.id);
@@ -849,16 +864,21 @@ export default function WeddingComposer() {
   // Auto-save when formData changes and user is logged in
   // Only auto-save for pending composers (not payment_initiated or completed)
   const hasDataLoadedRef = useRef(false);
+  const autosaveEnabled = useRef(false);
   
   useEffect(() => {
     // Skip auto-save during initial data load
     if (!hasDataLoadedRef.current) {
       hasDataLoadedRef.current = true;
+      // Enable autosave after a delay to ensure data is fully loaded
+      setTimeout(() => {
+        autosaveEnabled.current = true;
+      }, 2000);
       return;
     }
     
     // Only auto-save for pending composers after user makes changes
-    if (userAccount && composerId && composerPaymentStatus === "pending") {
+    if (autosaveEnabled.current && userAccount && composerId && composerPaymentStatus === "pending") {
       const timeoutId = setTimeout(() => {
         saveProgress();
       }, 1000); // Debounce auto-save
