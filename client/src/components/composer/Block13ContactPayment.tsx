@@ -57,6 +57,10 @@ export default function Block13ContactPayment({
     { key: 'byobBarAddon', label: 'BYOB Bar Setup', price: 40000, available: eventType === 'modest-wedding', hasQuantity: false },
     { key: 'rehearsalAddon', label: 'Rehearsal Hour', price: 15000, available: true, hasQuantity: false }
   ];
+
+  const formatPackageName = (type: string) => {
+    return type.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  };
   
   const handleByobChange = (checked: boolean) => {
     if (checked) {
@@ -241,46 +245,42 @@ export default function Block13ContactPayment({
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <div className="flex justify-between">
-              <span>Package:</span>
-              <span className="font-medium">{eventType}</span>
-            </div>
-            <div className="flex justify-between">
-              <span>Base Price:</span>
-              <span className="font-medium">${(basePackagePrice / 100).toFixed(2)}</span>
+              <span>{formatPackageName(eventType)}</span>
+              <span>${(basePackagePrice / 100).toFixed(2)}</span>
             </div>
 
-            {selectedAddons.length > 0 && (
-              <>
-                <div className="pt-2 border-t">
-                  <p className="text-sm font-medium mb-2">Add-Ons:</p>
-                  {selectedAddons.map(addon => {
-                    const price = addon.key === 'photoBookAddon' && addon.hasQuantity 
-                      ? addon.price * photoBookQuantity 
-                      : addon.price;
-                    const label = addon.key === 'photoBookAddon' && photoBookQuantity > 1
-                      ? `${addon.label} (×${photoBookQuantity})`
-                      : addon.label;
-                    return (
-                      <div key={addon.key} className="flex justify-between text-sm">
-                        <span>{label}</span>
-                        <span>${(price / 100).toFixed(2)}</span>
-                      </div>
-                    );
-                  })}
+            {selectedAddons.map(addon => {
+              const price = addon.key === 'photoBookAddon' && addon.hasQuantity 
+                ? addon.price * photoBookQuantity 
+                : addon.price;
+              const label = addon.key === 'photoBookAddon' && photoBookQuantity > 1
+                ? `${addon.label} (×${photoBookQuantity})`
+                : addon.label;
+              return (
+                <div key={addon.key} className="flex justify-between">
+                  <span>{label}</span>
+                  <span>${(price / 100).toFixed(2)}</span>
                 </div>
-              </>
-            )}
+              );
+            })}
 
-            {achDiscount > 0 && (
-              <div className="flex justify-between pt-2 border-t text-sm text-green-600 dark:text-green-400">
-                <span>ACH Payment Discount:</span>
-                <span>-${(achDiscount / 100).toFixed(2)}</span>
-              </div>
-            )}
+            <div className="border-t my-2"></div>
 
-            <div className="flex justify-between pt-3 border-t text-lg font-semibold">
-              <span>Total:</span>
-              <span className="text-yellow-400 font-bold">${(totalPrice / 100).toFixed(2)}</span>
+            <div className="flex justify-between">
+              <span>Subtotal</span>
+              <span>${((basePackagePrice + addonsTotal) / 100).toFixed(2)}</span>
+            </div>
+
+            <div className="flex justify-between">
+              <span>Amount Paid</span>
+              <span>$0.00</span>
+            </div>
+
+            <div className="border-t my-2"></div>
+
+            <div className="flex justify-between font-semibold text-lg">
+              <span>Balance Due</span>
+              <span>${((basePackagePrice + addonsTotal) / 100).toFixed(2)}</span>
             </div>
           </div>
         </CardContent>
