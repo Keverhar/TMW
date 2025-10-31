@@ -1146,7 +1146,7 @@ export default function WeddingComposer() {
                       data-testid="button-auth-menu"
                     >
                       <User className="h-4 w-4 mr-2" />
-                      Login / Sign Up
+                      Login / Create Account
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
