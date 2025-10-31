@@ -17,7 +17,7 @@ export default function Payment() {
   const composerId = params?.composerId;
   const { toast } = useToast();
 
-  const [paymentMethod, setPaymentMethod] = useState<"card" | "paypal" | "affirm" | "ach">("card");
+  const [paymentMethod, setPaymentMethod] = useState<"card" | "paypal" | "affirm" | "ach" | undefined>(undefined);
   const [cardNumber, setCardNumber] = useState("");
   const [cardName, setCardName] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
@@ -28,18 +28,6 @@ export default function Payment() {
     queryKey: ["/api/wedding-composers", composerId],
     enabled: !!composerId,
   });
-
-  // Sync paymentMethod state with composer data when it loads
-  useEffect(() => {
-    if (composer?.paymentMethod) {
-      const method = composer.paymentMethod;
-      if (method === 'credit_card') {
-        setPaymentMethod('card');
-      } else if (method === 'ach' || method === 'affirm' || method === 'paypal') {
-        setPaymentMethod(method as "ach" | "affirm" | "paypal");
-      }
-    }
-  }, [composer?.paymentMethod]);
 
   // Calculate balance due (total - amount already paid) with ACH or Affirm discount if applicable
   const calculateTotalPrice = () => {
@@ -89,6 +77,15 @@ export default function Payment() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!paymentMethod) {
+      toast({
+        title: "Payment method required",
+        description: "Please select a payment method to continue.",
+        variant: "destructive",
+      });
+      return;
+    }
 
     if (paymentMethod === "card") {
       if (!cardNumber || !cardName || !expiryDate || !cvv) {
@@ -421,8 +418,10 @@ export default function Payment() {
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                         Processing...
                       </>
-                    ) : (
+                    ) : paymentMethod ? (
                       `Pay $${(displayTotal / 100).toFixed(2)}`
+                    ) : (
+                      "Select Payment Method"
                     )}
                   </Button>
                 </form>
