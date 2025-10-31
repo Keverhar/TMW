@@ -112,7 +112,6 @@ export default function Block1EventType({ eventType, eventTypeOther, preferredDa
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="event-type">Select Your Event Type *</Label>
             <Select value={eventType} onValueChange={(value) => onChange('eventType', value)}>
               <SelectTrigger id="event-type" data-testid="select-event-type">
                 <SelectValue placeholder="Make Your Selection" />
