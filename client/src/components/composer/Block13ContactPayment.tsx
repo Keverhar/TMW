@@ -27,6 +27,8 @@ interface Block13ContactPaymentProps {
   eventType: string;
   basePackagePrice: number;
   amountPaid: number;
+  preferredDate: string;
+  timeSlot: string;
 }
 
 export default function Block13ContactPayment({
@@ -46,18 +48,35 @@ export default function Block13ContactPayment({
   onChange,
   eventType,
   basePackagePrice,
-  amountPaid
+  amountPaid,
+  preferredDate,
+  timeSlot
 }: Block13ContactPaymentProps) {
   const [showTermsDialog, setShowTermsDialog] = useState(false);
   const [showRefundDialog, setShowRefundDialog] = useState(false);
   const [showByobDialog, setShowByobDialog] = useState(false);
   
   const isSimplifiedFlow = eventType === 'modest-elopement' || eventType === 'vow-renewal';
+  
+  // Check if Extra Time addon is eligible (Saturday at 6:00 PM)
+  const isExtraTimeEligible = () => {
+    if (!preferredDate || !timeSlot) return false;
+    
+    // Parse the date to check if it's a Saturday
+    const date = new Date(preferredDate);
+    const isSaturday = date.getDay() === 6;
+    
+    // Check if time is 6:00 PM
+    const is6PM = timeSlot === '6:00 PM';
+    
+    return isSaturday && is6PM;
+  };
+  
   const addons = [
-    { key: 'photoBookAddon', label: 'Photo Book', price: 30000, available: true, hasQuantity: true },
-    { key: 'extraTimeAddon', label: 'Extra Time Block (Saturday 6PM only)', price: 100000, available: eventType === 'modest-wedding', hasQuantity: false },
-    { key: 'byobBarAddon', label: 'BYOB Bar Setup', price: 40000, available: eventType === 'modest-wedding', hasQuantity: false },
-    { key: 'rehearsalAddon', label: 'Rehearsal Hour', price: 15000, available: true, hasQuantity: false }
+    { key: 'photoBookAddon', label: 'Photo Book', price: 30000, available: true, hasQuantity: true, enabled: true },
+    { key: 'extraTimeAddon', label: 'Extra Time Block (Saturday 6PM only)', price: 100000, available: eventType === 'modest-wedding', hasQuantity: false, enabled: isExtraTimeEligible() },
+    { key: 'byobBarAddon', label: 'BYOB Bar Setup', price: 40000, available: eventType === 'modest-wedding', hasQuantity: false, enabled: true },
+    { key: 'rehearsalAddon', label: 'Rehearsal Hour', price: 15000, available: true, hasQuantity: false, enabled: true }
   ];
 
   const formatPackageName = (type: string) => {
@@ -189,11 +208,12 @@ export default function Block13ContactPayment({
           <CardContent className="space-y-3">
             {addons.filter(addon => addon.available).map((addon) => (
               <div key={addon.key} className="space-y-2">
-                <div className="flex items-center justify-between p-3 rounded-md border">
+                <div className={`flex items-center justify-between p-3 rounded-md border ${!addon.enabled ? 'opacity-50' : ''}`}>
                   <div className="flex items-center space-x-2">
                     <Checkbox
                       id={addon.key}
                       data-testid={`checkbox-${addon.key}`}
+                      disabled={!addon.enabled}
                       checked={addon.key === 'photoBookAddon' ? photoBookAddon :
                               addon.key === 'extraTimeAddon' ? extraTimeAddon :
                               addon.key === 'byobBarAddon' ? byobBarAddon :
@@ -206,7 +226,7 @@ export default function Block13ContactPayment({
                         }
                       }}
                     />
-                    <Label htmlFor={addon.key} className="cursor-pointer">
+                    <Label htmlFor={addon.key} className={addon.enabled ? "cursor-pointer" : "cursor-not-allowed"}>
                       {addon.label}
                     </Label>
                   </div>

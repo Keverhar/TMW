@@ -1314,6 +1314,8 @@ export default function WeddingComposer() {
               eventType={formData.eventType}
               basePackagePrice={basePrice}
               amountPaid={formData.amountPaid}
+              preferredDate={formData.preferredDate}
+              timeSlot={formData.timeSlot}
             />
           )}
         </div>
