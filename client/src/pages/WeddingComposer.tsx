@@ -635,6 +635,152 @@ export default function WeddingComposer() {
     setHasSeenInitialDialog(true);
   };
 
+  // Load user's existing composer data when component mounts with logged-in user
+  useEffect(() => {
+    const loadUserComposerData = async () => {
+      if (userAccount && !composerId) {
+        try {
+          const response = await fetch(`/api/wedding-composers/by-user?userId=${userAccount.id}`);
+          if (response.ok) {
+            const composers: WeddingComposerType[] = await response.json();
+            if (composers && composers.length > 0) {
+              // Get the most recent composer
+              const composer = composers.sort((a, b) => 
+                new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+              )[0];
+              
+              // Load the composer data into the form
+              setComposerId(composer.id);
+              setFormData({
+                eventType: composer.eventType || "",
+                eventTypeOther: composer.eventTypeOther || "",
+                preferredDate: composer.preferredDate || "",
+                backupDate: composer.backupDate || "",
+                timeSlot: composer.timeSlot || "",
+                signatureColor: composer.signatureColor || "",
+                colorSwatchDecision: composer.colorSwatchDecision || "",
+                processionalSong: composer.processionalSong || "",
+                recessionalSong: composer.recessionalSong || "",
+                receptionEntranceSong: composer.receptionEntranceSong || "",
+                cakeCuttingSong: composer.cakeCuttingSong || "",
+                fatherDaughterDanceSong: composer.fatherDaughterDanceSong || "",
+                lastDanceSong: composer.lastDanceSong || "",
+                playlistUrl: composer.playlistUrl || "",
+                musicCompletionStatus: composer.musicCompletionStatus || "",
+                grandIntroduction: composer.grandIntroduction || "",
+                fatherDaughterDanceAnnouncement: composer.fatherDaughterDanceAnnouncement || "",
+                toastsSpeechesAnnouncement: composer.toastsSpeechesAnnouncement || "",
+                guestCallouts: composer.guestCallouts || "",
+                vibeCheck: composer.vibeCheck || "",
+                announcementsCompletionStatus: composer.announcementsCompletionStatus || "",
+                ceremonyScript: composer.ceremonyScript || "",
+                vowChoices: composer.vowChoices || "",
+                unityCandle: composer.unityCandle || false,
+                sandCeremony: composer.sandCeremony || false,
+                handfasting: composer.handfasting || false,
+                guestReadingOrSongChoice: composer.guestReadingOrSongChoice || "no",
+                guestReadingOrSong: composer.guestReadingOrSong || "",
+                guestReadingOrSongName: composer.guestReadingOrSongName || "",
+                officiantPassageChoice: composer.officiantPassageChoice || "no",
+                officiantPassage: composer.officiantPassage || "",
+                includingChildChoice: composer.includingChildChoice || "no",
+                includingChild: composer.includingChild || "",
+                childrenOrganizer: composer.childrenOrganizer || "",
+                petInvolvementChoice: composer.petInvolvementChoice || "no",
+                petPolicyAccepted: composer.petPolicyAccepted || false,
+                petInvolvement: composer.petInvolvement || "",
+                ceremonySpecialRequests: composer.ceremonySpecialRequests || "",
+                walkingDownAisle: composer.walkingDownAisle || "",
+                escortName: composer.escortName || "",
+                ringBearerIncluded: composer.ringBearerIncluded || "",
+                ringBearerFlowerGirl: composer.ringBearerFlowerGirl || "",
+                ringBearerOrganizer: composer.ringBearerOrganizer || "",
+                honoredGuestEscorts: composer.honoredGuestEscorts || "",
+                honoredGuestEscortsNA: composer.honoredGuestEscortsNA || false,
+                brideSideFrontRow: composer.brideSideFrontRow || "",
+                brideSideFrontRowNA: composer.brideSideFrontRowNA || false,
+                groomSideFrontRow: composer.groomSideFrontRow || "",
+                groomSideFrontRowNA: composer.groomSideFrontRowNA || false,
+                framedPhotos: composer.framedPhotos || "",
+                framedPhotosNA: composer.framedPhotosNA || false,
+                specialSeatingNeeds: composer.specialSeatingNeeds || "",
+                specialSeatingNeedsNA: composer.specialSeatingNeedsNA || false,
+                processionalSpecialInstructions: composer.processionalSpecialInstructions || "",
+                processionalSpecialInstructionsNA: composer.processionalSpecialInstructionsNA || false,
+                processionalCompletionStatus: composer.processionalCompletionStatus || "",
+                firstDance: composer.firstDance || "",
+                firstDanceNA: composer.firstDanceNA || false,
+                motherSonDance: composer.motherSonDance || "",
+                motherSonDanceNA: composer.motherSonDanceNA || false,
+                specialDances: composer.specialDances || "",
+                specialDancesNA: composer.specialDancesNA || false,
+                toastGivers: composer.toastGivers || "",
+                toastGiversNA: composer.toastGiversNA || false,
+                beveragePreferences: composer.beveragePreferences || "",
+                receptionSpecialRequests: composer.receptionSpecialRequests || "",
+                receptionSpecialRequestsNA: composer.receptionSpecialRequestsNA || false,
+                receptionCompletionStatus: composer.receptionCompletionStatus || "",
+                mustHaveShots: composer.mustHaveShots || "",
+                mustHaveShotsNA: composer.mustHaveShotsNA || false,
+                vipList: composer.vipList || "",
+                vipListNA: composer.vipListNA || false,
+                groupPhotosRequested: composer.groupPhotosRequested || "",
+                groupPhotosRequestedNA: composer.groupPhotosRequestedNA || false,
+                photographySpecialRequests: composer.photographySpecialRequests || "",
+                photographySpecialRequestsNA: composer.photographySpecialRequestsNA || false,
+                photographyCompletionStatus: composer.photographyCompletionStatus || "",
+                slideshowPhotos: composer.slideshowPhotos || "[]",
+                slideshowPhotosNA: composer.slideshowPhotosNA || false,
+                engagementPhotos: composer.engagementPhotos || "[]",
+                engagementPhotosNA: composer.engagementPhotosNA || false,
+                slideshowCompletionStatus: composer.slideshowCompletionStatus || "",
+                freshFlorals: composer.freshFlorals || "",
+                freshFloralsNA: composer.freshFloralsNA || false,
+                guestBookChoice: composer.guestBookChoice || "",
+                guestBook: composer.guestBook || "",
+                cakeKnifeChoice: composer.cakeKnifeChoice || "",
+                cakeKnifeServiceSet: composer.cakeKnifeServiceSet || "",
+                departureOrganizer: composer.departureOrganizer || "",
+                departureOrganizerTBD: composer.departureOrganizerTBD || false,
+                departureVehicleChoice: composer.departureVehicleChoice || "",
+                departureVehicle: composer.departureVehicle || "",
+                personalTouchesSpecialInstructions: composer.personalTouchesSpecialInstructions || "",
+                personalTouchesSpecialInstructionsNA: composer.personalTouchesSpecialInstructionsNA || false,
+                personalTouchesCompletionStatus: composer.personalTouchesCompletionStatus || "",
+                eviteDesignStyle: composer.eviteDesignStyle || "",
+                eviteHeaderText: composer.eviteHeaderText || "",
+                eviteBodyText: composer.eviteBodyText || "",
+                eviteRsvpOption: composer.eviteRsvpOption || "",
+                eviteRsvpCustomLink: composer.eviteRsvpCustomLink || "",
+                eviteDesignNoSpecialRequests: composer.eviteDesignNoSpecialRequests || false,
+                eviteWordingNoSpecialRequests: composer.eviteWordingNoSpecialRequests || false,
+                eviteRsvpNoSpecialRequests: composer.eviteRsvpNoSpecialRequests || false,
+                eviteCompletionStatus: composer.eviteCompletionStatus || "",
+                customerName: composer.customerName || "",
+                customerName2: composer.customerName2 || "",
+                customerEmail: composer.customerEmail || userAccount.email,
+                customerPhone: composer.customerPhone || "",
+                smsConsent: composer.smsConsent || false,
+                mailingAddress: composer.mailingAddress || "",
+                paymentMethod: composer.paymentMethod || "credit_card",
+                termsAccepted: composer.termsAccepted || false,
+                photoBookAddon: composer.photoBookAddon || false,
+                photoBookQuantity: composer.photoBookQuantity || 1,
+                extraTimeAddon: composer.extraTimeAddon || false,
+                byobBarAddon: composer.byobBarAddon || false,
+                rehearsalAddon: composer.rehearsalAddon || false,
+              });
+            }
+          }
+        } catch (error) {
+          console.error('Error loading composer data:', error);
+        }
+      }
+    };
+    
+    loadUserComposerData();
+  }, []);
+
   // Auto-save when formData changes and user is logged in
   useEffect(() => {
     if (userAccount && composerId) {
