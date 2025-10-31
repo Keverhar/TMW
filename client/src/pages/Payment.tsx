@@ -113,9 +113,13 @@ export default function Payment() {
     // Simulate payment processing and update payment status
     setTimeout(async () => {
       try {
+        // Fetch the LATEST composer data to ensure amount_paid is current
+        const latestResponse = await fetch(`/api/wedding-composers/${composerId}`);
+        const latestComposer = await latestResponse.json();
+        
         // Calculate the amount being paid (with discounts applied)
         const paymentAmount = displayTotal;
-        const currentAmountPaid = composer?.amountPaid || 0;
+        const currentAmountPaid = latestComposer?.amountPaid || 0;
         const newAmountPaid = currentAmountPaid + paymentAmount;
         
         // Update payment status to completed AND add to amount paid
