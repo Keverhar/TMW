@@ -110,6 +110,8 @@ export default function Block13ContactPayment({
   const achDiscount = paymentMethod === 'ach' ? 5000 : 0; // $50 discount in cents
   const totalPrice = basePackagePrice + addonsTotal - achDiscount;
 
+  console.log('Block13 - Payment Method:', paymentMethod, 'ACH Discount:', achDiscount);
+
   return (
     <div className="space-y-6">
       <div>
