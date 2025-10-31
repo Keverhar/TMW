@@ -23,6 +23,12 @@ interface Block13ContactPaymentProps {
   byobBarAddon: boolean;
   rehearsalAddon: boolean;
   photoBookQuantity?: number;
+  photoBookPrice: number;
+  extraTimePrice: number;
+  byobBarPrice: number;
+  rehearsalPrice: number;
+  achDiscountAmount: number;
+  affirmDiscountAmount: number;
   onChange: (field: string, value: string | boolean | number) => void;
   eventType: string;
   basePackagePrice: number;
@@ -45,6 +51,12 @@ export default function Block13ContactPayment({
   byobBarAddon,
   rehearsalAddon,
   photoBookQuantity = 1,
+  photoBookPrice,
+  extraTimePrice,
+  byobBarPrice,
+  rehearsalPrice,
+  achDiscountAmount,
+  affirmDiscountAmount,
   onChange,
   eventType,
   basePackagePrice,
@@ -74,10 +86,10 @@ export default function Block13ContactPayment({
   };
   
   const addons = [
-    { key: 'photoBookAddon', label: 'Photo Book', price: 30000, available: true, hasQuantity: true, enabled: true },
-    { key: 'extraTimeAddon', label: 'Extra Time Block (Saturday 6PM only)', price: 100000, available: eventType === 'modest-wedding', hasQuantity: false, enabled: isExtraTimeEligible() },
-    { key: 'byobBarAddon', label: 'BYOB Bar Setup', price: 40000, available: eventType === 'modest-wedding', hasQuantity: false, enabled: true },
-    { key: 'rehearsalAddon', label: 'Rehearsal Hour', price: 15000, available: true, hasQuantity: false, enabled: true }
+    { key: 'photoBookAddon', label: 'Photo Book', price: photoBookPrice, available: true, hasQuantity: true, enabled: true },
+    { key: 'extraTimeAddon', label: 'Extra Time Block (Saturday 6PM only)', price: extraTimePrice, available: eventType === 'modest-wedding', hasQuantity: false, enabled: isExtraTimeEligible() },
+    { key: 'byobBarAddon', label: 'BYOB Bar Setup', price: byobBarPrice, available: eventType === 'modest-wedding', hasQuantity: false, enabled: true },
+    { key: 'rehearsalAddon', label: 'Rehearsal Hour', price: rehearsalPrice, available: true, hasQuantity: false, enabled: true }
   ];
 
   const formatPackageName = (type: string) => {
@@ -106,11 +118,12 @@ export default function Block13ContactPayment({
     return sum + addon.price;
   }, 0);
   
-  // Apply ACH discount if payment method is ACH
-  const achDiscount = paymentMethod === 'ach' ? 5000 : 0; // $50 discount in cents
-  const totalPrice = basePackagePrice + addonsTotal - achDiscount;
+  // Apply ACH/Affirm discount if payment method is ACH or Affirm
+  const discount = paymentMethod === 'ach' ? achDiscountAmount : 
+                   paymentMethod === 'affirm' ? affirmDiscountAmount : 0;
+  const totalPrice = basePackagePrice + addonsTotal - discount;
 
-  console.log('Block13 - Payment Method:', paymentMethod, 'ACH Discount:', achDiscount);
+  console.log('Block13 - Payment Method:', paymentMethod, 'Discount:', discount);
 
   return (
     <div className="space-y-6">
@@ -315,10 +328,10 @@ export default function Block13ContactPayment({
               <span data-testid="text-subtotal">${((basePackagePrice + addonsTotal) / 100).toFixed(2)}</span>
             </div>
 
-            {paymentMethod === 'ach' && (
-              <div className="flex justify-between text-green-600 dark:text-green-400" data-testid="row-ach-discount">
-                <span>ACH Discount</span>
-                <span data-testid="text-ach-discount">-$50.00</span>
+            {discount > 0 && (
+              <div className="flex justify-between text-green-600 dark:text-green-400" data-testid="row-payment-discount">
+                <span>{paymentMethod === 'ach' ? 'ACH' : 'Affirm'} Discount</span>
+                <span data-testid="text-payment-discount">-${(discount / 100).toFixed(2)}</span>
               </div>
             )}
 
@@ -331,7 +344,7 @@ export default function Block13ContactPayment({
 
             <div className="flex justify-between font-semibold text-lg" data-testid="row-balance-due">
               <span>Balance Due</span>
-              <span data-testid="text-balance-due">${((basePackagePrice + addonsTotal - achDiscount - amountPaid) / 100).toFixed(2)}</span>
+              <span data-testid="text-balance-due">${((basePackagePrice + addonsTotal - discount - amountPaid) / 100).toFixed(2)}</span>
             </div>
           </div>
         </CardContent>

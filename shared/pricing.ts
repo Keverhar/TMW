@@ -18,7 +18,7 @@ export const PRICING = {
     rehearsal: 15000, // $150
   },
 
-  // Payment discounts
+  // Payment discounts (in cents)
   discounts: {
     ach: 5000, // $50 discount for ACH payment
     affirm: 5000, // $50 discount for Affirm payment

@@ -12,7 +12,7 @@ import { ChevronLeft, ChevronRight, Save, UserPlus, LogOut, User } from "lucide-
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import type { WeddingComposer as WeddingComposerType } from "@shared/schema";
-import { getAddonPrice } from "@shared/pricing";
+import { getAddonPrice, getPaymentDiscount } from "@shared/pricing";
 import AccountCreationDialog from "@/components/AccountCreationDialog";
 import InitialAuthDialog from "@/components/InitialAuthDialog";
 import LoginDialog from "@/components/LoginDialog";
@@ -309,6 +309,8 @@ export default function WeddingComposer() {
       const extraTimePrice = getAddonPrice('extraTime');
       const byobBarPrice = getAddonPrice('byobBar');
       const rehearsalPrice = getAddonPrice('rehearsal');
+      const achDiscountAmount = getPaymentDiscount('ach');
+      const affirmDiscountAmount = getPaymentDiscount('affirm');
       
       const addonsTotal =
         (formData.photoBookAddon ? photoBookPrice * (formData.photoBookQuantity || 1) : 0) +
@@ -329,6 +331,8 @@ export default function WeddingComposer() {
           extraTimePrice,
           byobBarPrice,
           rehearsalPrice,
+          achDiscountAmount,
+          affirmDiscountAmount,
           totalPrice,
           userId: userAccount?.id || null,
         };
@@ -343,6 +347,8 @@ export default function WeddingComposer() {
           extraTimePrice,
           byobBarPrice,
           rehearsalPrice,
+          achDiscountAmount,
+          affirmDiscountAmount,
           totalPrice,
           userId: userAccount?.id || null,
         };
@@ -499,6 +505,8 @@ export default function WeddingComposer() {
     const extraTimePrice = getAddonPrice('extraTime');
     const byobBarPrice = getAddonPrice('byobBar');
     const rehearsalPrice = getAddonPrice('rehearsal');
+    const achDiscountAmount = getPaymentDiscount('ach');
+    const affirmDiscountAmount = getPaymentDiscount('affirm');
     
     const addonsTotal =
       (formData.photoBookAddon ? photoBookPrice * (formData.photoBookQuantity || 1) : 0) +
@@ -514,6 +522,8 @@ export default function WeddingComposer() {
       extraTimePrice,
       byobBarPrice,
       rehearsalPrice,
+      achDiscountAmount,
+      affirmDiscountAmount,
       totalPrice,
       userId: userAccount?.id || null,
       paymentStatus: "payment_initiated", // Mark as payment initiated to preserve date/time
@@ -1366,6 +1376,12 @@ export default function WeddingComposer() {
               extraTimeAddon={formData.extraTimeAddon}
               byobBarAddon={formData.byobBarAddon}
               rehearsalAddon={formData.rehearsalAddon}
+              photoBookPrice={photoBookPrice}
+              extraTimePrice={extraTimePrice}
+              byobBarPrice={byobBarPrice}
+              rehearsalPrice={rehearsalPrice}
+              achDiscountAmount={getPaymentDiscount('ach')}
+              affirmDiscountAmount={getPaymentDiscount('affirm')}
               onChange={updateField}
               eventType={formData.eventType}
               basePackagePrice={basePrice}

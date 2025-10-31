@@ -33,8 +33,8 @@ export default function Payment() {
   const calculateTotalPrice = () => {
     if (!composer) return 0;
     const balanceDue = composer.totalPrice - (composer.amountPaid || 0);
-    const achDiscount = paymentMethod === 'ach' ? 5000 : 0; // $50 discount for ACH
-    const affirmDiscount = paymentMethod === 'affirm' ? 5000 : 0; // $50 discount for Affirm
+    const achDiscount = paymentMethod === 'ach' ? (composer.achDiscountAmount || 0) : 0;
+    const affirmDiscount = paymentMethod === 'affirm' ? (composer.affirmDiscountAmount || 0) : 0;
     return balanceDue - achDiscount - affirmDiscount;
   };
 
@@ -117,8 +117,9 @@ export default function Payment() {
         const latestResponse = await fetch(`/api/wedding-composers/${composerId}`);
         const latestComposer = await latestResponse.json();
         
-        // Calculate discount amount
-        const discountAmount = (paymentMethod === 'ach' || paymentMethod === 'affirm') ? 5000 : 0;
+        // Calculate discount amount from stored values
+        const discountAmount = paymentMethod === 'ach' ? (latestComposer.achDiscountAmount || 0) : 
+                              paymentMethod === 'affirm' ? (latestComposer.affirmDiscountAmount || 0) : 0;
         
         // Calculate the amount being paid (with discounts applied)
         const paymentAmount = displayTotal;
@@ -460,7 +461,7 @@ export default function Payment() {
                   {(paymentMethod === 'ach' || paymentMethod === 'affirm') && (
                     <div className="flex justify-between text-sm text-green-600 dark:text-green-400">
                       <span>{paymentMethod === 'ach' ? 'ACH' : 'Affirm'} Discount</span>
-                      <span>-$50.00</span>
+                      <span>-${((paymentMethod === 'ach' ? (composer.achDiscountAmount || 0) : (composer.affirmDiscountAmount || 0)) / 100).toFixed(2)}</span>
                     </div>
                   )}
                   <div className="border-t my-2"></div>
