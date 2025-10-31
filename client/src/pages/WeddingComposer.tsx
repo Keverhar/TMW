@@ -1193,6 +1193,8 @@ export default function WeddingComposer() {
             <Block1EventType
               eventType={formData.eventType}
               eventTypeOther={formData.eventTypeOther}
+              preferredDate={formData.preferredDate}
+              timeSlot={formData.timeSlot}
               onChange={updateField}
             />
           )}
