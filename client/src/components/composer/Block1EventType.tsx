@@ -107,7 +107,6 @@ export default function Block1EventType({ eventType, eventTypeOther, preferredDa
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Event Type</CardTitle>
           <CardDescription>This is the first step in shaping your celebration. Tell us what kind of event you're planning.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
