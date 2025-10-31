@@ -123,7 +123,7 @@ export default function Block13ContactPayment({
                    paymentMethod === 'affirm' ? affirmDiscountAmount : 0;
   const totalPrice = basePackagePrice + addonsTotal - discount;
 
-  console.log('Block13 - Payment Method:', paymentMethod, 'Discount:', discount);
+  console.log('Block13 - Payment Method:', paymentMethod, 'ACH Discount Amount:', achDiscountAmount, 'Affirm Discount Amount:', affirmDiscountAmount, 'Calculated Discount:', discount);
 
   return (
     <div className="space-y-6">
