@@ -160,7 +160,10 @@ export default function Confirmation() {
             </Card>
 
             <div className="flex flex-col gap-3 items-center pt-6">
-              <Button onClick={() => setLocation("/composer")} size="lg" className="w-full max-w-md" data-testid="button-return-composer">
+              <Button onClick={() => {
+                // Force reload by navigating to home first, then to composer
+                window.location.href = "/composer";
+              }} size="lg" className="w-full max-w-md" data-testid="button-return-composer">
                 Return to Wedding Composer
               </Button>
               <Button onClick={handleLogoutAndHome} variant="outline" size="lg" className="w-full max-w-md" data-testid="button-logout-home">

@@ -109,13 +109,29 @@ export default function Payment() {
 
     setIsProcessing(true);
 
-    // Simulate payment processing
-    setTimeout(() => {
-      toast({
-        title: "Payment successful!",
-        description: "Your wedding booking has been confirmed.",
-      });
-      setLocation(`/confirmation/${composerId}`);
+    // Simulate payment processing and update payment status
+    setTimeout(async () => {
+      try {
+        // Update payment status to completed
+        await fetch(`/api/wedding-composers/${composerId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ paymentStatus: 'completed' }),
+        });
+        
+        toast({
+          title: "Payment successful!",
+          description: "Your wedding booking has been confirmed.",
+        });
+        setLocation(`/confirmation/${composerId}`);
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "Payment successful but there was an error updating your booking.",
+          variant: "destructive",
+        });
+        setLocation(`/confirmation/${composerId}`);
+      }
     }, 2000);
   };
 
