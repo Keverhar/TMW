@@ -701,11 +701,10 @@ export default function WeddingComposer() {
             const composers: WeddingComposerType[] = await response.json();
             console.log('Loaded composers:', composers.length);
             if (composers && composers.length > 0) {
-              // Prioritize completed/payment_initiated composers, then most recent
-              const paidComposers = composers.filter(c => c.paymentStatus === 'completed' || c.paymentStatus === 'payment_initiated');
-              const composer = paidComposers.length > 0
-                ? paidComposers.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())[0]
-                : composers.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())[0];
+              // Get the most recent composer regardless of payment status
+              const composer = composers.sort((a, b) => 
+                new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+              )[0];
               
               console.log('Loading composer:', composer.id, 'with eventType:', composer.eventType);
               
@@ -855,7 +854,16 @@ export default function WeddingComposer() {
 
   // Auto-save when formData changes and user is logged in
   // Only auto-save for pending composers (not payment_initiated or completed)
+  const hasDataLoadedRef = useRef(false);
+  
   useEffect(() => {
+    // Skip auto-save during initial data load
+    if (!hasDataLoadedRef.current) {
+      hasDataLoadedRef.current = true;
+      return;
+    }
+    
+    // Only auto-save for pending composers after user makes changes
     if (userAccount && composerId && composerPaymentStatus === "pending") {
       const timeoutId = setTimeout(() => {
         saveProgress();
@@ -863,7 +871,7 @@ export default function WeddingComposer() {
       
       return () => clearTimeout(timeoutId);
     }
-  }, [formData, userAccount, composerPaymentStatus]);
+  }, [formData]);
 
   // Save immediately when user account is created or logs in
   useEffect(() => {
