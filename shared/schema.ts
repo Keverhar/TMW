@@ -165,9 +165,13 @@ export const weddingComposers = pgTable("wedding_composers", {
   basePackagePrice: integer("base_package_price").notNull(),
   photoBookAddon: boolean("photo_book_addon").default(false),
   photoBookQuantity: integer("photo_book_quantity").default(1),
+  photoBookPrice: integer("photo_book_price").default(30000), // Price per book in cents
   extraTimeAddon: boolean("extra_time_addon").default(false),
+  extraTimePrice: integer("extra_time_price").default(100000), // Price in cents
   byobBarAddon: boolean("byob_bar_addon").default(false),
+  byobBarPrice: integer("byob_bar_price").default(40000), // Price in cents
   rehearsalAddon: boolean("rehearsal_addon").default(false),
+  rehearsalPrice: integer("rehearsal_price").default(15000), // Price in cents
   totalPrice: integer("total_price").notNull(),
   amountPaid: integer("amount_paid").notNull().default(0),
   
