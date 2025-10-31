@@ -117,18 +117,26 @@ export default function Payment() {
         const latestResponse = await fetch(`/api/wedding-composers/${composerId}`);
         const latestComposer = await latestResponse.json();
         
+        // Calculate discount amount
+        const discountAmount = (paymentMethod === 'ach' || paymentMethod === 'affirm') ? 5000 : 0;
+        
         // Calculate the amount being paid (with discounts applied)
         const paymentAmount = displayTotal;
         const currentAmountPaid = latestComposer?.amountPaid || 0;
         const newAmountPaid = currentAmountPaid + paymentAmount;
         
-        // Update payment status to completed AND add to amount paid
+        // Reduce total price by discount amount (so balance calculation remains correct)
+        const currentTotalPrice = latestComposer?.totalPrice || 0;
+        const newTotalPrice = currentTotalPrice - discountAmount;
+        
+        // Update payment status to completed, add to amount paid, and adjust total price for discount
         await fetch(`/api/wedding-composers/${composerId}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ 
             paymentStatus: 'completed',
-            amountPaid: newAmountPaid
+            amountPaid: newAmountPaid,
+            totalPrice: newTotalPrice
           }),
         });
         
