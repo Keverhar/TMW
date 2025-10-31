@@ -307,7 +307,7 @@ export default function WeddingComposer() {
         userId: userAccount?.id || null,
       };
 
-      // Only save date/time for paid composers
+      // Only save date/time for paid/payment-initiated composers
       if (composerPaymentStatus === "pending") {
         composerData = {
           ...composerData,
@@ -474,17 +474,19 @@ export default function WeddingComposer() {
       basePackagePrice: basePrice,
       totalPrice,
       userId: userAccount?.id || null,
+      paymentStatus: "payment_initiated", // Mark as payment initiated to preserve date/time
     };
 
     try {
       if (composerId) {
         // For payment submission, save ALL data including date/time
         await apiRequest("PATCH", `/api/wedding-composers/${composerId}`, composerData);
+        setComposerPaymentStatus("payment_initiated"); // Update local state
       } else {
         const response = await apiRequest("POST", "/api/wedding-composers", composerData);
         const result = await response.json();
         setComposerId(result.id);
-        setComposerPaymentStatus(result.paymentStatus || "pending");
+        setComposerPaymentStatus("payment_initiated"); // Update local state
       }
     } catch (error: any) {
       toast({
@@ -699,8 +701,8 @@ export default function WeddingComposer() {
             const composers: WeddingComposerType[] = await response.json();
             console.log('Loaded composers:', composers.length);
             if (composers && composers.length > 0) {
-              // Prioritize completed/paid composers, then most recent
-              const paidComposers = composers.filter(c => c.paymentStatus === 'completed');
+              // Prioritize completed/payment_initiated composers, then most recent
+              const paidComposers = composers.filter(c => c.paymentStatus === 'completed' || c.paymentStatus === 'payment_initiated');
               const composer = paidComposers.length > 0
                 ? paidComposers.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())[0]
                 : composers.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())[0];
