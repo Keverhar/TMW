@@ -12,6 +12,7 @@ import { ChevronLeft, ChevronRight, Save, UserPlus, LogOut, User } from "lucide-
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import type { WeddingComposer as WeddingComposerType } from "@shared/schema";
+import { getAddonPrice } from "@shared/pricing";
 import AccountCreationDialog from "@/components/AccountCreationDialog";
 import InitialAuthDialog from "@/components/InitialAuthDialog";
 import LoginDialog from "@/components/LoginDialog";
@@ -302,11 +303,18 @@ export default function WeddingComposer() {
     try {
       const dayOfWeek = getDayOfWeek(formData.preferredDate);
       const basePrice = calculatePrice(formData.eventType, dayOfWeek);
+      
+      // Get current prices from pricing config
+      const photoBookPrice = getAddonPrice('photoBook');
+      const extraTimePrice = getAddonPrice('extraTime');
+      const byobBarPrice = getAddonPrice('byobBar');
+      const rehearsalPrice = getAddonPrice('rehearsal');
+      
       const addonsTotal =
-        (formData.photoBookAddon ? 30000 * (formData.photoBookQuantity || 1) : 0) +
-        (formData.extraTimeAddon ? 100000 : 0) +
-        (formData.byobBarAddon ? 40000 : 0) +
-        (formData.rehearsalAddon ? 15000 : 0);
+        (formData.photoBookAddon ? photoBookPrice * (formData.photoBookQuantity || 1) : 0) +
+        (formData.extraTimeAddon ? extraTimePrice : 0) +
+        (formData.byobBarAddon ? byobBarPrice : 0) +
+        (formData.rehearsalAddon ? rehearsalPrice : 0);
       const totalPrice = basePrice + addonsTotal;
 
       let composerData;
@@ -317,6 +325,10 @@ export default function WeddingComposer() {
         composerData = {
           ...formData,
           basePackagePrice: basePrice,
+          photoBookPrice,
+          extraTimePrice,
+          byobBarPrice,
+          rehearsalPrice,
           totalPrice,
           userId: userAccount?.id || null,
         };
@@ -327,6 +339,10 @@ export default function WeddingComposer() {
           backupDate: "",
           timeSlot: "",
           basePackagePrice: basePrice,
+          photoBookPrice,
+          extraTimePrice,
+          byobBarPrice,
+          rehearsalPrice,
           totalPrice,
           userId: userAccount?.id || null,
         };
@@ -477,16 +493,27 @@ export default function WeddingComposer() {
     // Save progress with date/time for payment submission
     const dayOfWeek = getDayOfWeek(formData.preferredDate);
     const basePrice = calculatePrice(formData.eventType, dayOfWeek);
+    
+    // Get current prices from pricing config
+    const photoBookPrice = getAddonPrice('photoBook');
+    const extraTimePrice = getAddonPrice('extraTime');
+    const byobBarPrice = getAddonPrice('byobBar');
+    const rehearsalPrice = getAddonPrice('rehearsal');
+    
     const addonsTotal =
-      (formData.photoBookAddon ? 30000 * (formData.photoBookQuantity || 1) : 0) +
-      (formData.extraTimeAddon ? 100000 : 0) +
-      (formData.byobBarAddon ? 40000 : 0) +
-      (formData.rehearsalAddon ? 15000 : 0);
+      (formData.photoBookAddon ? photoBookPrice * (formData.photoBookQuantity || 1) : 0) +
+      (formData.extraTimeAddon ? extraTimePrice : 0) +
+      (formData.byobBarAddon ? byobBarPrice : 0) +
+      (formData.rehearsalAddon ? rehearsalPrice : 0);
     const totalPrice = basePrice + addonsTotal;
 
     const composerData = {
       ...formData,
       basePackagePrice: basePrice,
+      photoBookPrice,
+      extraTimePrice,
+      byobBarPrice,
+      rehearsalPrice,
       totalPrice,
       userId: userAccount?.id || null,
       paymentStatus: "payment_initiated", // Mark as payment initiated to preserve date/time
@@ -1013,11 +1040,17 @@ export default function WeddingComposer() {
   const dayOfWeek = getDayOfWeek(formData.preferredDate);
   const basePrice = calculatePrice(formData.eventType, dayOfWeek);
 
+  // Get current prices from pricing config
+  const photoBookPrice = getAddonPrice('photoBook');
+  const extraTimePrice = getAddonPrice('extraTime');
+  const byobBarPrice = getAddonPrice('byobBar');
+  const rehearsalPrice = getAddonPrice('rehearsal');
+  
   const addonsTotal =
-    (formData.photoBookAddon ? 30000 * (formData.photoBookQuantity || 1) : 0) +
-    (formData.extraTimeAddon ? 100000 : 0) +
-    (formData.byobBarAddon ? 40000 : 0) +
-    (formData.rehearsalAddon ? 15000 : 0);
+    (formData.photoBookAddon ? photoBookPrice * (formData.photoBookQuantity || 1) : 0) +
+    (formData.extraTimeAddon ? extraTimePrice : 0) +
+    (formData.byobBarAddon ? byobBarPrice : 0) +
+    (formData.rehearsalAddon ? rehearsalPrice : 0);
   const totalPrice = basePrice + addonsTotal;
 
   return (
