@@ -212,66 +212,6 @@ export default function Block13ContactPayment({
         </CardContent>
       </Card>
 
-      {!isSimplifiedFlow && (
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <DollarSign className="h-5 w-5" />
-              <CardTitle>Add-Ons (Optional)</CardTitle>
-            </div>
-            <CardDescription>Enhance your celebration with these optional add-ons</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {addons.filter(addon => addon.available).map((addon) => (
-              <div key={addon.key} className="space-y-2">
-                <div className={`flex items-center justify-between p-3 rounded-md border ${!addon.enabled ? 'opacity-50' : ''}`}>
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      id={addon.key}
-                      data-testid={`checkbox-${addon.key}`}
-                      disabled={!addon.enabled}
-                      checked={addon.key === 'photoBookAddon' ? photoBookAddon :
-                              addon.key === 'extraTimeAddon' ? extraTimeAddon :
-                              addon.key === 'byobBarAddon' ? byobBarAddon :
-                              rehearsalAddon}
-                      onCheckedChange={(checked) => {
-                        if (addon.key === 'byobBarAddon') {
-                          handleByobChange(checked as boolean);
-                        } else {
-                          onChange(addon.key, checked as boolean);
-                        }
-                      }}
-                    />
-                    <Label htmlFor={addon.key} className={addon.enabled ? "cursor-pointer" : "cursor-not-allowed"}>
-                      {addon.label}
-                    </Label>
-                  </div>
-                  <Badge variant="secondary">${(addon.price / 100).toFixed(2)}</Badge>
-                </div>
-                {addon.key === 'photoBookAddon' && photoBookAddon && (
-                  <div className="ml-6 flex items-center gap-2">
-                    <Label htmlFor="photo-book-quantity" className="text-sm">Quantity:</Label>
-                    <Select value={String(photoBookQuantity)} onValueChange={(value) => onChange('photoBookQuantity', parseInt(value))}>
-                      <SelectTrigger className="w-20" id="photo-book-quantity" data-testid="select-photo-book-quantity">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {[...Array(10)].map((_, i) => (
-                          <SelectItem key={i + 1} value={String(i + 1)}>{i + 1}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <span className="text-sm text-muted-foreground">
-                      Total: ${((addon.price * photoBookQuantity) / 100).toFixed(2)}
-                    </span>
-                  </div>
-                )}
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      )}
-
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
