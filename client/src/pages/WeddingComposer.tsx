@@ -2,7 +2,13 @@ import { useState, useEffect, useRef } from "react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { ChevronLeft, ChevronRight, Save, UserPlus } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { ChevronLeft, ChevronRight, Save, UserPlus, LogOut, User } from "lucide-react";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import type { WeddingComposer as WeddingComposerType } from "@shared/schema";
@@ -626,6 +632,18 @@ export default function WeddingComposer() {
     setHasSeenInitialDialog(true);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    setUserAccount(null);
+    setComposerId(null);
+    hasLoadedDataRef.current = false;
+    toast({
+      title: "Logged out",
+      description: "You have been successfully logged out.",
+    });
+    setLocation("/");
+  };
+
   // Load user's existing composer data when component mounts with logged-in user
   useEffect(() => {
     const loadUserComposerData = async () => {
@@ -979,8 +997,28 @@ export default function WeddingComposer() {
                 </Button>
               )}
               {userAccount && (
-                <div className="text-sm text-muted-foreground" data-testid="text-auto-save-indicator">
-                  Auto-saving as {userAccount.email}
+                <div className="flex flex-col gap-1 items-end">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        data-testid="button-account-menu"
+                      >
+                        <User className="h-4 w-4 mr-2" />
+                        Account
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onClick={handleLogout} data-testid="button-logout">
+                        <LogOut className="h-4 w-4 mr-2" />
+                        Logout
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  <div className="text-xs text-muted-foreground" data-testid="text-auto-save-indicator">
+                    Auto-saving as {userAccount.email}
+                  </div>
                 </div>
               )}
             </div>
