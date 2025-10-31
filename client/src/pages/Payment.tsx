@@ -445,6 +445,11 @@ export default function Payment() {
                 )}
 
                 <div className="pt-4 border-t space-y-2">
+                  <div className="flex justify-between text-sm text-green-600 dark:text-green-400">
+                    <span>{paymentMethod === 'ach' ? 'ACH' : paymentMethod === 'affirm' ? 'Affirm' : 'Payment'} Discount</span>
+                    <span>{(paymentMethod === 'ach' ? (composer.achDiscountAmount || 0) : paymentMethod === 'affirm' ? (composer.affirmDiscountAmount || 0) : 0) > 0 ? '-' : ''}${((paymentMethod === 'ach' ? (composer.achDiscountAmount || 0) : paymentMethod === 'affirm' ? (composer.affirmDiscountAmount || 0) : 0) / 100).toFixed(2)}</span>
+                  </div>
+                  <div className="border-t my-2"></div>
                   <div className="flex justify-between text-sm">
                     <span>Subtotal</span>
                     <span>${(composer.totalPrice / 100).toFixed(2)}</span>
@@ -458,12 +463,6 @@ export default function Payment() {
                     <span>Balance Due</span>
                     <span>${((composer.totalPrice - (composer.amountPaid || 0)) / 100).toFixed(2)}</span>
                   </div>
-                  {(paymentMethod === 'ach' || paymentMethod === 'affirm') && (
-                    <div className="flex justify-between text-sm text-green-600 dark:text-green-400">
-                      <span>{paymentMethod === 'ach' ? 'ACH' : 'Affirm'} Discount</span>
-                      <span>-${((paymentMethod === 'ach' ? (composer.achDiscountAmount || 0) : (composer.affirmDiscountAmount || 0)) / 100).toFixed(2)}</span>
-                    </div>
-                  )}
                   <div className="border-t my-2"></div>
                   <div className="flex justify-between font-semibold text-lg">
                     <span>Total Due Now</span>
