@@ -1071,8 +1071,8 @@ export default function WeddingComposer() {
                 );
               })}
             </div>
-            {userAccount && (
-              <div className="flex-shrink-0">
+            <div className="flex-shrink-0">
+              {userAccount ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
@@ -1091,8 +1091,31 @@ export default function WeddingComposer() {
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-              </div>
-            )}
+              ) : (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="default"
+                      size="sm"
+                      data-testid="button-auth-menu"
+                    >
+                      <User className="h-4 w-4 mr-2" />
+                      Login / Sign Up
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={() => setShowLoginDialog(true)} data-testid="button-nav-login">
+                      <User className="h-4 w-4 mr-2" />
+                      Login
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setShowAccountDialog(true)} data-testid="button-nav-create-account">
+                      <UserPlus className="h-4 w-4 mr-2" />
+                      Create Account
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
+            </div>
           </div>
         </div>
       </div>
