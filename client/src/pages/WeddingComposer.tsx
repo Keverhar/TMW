@@ -300,22 +300,16 @@ export default function WeddingComposer() {
         (formData.rehearsalAddon ? 15000 : 0);
       const totalPrice = basePrice + addonsTotal;
 
-      let composerData = {
+      // NEVER save date/time during autosave - only save on payment submission
+      const composerData = {
         ...formData,
+        preferredDate: "", // Always exclude date/time from autosave
+        backupDate: "",
+        timeSlot: "",
         basePackagePrice: basePrice,
         totalPrice,
         userId: userAccount?.id || null,
       };
-
-      // Only save date/time for paid/payment-initiated composers
-      if (composerPaymentStatus === "pending") {
-        composerData = {
-          ...composerData,
-          preferredDate: "",
-          backupDate: "",
-          timeSlot: "",
-        };
-      }
 
       if (composerId) {
         await apiRequest("PATCH", `/api/wedding-composers/${composerId}`, composerData);
@@ -873,13 +867,7 @@ export default function WeddingComposer() {
     }
   }, [formData]);
 
-  // Save immediately when user account is created or logs in
-  // Only for pending composers (not completed or payment_initiated)
-  useEffect(() => {
-    if (userAccount && hasSeenInitialDialog && composerPaymentStatus === "pending") {
-      saveProgress();
-    }
-  }, [userAccount]);
+  // DO NOT save on login - user explicitly requested no autosave on login
 
   // Extract day of week from preferred date
   const getDayOfWeek = (dateString: string): string => {
