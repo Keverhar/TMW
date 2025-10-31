@@ -16,6 +16,8 @@ interface BlockAddOnsProps {
   rehearsalAddon: boolean;
   onChange: (field: string, value: string | number | boolean) => void;
   eventType: string;
+  preferredDate: string;
+  timeSlot: string;
 }
 
 export default function BlockAddOns({
@@ -26,9 +28,22 @@ export default function BlockAddOns({
   rehearsalAddon,
   onChange,
   eventType,
+  preferredDate,
+  timeSlot,
 }: BlockAddOnsProps) {
   const [showByobDialog, setShowByobDialog] = useState(false);
   const isSimplifiedFlow = eventType === 'modest-elopement' || eventType === 'vow-renewal';
+  
+  // Check if Extra Time addon is eligible (Saturday at 6:00 PM)
+  const isExtraTimeEligible = () => {
+    if (!preferredDate || !timeSlot) return false;
+    
+    const date = new Date(preferredDate + 'T12:00:00');
+    const isSaturday = date.getDay() === 6;
+    const is6PM = timeSlot === '6pm-9pm' || timeSlot === '6pm';
+    
+    return isSaturday && is6PM;
+  };
   
   const photoBookPrice = getAddonPrice('photoBook');
   const extraTimePrice = getAddonPrice('extraTime');
@@ -100,23 +115,29 @@ export default function BlockAddOns({
             )}
           </div>
 
-          {/* Extra Time Add-On - Only for Modest Wedding */}
+          {/* Extra Time Add-On - Only for Modest Wedding on Saturday at 6pm */}
           {!isSimplifiedFlow && (
-            <div className="space-y-3 p-4 border rounded-lg">
+            <div className={`space-y-3 p-4 border rounded-lg ${!isExtraTimeEligible() ? 'opacity-50' : ''}`}>
               <div className="flex items-start gap-3">
                 <Checkbox
                   id="extra-time-addon"
                   checked={extraTimeAddon}
+                  disabled={!isExtraTimeEligible()}
                   onCheckedChange={(checked) => onChange('extraTimeAddon', checked as boolean)}
                   data-testid="checkbox-extra-time-addon"
                 />
                 <div className="flex-1">
-                  <Label htmlFor="extra-time-addon" className="cursor-pointer text-base font-medium">
+                  <Label htmlFor="extra-time-addon" className={isExtraTimeEligible() ? "cursor-pointer text-base font-medium" : "cursor-not-allowed text-base font-medium"}>
                     Extra Time - ${(extraTimePrice / 100).toFixed(2)}
                   </Label>
                   <p className="text-sm text-muted-foreground mt-1">
                     Add an additional hour to your celebration
                   </p>
+                  {!isExtraTimeEligible() && (
+                    <p className="text-sm text-amber-600 dark:text-amber-400 mt-1">
+                      Only available on Saturday at 6:00 PM
+                    </p>
+                  )}
                 </div>
               </div>
             </div>

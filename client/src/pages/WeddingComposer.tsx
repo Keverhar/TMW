@@ -1372,6 +1372,8 @@ export default function WeddingComposer() {
               rehearsalAddon={formData.rehearsalAddon}
               onChange={updateField}
               eventType={formData.eventType}
+              preferredDate={formData.preferredDate}
+              timeSlot={formData.timeSlot}
             />
           )}
           {steps[currentStep - 1]?.id === 13 && (
