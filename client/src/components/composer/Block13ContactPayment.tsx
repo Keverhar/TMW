@@ -26,6 +26,7 @@ interface Block13ContactPaymentProps {
   onChange: (field: string, value: string | boolean | number) => void;
   eventType: string;
   basePackagePrice: number;
+  amountPaid: number;
 }
 
 export default function Block13ContactPayment({
@@ -44,7 +45,8 @@ export default function Block13ContactPayment({
   photoBookQuantity = 1,
   onChange,
   eventType,
-  basePackagePrice
+  basePackagePrice,
+  amountPaid
 }: Block13ContactPaymentProps) {
   const [showTermsDialog, setShowTermsDialog] = useState(false);
   const [showRefundDialog, setShowRefundDialog] = useState(false);
@@ -273,14 +275,14 @@ export default function Block13ContactPayment({
 
             <div className="flex justify-between">
               <span>Amount Paid</span>
-              <span>$0.00</span>
+              <span>${(amountPaid / 100).toFixed(2)}</span>
             </div>
 
             <div className="border-t my-2"></div>
 
             <div className="flex justify-between font-semibold text-lg">
               <span>Balance Due</span>
-              <span>${((basePackagePrice + addonsTotal) / 100).toFixed(2)}</span>
+              <span>${((basePackagePrice + addonsTotal - amountPaid) / 100).toFixed(2)}</span>
             </div>
           </div>
         </CardContent>

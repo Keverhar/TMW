@@ -226,6 +226,7 @@ export default function WeddingComposer() {
     extraTimeAddon: false,
     byobBarAddon: false,
     rehearsalAddon: false,
+    amountPaid: 0,
   });
 
   const updateField = (field: string, value: string | boolean | number) => {
@@ -680,6 +681,7 @@ export default function WeddingComposer() {
         extraTimeAddon: composer.extraTimeAddon || false,
         byobBarAddon: composer.byobBarAddon || false,
         rehearsalAddon: composer.rehearsalAddon || false,
+        amountPaid: composer.amountPaid || 0,
       });
       
       // Release hydration flag after a brief delay to ensure effect has run
@@ -856,6 +858,7 @@ export default function WeddingComposer() {
                 extraTimeAddon: composer.extraTimeAddon || false,
                 byobBarAddon: composer.byobBarAddon || false,
                 rehearsalAddon: composer.rehearsalAddon || false,
+                amountPaid: composer.amountPaid || 0,
               });
               
               // Release hydration flag after a brief delay to ensure effect has run
@@ -1310,6 +1313,7 @@ export default function WeddingComposer() {
               onChange={updateField}
               eventType={formData.eventType}
               basePackagePrice={basePrice}
+              amountPaid={formData.amountPaid}
             />
           )}
         </div>

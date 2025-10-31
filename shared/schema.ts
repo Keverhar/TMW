@@ -169,6 +169,7 @@ export const weddingComposers = pgTable("wedding_composers", {
   byobBarAddon: boolean("byob_bar_addon").default(false),
   rehearsalAddon: boolean("rehearsal_addon").default(false),
   totalPrice: integer("total_price").notNull(),
+  amountPaid: integer("amount_paid").notNull().default(0),
   
   // Payment & Status
   paymentStatus: text("payment_status").notNull().default("pending"),
