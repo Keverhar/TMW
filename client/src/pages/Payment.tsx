@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useRoute } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -28,6 +28,18 @@ export default function Payment() {
     queryKey: ["/api/wedding-composers", composerId],
     enabled: !!composerId,
   });
+
+  // Sync paymentMethod state with composer data when it loads
+  useEffect(() => {
+    if (composer?.paymentMethod) {
+      const method = composer.paymentMethod;
+      if (method === 'credit_card') {
+        setPaymentMethod('card');
+      } else if (method === 'ach' || method === 'affirm' || method === 'paypal') {
+        setPaymentMethod(method as "ach" | "affirm" | "paypal");
+      }
+    }
+  }, [composer?.paymentMethod]);
 
   // Calculate balance due (total - amount already paid) with ACH or Affirm discount if applicable
   const calculateTotalPrice = () => {
