@@ -29,12 +29,13 @@ export default function Payment() {
     enabled: !!composerId,
   });
 
-  // Calculate total price with ACH or Affirm discount if applicable
+  // Calculate balance due (total - amount already paid) with ACH or Affirm discount if applicable
   const calculateTotalPrice = () => {
     if (!composer) return 0;
+    const balanceDue = composer.totalPrice - (composer.amountPaid || 0);
     const achDiscount = paymentMethod === 'ach' ? 5000 : 0; // $50 discount for ACH
     const affirmDiscount = paymentMethod === 'affirm' ? 5000 : 0; // $50 discount for Affirm
-    return composer.totalPrice - achDiscount - affirmDiscount;
+    return balanceDue - achDiscount - affirmDiscount;
   };
 
   const displayTotal = calculateTotalPrice();
@@ -435,14 +436,24 @@ export default function Payment() {
                     <span>Subtotal</span>
                     <span>${(composer.totalPrice / 100).toFixed(2)}</span>
                   </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Amount Paid</span>
+                    <span>-${((composer.amountPaid || 0) / 100).toFixed(2)}</span>
+                  </div>
+                  <div className="border-t my-2"></div>
+                  <div className="flex justify-between text-sm">
+                    <span>Balance Due</span>
+                    <span>${((composer.totalPrice - (composer.amountPaid || 0)) / 100).toFixed(2)}</span>
+                  </div>
                   {(paymentMethod === 'ach' || paymentMethod === 'affirm') && (
                     <div className="flex justify-between text-sm text-green-600 dark:text-green-400">
                       <span>{paymentMethod === 'ach' ? 'ACH' : 'Affirm'} Discount</span>
                       <span>-$50.00</span>
                     </div>
                   )}
+                  <div className="border-t my-2"></div>
                   <div className="flex justify-between font-semibold text-lg">
-                    <span>Total</span>
+                    <span>Total Due Now</span>
                     <span className="text-primary">${(displayTotal / 100).toFixed(2)}</span>
                   </div>
                 </div>
