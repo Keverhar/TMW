@@ -874,8 +874,9 @@ export default function WeddingComposer() {
   }, [formData]);
 
   // Save immediately when user account is created or logs in
+  // Only for pending composers (not completed or payment_initiated)
   useEffect(() => {
-    if (userAccount && hasSeenInitialDialog) {
+    if (userAccount && hasSeenInitialDialog && composerPaymentStatus === "pending") {
       saveProgress();
     }
   }, [userAccount]);
