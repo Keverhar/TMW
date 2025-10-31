@@ -62,6 +62,7 @@ export default function WeddingComposer() {
   const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(1);
   const [composerId, setComposerId] = useState<string | null>(null);
+  const [composerPaymentStatus, setComposerPaymentStatus] = useState<string>("pending");
   const [isSaving, setIsSaving] = useState(false);
   const [showAccountDialog, setShowAccountDialog] = useState(false);
   const [showInitialDialog, setShowInitialDialog] = useState(true);
@@ -299,12 +300,22 @@ export default function WeddingComposer() {
         (formData.rehearsalAddon ? 15000 : 0);
       const totalPrice = basePrice + addonsTotal;
 
-      const composerData = {
+      let composerData = {
         ...formData,
         basePackagePrice: basePrice,
         totalPrice,
         userId: userAccount?.id || null,
       };
+
+      // Only save date/time for paid composers
+      if (composerPaymentStatus === "pending") {
+        composerData = {
+          ...composerData,
+          preferredDate: "",
+          backupDate: "",
+          timeSlot: "",
+        };
+      }
 
       if (composerId) {
         await apiRequest("PATCH", `/api/wedding-composers/${composerId}`, composerData);
@@ -312,6 +323,7 @@ export default function WeddingComposer() {
         const response = await apiRequest("POST", "/api/wedding-composers", composerData);
         const result = await response.json();
         setComposerId(result.id);
+        setComposerPaymentStatus(result.paymentStatus || "pending");
       }
     } catch (error: any) {
       toast({
@@ -447,8 +459,41 @@ export default function WeddingComposer() {
     }
 
 
-    // Save progress first
-    await saveProgress();
+    // Save progress with date/time for payment submission
+    const dayOfWeek = getDayOfWeek(formData.preferredDate);
+    const basePrice = calculatePrice(formData.eventType, dayOfWeek);
+    const addonsTotal =
+      (formData.photoBookAddon ? 30000 * (formData.photoBookQuantity || 1) : 0) +
+      (formData.extraTimeAddon ? 100000 : 0) +
+      (formData.byobBarAddon ? 40000 : 0) +
+      (formData.rehearsalAddon ? 15000 : 0);
+    const totalPrice = basePrice + addonsTotal;
+
+    const composerData = {
+      ...formData,
+      basePackagePrice: basePrice,
+      totalPrice,
+      userId: userAccount?.id || null,
+    };
+
+    try {
+      if (composerId) {
+        // For payment submission, save ALL data including date/time
+        await apiRequest("PATCH", `/api/wedding-composers/${composerId}`, composerData);
+      } else {
+        const response = await apiRequest("POST", "/api/wedding-composers", composerData);
+        const result = await response.json();
+        setComposerId(result.id);
+        setComposerPaymentStatus(result.paymentStatus || "pending");
+      }
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: "Unable to save your data. Please try again.",
+        variant: "destructive",
+      });
+      return;
+    }
 
     if (!composerId) {
       toast({
@@ -495,6 +540,7 @@ export default function WeddingComposer() {
     if (composer) {
       // Load the composer data into the form
       setComposerId(composer.id);
+      setComposerPaymentStatus(composer.paymentStatus || "pending");
       setFormData({
         eventType: composer.eventType || "modest-wedding",
         eventTypeOther: composer.eventTypeOther || "",
@@ -636,6 +682,7 @@ export default function WeddingComposer() {
     localStorage.removeItem("user");
     setUserAccount(null);
     setComposerId(null);
+    setComposerPaymentStatus("pending");
     hasLoadedDataRef.current = false;
     setLocation("/");
   };
@@ -652,15 +699,17 @@ export default function WeddingComposer() {
             const composers: WeddingComposerType[] = await response.json();
             console.log('Loaded composers:', composers.length);
             if (composers && composers.length > 0) {
-              // Get the most recent composer
-              const composer = composers.sort((a, b) => 
-                new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
-              )[0];
+              // Prioritize completed/paid composers, then most recent
+              const paidComposers = composers.filter(c => c.paymentStatus === 'completed');
+              const composer = paidComposers.length > 0
+                ? paidComposers.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())[0]
+                : composers.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())[0];
               
               console.log('Loading composer:', composer.id, 'with eventType:', composer.eventType);
               
               // Load the composer data into the form
               setComposerId(composer.id);
+              setComposerPaymentStatus(composer.paymentStatus || "pending");
               isInitialLoadRef.current = true; // Prevent date clearing during load
               previousEventTypeRef.current = composer.eventType || ""; // Set the previous event type
               setFormData({
