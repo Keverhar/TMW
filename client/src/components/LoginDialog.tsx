@@ -51,13 +51,6 @@ export default function LoginDialog({
       });
       const data: any = await response.json();
 
-      toast({
-        title: "Welcome back!",
-        description: data.composer 
-          ? "Loading your saved wedding plans..."
-          : "You've successfully logged in",
-      });
-
       onLoginSuccess(data.user.id, data.user.email, data.composer);
       onOpenChange(false);
     } catch (error: any) {

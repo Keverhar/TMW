@@ -614,16 +614,6 @@ export default function WeddingComposer() {
         byobBarAddon: composer.byobBarAddon || false,
         rehearsalAddon: composer.rehearsalAddon || false,
       });
-      
-      toast({
-        title: "Welcome back!",
-        description: "Your saved wedding plans have been loaded.",
-      });
-    } else {
-      toast({
-        title: "Welcome back!",
-        description: "Start planning your wedding!",
-      });
     }
   };
 
@@ -647,10 +637,6 @@ export default function WeddingComposer() {
     setUserAccount(null);
     setComposerId(null);
     hasLoadedDataRef.current = false;
-    toast({
-      title: "Logged out",
-      description: "You have been successfully logged out.",
-    });
     setLocation("/");
   };
 
