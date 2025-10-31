@@ -67,18 +67,8 @@ export default function Block13ContactPayment({
     const date = new Date(preferredDate + 'T12:00:00');
     const isSaturday = date.getDay() === 6;
     
-    // Check if time is 6:00 PM
-    const is6PM = timeSlot === '6:00 PM';
-    
-    console.log('Extra Time Eligibility Check:', {
-      preferredDate,
-      timeSlot,
-      parsedDate: date,
-      dayOfWeek: date.getDay(),
-      isSaturday,
-      is6PM,
-      eligible: isSaturday && is6PM
-    });
+    // Check if time is 6:00 PM (value is "6pm-9pm" for modest weddings)
+    const is6PM = timeSlot === '6pm-9pm' || timeSlot === '6pm';
     
     return isSaturday && is6PM;
   };
