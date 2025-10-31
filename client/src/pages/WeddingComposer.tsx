@@ -307,18 +307,30 @@ export default function WeddingComposer() {
         (formData.rehearsalAddon ? 15000 : 0);
       const totalPrice = basePrice + addonsTotal;
 
-      // NEVER save date/time during autosave - only save on payment submission
-      const composerData = {
-        ...formData,
-        preferredDate: "", // Always exclude date/time from autosave
-        backupDate: "",
-        timeSlot: "",
-        basePackagePrice: basePrice,
-        totalPrice,
-        userId: userAccount?.id || null,
-      };
+      let composerData;
       
-      console.log('Saving with empty date/time (autosave)');
+      // For paid/initiated composers: preserve date/time
+      // For pending composers: exclude date/time (only save on payment)
+      if (composerPaymentStatus === "completed" || composerPaymentStatus === "payment_initiated") {
+        console.log('Preserving date/time for paid composer');
+        composerData = {
+          ...formData,
+          basePackagePrice: basePrice,
+          totalPrice,
+          userId: userAccount?.id || null,
+        };
+      } else {
+        console.log('Excluding date/time for pending composer');
+        composerData = {
+          ...formData,
+          preferredDate: "", // Exclude date/time for unpaid composers
+          backupDate: "",
+          timeSlot: "",
+          basePackagePrice: basePrice,
+          totalPrice,
+          userId: userAccount?.id || null,
+        };
+      }
 
       if (composerId) {
         await apiRequest("PATCH", `/api/wedding-composers/${composerId}`, composerData);
