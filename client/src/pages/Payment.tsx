@@ -112,11 +112,19 @@ export default function Payment() {
     // Simulate payment processing and update payment status
     setTimeout(async () => {
       try {
-        // Update payment status to completed
+        // Calculate the amount being paid (with discounts applied)
+        const paymentAmount = displayTotal;
+        const currentAmountPaid = composer?.amountPaid || 0;
+        const newAmountPaid = currentAmountPaid + paymentAmount;
+        
+        // Update payment status to completed AND add to amount paid
         await fetch(`/api/wedding-composers/${composerId}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ paymentStatus: 'completed' }),
+          body: JSON.stringify({ 
+            paymentStatus: 'completed',
+            amountPaid: newAmountPaid
+          }),
         });
         
         toast({
