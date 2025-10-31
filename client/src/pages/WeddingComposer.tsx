@@ -58,7 +58,7 @@ const calculatePrice = (eventType: string, dayOfWeek: string): number => {
 };
 
 export default function WeddingComposer() {
-  const [, setLocation] = useLocation();
+  const [location, setLocation] = useLocation();
   const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(1);
   const [composerId, setComposerId] = useState<string | null>(null);
@@ -77,6 +77,7 @@ export default function WeddingComposer() {
   const [savedStepBeforeSimplification, setSavedStepBeforeSimplification] = useState<number | null>(null);
   const previousEventTypeRef = useRef<string>("");
   const hasLoadedDataRef = useRef(false);
+  const lastLocationRef = useRef<string>("");
 
   const [formData, setFormData] = useState({
     // Block 1: Event Type
@@ -796,6 +797,14 @@ export default function WeddingComposer() {
     loadUserComposerData();
   }, [userAccount, composerId]);
 
+  // Reset to step 1 when returning from payment/confirmation
+  useEffect(() => {
+    if (lastLocationRef.current.includes('/payment') || lastLocationRef.current.includes('/confirmation')) {
+      setCurrentStep(1);
+    }
+    lastLocationRef.current = location;
+  }, [location]);
+
   // Auto-save when formData changes and user is logged in
   useEffect(() => {
     if (userAccount && composerId) {
@@ -972,56 +981,39 @@ export default function WeddingComposer() {
                 );
               })}
             </div>
+            {userAccount && (
+              <div className="flex-shrink-0">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      data-testid="button-account-menu"
+                    >
+                      <User className="h-4 w-4 mr-2" />
+                      Account
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={handleLogout} data-testid="button-logout">
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Logout
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            )}
           </div>
         </div>
       </div>
 
       <div className="max-w-4xl mx-auto p-6">
         <div className="mb-8">
-          <div className="flex items-center justify-between mb-4 gap-4">
-            <div>
-              <h1 className="text-4xl font-serif mb-2">The Wedding Composer</h1>
-              <p className="text-muted-foreground">
-                Your personalized planning tool for designing a wedding day that feels entirely your own
-              </p>
-            </div>
-            <div className="flex flex-col gap-2 items-end shrink-0">
-              {!userAccount && (
-                <Button
-                  onClick={() => setShowLoginDialog(true)}
-                  className="bg-zinc-700 hover:bg-zinc-800 text-yellow-400 font-semibold border-0"
-                  data-testid="button-create-account-login-header"
-                >
-                  <UserPlus className="h-4 w-4 mr-2" />
-                  Create Account or Login
-                </Button>
-              )}
-              {userAccount && (
-                <div className="flex flex-col gap-1 items-end">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        data-testid="button-account-menu"
-                      >
-                        <User className="h-4 w-4 mr-2" />
-                        Account
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem onClick={handleLogout} data-testid="button-logout">
-                        <LogOut className="h-4 w-4 mr-2" />
-                        Logout
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                  <div className="text-xs text-muted-foreground" data-testid="text-auto-save-indicator">
-                    Auto-saving as {userAccount.email}
-                  </div>
-                </div>
-              )}
-            </div>
+          <div className="mb-4">
+            <h1 className="text-4xl font-serif mb-2">The Wedding Composer</h1>
+            <p className="text-muted-foreground">
+              Your personalized planning tool for designing a wedding day that feels entirely your own
+            </p>
           </div>
 
           <div className="space-y-2">

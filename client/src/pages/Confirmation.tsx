@@ -112,53 +112,6 @@ export default function Confirmation() {
 
             <Card>
               <CardHeader>
-                <CardTitle>Your Wedding Details</CardTitle>
-                <CardDescription>Review your selections</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div>
-                  <p className="text-sm font-medium">Event Type:</p>
-                  <p className="text-sm text-muted-foreground">
-                    {composer.eventType === 'modest-elopement' ? 'Modest Elopement' :
-                     composer.eventType === 'vow-renewal' ? 'Vow Renewal' :
-                     composer.eventType === 'modest-wedding-friday-sunday' ? 'Modest Wedding (Friday/Sunday)' :
-                     composer.eventType === 'modest-wedding-saturday' ? 'Modest Wedding (Saturday)' :
-                     composer.eventType}
-                  </p>
-                </div>
-
-                {composer.signatureColor && (
-                  <div>
-                    <p className="text-sm font-medium">Signature Color:</p>
-                    <p className="text-sm text-muted-foreground">{composer.signatureColor}</p>
-                  </div>
-                )}
-
-                {composer.ceremonyScript && (
-                  <div>
-                    <p className="text-sm font-medium">Ceremony Style:</p>
-                    <p className="text-sm text-muted-foreground">{composer.ceremonyScript}</p>
-                  </div>
-                )}
-
-                {composer.vibeCheck && (
-                  <div>
-                    <p className="text-sm font-medium">Event Vibe:</p>
-                    <p className="text-sm text-muted-foreground">{composer.vibeCheck}</p>
-                  </div>
-                )}
-
-                <div className="pt-3 border-t">
-                  <p className="text-sm font-medium">Total Investment:</p>
-                  <p className="text-2xl font-semibold text-primary">
-                    ${(composer.totalPrice / 100).toFixed(2)}
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
                 <CardTitle>What's Next?</CardTitle>
                 <CardDescription>Here's what to expect</CardDescription>
               </CardHeader>
@@ -201,8 +154,11 @@ export default function Confirmation() {
               </CardContent>
             </Card>
 
-            <div className="text-center pt-6">
-              <Button onClick={() => setLocation("/")} size="lg" className="w-full max-w-md" data-testid="button-return-home">
+            <div className="flex flex-col gap-3 items-center pt-6">
+              <Button onClick={() => setLocation("/wedding-composer")} size="lg" className="w-full max-w-md" data-testid="button-return-composer">
+                Return to Wedding Composer
+              </Button>
+              <Button onClick={() => setLocation("/")} variant="outline" size="lg" className="w-full max-w-md" data-testid="button-return-home">
                 Return to Home
               </Button>
             </div>
