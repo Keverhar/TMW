@@ -2,13 +2,18 @@ import { useLocation, useRoute } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Loader2, Calendar, Mail, Phone, Heart, DollarSign } from "lucide-react";
+import { CheckCircle, Loader2, Calendar, Mail, Phone, Heart, DollarSign, LogOut } from "lucide-react";
 import type { WeddingComposer } from "@shared/schema";
 
 export default function Confirmation() {
   const [, setLocation] = useLocation();
   const [, params] = useRoute("/confirmation/:composerId");
   const composerId = params?.composerId;
+
+  const handleLogoutAndHome = () => {
+    localStorage.removeItem("user");
+    setLocation("/");
+  };
 
   const { data: composer, isLoading } = useQuery<WeddingComposer>({
     queryKey: ["/api/wedding-composers", composerId],
@@ -155,11 +160,12 @@ export default function Confirmation() {
             </Card>
 
             <div className="flex flex-col gap-3 items-center pt-6">
-              <Button onClick={() => setLocation("/wedding-composer")} size="lg" className="w-full max-w-md" data-testid="button-return-composer">
+              <Button onClick={() => setLocation("/composer")} size="lg" className="w-full max-w-md" data-testid="button-return-composer">
                 Return to Wedding Composer
               </Button>
-              <Button onClick={() => setLocation("/")} variant="outline" size="lg" className="w-full max-w-md" data-testid="button-return-home">
-                Return to Home
+              <Button onClick={handleLogoutAndHome} variant="outline" size="lg" className="w-full max-w-md" data-testid="button-logout-home">
+                <LogOut className="h-4 w-4 mr-2" />
+                Logout and Return Home
               </Button>
             </div>
           </div>

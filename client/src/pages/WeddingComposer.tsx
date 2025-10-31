@@ -78,6 +78,7 @@ export default function WeddingComposer() {
   const previousEventTypeRef = useRef<string>("");
   const hasLoadedDataRef = useRef(false);
   const lastLocationRef = useRef<string>("");
+  const isInitialLoadRef = useRef(true);
 
   const [formData, setFormData] = useState({
     // Block 1: Event Type
@@ -230,13 +231,21 @@ export default function WeddingComposer() {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  // Clear dates when event type changes
+  // Clear dates when event type changes (but not during initial data load)
   useEffect(() => {
-    setFormData((prev) => ({
-      ...prev,
-      preferredDate: "",
-      backupDate: "",
-    }));
+    if (isInitialLoadRef.current) {
+      isInitialLoadRef.current = false;
+      return;
+    }
+    
+    // Only clear dates if event type actually changed
+    if (formData.eventType && formData.eventType !== previousEventTypeRef.current) {
+      setFormData((prev) => ({
+        ...prev,
+        preferredDate: "",
+        backupDate: "",
+      }));
+    }
   }, [formData.eventType]);
 
   // Preserve and restore navigation position when switching between package types
@@ -666,6 +675,8 @@ export default function WeddingComposer() {
               
               // Load the composer data into the form
               setComposerId(composer.id);
+              isInitialLoadRef.current = true; // Prevent date clearing during load
+              previousEventTypeRef.current = composer.eventType || ""; // Set the previous event type
               setFormData({
                 eventType: composer.eventType || "",
                 eventTypeOther: composer.eventTypeOther || "",
