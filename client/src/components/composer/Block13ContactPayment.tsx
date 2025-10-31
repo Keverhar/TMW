@@ -294,6 +294,13 @@ export default function Block13ContactPayment({
               <span data-testid="text-subtotal">${((basePackagePrice + addonsTotal) / 100).toFixed(2)}</span>
             </div>
 
+            {paymentMethod === 'ach' && (
+              <div className="flex justify-between text-green-600 dark:text-green-400" data-testid="row-ach-discount">
+                <span>ACH Discount</span>
+                <span data-testid="text-ach-discount">-$50.00</span>
+              </div>
+            )}
+
             <div className="flex justify-between" data-testid="row-amount-paid">
               <span>Amount Paid</span>
               <span data-testid="text-amount-paid">${(amountPaid / 100).toFixed(2)}</span>
@@ -303,7 +310,7 @@ export default function Block13ContactPayment({
 
             <div className="flex justify-between font-semibold text-lg" data-testid="row-balance-due">
               <span>Balance Due</span>
-              <span data-testid="text-balance-due">${((basePackagePrice + addonsTotal - amountPaid) / 100).toFixed(2)}</span>
+              <span data-testid="text-balance-due">${((basePackagePrice + addonsTotal - achDiscount - amountPaid) / 100).toFixed(2)}</span>
             </div>
           </div>
         </CardContent>
