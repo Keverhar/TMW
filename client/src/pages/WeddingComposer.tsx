@@ -529,6 +529,8 @@ export default function WeddingComposer() {
       paymentStatus: "payment_initiated", // Mark as payment initiated to preserve date/time
     };
 
+    let currentComposerId = composerId;
+
     try {
       if (composerId) {
         // For payment submission, save ALL data including date/time
@@ -537,6 +539,7 @@ export default function WeddingComposer() {
       } else {
         const response = await apiRequest("POST", "/api/wedding-composers", composerData);
         const result = await response.json();
+        currentComposerId = result.id;
         setComposerId(result.id);
         setComposerPaymentStatus("payment_initiated"); // Update local state
       }
@@ -549,7 +552,7 @@ export default function WeddingComposer() {
       return;
     }
 
-    if (!composerId) {
+    if (!currentComposerId) {
       toast({
         title: "Error",
         description: "Unable to process payment. Please try again.",
@@ -559,7 +562,7 @@ export default function WeddingComposer() {
     }
 
     // Redirect to payment page
-    setLocation(`/payment/${composerId}`);
+    setLocation(`/payment/${currentComposerId}`);
   };
 
   const handleSaveProgress = async () => {
