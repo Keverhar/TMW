@@ -209,25 +209,6 @@ export default function Block13ContactPayment({
               rows={2}
             />
           </div>
-
-          <div className="space-y-3">
-            <Label>Preferred Payment Method</Label>
-            <Select value={paymentMethod} onValueChange={(value) => onChange('paymentMethod', value)}>
-              <SelectTrigger data-testid="select-payment-method">
-                <SelectValue placeholder="Select payment method" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="credit_card">Credit/Debit Card</SelectItem>
-                <SelectItem value="ach">ACH (Bank Transfer) - Save $50</SelectItem>
-              </SelectContent>
-            </Select>
-            {paymentMethod === 'ach' && (
-              <div className="p-3 bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-md text-sm space-y-1">
-                <p className="font-medium text-green-900 dark:text-green-100">ACH Payment Selected - $50 Discount Applied!</p>
-                <p className="text-green-700 dark:text-green-300">Pay directly from your bank account. Funds take 2–3 days to clear, but your date is secured once payment is received.</p>
-              </div>
-            )}
-          </div>
         </CardContent>
       </Card>
 
