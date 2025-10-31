@@ -2,7 +2,7 @@ import { useLocation, useRoute } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Loader2, Calendar, Mail, Phone } from "lucide-react";
+import { CheckCircle, Loader2, Calendar, Mail, Phone, Heart, DollarSign } from "lucide-react";
 import type { WeddingComposer } from "@shared/schema";
 
 export default function Confirmation() {
@@ -53,11 +53,35 @@ export default function Confirmation() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center gap-3">
+                  <Heart className="h-5 w-5 text-muted-foreground" />
+                  <div>
+                    <p className="font-medium">Event Type</p>
+                    <p className="text-sm text-muted-foreground">
+                      {composer.eventType === 'modest-elopement' ? 'Modest Elopement' :
+                       composer.eventType === 'vow-renewal' ? 'Vow Renewal' :
+                       composer.eventType === 'modest-wedding' ? 'Modest Wedding' :
+                       composer.eventType === 'other' ? 'Other Event' :
+                       composer.eventType}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3">
                   <Calendar className="h-5 w-5 text-muted-foreground" />
                   <div>
                     <p className="font-medium">Event Date & Time</p>
                     <p className="text-sm text-muted-foreground">
                       {composer.preferredDate || "To be determined"} at {composer.timeSlot || "TBD"}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <DollarSign className="h-5 w-5 text-muted-foreground" />
+                  <div>
+                    <p className="font-medium">Total Investment</p>
+                    <p className="text-sm text-muted-foreground">
+                      ${(composer.totalPrice / 100).toFixed(2)}
                     </p>
                   </div>
                 </div>
