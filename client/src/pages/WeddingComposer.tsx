@@ -854,15 +854,16 @@ export default function WeddingComposer() {
   }, [location]);
 
   // Auto-save when formData changes and user is logged in
+  // Only auto-save for pending composers (not payment_initiated or completed)
   useEffect(() => {
-    if (userAccount && composerId) {
+    if (userAccount && composerId && composerPaymentStatus === "pending") {
       const timeoutId = setTimeout(() => {
         saveProgress();
       }, 1000); // Debounce auto-save
       
       return () => clearTimeout(timeoutId);
     }
-  }, [formData, userAccount]);
+  }, [formData, userAccount, composerPaymentStatus]);
 
   // Save immediately when user account is created or logs in
   useEffect(() => {
