@@ -232,10 +232,18 @@ export default function WeddingComposer() {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  // Clear dates when event type changes (but not during initial data load)
+  // Add hydration flag to prevent date clearing during data loads
+  const isHydratingRef = useRef(false);
+
+  // Clear dates when event type changes (but not during initial load or data hydration)
   useEffect(() => {
     if (isInitialLoadRef.current) {
       isInitialLoadRef.current = false;
+      return;
+    }
+    
+    // Skip if we're hydrating data from database
+    if (isHydratingRef.current) {
       return;
     }
     
@@ -558,6 +566,11 @@ export default function WeddingComposer() {
       // Load the composer data into the form
       setComposerId(composer.id);
       setComposerPaymentStatus(composer.paymentStatus || "pending");
+      
+      // Set hydration flag to prevent date clearing effect from running
+      isHydratingRef.current = true;
+      previousEventTypeRef.current = composer.eventType || ""; // Set the previous event type BEFORE loading data
+      
       setFormData({
         eventType: composer.eventType || "modest-wedding",
         eventTypeOther: composer.eventTypeOther || "",
@@ -677,6 +690,11 @@ export default function WeddingComposer() {
         byobBarAddon: composer.byobBarAddon || false,
         rehearsalAddon: composer.rehearsalAddon || false,
       });
+      
+      // Release hydration flag after a brief delay to ensure effect has run
+      setTimeout(() => {
+        isHydratingRef.current = false;
+      }, 100);
     }
   };
 
@@ -732,8 +750,10 @@ export default function WeddingComposer() {
               // Load the composer data into the form
               setComposerId(composer.id);
               setComposerPaymentStatus(composer.paymentStatus || "pending");
-              isInitialLoadRef.current = true; // Prevent date clearing during load
-              previousEventTypeRef.current = composer.eventType || ""; // Set the previous event type
+              
+              // Set hydration flag to prevent date clearing effect from running
+              isHydratingRef.current = true;
+              previousEventTypeRef.current = composer.eventType || ""; // Set the previous event type BEFORE loading data
               
               setFormData({
                 eventType: composer.eventType || "",
@@ -859,6 +879,11 @@ export default function WeddingComposer() {
                 preferredDate: composer.preferredDate || "",
                 timeSlot: composer.timeSlot || ""
               });
+              
+              // Release hydration flag after a brief delay to ensure effect has run
+              setTimeout(() => {
+                isHydratingRef.current = false;
+              }, 100);
             }
           }
         } catch (error) {
