@@ -734,6 +734,7 @@ export default function WeddingComposer() {
               setComposerPaymentStatus(composer.paymentStatus || "pending");
               isInitialLoadRef.current = true; // Prevent date clearing during load
               previousEventTypeRef.current = composer.eventType || ""; // Set the previous event type
+              
               setFormData({
                 eventType: composer.eventType || "",
                 eventTypeOther: composer.eventTypeOther || "",
@@ -852,6 +853,11 @@ export default function WeddingComposer() {
                 extraTimeAddon: composer.extraTimeAddon || false,
                 byobBarAddon: composer.byobBarAddon || false,
                 rehearsalAddon: composer.rehearsalAddon || false,
+              });
+              
+              console.log('Form data set with date/time:', {
+                preferredDate: composer.preferredDate || "",
+                timeSlot: composer.timeSlot || ""
               });
             }
           }
