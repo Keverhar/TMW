@@ -70,6 +70,7 @@ export default function WeddingComposer() {
   });
   const [savedStepBeforeSimplification, setSavedStepBeforeSimplification] = useState<number | null>(null);
   const previousEventTypeRef = useRef<string>("");
+  const hasLoadedDataRef = useRef(false);
 
   const [formData, setFormData] = useState({
     // Block 1: Event Type
@@ -638,16 +639,21 @@ export default function WeddingComposer() {
   // Load user's existing composer data when component mounts with logged-in user
   useEffect(() => {
     const loadUserComposerData = async () => {
-      if (userAccount && !composerId) {
+      if (userAccount && !composerId && !hasLoadedDataRef.current) {
+        hasLoadedDataRef.current = true;
+        console.log('Loading composer data for user:', userAccount.id);
         try {
           const response = await fetch(`/api/wedding-composers/by-user?userId=${userAccount.id}`);
           if (response.ok) {
             const composers: WeddingComposerType[] = await response.json();
+            console.log('Loaded composers:', composers.length);
             if (composers && composers.length > 0) {
               // Get the most recent composer
               const composer = composers.sort((a, b) => 
                 new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
               )[0];
+              
+              console.log('Loading composer:', composer.id, 'with eventType:', composer.eventType);
               
               // Load the composer data into the form
               setComposerId(composer.id);
@@ -774,12 +780,13 @@ export default function WeddingComposer() {
           }
         } catch (error) {
           console.error('Error loading composer data:', error);
+          hasLoadedDataRef.current = false;
         }
       }
     };
     
     loadUserComposerData();
-  }, []);
+  }, [userAccount, composerId]);
 
   // Auto-save when formData changes and user is logged in
   useEffect(() => {
