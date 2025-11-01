@@ -1079,9 +1079,11 @@ export default function WeddingComposer() {
       <div className="sticky top-0 z-50 bg-background border-b">
         <div className="max-w-4xl mx-auto px-6 py-3">
           <div className="flex flex-wrap items-start gap-3">
-            <div className="flex-shrink-0 px-4 py-1.5 bg-background border rounded-md font-bold text-sm text-yellow-400" data-testid="text-total-price">
-              ${(totalPrice / 100).toFixed(2)}
-            </div>
+            {formData.eventType && (
+              <div className="flex-shrink-0 px-4 py-1.5 bg-background border rounded-md font-bold text-sm text-yellow-400" data-testid="text-total-price">
+                ${(totalPrice / 100).toFixed(2)}
+              </div>
+            )}
             <div className="flex flex-wrap gap-2 flex-1 min-w-0">
               {steps.map((step, index) => {
                 const stepNumber = index + 1;
