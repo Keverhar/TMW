@@ -30,7 +30,7 @@ import Block10Slideshow from "@/components/composer/Block10Slideshow";
 import Block11PersonalTouches from "@/components/composer/Block11PersonalTouches";
 import Block12EviteSaveTheDate from "@/components/composer/Block12EviteSaveTheDate";
 import BlockAddOns from "@/components/composer/BlockAddOns";
-import BlockCart from "@/components/composer/BlockCart";
+import Block13ContactPayment from "@/components/composer/Block13ContactPayment";
 
 const allSteps = [
   { id: 1, title: 'Event Type', description: 'Choose your celebration', availableFor: ['all'] },
@@ -1388,27 +1388,30 @@ export default function WeddingComposer() {
             />
           )}
           {steps[currentStep - 1]?.id === 13 && (
-            <BlockCart
-              eventType={formData.eventType}
-              basePackagePrice={basePrice}
+            <Block13ContactPayment
+              customerName={formData.customerName}
+              customerName2={formData.customerName2}
+              customerEmail={formData.customerEmail}
+              customerPhone={formData.customerPhone}
+              smsConsent={formData.smsConsent}
+              mailingAddress={formData.mailingAddress}
+              paymentMethod={formData.paymentMethod}
+              termsAccepted={formData.termsAccepted}
               photoBookAddon={formData.photoBookAddon}
-              photoBookQuantity={formData.photoBookQuantity}
               extraTimeAddon={formData.extraTimeAddon}
               byobBarAddon={formData.byobBarAddon}
               rehearsalAddon={formData.rehearsalAddon}
+              photoBookQuantity={formData.photoBookQuantity}
               photoBookPrice={photoBookPrice}
               extraTimePrice={extraTimePrice}
               byobBarPrice={byobBarPrice}
               rehearsalPrice={rehearsalPrice}
-              paymentMethod={formData.paymentMethod}
               achDiscountAmount={getPaymentDiscount('ach', formData.eventType)}
               affirmDiscountAmount={getPaymentDiscount('affirm', formData.eventType)}
-              echeckDiscountAmount={getPaymentDiscount('echeck', formData.eventType)}
-              paypalDiscountAmount={getPaymentDiscount('paypal', formData.eventType)}
-              venmoDiscountAmount={getPaymentDiscount('venmo', formData.eventType)}
-              amountPaid={formData.amountPaid}
-              termsAccepted={formData.termsAccepted}
               onChange={updateField}
+              eventType={formData.eventType}
+              basePackagePrice={basePrice}
+              amountPaid={formData.amountPaid}
               preferredDate={formData.preferredDate}
               timeSlot={formData.timeSlot}
             />
