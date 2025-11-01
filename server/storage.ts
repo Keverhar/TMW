@@ -22,6 +22,8 @@ export interface IStorage {
   updateWeddingComposer(id: string, updates: Partial<InsertWeddingComposer>): Promise<WeddingComposer | undefined>;
   updateWeddingComposerPaymentStatus(id: string, paymentStatus: string, stripeSessionId?: string, stripePaymentIntentId?: string): Promise<WeddingComposer | undefined>;
   getAllWeddingComposers(): Promise<WeddingComposer[]>;
+  getBookedDateTimeSlots(): Promise<Array<{ date: string; timeSlot: string; eventType: string }>>;
+  checkDateTimeAvailability(date: string, timeSlot: string, excludeComposerId?: string): Promise<boolean>;
 }
 
 export class MemStorage implements IStorage {
@@ -220,6 +222,28 @@ export class MemStorage implements IStorage {
   async getAllWeddingComposers(): Promise<WeddingComposer[]> {
     return Array.from(this.weddingComposers.values());
   }
+
+  async getBookedDateTimeSlots(): Promise<Array<{ date: string; timeSlot: string; eventType: string }>> {
+    const paidComposers = Array.from(this.weddingComposers.values()).filter(
+      (composer) => composer.paymentStatus === 'completed' && composer.preferredDate && composer.timeSlot
+    );
+    return paidComposers.map(c => ({
+      date: c.preferredDate!,
+      timeSlot: c.timeSlot!,
+      eventType: c.eventType
+    }));
+  }
+
+  async checkDateTimeAvailability(date: string, timeSlot: string, excludeComposerId?: string): Promise<boolean> {
+    const conflict = Array.from(this.weddingComposers.values()).find(
+      (composer) =>
+        composer.paymentStatus === 'completed' &&
+        composer.preferredDate === date &&
+        composer.timeSlot === timeSlot &&
+        composer.id !== excludeComposerId
+    );
+    return !conflict; // Returns true if available (no conflict)
+  }
 }
 
 export class DbStorage implements IStorage {
@@ -333,6 +357,42 @@ export class DbStorage implements IStorage {
 
   async getAllWeddingComposers(): Promise<WeddingComposer[]> {
     return await this.db.select().from(weddingComposers);
+  }
+
+  async getBookedDateTimeSlots(): Promise<Array<{ date: string; timeSlot: string; eventType: string }>> {
+    const result = await this.db
+      .select({
+        date: weddingComposers.preferredDate,
+        timeSlot: weddingComposers.timeSlot,
+        eventType: weddingComposers.eventType,
+      })
+      .from(weddingComposers)
+      .where(eq(weddingComposers.paymentStatus, 'completed'));
+    
+    // Filter out null values
+    return result.filter(r => r.date && r.timeSlot).map(r => ({
+      date: r.date!,
+      timeSlot: r.timeSlot!,
+      eventType: r.eventType
+    }));
+  }
+
+  async checkDateTimeAvailability(date: string, timeSlot: string, excludeComposerId?: string): Promise<boolean> {
+    const query = this.db
+      .select()
+      .from(weddingComposers)
+      .where(eq(weddingComposers.paymentStatus, 'completed'));
+    
+    const results = await query;
+    
+    const conflict = results.find(
+      (composer) =>
+        composer.preferredDate === date &&
+        composer.timeSlot === timeSlot &&
+        composer.id !== excludeComposerId
+    );
+    
+    return !conflict; // Returns true if available (no conflict)
   }
 }
 

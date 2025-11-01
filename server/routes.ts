@@ -283,6 +283,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Availability Routes - Prevent double-booking
+  
+  // Get all booked date/time slots
+  app.get("/api/availability/booked-slots", async (req, res) => {
+    try {
+      const bookedSlots = await storage.getBookedDateTimeSlots();
+      res.json(bookedSlots);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Check if a specific date/time slot is available
+  app.post("/api/availability/check", async (req, res) => {
+    try {
+      const { date, timeSlot, composerId } = req.body;
+      
+      if (!date || !timeSlot) {
+        return res.status(400).json({ message: "Date and timeSlot are required" });
+      }
+      
+      const isAvailable = await storage.checkDateTimeAvailability(date, timeSlot, composerId);
+      res.json({ available: isAvailable });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
   // Create Stripe checkout session for a wedding composer
   app.post("/api/wedding-composers/create-checkout-session", async (req, res) => {
     if (!stripe) {
@@ -295,6 +323,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const composer = await storage.getWeddingComposer(composerId);
       if (!composer) {
         return res.status(404).json({ message: "Wedding composer not found" });
+      }
+
+      // Check if date/time slot is still available (prevent double-booking)
+      if (composer.preferredDate && composer.timeSlot) {
+        const isAvailable = await storage.checkDateTimeAvailability(
+          composer.preferredDate,
+          composer.timeSlot,
+          composerId
+        );
+        
+        if (!isAvailable) {
+          return res.status(409).json({
+            message: "This date and time slot has already been booked. Please select a different date or time."
+          });
+        }
       }
 
       const eventDate = composer.preferredDate || "TBD";
