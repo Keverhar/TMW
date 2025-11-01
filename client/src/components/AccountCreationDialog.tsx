@@ -76,6 +76,8 @@ export default function AccountCreationDialog({ open, onOpenChange, onAccountCre
   });
 
   const suffixValue = form.watch("suffix");
+  const standardSuffixes = [" ", "Jr.", "Sr.", "II", "III", "IV"];
+  const showCustomSuffix = suffixValue && !standardSuffixes.includes(suffixValue);
 
   const handleEmailSignup = async (data: SignupForm) => {
     setIsSubmitting(true);
@@ -340,7 +342,7 @@ export default function AccountCreationDialog({ open, onOpenChange, onAccountCre
                   />
                 </div>
 
-                {suffixValue === "Other" && (
+                {showCustomSuffix && (
                   <FormField
                     control={form.control}
                     name="customSuffix"

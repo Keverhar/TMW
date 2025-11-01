@@ -73,6 +73,8 @@ export default function Account() {
   });
 
   const suffixValue = form.watch("suffix");
+  const standardSuffixes = [" ", "Jr.", "Sr.", "II", "III", "IV"];
+  const showCustomSuffix = suffixValue && !standardSuffixes.includes(suffixValue);
 
   useEffect(() => {
     const loadAccountData = async () => {
@@ -402,7 +404,7 @@ export default function Account() {
                   />
                 </div>
 
-                {suffixValue === "Other" && (
+                {showCustomSuffix && (
                   <FormField
                     control={form.control}
                     name="customSuffix"
