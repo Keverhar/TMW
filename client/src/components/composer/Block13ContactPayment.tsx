@@ -222,7 +222,7 @@ export default function Block13ContactPayment({
         </CardContent>
       </Card>
 
-      {paymentMethod === 'e_check' && (
+      {paymentMethod === 'echeck' && (
         <Card>
           <CardHeader>
             <CardTitle>E-Check Payment Information</CardTitle>
