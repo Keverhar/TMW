@@ -8,7 +8,6 @@ import { format } from "date-fns";
 
 interface Block1EventTypeProps {
   eventType: string;
-  eventTypeOther: string;
   preferredDate: string;
   timeSlot: string;
   onChange: (field: string, value: string) => void;
@@ -29,11 +28,6 @@ const eventTypes = [
     value: "vow-renewal",
     label: "Vow Renewal",
     description: "Celebrate your journey together with a heartfelt renewal ceremony."
-  },
-  {
-    value: "other",
-    label: "Other",
-    description: "Planning something unique? Tell us more and we'll customize the experience."
   }
 ];
 
@@ -64,7 +58,7 @@ const getTimeSlots = (preferredDate: string, eventType: string) => {
   ];
 };
 
-export default function Block1EventType({ eventType, eventTypeOther, preferredDate, timeSlot, onChange }: Block1EventTypeProps) {
+export default function Block1EventType({ eventType, preferredDate, timeSlot, onChange }: Block1EventTypeProps) {
   const selectedEvent = eventTypes.find(e => e.value === eventType);
   const isSimplifiedFlow = eventType === 'modest-elopement' || eventType === 'vow-renewal';
   const allowedDays = isSimplifiedFlow 
@@ -132,20 +126,6 @@ export default function Block1EventType({ eventType, eventTypeOther, preferredDa
               ))}
             </RadioGroup>
           </div>
-
-          {eventType === 'other' && (
-            <div className="space-y-2">
-              <Label htmlFor="event-type-other">Tell us about your event</Label>
-              <Textarea
-                id="event-type-other"
-                data-testid="input-event-type-other"
-                placeholder="Please describe the type of event you're planning..."
-                value={eventTypeOther}
-                onChange={(e) => onChange('eventTypeOther', e.target.value)}
-                rows={3}
-              />
-            </div>
-          )}
 
           <div className="flex gap-2 items-start bg-blue-50 dark:bg-blue-950 p-3 rounded-md">
             <Info className="h-4 w-4 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />

@@ -45,7 +45,6 @@ export const weddingComposers = pgTable("wedding_composers", {
   
   // Block 1: Event Type
   eventType: text("event_type").notNull(),
-  eventTypeOther: text("event_type_other"),
   
   // Block 2: Date & Time
   preferredDate: text("preferred_date"),
@@ -192,8 +191,14 @@ export const weddingComposers = pgTable("wedding_composers", {
   echeckAccountNumber: text("echeck_account_number"),
   echeckCheckNumber: text("echeck_check_number"),
   
+  // Legacy columns (nullable for backward compatibility)
+  customerName: text("customer_name"),
+  customerName2: text("customer_name_2"),
+  customerEmail: text("customer_email"),
+  customerPhone: text("customer_phone"),
+  
   // Pricing & Add-ons
-  basePackagePrice: integer("base_package_price").notNull(),
+  basePackagePrice: integer("base_package_price"),
   photoBookAddon: boolean("photo_book_addon").default(false),
   photoBookQuantity: integer("photo_book_quantity").default(1),
   photoBookPrice: integer("photo_book_price").default(30000), // Price per book in cents
@@ -205,7 +210,7 @@ export const weddingComposers = pgTable("wedding_composers", {
   rehearsalPrice: integer("rehearsal_price").default(15000), // Price in cents
   achDiscountAmount: integer("ach_discount_amount").default(5000), // ACH discount in cents
   affirmDiscountAmount: integer("affirm_discount_amount").default(5000), // Affirm discount in cents
-  totalPrice: integer("total_price").notNull(),
+  totalPrice: integer("total_price"),
   amountPaid: integer("amount_paid").notNull().default(0),
   
   // Payment & Status

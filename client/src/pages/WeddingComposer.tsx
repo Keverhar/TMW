@@ -88,7 +88,6 @@ export default function WeddingComposer() {
   const [formData, setFormData] = useState({
     // Block 1: Event Type
     eventType: "",
-    eventTypeOther: "",
 
     // Block 2: Date & Time
     preferredDate: "",
@@ -638,7 +637,6 @@ export default function WeddingComposer() {
       
       setFormData({
         eventType: composer.eventType || "",
-        eventTypeOther: composer.eventTypeOther || "",
         preferredDate: composer.preferredDate || "",
         backupDate: composer.backupDate || "",
         timeSlot: composer.timeSlot || "",
@@ -835,7 +833,6 @@ export default function WeddingComposer() {
               
               setFormData({
                 eventType: composer.eventType || "",
-                eventTypeOther: composer.eventTypeOther || "",
                 preferredDate: composer.preferredDate || "",
                 backupDate: composer.backupDate || "",
                 timeSlot: composer.timeSlot || "",
@@ -1292,7 +1289,6 @@ export default function WeddingComposer() {
           {steps[currentStep - 1]?.id === 2 && (
             <Block1EventType
               eventType={formData.eventType}
-              eventTypeOther={formData.eventTypeOther}
               preferredDate={formData.preferredDate}
               timeSlot={formData.timeSlot}
               onChange={updateField}
