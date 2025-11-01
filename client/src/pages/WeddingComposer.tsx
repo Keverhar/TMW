@@ -1349,7 +1349,7 @@ export default function WeddingComposer() {
               ceremonySpecialRequests={formData.ceremonySpecialRequests}
               onChange={updateField}
               showAddOns={!isSimplifiedFlow}
-              readOnly={isBlockReadOnly(5)}
+              readOnly={isBlockReadOnly(6)}
               eventType={formData.eventType}
             />
           )}
