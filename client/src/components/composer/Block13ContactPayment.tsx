@@ -67,6 +67,7 @@ export default function Block13ContactPayment({
   const [showTermsDialog, setShowTermsDialog] = useState(false);
   const [showRefundDialog, setShowRefundDialog] = useState(false);
   const [showByobDialog, setShowByobDialog] = useState(false);
+  const [showImmutabilityWarning, setShowImmutabilityWarning] = useState(false);
   
   const isSimplifiedFlow = eventType === 'modest-elopement' || eventType === 'vow-renewal';
   
@@ -101,6 +102,16 @@ export default function Block13ContactPayment({
       setShowByobDialog(true);
     } else {
       onChange('byobBarAddon', false);
+    }
+  };
+
+  const handleTermsChange = (checked: boolean) => {
+    if (checked && !termsAccepted) {
+      // Show warning dialog when user tries to accept terms
+      setShowImmutabilityWarning(true);
+    } else {
+      // Allow unchecking without warning
+      onChange('termsAccepted', checked as boolean);
     }
   };
 
@@ -234,7 +245,7 @@ export default function Block13ContactPayment({
               id="terms-accepted"
               data-testid="checkbox-terms-accepted"
               checked={termsAccepted}
-              onCheckedChange={(checked) => onChange('termsAccepted', checked as boolean)}
+              onCheckedChange={handleTermsChange}
             />
             <Label htmlFor="terms-accepted" className="cursor-pointer text-sm">
               I have read and I agree to <button type="button" onClick={() => setShowTermsDialog(true)} className="text-primary underline hover:no-underline">The Modest Wedding's Terms & Conditions</button>, including the <button type="button" onClick={() => setShowRefundDialog(true)} className="text-primary underline hover:no-underline">Refund and Cancellation Policy</button>, and understand that my selected date will be reserved only after full payment has been processed. All requests for refunds and cancellations must be made through email at Support@TheModestWedding.com.
@@ -315,6 +326,50 @@ export default function Block13ContactPayment({
               className="px-4 py-2 text-sm bg-primary text-primary-foreground rounded-md hover-elevate"
             >
               Accept & Continue
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Immutability Warning Dialog */}
+      <Dialog open={showImmutabilityWarning} onOpenChange={setShowImmutabilityWarning}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-amber-600 dark:text-amber-500">Important Notice</DialogTitle>
+            <DialogDescription>Please read carefully before proceeding</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="p-4 bg-amber-50 dark:bg-amber-950 rounded-md border border-amber-200 dark:border-amber-800">
+              <p className="text-sm text-amber-900 dark:text-amber-100 font-medium">
+                Once payment has been made, the following selections cannot be changed:
+              </p>
+              <ul className="list-disc list-inside mt-2 space-y-1 text-sm text-amber-800 dark:text-amber-200">
+                <li>Wedding Type (Package)</li>
+                <li>Wedding Date</li>
+                <li>Wedding Time</li>
+              </ul>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              All other selections in your Wedding Composer can be updated up to 7 days before your event. If you need to change your wedding type, date, or time after payment, you will need to cancel and rebook (subject to our cancellation policy).
+            </p>
+          </div>
+          <div className="flex gap-3 justify-end">
+            <button
+              onClick={() => setShowImmutabilityWarning(false)}
+              className="px-4 py-2 text-sm border rounded-md hover-elevate"
+              data-testid="button-cancel-warning"
+            >
+              Go Back
+            </button>
+            <button
+              onClick={() => {
+                setShowImmutabilityWarning(false);
+                onChange('termsAccepted', true);
+              }}
+              className="px-4 py-2 text-sm bg-primary text-primary-foreground rounded-md hover-elevate"
+              data-testid="button-accept-warning"
+            >
+              I Understand
             </button>
           </div>
         </DialogContent>
