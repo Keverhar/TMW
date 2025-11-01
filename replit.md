@@ -13,9 +13,14 @@ Preferred communication style: Simple, everyday language.
 ### November 1, 2025
 - **Person 2 Required Fields**: Person 2 is now mandatory in the booking flow. Only the full name and role are required; pronouns, email, and phone remain optional.
 - **Title and Suffix Options**: Removed custom title and suffix functionality. Title dropdown now only shows: Mr., Dr., Ms., Mrs. Suffix dropdown now only shows: Jr., Sr., II, III, IV.
+- **Ceremony Preferences Updates**:
+  - Removed "Vow Choices" section entirely from the ceremony page
+  - Ceremony script choices are now available for all event types (Elopement, Vow Renewal, and Weddings)
+  - Optional Ceremony Elements (Unity Candle, Sand Ceremony, Handfasting) are now only available for weddings (modest-wedding event type)
 - **Database Schema Updates**: 
   - Added NOT NULL constraints to `person2_role` and `person2_full_name` in wedding_composers table
   - Removed `custom_title` and `custom_suffix` columns from users table
+  - Made legacy columns nullable: `customer_name`, `customer_email`, `base_package_price`, `total_price`
 
 ## System Architecture
 

@@ -1354,6 +1354,7 @@ export default function WeddingComposer() {
               onChange={updateField}
               showAddOns={!isSimplifiedFlow}
               readOnly={isBlockReadOnly(5)}
+              eventType={formData.eventType}
             />
           )}
           {steps[currentStep - 1]?.id === 7 && (

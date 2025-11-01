@@ -33,6 +33,7 @@ interface Block6CeremonyProps {
   onChange: (field: string, value: string | boolean) => void;
   showAddOns?: boolean;
   readOnly?: boolean;
+  eventType: string;
 }
 
 const FULL_CEREMONY_SCRIPTS: Record<string, string> = {
@@ -340,7 +341,8 @@ export default function Block6Ceremony({
   ceremonySpecialRequests,
   onChange,
   showAddOns = true,
-  readOnly = false
+  readOnly = false,
+  eventType
 }: Block6CeremonyProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedScriptForPreview, setSelectedScriptForPreview] = useState<string>("");
@@ -405,22 +407,6 @@ export default function Block6Ceremony({
               </div>
             ))}
           </RadioGroup>
-
-          <div className="space-y-2">
-            <Label htmlFor="vow-choices">Vow Choices</Label>
-            <Select value={vowChoices} onValueChange={(value) => onChange('vowChoices', value)} disabled={readOnly}>
-              <SelectTrigger id="vow-choices" data-testid="select-vow-choices">
-                <SelectValue placeholder="Select vow style" />
-              </SelectTrigger>
-              <SelectContent>
-                {vowChoicesOptions.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
         </CardContent>
       </Card>
 
@@ -443,52 +429,54 @@ export default function Block6Ceremony({
         </DialogContent>
       </Dialog>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Optional Ceremony Elements</CardTitle>
-          <CardDescription>Add meaningful rituals and traditions (all items must be provided by you)</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="unity-candle"
-              data-testid="checkbox-unity-candle"
-              checked={unityCandle}
-              onCheckedChange={(checked) => onChange('unityCandle', checked as boolean)}
-              disabled={readOnly}
-            />
-            <Label htmlFor="unity-candle" className="cursor-pointer">
-              Unity Candle (we'll bring a unity candle set)
-            </Label>
-          </div>
+      {eventType === 'modest-wedding' && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Optional Ceremony Elements</CardTitle>
+            <CardDescription>Add meaningful rituals and traditions (all items must be provided by you)</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="unity-candle"
+                data-testid="checkbox-unity-candle"
+                checked={unityCandle}
+                onCheckedChange={(checked) => onChange('unityCandle', checked as boolean)}
+                disabled={readOnly}
+              />
+              <Label htmlFor="unity-candle" className="cursor-pointer">
+                Unity Candle (we'll bring a unity candle set)
+              </Label>
+            </div>
 
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="sand-ceremony"
-              data-testid="checkbox-sand-ceremony"
-              checked={sandCeremony}
-              onCheckedChange={(checked) => onChange('sandCeremony', checked as boolean)}
-              disabled={readOnly}
-            />
-            <Label htmlFor="sand-ceremony" className="cursor-pointer">
-              Sand Ceremony (we'll bring sand and vessels)
-            </Label>
-          </div>
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="sand-ceremony"
+                data-testid="checkbox-sand-ceremony"
+                checked={sandCeremony}
+                onCheckedChange={(checked) => onChange('sandCeremony', checked as boolean)}
+                disabled={readOnly}
+              />
+              <Label htmlFor="sand-ceremony" className="cursor-pointer">
+                Sand Ceremony (we'll bring sand and vessels)
+              </Label>
+            </div>
 
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="handfasting"
-              data-testid="checkbox-handfasting"
-              checked={handfasting}
-              onCheckedChange={(checked) => onChange('handfasting', checked as boolean)}
-              disabled={readOnly}
-            />
-            <Label htmlFor="handfasting" className="cursor-pointer">
-              Handfasting (we'll bring a handfasting ribbon or cord)
-            </Label>
-          </div>
-        </CardContent>
-      </Card>
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="handfasting"
+                data-testid="checkbox-handfasting"
+                checked={handfasting}
+                onCheckedChange={(checked) => onChange('handfasting', checked as boolean)}
+                disabled={readOnly}
+              />
+              <Label htmlFor="handfasting" className="cursor-pointer">
+                Handfasting (we'll bring a handfasting ribbon or cord)
+              </Label>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {showAddOns && (
         <Card>
