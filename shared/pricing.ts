@@ -22,6 +22,8 @@ export const PRICING = {
   discounts: {
     ach: 5000, // $50 discount for ACH payment
     affirm: 0, // No discount for Affirm payment
+    echeck: 5000, // $50 discount for E-Check payment
+    paypal: 0, // No discount for PayPal payment
   },
 } as const;
 
@@ -39,5 +41,7 @@ export function getAddonPrice(addonType: 'photoBook' | 'extraTime' | 'byobBar' |
 export function getPaymentDiscount(paymentMethod: string): number {
   if (paymentMethod === 'ach') return PRICING.discounts.ach;
   if (paymentMethod === 'affirm') return PRICING.discounts.affirm;
+  if (paymentMethod === 'echeck') return PRICING.discounts.echeck;
+  if (paymentMethod === 'paypal') return PRICING.discounts.paypal;
   return 0;
 }

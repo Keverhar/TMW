@@ -1047,9 +1047,9 @@ export default function WeddingComposer() {
       case 13: // Cart (Payment & Review)
         // Cart is complete when terms are accepted
         if (formData.termsAccepted) return 'complete';
-        // Partial if user has selected ACH (which has a discount, indicating interaction)
-        if (formData.paymentMethod === 'ach') return 'partial';
-        // None for default state (credit_card and affirm don't show partial)
+        // Partial if user has selected ACH or E-Check (which have discounts, indicating interaction)
+        if (formData.paymentMethod === 'ach' || formData.paymentMethod === 'echeck') return 'partial';
+        // None for default state (credit_card, affirm, and paypal don't show partial)
         return 'none';
       
       default:
@@ -1403,6 +1403,8 @@ export default function WeddingComposer() {
               paymentMethod={formData.paymentMethod}
               achDiscountAmount={getPaymentDiscount('ach')}
               affirmDiscountAmount={getPaymentDiscount('affirm')}
+              echeckDiscountAmount={getPaymentDiscount('echeck')}
+              paypalDiscountAmount={getPaymentDiscount('paypal')}
               amountPaid={formData.amountPaid}
               termsAccepted={formData.termsAccepted}
               onChange={updateField}

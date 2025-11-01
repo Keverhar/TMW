@@ -23,6 +23,8 @@ interface BlockCartProps {
   paymentMethod: string;
   achDiscountAmount: number;
   affirmDiscountAmount: number;
+  echeckDiscountAmount: number;
+  paypalDiscountAmount: number;
   amountPaid: number;
   termsAccepted: boolean;
   onChange: (field: string, value: string | boolean | number) => void;
@@ -45,6 +47,8 @@ export default function BlockCart({
   paymentMethod,
   achDiscountAmount,
   affirmDiscountAmount,
+  echeckDiscountAmount,
+  paypalDiscountAmount,
   amountPaid,
   termsAccepted,
   onChange,
@@ -109,7 +113,9 @@ export default function BlockCart({
   }, 0);
 
   const discount = paymentMethod === 'ach' ? achDiscountAmount : 
-                   paymentMethod === 'affirm' ? affirmDiscountAmount : 0;
+                   paymentMethod === 'affirm' ? affirmDiscountAmount :
+                   paymentMethod === 'echeck' ? echeckDiscountAmount :
+                   paymentMethod === 'paypal' ? paypalDiscountAmount : 0;
 
   // If no event type is selected, show empty cart message
   if (!eventType) {
@@ -178,7 +184,7 @@ export default function BlockCart({
             })}
 
             <div className="flex justify-between text-green-600 dark:text-green-400" data-testid="row-payment-discount">
-              <span>{paymentMethod === 'ach' ? 'ACH' : paymentMethod === 'affirm' ? 'Affirm' : 'Payment'} Discount</span>
+              <span>{paymentMethod === 'ach' ? 'ACH' : paymentMethod === 'echeck' ? 'E-Check' : paymentMethod === 'affirm' ? 'Affirm' : paymentMethod === 'paypal' ? 'PayPal' : 'Payment'} Discount</span>
               <span data-testid="text-payment-discount">{discount > 0 ? '-' : ''}${(discount / 100).toFixed(2)}</span>
             </div>
 
@@ -314,6 +320,38 @@ export default function BlockCart({
                 </Label>
               </div>
             </div>
+
+            <div className="flex items-start space-x-3 p-4 border rounded-lg hover-elevate">
+              <RadioGroupItem value="echeck" id="echeck" data-testid="radio-payment-echeck" />
+              <div className="flex-1">
+                <Label htmlFor="echeck" className="cursor-pointer">
+                  <div className="mb-2">
+                    <span className="font-semibold">Pay by E-Check</span>
+                  </div>
+                  <div className="text-sm text-muted-foreground space-y-1">
+                    <p>- Convenient electronic check payment processed securely online.</p>
+                    <p>- Same security as paper checks with faster processing.</p>
+                    <p className="font-medium text-foreground">- Special savings: Receive a ${(echeckDiscountAmount / 100).toFixed(2)} discount on your wedding package when you choose E-Check.</p>
+                  </div>
+                </Label>
+              </div>
+            </div>
+
+            <div className="flex items-start space-x-3 p-4 border rounded-lg hover-elevate">
+              <RadioGroupItem value="paypal" id="paypal" data-testid="radio-payment-paypal" />
+              <div className="flex-1">
+                <Label htmlFor="paypal" className="cursor-pointer">
+                  <div className="mb-2">
+                    <span className="font-semibold">Pay with PayPal</span>
+                  </div>
+                  <div className="text-sm text-muted-foreground space-y-1">
+                    <p>- Fast and secure payment through your PayPal account.</p>
+                    <p>- Pay with your PayPal balance, bank account, or linked cards.</p>
+                    <p>- Trusted by millions worldwide for safe online transactions.</p>
+                  </div>
+                </Label>
+              </div>
+            </div>
           </RadioGroup>
 
           {paymentMethod === 'affirm' && (
@@ -360,6 +398,52 @@ export default function BlockCart({
                 </AlertDescription>
               </Alert>
             </div>
+          )}
+
+          {paymentMethod === 'echeck' && (
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="echeckRoutingNumber">Routing Number</Label>
+                <Input
+                  id="echeckRoutingNumber"
+                  placeholder="9 digits"
+                  maxLength={9}
+                  data-testid="input-echeck-routing-number"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="echeckAccountNumber">Account Number</Label>
+                <Input
+                  id="echeckAccountNumber"
+                  placeholder="Account number"
+                  data-testid="input-echeck-account-number"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="echeckAccountName">Name on Account</Label>
+                <Input
+                  id="echeckAccountName"
+                  placeholder="Account holder name"
+                  data-testid="input-echeck-account-name"
+                />
+              </div>
+              <Alert>
+                <Info className="h-4 w-4" />
+                <AlertDescription>
+                  Your E-Check will be processed securely. Funds are typically verified within 1-2 business days.
+                </AlertDescription>
+              </Alert>
+            </div>
+          )}
+
+          {paymentMethod === 'paypal' && (
+            <Alert>
+              <Info className="h-4 w-4" />
+              <AlertDescription>
+                You'll be redirected to PayPal to complete your payment securely. 
+                Your booking will be confirmed once the payment is processed.
+              </AlertDescription>
+            </Alert>
           )}
         </CardContent>
       </Card>
