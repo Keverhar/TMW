@@ -24,12 +24,10 @@ const accountSchema = z.object({
   password: z.string().min(8, "Password must be at least 8 characters").optional().or(z.literal("")),
   confirmPassword: z.string().optional(),
   title: z.string().optional(),
-  customTitle: z.string().optional(),
   firstName: z.string().min(1, "First name is required"),
   middleName: z.string().optional(),
   lastName: z.string().min(1, "Last name is required"),
   suffix: z.string().optional(),
-  customSuffix: z.string().optional(),
   alternateEmail: z.string().email("Please enter a valid email").optional().or(z.literal("")),
   primaryPhone: z.string().min(1, "Primary phone is required"),
   alternatePhone: z.string().optional(),
@@ -63,12 +61,10 @@ export default function Account() {
       password: "",
       confirmPassword: "",
       title: "",
-      customTitle: "",
       firstName: "",
       middleName: "",
       lastName: "",
       suffix: "",
-      customSuffix: "",
       alternateEmail: "",
       primaryPhone: "",
       alternatePhone: "",
@@ -79,12 +75,6 @@ export default function Account() {
       zip: "",
     },
   });
-
-  const titleValue = form.watch("title");
-  const showCustomTitle = titleValue === "Other";
-
-  const suffixValue = form.watch("suffix");
-  const showCustomSuffix = suffixValue === "Other";
 
   useEffect(() => {
     const loadAccountData = async () => {
@@ -105,12 +95,10 @@ export default function Account() {
             password: "",
             confirmPassword: "",
             title: userData.title || "",
-            customTitle: userData.customTitle || "",
             firstName: userData.firstName || "",
             middleName: userData.middleName || "",
             lastName: userData.lastName || "",
             suffix: userData.suffix || "",
-            customSuffix: userData.customSuffix || "",
             alternateEmail: userData.alternateEmail || "",
             primaryPhone: userData.primaryPhone || "",
             alternatePhone: userData.alternatePhone || "",
@@ -147,12 +135,10 @@ export default function Account() {
       const user = JSON.parse(savedUser);
       const updateData: any = {
         title: data.title || null,
-        customTitle: data.customTitle || null,
         firstName: data.firstName,
         middleName: data.middleName || null,
         lastName: data.lastName,
         suffix: data.suffix || null,
-        customSuffix: data.customSuffix || null,
         displayName: `${data.firstName} ${data.lastName}`,
         alternateEmail: data.alternateEmail || null,
         primaryPhone: data.primaryPhone,
@@ -307,36 +293,13 @@ export default function Account() {
                             <SelectItem value="Dr.">Dr.</SelectItem>
                             <SelectItem value="Ms.">Ms.</SelectItem>
                             <SelectItem value="Mrs.">Mrs.</SelectItem>
-                            <SelectItem value="Other">Other</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                </div>
 
-                {showCustomTitle && (
-                  <FormField
-                    control={form.control}
-                    name="customTitle"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Custom Title</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="e.g., Col., Rev., Prof."
-                            {...field}
-                            data-testid="input-custom-title"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                )}
-
-                <div className="grid grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
                     name="firstName"
@@ -388,12 +351,7 @@ export default function Account() {
                       <FormItem>
                         <FormLabel>Suffix</FormLabel>
                         <Select 
-                          onValueChange={(value) => {
-                            field.onChange(value);
-                            if (value !== "Other") {
-                              form.setValue("customSuffix", "");
-                            }
-                          }} 
+                          onValueChange={field.onChange}
                           value={field.value || " "}
                         >
                           <FormControl>
@@ -408,7 +366,6 @@ export default function Account() {
                             <SelectItem value="II">II</SelectItem>
                             <SelectItem value="III">III</SelectItem>
                             <SelectItem value="IV">IV</SelectItem>
-                            <SelectItem value="Other">Other</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -416,26 +373,6 @@ export default function Account() {
                     )}
                   />
                 </div>
-
-                {showCustomSuffix && (
-                  <FormField
-                    control={form.control}
-                    name="customSuffix"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Custom Suffix</FormLabel>
-                        <FormControl>
-                          <Input 
-                            placeholder="e.g., MD, Esq, Ret" 
-                            {...field}
-                            data-testid="input-custom-suffix" 
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                )}
               </CardContent>
             </Card>
 
