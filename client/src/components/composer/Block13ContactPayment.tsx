@@ -175,16 +175,16 @@ export default function Block13ContactPayment({
               );
             })}
 
-            <div className="flex justify-between text-green-600 dark:text-green-400" data-testid="row-payment-discount">
-              <span>{paymentMethod === 'ach' ? 'ACH' : paymentMethod === 'affirm' ? 'Affirm' : 'Payment'} Discount</span>
-              <span data-testid="text-payment-discount">{discount > 0 ? '-' : ''}${(discount / 100).toFixed(2)}</span>
-            </div>
-
             <div className="border-t my-2"></div>
 
             <div className="flex justify-between" data-testid="row-subtotal">
               <span>Subtotal</span>
               <span data-testid="text-subtotal">${((basePackagePrice + addonsTotal) / 100).toFixed(2)}</span>
+            </div>
+
+            <div className="flex justify-between text-green-600 dark:text-green-400" data-testid="row-payment-discount">
+              <span>{paymentMethod === 'ach' ? 'ACH' : paymentMethod === 'affirm' ? 'Affirm' : 'Payment'} Discount</span>
+              <span data-testid="text-payment-discount">{discount > 0 ? '-' : ''}${(discount / 100).toFixed(2)}</span>
             </div>
 
             <div className="flex justify-between" data-testid="row-tax">
