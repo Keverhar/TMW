@@ -310,8 +310,8 @@ export default function WeddingComposer() {
       const extraTimePrice = getAddonPrice('extraTime');
       const byobBarPrice = getAddonPrice('byobBar');
       const rehearsalPrice = getAddonPrice('rehearsal');
-      const achDiscountAmount = getPaymentDiscount('ach');
-      const affirmDiscountAmount = getPaymentDiscount('affirm');
+      const achDiscountAmount = getPaymentDiscount('ach', formData.eventType);
+      const affirmDiscountAmount = getPaymentDiscount('affirm', formData.eventType);
       
       const addonsTotal =
         (formData.photoBookAddon ? photoBookPrice * (formData.photoBookQuantity || 1) : 0) +
@@ -506,8 +506,8 @@ export default function WeddingComposer() {
     const extraTimePrice = getAddonPrice('extraTime');
     const byobBarPrice = getAddonPrice('byobBar');
     const rehearsalPrice = getAddonPrice('rehearsal');
-    const achDiscountAmount = getPaymentDiscount('ach');
-    const affirmDiscountAmount = getPaymentDiscount('affirm');
+    const achDiscountAmount = getPaymentDiscount('ach', formData.eventType);
+    const affirmDiscountAmount = getPaymentDiscount('affirm', formData.eventType);
     
     const addonsTotal =
       (formData.photoBookAddon ? photoBookPrice * (formData.photoBookQuantity || 1) : 0) +
@@ -1401,11 +1401,11 @@ export default function WeddingComposer() {
               byobBarPrice={byobBarPrice}
               rehearsalPrice={rehearsalPrice}
               paymentMethod={formData.paymentMethod}
-              achDiscountAmount={getPaymentDiscount('ach')}
-              affirmDiscountAmount={getPaymentDiscount('affirm')}
-              echeckDiscountAmount={getPaymentDiscount('echeck')}
-              paypalDiscountAmount={getPaymentDiscount('paypal')}
-              venmoDiscountAmount={getPaymentDiscount('venmo')}
+              achDiscountAmount={getPaymentDiscount('ach', formData.eventType)}
+              affirmDiscountAmount={getPaymentDiscount('affirm', formData.eventType)}
+              echeckDiscountAmount={getPaymentDiscount('echeck', formData.eventType)}
+              paypalDiscountAmount={getPaymentDiscount('paypal', formData.eventType)}
+              venmoDiscountAmount={getPaymentDiscount('venmo', formData.eventType)}
               amountPaid={formData.amountPaid}
               termsAccepted={formData.termsAccepted}
               onChange={updateField}
