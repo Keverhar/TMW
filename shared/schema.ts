@@ -9,6 +9,7 @@ export const users = pgTable("users", {
   password: text("password"),
   authProvider: text("auth_provider").notNull().default("email"), // email, google, facebook
   displayName: text("display_name"),
+  isAdmin: boolean("is_admin").default(false).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -232,3 +233,70 @@ export const insertBookingSchema = createInsertSchema(bookings).omit({
 
 export type InsertBooking = z.infer<typeof insertBookingSchema>;
 export type Booking = typeof bookings.$inferSelect;
+
+// Admin tables for audit logging, payment tracking, and ceremony management
+export const adminActions = pgTable("admin_actions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  adminId: varchar("admin_id").notNull(),
+  entityType: text("entity_type").notNull(), // booking, payment, ceremony, user
+  entityId: varchar("entity_id").notNull(),
+  action: text("action").notNull(), // create, update, delete, cancel, refund, capture
+  payloadSnapshot: text("payload_snapshot"), // JSON snapshot of changes
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertAdminActionSchema = createInsertSchema(adminActions).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertAdminAction = z.infer<typeof insertAdminActionSchema>;
+export type AdminAction = typeof adminActions.$inferSelect;
+
+export const payments = pgTable("payments", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  composerId: varchar("composer_id").notNull(),
+  amount: integer("amount").notNull(), // Amount in cents
+  currency: text("currency").notNull().default("usd"),
+  paymentMethod: text("payment_method").notNull(), // credit_card, ach, echeck, affirm, paypal, venmo, manual
+  status: text("status").notNull().default("pending"), // pending, processing, captured, failed, refunded
+  source: text("source").notNull().default("stripe"), // stripe, manual
+  stripePaymentIntentId: text("stripe_payment_intent_id"),
+  refundedAmount: integer("refunded_amount").default(0),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  capturedAt: timestamp("captured_at"),
+  refundedAt: timestamp("refunded_at"),
+});
+
+export const insertPaymentSchema = createInsertSchema(payments).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertPayment = z.infer<typeof insertPaymentSchema>;
+export type Payment = typeof payments.$inferSelect;
+
+export const ceremonyRuns = pgTable("ceremony_runs", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  composerId: varchar("composer_id").notNull(),
+  status: text("status").notNull().default("scheduled"), // scheduled, in_progress, completed, cancelled
+  officiantId: varchar("officiant_id"),
+  checklistData: text("checklist_data"), // JSON of checklist items
+  scheduledAt: timestamp("scheduled_at"),
+  actualStartAt: timestamp("actual_start_at"),
+  actualEndAt: timestamp("actual_end_at"),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertCeremonyRunSchema = createInsertSchema(ceremonyRuns).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type InsertCeremonyRun = z.infer<typeof insertCeremonyRunSchema>;
+export type CeremonyRun = typeof ceremonyRuns.$inferSelect;
