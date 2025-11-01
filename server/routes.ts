@@ -404,6 +404,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const composerId = session.metadata?.composerId;
 
       if (composerId) {
+        // Critical: Re-check availability before completing payment to prevent race conditions
+        const composer = await storage.getWeddingComposer(composerId);
+        
+        if (composer && composer.preferredDate && composer.timeSlot) {
+          const isStillAvailable = await storage.checkDateTimeAvailability(
+            composer.preferredDate,
+            composer.timeSlot,
+            composerId
+          );
+          
+          if (!isStillAvailable) {
+            console.error(`[Webhook] Booking conflict detected for composer ${composerId} - slot already taken`);
+            // Don't complete the payment - slot was taken by another concurrent booking
+            // The payment will remain in 'pending' status and require manual resolution
+            return res.status(409).json({ 
+              error: 'booking_conflict',
+              message: 'This date and time slot was booked by another customer during checkout'
+            });
+          }
+        }
+        
+        // If still available (or no date/time selected), complete the payment
         await storage.updateWeddingComposerPaymentStatus(
           composerId,
           'completed',
@@ -429,6 +451,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const composer = await storage.getWeddingComposer(session.metadata.composerId);
         
         if (composer && session.payment_status === 'paid') {
+          // Critical: Re-check availability before completing payment to prevent race conditions
+          if (composer.preferredDate && composer.timeSlot) {
+            const isStillAvailable = await storage.checkDateTimeAvailability(
+              composer.preferredDate,
+              composer.timeSlot,
+              composer.id
+            );
+            
+            if (!isStillAvailable) {
+              console.error(`[Verify Payment] Booking conflict detected for composer ${composer.id} - slot already taken`);
+              return res.status(409).json({ 
+                status: 'conflict',
+                message: 'This date and time slot was booked by another customer during checkout'
+              });
+            }
+          }
+          
           await storage.updateWeddingComposerPaymentStatus(
             composer.id,
             'completed',

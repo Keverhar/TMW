@@ -119,3 +119,47 @@ Preferred communication style: Simple, everyday language.
 
 **Fonts**
 - Google Fonts: Playfair Display, Inter, Architects Daughter, DM Sans, Fira Code, Geist Mono (loaded via CDN in index.html)
+
+## Key Features
+
+### Double-Booking Prevention System
+
+**Overview**
+A comprehensive three-layer validation system that prevents multiple bookings for the same date/time slot, protecting against both user errors and concurrent payment race conditions.
+
+**Implementation Details**
+
+*Backend Layer*
+1. **Storage Methods** (`server/storage.ts`)
+   - `getBookedDateTimeSlots()`: Returns all date/time slots where paymentStatus = 'completed'
+   - `checkDateTimeAvailability(date, timeSlot, excludeComposerId?)`: Validates if a specific slot is still available
+   - Implemented in both MemStorage and DbStorage classes
+
+2. **API Endpoints** (`server/routes.ts`)
+   - `GET /api/availability/booked-slots`: Fetch all currently booked slots
+   - `POST /api/availability/check`: Check specific date/time availability
+
+3. **Three-Layer Validation Strategy**
+   - **Layer 1 (Pre-Checkout)**: Validates availability before creating Stripe checkout session (returns 409 if slot taken)
+   - **Layer 2 (Webhook)**: Re-validates availability in Stripe webhook before completing payment (automatic)
+   - **Layer 3 (Verify-Payment)**: Re-validates in manual payment verification endpoint (manual fallback)
+
+*Frontend Layer* (`client/src/components/composer/Block2DateTime.tsx`)
+- Fetches booked slots from API on component mount
+- Calendar component disables fully-booked dates
+- Time slot radio buttons disabled for already-booked slots
+- Visual indicators show "(Already Booked)" status for unavailable slots
+- Real-time updates via React Query cache
+
+**Race Condition Protection**
+The system prevents concurrent booking conflicts where two users might simultaneously attempt to book the same slot:
+1. User A and User B both see slot as available
+2. Both create checkout sessions (Layer 1 passes for both)
+3. User A completes payment first → webhook validates and completes booking
+4. User B completes payment → webhook re-validates, detects conflict, returns 409
+5. User B's payment remains in 'pending' status requiring manual resolution
+
+**Error Handling**
+- 409 Conflict responses with descriptive messages when slots are unavailable
+- Console logging of booking conflicts for operational monitoring
+- Clear user feedback on unavailable dates/times in the UI
