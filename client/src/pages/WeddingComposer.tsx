@@ -330,7 +330,15 @@ export default function WeddingComposer() {
         (formData.extraTimeAddon ? extraTimePrice : 0) +
         (formData.byobBarAddon ? byobBarPrice : 0) +
         (formData.rehearsalAddon ? rehearsalPrice : 0);
-      const totalPrice = basePrice + addonsTotal;
+      
+      // Apply payment method discount
+      const paymentDiscount = (formData.paymentMethod === 'ach' || formData.paymentMethod === 'echeck') 
+        ? achDiscountAmount 
+        : formData.paymentMethod === 'affirm' 
+          ? affirmDiscountAmount 
+          : 0;
+      
+      const totalPrice = basePrice + addonsTotal - paymentDiscount;
 
       let composerData;
       
@@ -474,6 +482,15 @@ export default function WeddingComposer() {
       return;
     }
 
+    if (formData.paymentMethod === 'echeck' && (!formData.echeckRoutingNumber || !formData.echeckAccountNumber || !formData.echeckAccountHolder || !formData.echeckCheckNumber)) {
+      toast({
+        title: "E-Check information required",
+        description: "Please fill in all required E-Check payment details (Routing Number, Account Number, Name on Account, and Check Number).",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (!formData.eventType) {
       toast({
         title: "Missing information",
@@ -546,7 +563,15 @@ export default function WeddingComposer() {
       (formData.extraTimeAddon ? extraTimePrice : 0) +
       (formData.byobBarAddon ? byobBarPrice : 0) +
       (formData.rehearsalAddon ? rehearsalPrice : 0);
-    const totalPrice = basePrice + addonsTotal;
+    
+    // Apply payment method discount
+    const paymentDiscount = (formData.paymentMethod === 'ach' || formData.paymentMethod === 'echeck') 
+      ? achDiscountAmount 
+      : formData.paymentMethod === 'affirm' 
+        ? affirmDiscountAmount 
+        : 0;
+    
+    const totalPrice = basePrice + addonsTotal - paymentDiscount;
 
     const composerData = {
       ...formData,

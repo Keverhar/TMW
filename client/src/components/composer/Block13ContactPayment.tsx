@@ -230,46 +230,58 @@ export default function Block13ContactPayment({
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="routing-number">Routing Number</Label>
+              <Label htmlFor="routing-number">
+                Routing Number <span className="text-destructive">*</span>
+              </Label>
               <Input
                 id="routing-number"
                 data-testid="input-routing-number"
                 placeholder="Enter routing number"
                 value={echeckRoutingNumber}
                 onChange={(e) => onChange('echeckRoutingNumber', e.target.value)}
+                required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="account-number">Account Number</Label>
+              <Label htmlFor="account-number">
+                Account Number <span className="text-destructive">*</span>
+              </Label>
               <Input
                 id="account-number"
                 data-testid="input-account-number"
                 placeholder="Enter account number"
                 value={echeckAccountNumber}
                 onChange={(e) => onChange('echeckAccountNumber', e.target.value)}
+                required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="account-holder">Name on Account</Label>
+              <Label htmlFor="account-holder">
+                Name on Account <span className="text-destructive">*</span>
+              </Label>
               <Input
                 id="account-holder"
                 data-testid="input-account-holder"
                 placeholder="Enter name on account"
                 value={echeckAccountHolder}
                 onChange={(e) => onChange('echeckAccountHolder', e.target.value)}
+                required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="check-number">Check Number</Label>
+              <Label htmlFor="check-number">
+                Check Number <span className="text-destructive">*</span>
+              </Label>
               <Input
                 id="check-number"
                 data-testid="input-check-number"
                 placeholder="Enter check number"
                 value={echeckCheckNumber}
                 onChange={(e) => onChange('echeckCheckNumber', e.target.value)}
+                required
               />
             </div>
           </CardContent>
