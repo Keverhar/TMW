@@ -458,20 +458,24 @@ export default function WeddingComposer() {
     if (!formData.person1FullName || !formData.person1Email || !formData.person1Phone || !formData.person1Role) {
       toast({
         title: "Missing information",
-        description: "Please fill in all required contact information for Person 1.",
+        description: "You must provide the couple's information before proceeding.",
         variant: "destructive",
         duration: 3000,
       });
+      setCurrentStep(13); // Navigate to The Couple block
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
 
     if (!formData.person2FullName || !formData.person2Role) {
       toast({
         title: "Missing information",
-        description: "Please fill in all required contact information for Person 2 (Name and Role).",
+        description: "You must provide the couple's information before proceeding.",
         variant: "destructive",
         duration: 3000,
       });
+      setCurrentStep(13); // Navigate to The Couple block
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
 
