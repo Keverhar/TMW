@@ -1443,7 +1443,7 @@ export default function WeddingComposer() {
           ) : (
             <Button
               onClick={handleSubmit}
-              disabled={!formData.termsAccepted || !formData.customerName}
+              disabled={!formData.termsAccepted}
               size="lg"
               data-testid="button-finalize-payment"
             >
