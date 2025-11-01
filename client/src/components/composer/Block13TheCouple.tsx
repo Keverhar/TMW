@@ -68,9 +68,7 @@ export default function Block13TheCouple({
         <CardHeader>
           <div className="flex items-center gap-2">
             <User className="h-5 w-5" />
-            <CardTitle>Person 1</CardTitle>
           </div>
-          <CardDescription>Primary contact information</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
