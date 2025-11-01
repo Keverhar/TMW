@@ -45,7 +45,8 @@ const allSteps = [
   { id: 10, title: 'Personal Touches', description: 'Special details', availableFor: ['modest-wedding', 'other'] },
   { id: 11, title: 'Evites', description: 'Digital invitations', availableFor: ['all'] },
   { id: 12, title: 'Add-Ons', description: 'Enhance your celebration', availableFor: ['all'] },
-  { id: 13, title: 'Contact Information', description: 'Finalize booking', availableFor: ['all'] },
+  { id: 13, title: 'Contact Information', description: 'Your details', availableFor: ['all'] },
+  { id: 14, title: 'Cart', description: 'Review & payment', availableFor: ['all'] },
 ];
 
 const calculatePrice = (eventType: string, dayOfWeek: string): number => {
@@ -1408,6 +1409,12 @@ export default function WeddingComposer() {
               preferredDate={formData.preferredDate}
               timeSlot={formData.timeSlot}
             />
+          )}
+          {steps[currentStep - 1]?.id === 14 && (
+            <div>
+              <h2>Cart - Coming Soon</h2>
+              <p>Booking Summary and Payment will be displayed here</p>
+            </div>
           )}
         </div>
 
