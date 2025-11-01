@@ -24,6 +24,7 @@ const accountSchema = z.object({
   password: z.string().min(8, "Password must be at least 8 characters").optional().or(z.literal("")),
   confirmPassword: z.string().optional(),
   title: z.string().optional(),
+  customTitle: z.string().optional(),
   firstName: z.string().min(1, "First name is required"),
   middleName: z.string().optional(),
   lastName: z.string().min(1, "Last name is required"),
@@ -62,6 +63,7 @@ export default function Account() {
       password: "",
       confirmPassword: "",
       title: "",
+      customTitle: "",
       firstName: "",
       middleName: "",
       lastName: "",
@@ -79,12 +81,10 @@ export default function Account() {
   });
 
   const titleValue = form.watch("title");
-  const standardTitles = [" ", "Mr.", "Dr.", "Ms.", "Mrs."];
-  const showCustomTitle = titleValue && !standardTitles.includes(titleValue);
+  const showCustomTitle = titleValue === "Other";
 
   const suffixValue = form.watch("suffix");
-  const standardSuffixes = [" ", "Jr.", "Sr.", "II", "III", "IV"];
-  const showCustomSuffix = suffixValue && !standardSuffixes.includes(suffixValue);
+  const showCustomSuffix = suffixValue === "Other";
 
   useEffect(() => {
     const loadAccountData = async () => {
@@ -105,6 +105,7 @@ export default function Account() {
             password: "",
             confirmPassword: "",
             title: userData.title || "",
+            customTitle: userData.customTitle || "",
             firstName: userData.firstName || "",
             middleName: userData.middleName || "",
             lastName: userData.lastName || "",
@@ -146,6 +147,7 @@ export default function Account() {
       const user = JSON.parse(savedUser);
       const updateData: any = {
         title: data.title || null,
+        customTitle: data.customTitle || null,
         firstName: data.firstName,
         middleName: data.middleName || null,
         lastName: data.lastName,
@@ -317,7 +319,7 @@ export default function Account() {
                 {showCustomTitle && (
                   <FormField
                     control={form.control}
-                    name="title"
+                    name="customTitle"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Custom Title</FormLabel>
@@ -325,9 +327,6 @@ export default function Account() {
                           <Input
                             placeholder="e.g., Col., Rev., Prof."
                             {...field}
-                            onChange={(e) => {
-                              field.onChange(e.target.value || "Other");
-                            }}
                             data-testid="input-custom-title"
                           />
                         </FormControl>
@@ -429,10 +428,6 @@ export default function Account() {
                           <Input 
                             placeholder="e.g., MD, Esq, Ret" 
                             {...field}
-                            onChange={(e) => {
-                              field.onChange(e);
-                              form.setValue("suffix", e.target.value || "Other");
-                            }}
                             data-testid="input-custom-suffix" 
                           />
                         </FormControl>

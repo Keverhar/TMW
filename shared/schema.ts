@@ -11,6 +11,7 @@ export const users = pgTable("users", {
   
   // Account Information
   title: text("title"), // None, Mr., Sir, Ms., Mrs., Lady
+  customTitle: text("custom_title"), // Used when title is "Other"
   firstName: text("first_name"),
   middleName: text("middle_name"),
   lastName: text("last_name"),
