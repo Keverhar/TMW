@@ -282,14 +282,14 @@ export default function Account() {
                           onValueChange={(value) => {
                             if (value === "Other") {
                               setShowOtherTitle(true);
-                              field.onChange(customTitle || "Other");
+                              field.onChange("Other");
                             } else {
                               setShowOtherTitle(false);
                               setCustomTitle("");
                               field.onChange(value);
                             }
                           }} 
-                          value={showOtherTitle ? "Other" : (field.value || " ")}
+                          value={field.value || " "}
                         >
                           <FormControl>
                             <SelectTrigger data-testid="select-title">
@@ -311,7 +311,7 @@ export default function Account() {
                             value={customTitle}
                             onChange={(e) => {
                               setCustomTitle(e.target.value);
-                              field.onChange(e.target.value);
+                              field.onChange(e.target.value || "Other");
                             }}
                             className="mt-2"
                             data-testid="input-custom-title"
@@ -372,7 +372,15 @@ export default function Account() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Suffix</FormLabel>
-                        <Select onValueChange={field.onChange} value={field.value || " "}>
+                        <Select 
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            if (value !== "Other") {
+                              form.setValue("customSuffix", "");
+                            }
+                          }} 
+                          value={field.value || " "}
+                        >
                           <FormControl>
                             <SelectTrigger data-testid="select-suffix">
                               <SelectValue placeholder="None" />
@@ -402,7 +410,15 @@ export default function Account() {
                       <FormItem>
                         <FormLabel>Custom Suffix</FormLabel>
                         <FormControl>
-                          <Input placeholder="e.g., MD, Esq, Ret" {...field} data-testid="input-custom-suffix" />
+                          <Input 
+                            placeholder="e.g., MD, Esq, Ret" 
+                            {...field}
+                            onChange={(e) => {
+                              field.onChange(e);
+                              form.setValue("suffix", e.target.value || "Other");
+                            }}
+                            data-testid="input-custom-suffix" 
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

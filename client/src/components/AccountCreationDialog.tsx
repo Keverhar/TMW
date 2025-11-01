@@ -220,14 +220,14 @@ export default function AccountCreationDialog({ open, onOpenChange, onAccountCre
                           onValueChange={(value) => {
                             if (value === "Other") {
                               setShowOtherTitle(true);
-                              field.onChange(customTitle || "Other");
+                              field.onChange("Other");
                             } else {
                               setShowOtherTitle(false);
                               setCustomTitle("");
                               field.onChange(value);
                             }
                           }} 
-                          value={showOtherTitle ? "Other" : (field.value || " ")}
+                          value={field.value || " "}
                         >
                           <FormControl>
                             <SelectTrigger data-testid="select-title">
@@ -249,7 +249,7 @@ export default function AccountCreationDialog({ open, onOpenChange, onAccountCre
                             value={customTitle}
                             onChange={(e) => {
                               setCustomTitle(e.target.value);
-                              field.onChange(e.target.value);
+                              field.onChange(e.target.value || "Other");
                             }}
                             className="mt-2"
                             data-testid="input-custom-title"
