@@ -732,10 +732,17 @@ export default function WeddingComposer() {
         eviteWordingNoSpecialRequests: composer.eviteWordingNoSpecialRequests || false,
         eviteRsvpNoSpecialRequests: composer.eviteRsvpNoSpecialRequests || false,
         eviteCompletionStatus: composer.eviteCompletionStatus || "",
-        customerName: composer.customerName || "",
-        customerName2: composer.customerName2 || "",
-        customerEmail: composer.customerEmail || email,
-        customerPhone: composer.customerPhone || "",
+        person1Role: composer.person1Role || "",
+        person1FullName: composer.person1FullName || "",
+        person1Pronouns: composer.person1Pronouns || "",
+        person1Email: composer.person1Email || email,
+        person1Phone: composer.person1Phone || "",
+        person1AlternatePhone: composer.person1AlternatePhone || "",
+        person2Role: composer.person2Role || "",
+        person2FullName: composer.person2FullName || "",
+        person2Pronouns: composer.person2Pronouns || "",
+        person2Email: composer.person2Email || "",
+        person2Phone: composer.person2Phone || "",
         smsConsent: composer.smsConsent || false,
         mailingAddress: composer.mailingAddress || "",
         paymentMethod: composer.paymentMethod || "credit_card",
@@ -922,10 +929,17 @@ export default function WeddingComposer() {
                 eviteWordingNoSpecialRequests: composer.eviteWordingNoSpecialRequests || false,
                 eviteRsvpNoSpecialRequests: composer.eviteRsvpNoSpecialRequests || false,
                 eviteCompletionStatus: composer.eviteCompletionStatus || "",
-                customerName: composer.customerName || "",
-                customerName2: composer.customerName2 || "",
-                customerEmail: composer.customerEmail || userAccount.email,
-                customerPhone: composer.customerPhone || "",
+                person1Role: composer.person1Role || "",
+                person1FullName: composer.person1FullName || "",
+                person1Pronouns: composer.person1Pronouns || "",
+                person1Email: composer.person1Email || userAccount.email,
+                person1Phone: composer.person1Phone || "",
+                person1AlternatePhone: composer.person1AlternatePhone || "",
+                person2Role: composer.person2Role || "",
+                person2FullName: composer.person2FullName || "",
+                person2Pronouns: composer.person2Pronouns || "",
+                person2Email: composer.person2Email || "",
+                person2Phone: composer.person2Phone || "",
                 smsConsent: composer.smsConsent || false,
                 mailingAddress: composer.mailingAddress || "",
                 paymentMethod: composer.paymentMethod || "credit_card",
@@ -1019,10 +1033,10 @@ export default function WeddingComposer() {
   const getBlockCompletionStatus = (blockId: number): 'complete' | 'partial' | 'none' => {
     switch (blockId) {
       case 1: // The Couple
-        // Check if at least customer name and email are filled
-        if (formData.customerName && formData.customerEmail) return 'complete';
-        // Partial if only one is filled
-        if (formData.customerName || formData.customerEmail) return 'partial';
+        // Check if person1 required fields are filled
+        if (formData.person1FullName && formData.person1Email && formData.person1Phone && formData.person1Role) return 'complete';
+        // Partial if at least one field is filled
+        if (formData.person1FullName || formData.person1Email || formData.person1Phone || formData.person1Role) return 'partial';
         return 'none';
       
       case 2: // Event Type (includes Date & Time at bottom)
@@ -1432,8 +1446,8 @@ export default function WeddingComposer() {
               eviteRsvpNoSpecialRequests={formData.eviteRsvpNoSpecialRequests}
               eviteCompletionStatus={formData.eviteCompletionStatus}
               onChange={updateField}
-              customerName={formData.customerName}
-              customerName2={formData.customerName2}
+              customerName={formData.person1FullName}
+              customerName2={formData.person2FullName}
               preferredDate={formData.preferredDate}
               timeSlot={formData.timeSlot}
               readOnly={isBlockReadOnly(11)}
@@ -1455,10 +1469,10 @@ export default function WeddingComposer() {
           )}
           {steps[currentStep - 1]?.id === 14 && (
             <Block13ContactPayment
-              customerName={formData.customerName}
-              customerName2={formData.customerName2}
-              customerEmail={formData.customerEmail}
-              customerPhone={formData.customerPhone}
+              customerName={formData.person1FullName}
+              customerName2={formData.person2FullName}
+              customerEmail={formData.person1Email}
+              customerPhone={formData.person1Phone}
               smsConsent={formData.smsConsent}
               mailingAddress={formData.mailingAddress}
               paymentMethod={formData.paymentMethod}
