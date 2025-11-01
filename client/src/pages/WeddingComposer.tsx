@@ -488,6 +488,17 @@ export default function WeddingComposer() {
       return;
     }
 
+    if (!formData.ceremonyScript) {
+      toast({
+        title: "Ceremony script required",
+        description: "Please select a ceremony script in the Ceremony section.",
+        variant: "destructive",
+      });
+      setCurrentStep(6); // Navigate to ceremony block
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
     // Validate ceremony add-ons if "Yes" is selected
     if (formData.guestReadingOrSongChoice === 'yes' && (!formData.guestReadingOrSongName || !formData.guestReadingOrSong)) {
       toast({
