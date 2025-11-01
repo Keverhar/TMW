@@ -749,6 +749,16 @@ export default function WeddingComposer() {
     setHasSeenInitialDialog(true);
   };
 
+  const handleLoginFailure = () => {
+    // Close login dialog
+    setShowLoginDialog(false);
+    // Redirect to home page
+    setLocation("/");
+    // Reopen initial dialog
+    setShowInitialDialog(true);
+    setHasSeenInitialDialog(false);
+  };
+
   const handleLogout = () => {
     localStorage.removeItem("user");
     setUserAccount(null);
@@ -1485,6 +1495,7 @@ export default function WeddingComposer() {
         open={showLoginDialog}
         onOpenChange={setShowLoginDialog}
         onLoginSuccess={handleLoginSuccess}
+        onLoginFailure={handleLoginFailure}
         onSwitchToSignup={() => {
           setShowLoginDialog(false);
           setShowAccountDialog(true);

@@ -17,6 +17,7 @@ interface LoginDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onLoginSuccess: (userId: string, email: string, composer?: any) => void;
+  onLoginFailure?: () => void;
   onSwitchToSignup?: () => void;
 }
 
@@ -24,6 +25,7 @@ export default function LoginDialog({
   open,
   onOpenChange,
   onLoginSuccess,
+  onLoginFailure,
   onSwitchToSignup,
 }: LoginDialogProps) {
   const [email, setEmail] = useState("");
@@ -59,6 +61,11 @@ export default function LoginDialog({
         description: error.message || "Invalid email or password",
         variant: "destructive",
       });
+      
+      // Call onLoginFailure if provided
+      if (onLoginFailure) {
+        onLoginFailure();
+      }
     } finally {
       setIsLoading(false);
     }
