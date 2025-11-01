@@ -1383,7 +1383,7 @@ export default function WeddingComposer() {
               signatureColor={formData.signatureColor}
               colorSwatchDecision={formData.colorSwatchDecision}
               onChange={updateField}
-              readOnly={isBlockReadOnly(2)}
+              readOnly={isBlockReadOnly(3)}
             />
           )}
           {steps[currentStep - 1]?.id === 4 && (
@@ -1458,7 +1458,7 @@ export default function WeddingComposer() {
               processionalSpecialInstructionsNA={formData.processionalSpecialInstructionsNA}
               processionalCompletionStatus={formData.processionalCompletionStatus}
               onChange={updateField}
-              readOnly={isBlockReadOnly(6)}
+              readOnly={isBlockReadOnly(7)}
             />
           )}
           {steps[currentStep - 1]?.id === 8 && (
