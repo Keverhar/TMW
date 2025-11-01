@@ -21,7 +21,7 @@ export const PRICING = {
   // Payment discounts (in cents)
   discounts: {
     ach: 5000, // $50 discount for ACH payment
-    affirm: 5000, // $50 discount for Affirm payment
+    affirm: 0, // No discount for Affirm payment
   },
 } as const;
 

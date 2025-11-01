@@ -1047,9 +1047,9 @@ export default function WeddingComposer() {
       case 13: // Cart (Payment & Review)
         // Cart is complete when terms are accepted
         if (formData.termsAccepted) return 'complete';
-        // Partial if user has selected a non-default payment method (indicating interaction)
-        if (formData.paymentMethod === 'affirm' || formData.paymentMethod === 'ach') return 'partial';
-        // None for default state (credit_card is default, so no partial until user changes it)
+        // Partial if user has selected ACH (which has a discount, indicating interaction)
+        if (formData.paymentMethod === 'ach') return 'partial';
+        // None for default state (credit_card and affirm don't show partial)
         return 'none';
       
       default:
