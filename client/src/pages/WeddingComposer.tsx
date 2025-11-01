@@ -462,7 +462,7 @@ export default function WeddingComposer() {
         variant: "destructive",
         duration: 3000,
       });
-      setCurrentStep(13); // Navigate to The Couple block
+      setCurrentStep(1); // Navigate to The Couple block
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
@@ -474,7 +474,7 @@ export default function WeddingComposer() {
         variant: "destructive",
         duration: 3000,
       });
-      setCurrentStep(13); // Navigate to The Couple block
+      setCurrentStep(1); // Navigate to The Couple block
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
