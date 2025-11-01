@@ -55,8 +55,6 @@ export default function Account() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [userEmail, setUserEmail] = useState("");
-  const [showOtherTitle, setShowOtherTitle] = useState(false);
-  const [customTitle, setCustomTitle] = useState("");
 
   const form = useForm<AccountForm>({
     resolver: zodResolver(accountSchema),
@@ -79,6 +77,10 @@ export default function Account() {
       zip: "",
     },
   });
+
+  const titleValue = form.watch("title");
+  const standardTitles = [" ", "Mr.", "Dr.", "Ms.", "Mrs."];
+  const showCustomTitle = titleValue && !standardTitles.includes(titleValue);
 
   const suffixValue = form.watch("suffix");
   const standardSuffixes = [" ", "Jr.", "Sr.", "II", "III", "IV"];
@@ -289,16 +291,7 @@ export default function Account() {
                       <FormItem>
                         <FormLabel>Title</FormLabel>
                         <Select 
-                          onValueChange={(value) => {
-                            if (value === "Other") {
-                              setShowOtherTitle(true);
-                              field.onChange("Other");
-                            } else {
-                              setShowOtherTitle(false);
-                              setCustomTitle("");
-                              field.onChange(value);
-                            }
-                          }} 
+                          onValueChange={field.onChange}
                           value={field.value || " "}
                         >
                           <FormControl>
@@ -315,23 +308,36 @@ export default function Account() {
                             <SelectItem value="Other">Other</SelectItem>
                           </SelectContent>
                         </Select>
-                        {showOtherTitle && (
-                          <Input
-                            placeholder="Enter custom title (e.g., Col., Rev.)"
-                            value={customTitle}
-                            onChange={(e) => {
-                              setCustomTitle(e.target.value);
-                              field.onChange(e.target.value || "Other");
-                            }}
-                            className="mt-2"
-                            data-testid="input-custom-title"
-                          />
-                        )}
                         <FormMessage />
                       </FormItem>
                     )}
                   />
+                </div>
 
+                {showCustomTitle && (
+                  <FormField
+                    control={form.control}
+                    name="title"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Custom Title</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="e.g., Col., Rev., Prof."
+                            {...field}
+                            onChange={(e) => {
+                              field.onChange(e.target.value || "Other");
+                            }}
+                            data-testid="input-custom-title"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+
+                <div className="grid grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
                     name="firstName"
