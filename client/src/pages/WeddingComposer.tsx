@@ -214,11 +214,18 @@ export default function WeddingComposer() {
     eviteRsvpNoSpecialRequests: false,
     eviteCompletionStatus: "",
 
-    // Block 13: Contact & Payment
-    customerName: "",
-    customerName2: "",
-    customerEmail: "",
-    customerPhone: "",
+    // Block 13: Contact & Payment - Couple Information
+    person1Role: "",
+    person1FullName: "",
+    person1Pronouns: "",
+    person1Email: "",
+    person1Phone: "",
+    person1AlternatePhone: "",
+    person2Role: "",
+    person2FullName: "",
+    person2Pronouns: "",
+    person2Email: "",
+    person2Phone: "",
     smsConsent: false,
     mailingAddress: "",
     paymentMethod: "credit_card",
@@ -438,10 +445,10 @@ export default function WeddingComposer() {
       return;
     }
 
-    if (!formData.customerName || !formData.customerEmail) {
+    if (!formData.person1FullName || !formData.person1Email || !formData.person1Phone || !formData.person1Role) {
       toast({
         title: "Missing information",
-        description: "Please fill in all required contact information.",
+        description: "Please fill in all required contact information for Person 1.",
         variant: "destructive",
       });
       return;
@@ -1233,12 +1240,18 @@ export default function WeddingComposer() {
         <div className="mb-8">
           {steps[currentStep - 1]?.id === 1 && (
             <Block13TheCouple
-              customerName={formData.customerName}
-              customerName2={formData.customerName2}
-              customerEmail={formData.customerEmail}
-              customerPhone={formData.customerPhone}
+              person1Role={formData.person1Role}
+              person1FullName={formData.person1FullName}
+              person1Pronouns={formData.person1Pronouns}
+              person1Email={formData.person1Email}
+              person1Phone={formData.person1Phone}
+              person1AlternatePhone={formData.person1AlternatePhone}
+              person2Role={formData.person2Role}
+              person2FullName={formData.person2FullName}
+              person2Pronouns={formData.person2Pronouns}
+              person2Email={formData.person2Email}
+              person2Phone={formData.person2Phone}
               smsConsent={formData.smsConsent}
-              mailingAddress={formData.mailingAddress}
               onChange={updateField}
             />
           )}

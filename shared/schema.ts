@@ -171,11 +171,20 @@ export const weddingComposers = pgTable("wedding_composers", {
   eviteRsvpNoSpecialRequests: boolean("evite_rsvp_no_special_requests").default(false),
   eviteCompletionStatus: text("evite_completion_status"),
   
-  // Block 13: Contact & Payment
-  customerName: text("customer_name").notNull(),
-  customerName2: text("customer_name_2"),
-  customerEmail: text("customer_email").notNull(),
-  customerPhone: text("customer_phone"),
+  // Block 13: Contact & Payment - Couple Information
+  person1Role: text("person1_role").notNull(), // Bride, Groom, Wife, Husband, Spouse, Partner, Other
+  person1FullName: text("person1_full_name").notNull(),
+  person1Pronouns: text("person1_pronouns"), // Optional: He/Him/His, She/Her/Hers, They/Them/Theirs, Prefer not to say
+  person1Email: text("person1_email").notNull(),
+  person1Phone: text("person1_phone").notNull(),
+  person1AlternatePhone: text("person1_alternate_phone"), // Optional
+  
+  person2Role: text("person2_role"), // Bride, Groom, Wife, Husband, Spouse, Partner, Other
+  person2FullName: text("person2_full_name"),
+  person2Pronouns: text("person2_pronouns"), // Optional: He/Him/His, She/Her/Hers, They/Them/Theirs, Prefer not to say
+  person2Email: text("person2_email"), // Optional
+  person2Phone: text("person2_phone"), // Optional
+  
   smsConsent: boolean("sms_consent").default(false),
   mailingAddress: text("mailing_address"),
   paymentMethod: text("payment_method").default("credit_card"),
