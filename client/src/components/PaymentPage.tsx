@@ -97,7 +97,6 @@ export default function PaymentPage({ totalAmount, onPaymentComplete, onBack }: 
                       <p>- Flexible: split your $5,000 wedding into smaller monthly payments.</p>
                       <p>- Quick decision, no late fees, and clear terms.</p>
                       <p>- Trusted brand used by millions.</p>
-                      <p className="font-medium text-foreground">- Special savings: Receive a $100 discount on your wedding package when you choose Affirm.</p>
                     </div>
                   </Label>
                 </div>
@@ -113,7 +112,7 @@ export default function PaymentPage({ totalAmount, onPaymentComplete, onBack }: 
                     <div className="text-sm text-muted-foreground space-y-1">
                       <p>- Simple and secure: pay directly from your bank account using your routing and account number.</p>
                       <p>- Funds take 2–3 days to clear, but your date is secured once payment is received.</p>
-                      <p className="font-medium text-foreground">- **Special savings: Receive a $50 discount on your wedding package when you choose ACH.**</p>
+                      <p className="font-medium text-foreground">- Special savings: Receive a $100 discount on your wedding package when you choose ACH.</p>
                     </div>
                   </Label>
                 </div>
