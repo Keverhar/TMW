@@ -21,7 +21,7 @@ interface BookedSlot {
   eventType: string;
 }
 
-// Time slots vary by day of week
+// Time slots vary by day of week and event type
 const getTimeSlots = (preferredDate: string, eventType: string) => {
   if (!preferredDate) {
     return [];
@@ -29,9 +29,27 @@ const getTimeSlots = (preferredDate: string, eventType: string) => {
   
   const dateObj = new Date(preferredDate + 'T12:00:00');
   const dayOfWeek = dateObj.getDay();
+  const isSimplifiedEvent = eventType === 'modest-elopement' || eventType === 'vow-renewal';
+  
+  // Friday (5) has different time slots based on event type
+  if (dayOfWeek === 5) {
+    if (isSimplifiedEvent) {
+      // Elopements/Vow Renewals on Friday: 12 PM, 2 PM, 4 PM
+      return [
+        { value: "12pm", label: "12:00 PM", arrival: "" },
+        { value: "2pm", label: "2:00 PM", arrival: "" },
+        { value: "4pm", label: "4:00 PM", arrival: "" },
+      ];
+    } else {
+      // Weddings on Friday: only 6 PM - 9 PM
+      return [
+        { value: "6pm-9pm", label: "6:00 PM – 9:00 PM", arrival: "Bride arrival 4:30pm" }
+      ];
+    }
+  }
   
   // Wednesday (3) has specific time slots for elopement/vow renewal
-  if (dayOfWeek === 3 && (eventType === 'modest-elopement' || eventType === 'vow-renewal')) {
+  if (dayOfWeek === 3 && isSimplifiedEvent) {
     return [
       { value: "12pm", label: "12:00 PM", arrival: "" },
       { value: "2pm", label: "2:00 PM", arrival: "" },
@@ -40,7 +58,7 @@ const getTimeSlots = (preferredDate: string, eventType: string) => {
     ];
   }
   
-  // Default time slots for other days
+  // Default time slots for other days (Saturday, Sunday for weddings)
   return [
     { value: "11am-2pm", label: "11:00 AM – 2:00 PM", arrival: "Bride arrival 9:30am" },
     { value: "2:30pm-5:30pm", label: "2:30 PM – 5:30 PM", arrival: "Bride arrival 1:00pm" },
