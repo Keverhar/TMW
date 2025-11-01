@@ -46,6 +46,8 @@ export default function Account() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [userEmail, setUserEmail] = useState("");
+  const [showOtherTitle, setShowOtherTitle] = useState(false);
+  const [customTitle, setCustomTitle] = useState("");
 
   const form = useForm<AccountForm>({
     resolver: zodResolver(accountSchema),
@@ -270,7 +272,19 @@ export default function Account() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Title</FormLabel>
-                        <Select onValueChange={field.onChange} value={field.value || " "}>
+                        <Select 
+                          onValueChange={(value) => {
+                            if (value === "Other") {
+                              setShowOtherTitle(true);
+                              field.onChange(customTitle || "Other");
+                            } else {
+                              setShowOtherTitle(false);
+                              setCustomTitle("");
+                              field.onChange(value);
+                            }
+                          }} 
+                          value={showOtherTitle ? "Other" : (field.value || " ")}
+                        >
                           <FormControl>
                             <SelectTrigger data-testid="select-title">
                               <SelectValue placeholder="None" />
@@ -279,14 +293,24 @@ export default function Account() {
                           <SelectContent>
                             <SelectItem value=" "> </SelectItem>
                             <SelectItem value="Mr.">Mr.</SelectItem>
-                            <SelectItem value="Sir">Sir</SelectItem>
                             <SelectItem value="Dr.">Dr.</SelectItem>
                             <SelectItem value="Ms.">Ms.</SelectItem>
                             <SelectItem value="Mrs.">Mrs.</SelectItem>
-                            <SelectItem value="Lady">Lady</SelectItem>
-                            <SelectItem value="Dr.">Dr.</SelectItem>
+                            <SelectItem value="Other">Other</SelectItem>
                           </SelectContent>
                         </Select>
+                        {showOtherTitle && (
+                          <Input
+                            placeholder="Enter custom title (e.g., Col., Rev.)"
+                            value={customTitle}
+                            onChange={(e) => {
+                              setCustomTitle(e.target.value);
+                              field.onChange(e.target.value);
+                            }}
+                            className="mt-2"
+                            data-testid="input-custom-title"
+                          />
+                        )}
                         <FormMessage />
                       </FormItem>
                     )}
