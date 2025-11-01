@@ -294,7 +294,6 @@ export default function BlockCart({
                     <p>- Flexible: split your wedding cost into smaller monthly payments.</p>
                     <p>- Quick decision, no late fees, and clear terms.</p>
                     <p>- Trusted brand used by millions.</p>
-                    <p className="font-medium text-foreground">- Special savings: Receive a ${(affirmDiscountAmount / 100).toFixed(2)} discount on your wedding package when you choose Affirm.</p>
                   </div>
                 </Label>
               </div>
