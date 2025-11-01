@@ -107,6 +107,7 @@ export default function AccountCreationDialog({ open, onOpenChange, onAccountCre
       toast({
         title: "Account created successfully!",
         description: "Your progress has been saved.",
+        duration: 3000,
       });
 
       if (onAccountCreated) {
@@ -120,6 +121,7 @@ export default function AccountCreationDialog({ open, onOpenChange, onAccountCre
         title: "Signup failed",
         description: error.message || "Failed to create account. Please try again.",
         variant: "destructive",
+        duration: 3000,
       });
     } finally {
       setIsSubmitting(false);
@@ -130,6 +132,7 @@ export default function AccountCreationDialog({ open, onOpenChange, onAccountCre
     toast({
       title: `${provider === "google" ? "Google" : "Facebook"} Sign-In`,
       description: `${provider === "google" ? "Google" : "Facebook"} OAuth integration will be added soon. For now, please use email signup.`,
+      duration: 3000,
     });
   };
 

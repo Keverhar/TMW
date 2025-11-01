@@ -106,6 +106,7 @@ export default function Payment() {
         title: "Payment method required",
         description: "Please select a payment method to continue.",
         variant: "destructive",
+        duration: 3000,
       });
       return;
     }
@@ -116,6 +117,7 @@ export default function Payment() {
           title: "Missing information",
           description: "Please fill in all card details.",
           variant: "destructive",
+          duration: 3000,
         });
         return;
       }
@@ -126,6 +128,7 @@ export default function Payment() {
           title: "Invalid card number",
           description: "Card number must be 16 digits.",
           variant: "destructive",
+          duration: 3000,
         });
         return;
       }
@@ -135,6 +138,7 @@ export default function Payment() {
           title: "Invalid CVV",
           description: "CVV must be at least 3 digits.",
           variant: "destructive",
+          duration: 3000,
         });
         return;
       }
@@ -176,6 +180,7 @@ export default function Payment() {
         toast({
           title: "Payment successful!",
           description: "Your wedding booking has been confirmed.",
+          duration: 3000,
         });
         setLocation(`/confirmation/${composerId}`);
       } catch (error) {
@@ -183,6 +188,7 @@ export default function Payment() {
           title: "Error",
           description: "Payment successful but there was an error updating your booking.",
           variant: "destructive",
+          duration: 3000,
         });
         setLocation(`/confirmation/${composerId}`);
       }

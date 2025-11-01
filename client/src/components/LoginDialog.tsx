@@ -41,6 +41,7 @@ export default function LoginDialog({
         title: "Missing information",
         description: "Please enter both email and password",
         variant: "destructive",
+        duration: 3000,
       });
       return;
     }
@@ -60,6 +61,7 @@ export default function LoginDialog({
         title: "Login failed",
         description: error.message || "Invalid email or password",
         variant: "destructive",
+        duration: 3000,
       });
       
       // Call onLoginFailure if provided

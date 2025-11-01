@@ -385,6 +385,7 @@ export default function WeddingComposer() {
         title: "Error saving progress",
         description: error.message || "Failed to save your progress. Please try again.",
         variant: "destructive",
+        duration: 3000,
       });
     } finally {
       setIsSaving(false);
@@ -418,6 +419,7 @@ export default function WeddingComposer() {
         title: "Account required",
         description: "You must create an account to continue.",
         variant: "destructive",
+        duration: 3000,
       });
       setShowAccountDialog(true);
       return;
@@ -428,6 +430,7 @@ export default function WeddingComposer() {
         title: "Date required",
         description: "Please select a preferred date before proceeding to payment.",
         variant: "destructive",
+        duration: 3000,
       });
       return;
     }
@@ -437,6 +440,7 @@ export default function WeddingComposer() {
         title: "Time required",
         description: "Please select a time slot before proceeding to payment.",
         variant: "destructive",
+        duration: 3000,
       });
       return;
     }
@@ -446,6 +450,7 @@ export default function WeddingComposer() {
         title: "Terms not accepted",
         description: "Please accept the terms and conditions to proceed.",
         variant: "destructive",
+        duration: 3000,
       });
       return;
     }
@@ -455,6 +460,7 @@ export default function WeddingComposer() {
         title: "Missing information",
         description: "Please fill in all required contact information for Person 1.",
         variant: "destructive",
+        duration: 3000,
       });
       return;
     }
@@ -464,6 +470,7 @@ export default function WeddingComposer() {
         title: "Missing information",
         description: "Please fill in all required contact information for Person 2 (Name and Role).",
         variant: "destructive",
+        duration: 3000,
       });
       return;
     }
@@ -473,6 +480,7 @@ export default function WeddingComposer() {
         title: "Mailing address required",
         description: "Please provide a mailing address for photo book delivery in the Add-Ons section.",
         variant: "destructive",
+        duration: 3000,
       });
       setCurrentStep(13); // Navigate to Add-Ons block
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -484,6 +492,7 @@ export default function WeddingComposer() {
         title: "Missing information",
         description: "Please select an event type.",
         variant: "destructive",
+        duration: 3000,
       });
       return;
     }
@@ -493,6 +502,7 @@ export default function WeddingComposer() {
         title: "Ceremony script required",
         description: "Please select a ceremony script in the Ceremony section.",
         variant: "destructive",
+        duration: 3000,
       });
       setCurrentStep(6); // Navigate to ceremony block
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -505,6 +515,7 @@ export default function WeddingComposer() {
         title: "Guest reading or song details required",
         description: "Please provide the guest name and describe their involvement in the Ceremony section.",
         variant: "destructive",
+        duration: 3000,
       });
       setCurrentStep(6); // Navigate to ceremony block
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -516,6 +527,7 @@ export default function WeddingComposer() {
         title: "Officiant passage required",
         description: "Please provide the passage text in the Ceremony section.",
         variant: "destructive",
+        duration: 3000,
       });
       setCurrentStep(6);
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -527,6 +539,7 @@ export default function WeddingComposer() {
         title: "Child involvement details required",
         description: "Please describe how children will be involved and provide the organizer name in the Ceremony section.",
         variant: "destructive",
+        duration: 3000,
       });
       setCurrentStep(6);
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -538,6 +551,7 @@ export default function WeddingComposer() {
         title: "Pet involvement details required",
         description: "Please provide the pet name, role, and handler details in the Ceremony section.",
         variant: "destructive",
+        duration: 3000,
       });
       setCurrentStep(6);
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -582,6 +596,7 @@ export default function WeddingComposer() {
         title: "No payment required",
         description: "Your balance is already paid in full. No additional payment is needed.",
         variant: "destructive",
+        duration: 3000,
       });
       return;
     }
@@ -619,6 +634,7 @@ export default function WeddingComposer() {
         title: "Error",
         description: "Unable to save your data. Please try again.",
         variant: "destructive",
+        duration: 3000,
       });
       return;
     }
@@ -628,6 +644,7 @@ export default function WeddingComposer() {
         title: "Error",
         description: "Unable to process payment. Please try again.",
         variant: "destructive",
+        duration: 3000,
       });
       return;
     }
@@ -644,6 +661,7 @@ export default function WeddingComposer() {
       toast({
         title: "Progress saved",
         description: "Your wedding details have been saved.",
+        duration: 3000,
       });
     }
   };
@@ -655,6 +673,7 @@ export default function WeddingComposer() {
     toast({
       title: "Account created!",
       description: "Your progress will now be saved automatically",
+      duration: 3000,
     });
   };
 
