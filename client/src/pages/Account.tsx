@@ -12,11 +12,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { User, ArrowLeft, Menu, FileText, LogOut } from "lucide-react";
+import { User, ArrowLeft, Menu, FileText, LogOut, Calendar, Music, Palette, Users } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import type { WeddingComposer as WeddingComposerType } from "@shared/schema";
-import { PACKAGES, CEREMONY_SCRIPTS, VOWS, MUSIC, THEME_COLORS, CAKE_TOPPERS } from "@shared/pricing";
 
 type AccountView = "contact" | "summary";
 
@@ -296,20 +295,25 @@ function SummaryView({ composerData }: { composerData: WeddingComposerType | nul
     );
   }
 
-  const packageInfo = PACKAGES.find(p => p.id === composerData.eventType);
-  const ceremonyScript = CEREMONY_SCRIPTS.find(s => s.id === composerData.ceremonyScript);
-  const vows = VOWS.find(v => v.id === composerData.vows);
-  const music = MUSIC.find(m => m.id === composerData.music);
-  const themeColor = THEME_COLORS.find(c => c.id === composerData.themeColor);
-  const cakeTopper = CAKE_TOPPERS.find(t => t.id === composerData.cakeTopper);
+  const formatEventType = (type: string) => {
+    const types: Record<string, string> = {
+      'modest-wedding': 'The Modest Wedding',
+      'modest-elopement': 'Elopement',
+      'vow-renewal': 'Vow Renewal',
+      'other': 'Other Wedding Package',
+    };
+    return types[type] || type;
+  };
 
-  const formatSelection = (block: any) => {
-    if (!block || block.selection === "default") return null;
-    return block.selection;
+  const formatPrice = (cents: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    }).format(cents / 100);
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" data-testid="summary-view">
       <div>
         <h1 className="text-3xl font-serif font-bold mb-2">Wedding Summary</h1>
         <p className="text-muted-foreground">
@@ -320,136 +324,200 @@ function SummaryView({ composerData }: { composerData: WeddingComposerType | nul
       {/* Event Package */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <span className="text-primary">1.</span> Event Package
-          </CardTitle>
+          <div className="flex items-center gap-2">
+            <Calendar className="h-5 w-5 text-primary" />
+            <CardTitle>Event Package</CardTitle>
+          </div>
         </CardHeader>
-        <CardContent>
-          <div className="space-y-2">
+        <CardContent className="space-y-3">
+          <div>
+            <p className="text-sm text-muted-foreground">Event Type</p>
+            <p className="font-semibold">{formatEventType(composerData.eventType)}</p>
+          </div>
+          {composerData.eventTypeOther && (
             <div>
-              <p className="font-semibold">{packageInfo?.name || "Not selected"}</p>
-              {packageInfo && <p className="text-sm text-muted-foreground">{packageInfo.description}</p>}
+              <p className="text-sm text-muted-foreground">Additional Details</p>
+              <p className="font-semibold">{composerData.eventTypeOther}</p>
             </div>
+          )}
+          <div>
+            <p className="text-sm text-muted-foreground">Base Price</p>
+            <p className="font-semibold">{formatPrice(composerData.basePackagePrice)}</p>
           </div>
         </CardContent>
       </Card>
 
       {/* Date & Time */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <span className="text-primary">2.</span> Date & Time
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <p className="text-sm text-muted-foreground">Date</p>
-              <p className="font-semibold">{composerData.eventDate || "Not selected"}</p>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Time</p>
-              <p className="font-semibold">{composerData.eventTime || "Not selected"}</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Ceremony Customization */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <span className="text-primary">3.</span> Ceremony Customization
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div>
-            <p className="text-sm text-muted-foreground">Ceremony Script</p>
-            <p className="font-semibold">{ceremonyScript?.name || "Not selected"}</p>
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">Vows</p>
-            <p className="font-semibold">{vows?.name || "Not selected"}</p>
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">Music</p>
-            <p className="font-semibold">{music?.name || "Not selected"}</p>
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">Theme Color</p>
-            <p className="font-semibold">{themeColor?.name || "Not selected"}</p>
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">Cake Topper</p>
-            <p className="font-semibold">{cakeTopper?.name || "Not selected"}</p>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Composer Blocks */}
-      {[...Array(12)].map((_, i) => {
-        const blockNum = i + 1;
-        const blockKey = `block${blockNum}` as keyof WeddingComposerType;
-        const block = composerData[blockKey];
-        
-        if (!block || typeof block !== 'object') return null;
-        
-        const selection = formatSelection(block);
-        if (!selection) return null;
-
-        return (
-          <Card key={blockNum}>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <span className="text-primary">{blockNum + 3}.</span> Block {blockNum}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="font-semibold">{selection}</p>
-            </CardContent>
-          </Card>
-        );
-      })}
-
-      {/* Add-ons */}
-      {composerData.addOns && composerData.addOns.length > 0 && (
+      {(composerData.preferredDate || composerData.timeSlot) && (
         <Card>
           <CardHeader>
-            <CardTitle>Add-ons</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="space-y-2">
-              {composerData.addOns.map((addon, idx) => (
-                <li key={idx} className="flex items-center gap-2">
-                  <span className="text-primary">•</span>
-                  <span>{addon}</span>
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Payment Information */}
-      {composerData.selectedPaymentMethod && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Payment Information</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <div>
-              <p className="text-sm text-muted-foreground">Payment Method</p>
-              <p className="font-semibold">{composerData.selectedPaymentMethod}</p>
+            <div className="flex items-center gap-2">
+              <Calendar className="h-5 w-5 text-primary" />
+              <CardTitle>Date & Time</CardTitle>
             </div>
-            {composerData.termsAccepted && (
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {composerData.preferredDate && (
               <div>
-                <p className="text-sm text-muted-foreground">Terms Accepted</p>
-                <p className="font-semibold">Yes</p>
+                <p className="text-sm text-muted-foreground">Preferred Date</p>
+                <p className="font-semibold">{composerData.preferredDate}</p>
+              </div>
+            )}
+            {composerData.backupDate && (
+              <div>
+                <p className="text-sm text-muted-foreground">Backup Date</p>
+                <p className="font-semibold">{composerData.backupDate}</p>
+              </div>
+            )}
+            {composerData.timeSlot && (
+              <div>
+                <p className="text-sm text-muted-foreground">Time Slot</p>
+                <p className="font-semibold">{composerData.timeSlot}</p>
               </div>
             )}
           </CardContent>
         </Card>
       )}
+
+      {/* Ceremony Preferences */}
+      {composerData.ceremonyScript && (
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Users className="h-5 w-5 text-primary" />
+              <CardTitle>Ceremony Preferences</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div>
+              <p className="text-sm text-muted-foreground">Ceremony Script</p>
+              <p className="font-semibold">{composerData.ceremonyScript}</p>
+            </div>
+            {composerData.vowChoices && (
+              <div>
+                <p className="text-sm text-muted-foreground">Vow Choices</p>
+                <p className="font-semibold">{composerData.vowChoices}</p>
+              </div>
+            )}
+            <div className="flex flex-wrap gap-2">
+              {composerData.unityCandle && (
+                <span className="text-sm bg-primary/10 text-primary px-2 py-1 rounded">Unity Candle</span>
+              )}
+              {composerData.sandCeremony && (
+                <span className="text-sm bg-primary/10 text-primary px-2 py-1 rounded">Sand Ceremony</span>
+              )}
+              {composerData.handfasting && (
+                <span className="text-sm bg-primary/10 text-primary px-2 py-1 rounded">Handfasting</span>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Music & Theme */}
+      {(composerData.processionalSong || composerData.signatureColor) && (
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Music className="h-5 w-5 text-primary" />
+              <CardTitle>Music & Theme</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {composerData.signatureColor && (
+              <div>
+                <p className="text-sm text-muted-foreground">Signature Color</p>
+                <p className="font-semibold">{composerData.signatureColor}</p>
+              </div>
+            )}
+            {composerData.processionalSong && (
+              <div>
+                <p className="text-sm text-muted-foreground">Processional Song</p>
+                <p className="font-semibold">{composerData.processionalSong}</p>
+              </div>
+            )}
+            {composerData.recessionalSong && (
+              <div>
+                <p className="text-sm text-muted-foreground">Recessional Song</p>
+                <p className="font-semibold">{composerData.recessionalSong}</p>
+              </div>
+            )}
+            {composerData.playlistUrl && (
+              <div>
+                <p className="text-sm text-muted-foreground">Playlist URL</p>
+                <a href={composerData.playlistUrl} target="_blank" rel="noopener noreferrer" className="font-semibold text-primary hover:underline">
+                  View Playlist
+                </a>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Add-ons */}
+      {(composerData.photoBookAddon || composerData.extraTimeAddon || composerData.byobBarAddon || composerData.rehearsalAddon) && (
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Palette className="h-5 w-5 text-primary" />
+              <CardTitle>Add-ons</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {composerData.photoBookAddon && (
+              <div className="flex items-center justify-between">
+                <span>Photo Book (x{composerData.photoBookQuantity})</span>
+                <span className="font-semibold">{formatPrice(composerData.photoBookPrice * composerData.photoBookQuantity)}</span>
+              </div>
+            )}
+            {composerData.extraTimeAddon && (
+              <div className="flex items-center justify-between">
+                <span>Extra Time (1 hour)</span>
+                <span className="font-semibold">{formatPrice(composerData.extraTimePrice)}</span>
+              </div>
+            )}
+            {composerData.byobBarAddon && (
+              <div className="flex items-center justify-between">
+                <span>BYOB Bar Service</span>
+                <span className="font-semibold">{formatPrice(composerData.byobBarPrice)}</span>
+              </div>
+            )}
+            {composerData.rehearsalAddon && (
+              <div className="flex items-center justify-between">
+                <span>Rehearsal</span>
+                <span className="font-semibold">{formatPrice(composerData.rehearsalPrice)}</span>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Payment Information */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Payment Summary</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-muted-foreground">Payment Method</span>
+            <span className="font-semibold">{composerData.paymentMethod || 'Not selected'}</span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-muted-foreground">Payment Status</span>
+            <span className="font-semibold capitalize">{composerData.paymentStatus}</span>
+          </div>
+          <div className="flex items-center justify-between text-lg font-bold pt-2 border-t">
+            <span>Total Price</span>
+            <span>{formatPrice(composerData.totalPrice)}</span>
+          </div>
+          {composerData.amountPaid > 0 && (
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-muted-foreground">Amount Paid</span>
+              <span className="font-semibold text-green-600">{formatPrice(composerData.amountPaid)}</span>
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }
