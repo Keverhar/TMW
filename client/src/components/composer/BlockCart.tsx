@@ -111,6 +111,30 @@ export default function BlockCart({
   const discount = paymentMethod === 'ach' ? achDiscountAmount : 
                    paymentMethod === 'affirm' ? affirmDiscountAmount : 0;
 
+  // If no event type is selected, show empty cart message
+  if (!eventType) {
+    return (
+      <div className="space-y-6">
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <ShoppingCart className="h-5 w-5 text-primary" />
+              <CardTitle>Your Cart</CardTitle>
+            </div>
+            <CardDescription>Review your booking and proceed to payment</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="text-center py-8 text-muted-foreground">
+              <ShoppingCart className="h-12 w-12 mx-auto mb-3 opacity-20" />
+              <p>Your cart is empty</p>
+              <p className="text-sm mt-2">Select an event type to begin</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <Card>
