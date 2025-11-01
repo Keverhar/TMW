@@ -8,7 +8,25 @@ export const users = pgTable("users", {
   email: text("email").notNull().unique(),
   password: text("password"),
   authProvider: text("auth_provider").notNull().default("email"), // email, google, facebook
+  
+  // Account Information
+  title: text("title"), // None, Mr., Sir, Ms., Mrs., Lady
+  firstName: text("first_name"),
+  middleName: text("middle_name"),
+  lastName: text("last_name"),
+  suffix: text("suffix"), // None, Jr., Sr., II, III, IV
   displayName: text("display_name"),
+  alternateEmail: text("alternate_email"),
+  primaryPhone: text("primary_phone"),
+  alternatePhone: text("alternate_phone"),
+  
+  // Address
+  street: text("street"),
+  aptNumber: text("apt_number"),
+  city: text("city"),
+  state: text("state"),
+  zip: text("zip"),
+  
   isAdmin: boolean("is_admin").default(false).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });

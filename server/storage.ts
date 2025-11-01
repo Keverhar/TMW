@@ -8,6 +8,7 @@ export interface IStorage {
   getUser(id: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
+  updateUser(id: string, updates: Partial<InsertUser>): Promise<User | undefined>;
   
   // Legacy booking methods (for backwards compatibility)
   getBooking(id: string): Promise<Booking | undefined>;
@@ -55,11 +56,37 @@ export class MemStorage implements IStorage {
       displayName: insertUser.displayName ?? null,
       password: insertUser.password ?? null,
       authProvider: insertUser.authProvider ?? "email",
+      title: insertUser.title ?? null,
+      firstName: insertUser.firstName ?? null,
+      middleName: insertUser.middleName ?? null,
+      lastName: insertUser.lastName ?? null,
+      suffix: insertUser.suffix ?? null,
+      alternateEmail: insertUser.alternateEmail ?? null,
+      primaryPhone: insertUser.primaryPhone ?? null,
+      alternatePhone: insertUser.alternatePhone ?? null,
+      street: insertUser.street ?? null,
+      aptNumber: insertUser.aptNumber ?? null,
+      city: insertUser.city ?? null,
+      state: insertUser.state ?? null,
+      zip: insertUser.zip ?? null,
+      isAdmin: insertUser.isAdmin ?? false,
       id,
       createdAt: now,
     };
     this.users.set(id, user);
     return user;
+  }
+
+  async updateUser(id: string, updates: Partial<InsertUser>): Promise<User | undefined> {
+    const user = this.users.get(id);
+    if (!user) return undefined;
+
+    const updatedUser: User = {
+      ...user,
+      ...updates,
+    };
+    this.users.set(id, updatedUser);
+    return updatedUser;
   }
 
   // Legacy booking methods
@@ -169,6 +196,9 @@ export class MemStorage implements IStorage {
       departureOrganizer: null,
       departureVehicle: null,
       personalTouchesSpecialInstructions: null,
+      echeckRoutingNumber: null,
+      echeckAccountNumber: null,
+      echeckCheckNumber: null,
       ...insertComposer,
       id,
       paymentStatus: "pending",
@@ -269,6 +299,11 @@ export class DbStorage implements IStorage {
 
   async createUser(insertUser: InsertUser): Promise<User> {
     const result = await this.db.insert(users).values(insertUser).returning();
+    return result[0];
+  }
+
+  async updateUser(id: string, updates: Partial<InsertUser>): Promise<User | undefined> {
+    const result = await this.db.update(users).set(updates).where(eq(users.id, id)).returning();
     return result[0];
   }
 

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -24,12 +25,50 @@ export default function Block13TheCouple({
   mailingAddress,
   onChange,
 }: Block13TheCoupleProps) {
+  const [hasLoadedDefaults, setHasLoadedDefaults] = useState(false);
+
+  useEffect(() => {
+    if (!hasLoadedDefaults) {
+      setHasLoadedDefaults(true);
+      
+      const savedUser = localStorage.getItem("user");
+      if (savedUser) {
+        const user = JSON.parse(savedUser);
+        
+        // Load user account data to use as defaults for billing information
+        fetch(`/api/users/${user.id}`)
+          .then(res => res.ok ? res.json() : null)
+          .then(userData => {
+            if (userData) {
+              // Only set defaults if the fields are currently empty
+              if (!customerEmail && user.email) {
+                onChange('customerEmail', user.email);
+              }
+              if (!customerPhone && userData.primaryPhone) {
+                onChange('customerPhone', userData.primaryPhone);
+              }
+              if (!mailingAddress && userData.street) {
+                // Build formatted address from account data
+                const addressParts = [
+                  userData.street,
+                  userData.aptNumber,
+                  `${userData.city}, ${userData.state} ${userData.zip}`
+                ].filter(Boolean);
+                onChange('mailingAddress', addressParts.join('\n'));
+              }
+            }
+          })
+          .catch(err => console.error('Error loading account defaults:', err));
+      }
+    }
+  }, [hasLoadedDefaults, customerEmail, customerPhone, mailingAddress, onChange]);
+
   return (
     <div className="space-y-6">
       <div>
         <h2 className="text-3xl font-serif mb-2">The Couple</h2>
         <p className="text-muted-foreground">
-          Tell us about yourselves so we can personalize your celebration
+          Tell us about yourselves so we can personalize your celebration. Billing information is pre-filled from your account but can be changed.
         </p>
       </div>
 
