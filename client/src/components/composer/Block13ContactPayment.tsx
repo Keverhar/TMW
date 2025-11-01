@@ -137,8 +137,8 @@ export default function Block13ContactPayment({
     return sum + addon.price;
   }, 0);
   
-  // Apply ACH/Affirm discount if payment method is ACH or Affirm
-  const discount = paymentMethod === 'ach' ? achDiscountAmount : 
+  // Apply ACH/Affirm discount if payment method is ACH, E-Check, or Affirm
+  const discount = (paymentMethod === 'ach' || paymentMethod === 'echeck') ? achDiscountAmount : 
                    paymentMethod === 'affirm' ? affirmDiscountAmount : 0;
   const totalPrice = basePackagePrice + addonsTotal - discount;
 
