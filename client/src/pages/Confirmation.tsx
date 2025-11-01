@@ -116,6 +116,15 @@ export default function Confirmation() {
                           <span className="text-foreground">${((composer.rehearsalPrice || 0) / 100).toFixed(2)}</span>
                         </div>
                       )}
+                      <div className="border-t pt-1 mt-1"></div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Subtotal:</span>
+                        <span className="text-foreground">${(((composer.basePackagePrice || 0) + 
+                          (composer.photoBookAddon ? (composer.photoBookPrice || 0) * (composer.photoBookQuantity || 1) : 0) +
+                          (composer.extraTimeAddon ? (composer.extraTimePrice || 0) : 0) +
+                          (composer.byobBarAddon ? (composer.byobBarPrice || 0) : 0) +
+                          (composer.rehearsalAddon ? (composer.rehearsalPrice || 0) : 0)) / 100).toFixed(2)}</span>
+                      </div>
                       {(composer.paymentMethod === 'ach' && (composer.achDiscountAmount || 0) > 0) && (
                         <div className="flex justify-between text-green-600 dark:text-green-400">
                           <span>ACH Discount:</span>
