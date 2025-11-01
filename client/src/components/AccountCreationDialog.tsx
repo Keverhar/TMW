@@ -216,7 +216,7 @@ export default function AccountCreationDialog({ open, onOpenChange, onAccountCre
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value=" ">None</SelectItem>
+                            <SelectItem value=" "> </SelectItem>
                             <SelectItem value="Mr.">Mr.</SelectItem>
                             <SelectItem value="Sir">Sir</SelectItem>
                             <SelectItem value="Ms.">Ms.</SelectItem>
@@ -286,7 +286,7 @@ export default function AccountCreationDialog({ open, onOpenChange, onAccountCre
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value=" ">None</SelectItem>
+                            <SelectItem value=" "> </SelectItem>
                             <SelectItem value="Jr.">Jr.</SelectItem>
                             <SelectItem value="Sr.">Sr.</SelectItem>
                             <SelectItem value="II">II</SelectItem>
