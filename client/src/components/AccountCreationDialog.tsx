@@ -14,6 +14,14 @@ import { Separator } from "@/components/ui/separator";
 import { Loader2 } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
+const formatPhoneNumber = (value: string) => {
+  const numbers = value.replace(/\D/g, "");
+  if (numbers.length === 0) return "";
+  if (numbers.length <= 3) return `(${numbers}`;
+  if (numbers.length <= 6) return `(${numbers.slice(0, 3)}) ${numbers.slice(3)}`;
+  return `(${numbers.slice(0, 3)}) ${numbers.slice(3, 6)}-${numbers.slice(6, 10)}`;
+};
+
 const signupSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
   password: z.string().min(8, "Password must be at least 8 characters"),
@@ -391,7 +399,15 @@ export default function AccountCreationDialog({ open, onOpenChange, onAccountCre
                     <FormItem>
                       <FormLabel>Primary Phone *</FormLabel>
                       <FormControl>
-                        <Input placeholder="(123) 456-7890" {...field} data-testid="input-primary-phone" />
+                        <Input 
+                          placeholder="(123) 456-7890" 
+                          {...field}
+                          onChange={(e) => {
+                            const formatted = formatPhoneNumber(e.target.value);
+                            field.onChange(formatted);
+                          }}
+                          data-testid="input-primary-phone" 
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -405,7 +421,15 @@ export default function AccountCreationDialog({ open, onOpenChange, onAccountCre
                     <FormItem>
                       <FormLabel>Alternate Phone</FormLabel>
                       <FormControl>
-                        <Input placeholder="(123) 456-7890 (optional)" {...field} data-testid="input-alternate-phone" />
+                        <Input 
+                          placeholder="(123) 456-7890 (optional)" 
+                          {...field}
+                          onChange={(e) => {
+                            const formatted = formatPhoneNumber(e.target.value);
+                            field.onChange(formatted);
+                          }}
+                          data-testid="input-alternate-phone" 
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
