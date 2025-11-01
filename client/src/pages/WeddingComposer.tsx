@@ -454,6 +454,17 @@ export default function WeddingComposer() {
       return;
     }
 
+    if (formData.photoBookAddon && !formData.mailingAddress) {
+      toast({
+        title: "Mailing address required",
+        description: "Please provide a mailing address for photo book delivery in the Add-Ons section.",
+        variant: "destructive",
+      });
+      setCurrentStep(13); // Navigate to Add-Ons block
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
     if (!formData.eventType) {
       toast({
         title: "Missing information",
@@ -1435,6 +1446,7 @@ export default function WeddingComposer() {
               extraTimeAddon={formData.extraTimeAddon}
               byobBarAddon={formData.byobBarAddon}
               rehearsalAddon={formData.rehearsalAddon}
+              mailingAddress={formData.mailingAddress}
               onChange={updateField}
               eventType={formData.eventType}
               preferredDate={formData.preferredDate}

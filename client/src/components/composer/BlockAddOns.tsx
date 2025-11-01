@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { getAddonPrice } from "@shared/pricing";
@@ -14,6 +15,7 @@ interface BlockAddOnsProps {
   extraTimeAddon: boolean;
   byobBarAddon: boolean;
   rehearsalAddon: boolean;
+  mailingAddress: string;
   onChange: (field: string, value: string | number | boolean) => void;
   eventType: string;
   preferredDate: string;
@@ -26,6 +28,7 @@ export default function BlockAddOns({
   extraTimeAddon,
   byobBarAddon,
   rehearsalAddon,
+  mailingAddress,
   onChange,
   eventType,
   preferredDate,
@@ -99,18 +102,38 @@ export default function BlockAddOns({
             </div>
             
             {photoBookAddon && (
-              <div className="ml-7 space-y-2">
-                <Label htmlFor="photo-book-quantity">Quantity</Label>
-                <Input
-                  id="photo-book-quantity"
-                  type="number"
-                  min="1"
-                  max="10"
-                  value={photoBookQuantity}
-                  onChange={(e) => onChange('photoBookQuantity', parseInt(e.target.value) || 1)}
-                  className="w-24"
-                  data-testid="input-photo-book-quantity"
-                />
+              <div className="ml-7 space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="photo-book-quantity">Quantity</Label>
+                  <Input
+                    id="photo-book-quantity"
+                    type="number"
+                    min="1"
+                    max="10"
+                    value={photoBookQuantity}
+                    onChange={(e) => onChange('photoBookQuantity', parseInt(e.target.value) || 1)}
+                    className="w-24"
+                    data-testid="input-photo-book-quantity"
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="mailing-address">
+                    Mailing Address (for photo book delivery) *
+                  </Label>
+                  <Textarea
+                    id="mailing-address"
+                    data-testid="input-mailing-address"
+                    placeholder="Street address, city, state, ZIP"
+                    value={mailingAddress}
+                    onChange={(e) => onChange('mailingAddress', e.target.value)}
+                    rows={3}
+                    required
+                  />
+                  <p className="text-sm text-muted-foreground">
+                    Please provide a complete mailing address where your photo book will be delivered.
+                  </p>
+                </div>
               </div>
             )}
           </div>
