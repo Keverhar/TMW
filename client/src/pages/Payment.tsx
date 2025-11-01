@@ -490,16 +490,16 @@ export default function Payment() {
                     <span>${((composer.basePackagePrice || 0) / 100).toFixed(2)}</span>
                   </div>
                   
-                  <div className="flex justify-between text-sm text-green-600 dark:text-green-400" data-testid="row-payment-discount">
-                    <span>{paymentMethod === 'ach' ? 'ACH' : paymentMethod === 'affirm' ? 'Affirm' : 'Payment'} Discount</span>
-                    <span data-testid="text-payment-discount">{(paymentMethod === 'ach' ? (composer.achDiscountAmount || 0) : paymentMethod === 'affirm' ? (composer.affirmDiscountAmount || 0) : 0) > 0 ? '-' : ''}${((paymentMethod === 'ach' ? (composer.achDiscountAmount || 0) : paymentMethod === 'affirm' ? (composer.affirmDiscountAmount || 0) : 0) / 100).toFixed(2)}</span>
-                  </div>
-                  
                   <div className="border-t my-2"></div>
                   
                   <div className="flex justify-between text-sm" data-testid="row-subtotal">
                     <span>Subtotal</span>
                     <span data-testid="text-subtotal">${((composer.basePackagePrice || 0) / 100).toFixed(2)}</span>
+                  </div>
+                  
+                  <div className="flex justify-between text-sm text-green-600 dark:text-green-400" data-testid="row-payment-discount">
+                    <span>{paymentMethod === 'ach' ? 'ACH' : paymentMethod === 'affirm' ? 'Affirm' : 'Payment'} Discount</span>
+                    <span data-testid="text-payment-discount">{(paymentMethod === 'ach' ? (composer.achDiscountAmount || 0) : paymentMethod === 'affirm' ? (composer.affirmDiscountAmount || 0) : 0) > 0 ? '-' : ''}${((paymentMethod === 'ach' ? (composer.achDiscountAmount || 0) : paymentMethod === 'affirm' ? (composer.affirmDiscountAmount || 0) : 0) / 100).toFixed(2)}</span>
                   </div>
                   
                   <div className="flex justify-between text-sm" data-testid="row-tax">
