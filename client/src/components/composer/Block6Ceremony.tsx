@@ -365,18 +365,6 @@ export default function Block6Ceremony({
         </p>
       </div>
 
-      {readOnly && (
-        <div className="flex gap-3 items-start bg-amber-50 dark:bg-amber-950 p-4 rounded-md border border-amber-200 dark:border-amber-800">
-          <Lock className="h-5 w-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
-          <div>
-            <p className="font-medium text-amber-900 dark:text-amber-100">Available with Full Wedding Package</p>
-            <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
-              The Elopement and Vow Renewal packages include a basic, secular ceremony but you are welcome to review these options are available with the Modest Wedding packages.
-            </p>
-          </div>
-        </div>
-      )}
-
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
@@ -685,26 +673,6 @@ export default function Block6Ceremony({
                   />
                 </div>
               )}
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="ceremony-special-requests">Other Special Requests</Label>
-              <p className="text-sm text-muted-foreground">
-                (Examples: 'Please use gender-neutral language,' 'Do say husband and wife,' 'We don't want to exchange rings.')
-              </p>
-              <Textarea
-                id="ceremony-special-requests"
-                data-testid="input-ceremony-special-requests"
-                placeholder="Any other details you'd like your officiant to include (max 400 characters)"
-                value={ceremonySpecialRequests}
-                onChange={(e) => onChange('ceremonySpecialRequests', e.target.value)}
-                rows={2}
-                maxLength={400}
-                disabled={readOnly}
-              />
-              <p className="text-xs text-muted-foreground">
-                {ceremonySpecialRequests.length}/400 characters
-              </p>
             </div>
           </CardContent>
         </Card>
