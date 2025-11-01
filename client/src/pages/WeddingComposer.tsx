@@ -1447,7 +1447,7 @@ export default function WeddingComposer() {
               size="lg"
               data-testid="button-finalize-payment"
             >
-              Proceed to Payment
+              {userAccount ? 'Proceed to Payment' : 'You must create an Account to Continue'}
               <ChevronRight className="h-4 w-4 ml-2" />
             </Button>
           )}
