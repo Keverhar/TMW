@@ -312,7 +312,6 @@ export default function Payment() {
                             <p>- Flexible: split your $5,000 wedding into smaller monthly payments.</p>
                             <p>- Quick decision, no late fees, and clear terms.</p>
                             <p>- Trusted brand used by millions.</p>
-                            <p className="font-medium text-foreground">- **Special savings: Receive a $50 discount on your wedding package when you choose Affirm.**</p>
                           </div>
                         </Label>
                       </div>
