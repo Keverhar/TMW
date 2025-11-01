@@ -974,59 +974,66 @@ export default function WeddingComposer() {
     if (!isSimplifiedFlow) return false; // Full wedding packages have full access
     
     // Blocks available for all event types (not read-only)
-    const alwaysAvailableBlocks = [1, 5, 11, 12, 13]; // Event Type, Ceremony, Evites, Add-Ons, Contact/Payment
+    const alwaysAvailableBlocks = [1, 2, 6, 12, 13, 14]; // The Couple, Event Type, Ceremony, Evites, Add-Ons, Cart
     return !alwaysAvailableBlocks.includes(blockId);
   };
 
   // Function to determine completion status for each block
   const getBlockCompletionStatus = (blockId: number): 'complete' | 'partial' | 'none' => {
     switch (blockId) {
-      case 1: // Event Type (includes Date & Time at bottom)
+      case 1: // The Couple
+        // Check if at least customer name and email are filled
+        if (formData.customerName && formData.customerEmail) return 'complete';
+        // Partial if only one is filled
+        if (formData.customerName || formData.customerEmail) return 'partial';
+        return 'none';
+      
+      case 2: // Event Type (includes Date & Time at bottom)
         // Check if event type, date, and time are all filled
         if (formData.eventType && formData.preferredDate && formData.timeSlot) return 'complete';
         // Partial if only event type is filled (or event type + one of date/time)
         if (formData.eventType) return 'partial';
         return 'none';
       
-      case 2: // Colors
+      case 3: // Colors
         if (formData.colorSwatchDecision && formData.colorSwatchDecision !== 'see-swatches-at-tour') return 'complete';
         if (formData.signatureColor || formData.colorSwatchDecision === 'see-swatches-at-tour') return 'partial';
         return 'none';
       
-      case 3: // Music
+      case 4: // Music
         if (formData.musicCompletionStatus && formData.musicCompletionStatus !== 'finish-later') return 'complete';
         if (formData.musicCompletionStatus === 'finish-later' || formData.processionalSong || formData.recessionalSong || formData.playlistUrl) return 'partial';
         return 'none';
       
-      case 4: // Announcements
+      case 5: // Announcements
         if (formData.announcementsCompletionStatus && formData.announcementsCompletionStatus !== 'finish-later') return 'complete';
         if (formData.announcementsCompletionStatus === 'finish-later' || formData.grandIntroduction || formData.vibeCheck) return 'partial';
         return 'none';
       
-      case 5: // Ceremony
+      case 6: // Ceremony
         return formData.ceremonyScript ? 'complete' : 'none';
       
-      case 6: // Processional
+      case 7: // Processional
         if (formData.processionalCompletionStatus && formData.processionalCompletionStatus !== 'finish-later') return 'complete';
         if (formData.processionalCompletionStatus === 'finish-later' || formData.walkingDownAisle || formData.ringBearerIncluded) return 'partial';
         return 'none';
       
-      case 7: // Reception
+      case 8: // Reception
         if (formData.receptionCompletionStatus && formData.receptionCompletionStatus !== 'finish-later') return 'complete';
         if (formData.receptionCompletionStatus === 'finish-later' || formData.firstDance || formData.beveragePreferences) return 'partial';
         return 'none';
       
-      case 8: // Photography
+      case 9: // Photography
         if (formData.photographyCompletionStatus && formData.photographyCompletionStatus !== 'finish-later') return 'complete';
         if (formData.photographyCompletionStatus === 'finish-later' || formData.mustHaveShots || formData.vipList) return 'partial';
         return 'none';
       
-      case 9: // Slideshow
+      case 10: // Slideshow
         if (formData.slideshowCompletionStatus && formData.slideshowCompletionStatus !== 'finish-later') return 'complete';
         if (formData.slideshowCompletionStatus === 'finish-later' || formData.slideshowPhotos !== '[]' || formData.engagementPhotos !== '[]') return 'partial';
         return 'none';
       
-      case 10: // Personal Touches
+      case 11: // Personal Touches
         if (formData.personalTouchesCompletionStatus && formData.personalTouchesCompletionStatus !== 'finish-later') return 'complete';
         // Check for partial completion - exclude departureOrganizerTBD and checkbox-only flags as they don't represent actual data
         const hasPersonalTouchesData = (formData.freshFlorals && formData.freshFlorals.trim() !== '') || 
@@ -1036,17 +1043,17 @@ export default function WeddingComposer() {
         if (formData.personalTouchesCompletionStatus === 'finish-later' || hasPersonalTouchesData) return 'partial';
         return 'none';
       
-      case 11: // Evites
+      case 12: // Evites
         if (formData.eviteCompletionStatus && formData.eviteCompletionStatus !== 'finish-later') return 'complete';
         if (formData.eviteCompletionStatus === 'finish-later' || formData.eviteDesignStyle || formData.eviteHeaderText) return 'partial';
         return 'none';
       
-      case 12: // Add-Ons
-        // Add-ons are optional, so consider it complete if user has made any selection or left it empty
-        if (formData.photoBookAddon || formData.extraTimeAddon || formData.byobBarAddon || formData.rehearsalAddon) return 'partial';
+      case 13: // Add-Ons
+        // Add-ons are optional, turn green when any add-on is selected
+        if (formData.photoBookAddon || formData.extraTimeAddon || formData.byobBarAddon || formData.rehearsalAddon) return 'complete';
         return 'none';
       
-      case 13: // Cart (Payment & Review)
+      case 14: // Cart (Payment & Review)
         // Cart is complete when terms are accepted
         if (formData.termsAccepted) return 'complete';
         // Partial if user has selected ACH or E-Check (which have discounts, indicating interaction)
