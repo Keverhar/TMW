@@ -816,6 +816,32 @@ export default function WeddingComposer() {
     setLocation("/");
   };
 
+  // Verify user account exists in database on mount
+  useEffect(() => {
+    const verifyUserAccount = async () => {
+      if (userAccount) {
+        try {
+          const response = await fetch(`/api/users/${userAccount.id}`);
+          if (!response.ok) {
+            // User doesn't exist in database, clear localStorage
+            console.log('User account not found in database, clearing localStorage');
+            localStorage.removeItem("user");
+            setUserAccount(null);
+            setHasSeenInitialDialog(false);
+          }
+        } catch (error) {
+          console.error('Error verifying user account:', error);
+          // On error, clear the account to be safe
+          localStorage.removeItem("user");
+          setUserAccount(null);
+          setHasSeenInitialDialog(false);
+        }
+      }
+    };
+    
+    verifyUserAccount();
+  }, []); // Run only on mount
+
   // Load user's existing composer data when component mounts with logged-in user
   useEffect(() => {
     const loadUserComposerData = async () => {
