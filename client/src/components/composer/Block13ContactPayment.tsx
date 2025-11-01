@@ -19,6 +19,7 @@ interface Block13ContactPaymentProps {
   paymentMethod: string;
   echeckRoutingNumber: string;
   echeckAccountNumber: string;
+  echeckAccountHolder: string;
   echeckCheckNumber: string;
   termsAccepted: boolean;
   photoBookAddon: boolean;
@@ -50,6 +51,7 @@ export default function Block13ContactPayment({
   paymentMethod,
   echeckRoutingNumber,
   echeckAccountNumber,
+  echeckAccountHolder,
   echeckCheckNumber,
   termsAccepted,
   photoBookAddon,
@@ -246,6 +248,17 @@ export default function Block13ContactPayment({
                 placeholder="Enter account number"
                 value={echeckAccountNumber}
                 onChange={(e) => onChange('echeckAccountNumber', e.target.value)}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="account-holder">Name on Account</Label>
+              <Input
+                id="account-holder"
+                data-testid="input-account-holder"
+                placeholder="Enter name on account"
+                value={echeckAccountHolder}
+                onChange={(e) => onChange('echeckAccountHolder', e.target.value)}
               />
             </div>
 

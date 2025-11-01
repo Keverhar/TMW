@@ -189,6 +189,7 @@ export const weddingComposers = pgTable("wedding_composers", {
   paymentMethod: text("payment_method").default("credit_card"),
   echeckRoutingNumber: text("echeck_routing_number"),
   echeckAccountNumber: text("echeck_account_number"),
+  echeckAccountHolder: text("echeck_account_holder"),
   echeckCheckNumber: text("echeck_check_number"),
   
   // Legacy columns (nullable for backward compatibility)

@@ -230,6 +230,7 @@ export default function WeddingComposer() {
     paymentMethod: "credit_card",
     echeckRoutingNumber: "",
     echeckAccountNumber: "",
+    echeckAccountHolder: "",
     echeckCheckNumber: "",
     termsAccepted: false,
 
@@ -755,6 +756,7 @@ export default function WeddingComposer() {
         paymentMethod: composer.paymentMethod || "credit_card",
         echeckRoutingNumber: composer.echeckRoutingNumber || "",
         echeckAccountNumber: composer.echeckAccountNumber || "",
+        echeckAccountHolder: composer.echeckAccountHolder || "",
         echeckCheckNumber: composer.echeckCheckNumber || "",
         termsAccepted: composer.termsAccepted || false,
         photoBookAddon: composer.photoBookAddon || false,
@@ -951,6 +953,7 @@ export default function WeddingComposer() {
                 paymentMethod: composer.paymentMethod || "credit_card",
                 echeckRoutingNumber: composer.echeckRoutingNumber || "",
                 echeckAccountNumber: composer.echeckAccountNumber || "",
+                echeckAccountHolder: composer.echeckAccountHolder || "",
                 echeckCheckNumber: composer.echeckCheckNumber || "",
                 termsAccepted: composer.termsAccepted || false,
                 photoBookAddon: composer.photoBookAddon || false,
@@ -1484,6 +1487,7 @@ export default function WeddingComposer() {
               paymentMethod={formData.paymentMethod}
               echeckRoutingNumber={formData.echeckRoutingNumber}
               echeckAccountNumber={formData.echeckAccountNumber}
+              echeckAccountHolder={formData.echeckAccountHolder}
               echeckCheckNumber={formData.echeckCheckNumber}
               termsAccepted={formData.termsAccepted}
               photoBookAddon={formData.photoBookAddon}
