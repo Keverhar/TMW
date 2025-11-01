@@ -83,13 +83,57 @@ export default function Confirmation() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3">
-                  <DollarSign className="h-5 w-5 text-muted-foreground" />
-                  <div>
-                    <p className="font-medium">Total Investment</p>
-                    <p className="text-sm text-muted-foreground">
-                      ${(composer.totalPrice / 100).toFixed(2)}
-                    </p>
+                <div className="flex items-start gap-3">
+                  <DollarSign className="h-5 w-5 text-muted-foreground mt-1" />
+                  <div className="flex-1">
+                    <p className="font-medium mb-2">Payment Summary</p>
+                    <div className="text-sm space-y-1">
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Base Package:</span>
+                        <span className="text-foreground">${((composer.basePackagePrice || 0) / 100).toFixed(2)}</span>
+                      </div>
+                      {composer.photoBookAddon && (
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Photo Book ({composer.photoBookQuantity || 1}x):</span>
+                          <span className="text-foreground">${(((composer.photoBookPrice || 0) * (composer.photoBookQuantity || 1)) / 100).toFixed(2)}</span>
+                        </div>
+                      )}
+                      {composer.extraTimeAddon && (
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Extra Time:</span>
+                          <span className="text-foreground">${((composer.extraTimePrice || 0) / 100).toFixed(2)}</span>
+                        </div>
+                      )}
+                      {composer.byobBarAddon && (
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">BYOB Bar:</span>
+                          <span className="text-foreground">${((composer.byobBarPrice || 0) / 100).toFixed(2)}</span>
+                        </div>
+                      )}
+                      {composer.rehearsalAddon && (
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Rehearsal:</span>
+                          <span className="text-foreground">${((composer.rehearsalPrice || 0) / 100).toFixed(2)}</span>
+                        </div>
+                      )}
+                      {(composer.paymentMethod === 'ach' && (composer.achDiscountAmount || 0) > 0) && (
+                        <div className="flex justify-between text-green-600 dark:text-green-400">
+                          <span>ACH Discount:</span>
+                          <span>-${((composer.achDiscountAmount || 0) / 100).toFixed(2)}</span>
+                        </div>
+                      )}
+                      {(composer.paymentMethod === 'affirm' && (composer.affirmDiscountAmount || 0) > 0) && (
+                        <div className="flex justify-between text-green-600 dark:text-green-400">
+                          <span>Affirm Discount:</span>
+                          <span>-${((composer.affirmDiscountAmount || 0) / 100).toFixed(2)}</span>
+                        </div>
+                      )}
+                      <div className="border-t pt-1 mt-1"></div>
+                      <div className="flex justify-between font-semibold">
+                        <span>Total Paid:</span>
+                        <span>${((composer.totalPrice || 0) / 100).toFixed(2)}</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
