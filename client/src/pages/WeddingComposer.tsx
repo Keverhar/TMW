@@ -432,6 +432,8 @@ export default function WeddingComposer() {
         variant: "destructive",
         duration: 3000,
       });
+      setCurrentStep(2); // Navigate to Event Type page
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
 
