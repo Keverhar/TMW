@@ -24,6 +24,7 @@ export const PRICING = {
     affirm: 0, // No discount for Affirm payment
     echeck: 5000, // $50 discount for E-Check payment
     paypal: 0, // No discount for PayPal payment
+    venmo: 0, // No discount for Venmo payment
   },
 } as const;
 
@@ -43,5 +44,6 @@ export function getPaymentDiscount(paymentMethod: string): number {
   if (paymentMethod === 'affirm') return PRICING.discounts.affirm;
   if (paymentMethod === 'echeck') return PRICING.discounts.echeck;
   if (paymentMethod === 'paypal') return PRICING.discounts.paypal;
+  if (paymentMethod === 'venmo') return PRICING.discounts.venmo;
   return 0;
 }

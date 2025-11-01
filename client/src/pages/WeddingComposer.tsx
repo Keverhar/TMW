@@ -1405,6 +1405,7 @@ export default function WeddingComposer() {
               affirmDiscountAmount={getPaymentDiscount('affirm')}
               echeckDiscountAmount={getPaymentDiscount('echeck')}
               paypalDiscountAmount={getPaymentDiscount('paypal')}
+              venmoDiscountAmount={getPaymentDiscount('venmo')}
               amountPaid={formData.amountPaid}
               termsAccepted={formData.termsAccepted}
               onChange={updateField}

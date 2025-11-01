@@ -25,6 +25,7 @@ interface BlockCartProps {
   affirmDiscountAmount: number;
   echeckDiscountAmount: number;
   paypalDiscountAmount: number;
+  venmoDiscountAmount: number;
   amountPaid: number;
   termsAccepted: boolean;
   onChange: (field: string, value: string | boolean | number) => void;
@@ -49,6 +50,7 @@ export default function BlockCart({
   affirmDiscountAmount,
   echeckDiscountAmount,
   paypalDiscountAmount,
+  venmoDiscountAmount,
   amountPaid,
   termsAccepted,
   onChange,
@@ -115,7 +117,8 @@ export default function BlockCart({
   const discount = paymentMethod === 'ach' ? achDiscountAmount : 
                    paymentMethod === 'affirm' ? affirmDiscountAmount :
                    paymentMethod === 'echeck' ? echeckDiscountAmount :
-                   paymentMethod === 'paypal' ? paypalDiscountAmount : 0;
+                   paymentMethod === 'paypal' ? paypalDiscountAmount :
+                   paymentMethod === 'venmo' ? venmoDiscountAmount : 0;
 
   // If no event type is selected, show empty cart message
   if (!eventType) {
@@ -184,7 +187,7 @@ export default function BlockCart({
             })}
 
             <div className="flex justify-between text-green-600 dark:text-green-400" data-testid="row-payment-discount">
-              <span>{paymentMethod === 'ach' ? 'ACH' : paymentMethod === 'echeck' ? 'E-Check' : paymentMethod === 'affirm' ? 'Affirm' : paymentMethod === 'paypal' ? 'PayPal' : 'Payment'} Discount</span>
+              <span>{paymentMethod === 'ach' ? 'ACH' : paymentMethod === 'echeck' ? 'E-Check' : paymentMethod === 'affirm' ? 'Affirm' : paymentMethod === 'paypal' ? 'PayPal' : paymentMethod === 'venmo' ? 'Venmo' : 'Payment'} Discount</span>
               <span data-testid="text-payment-discount">{discount > 0 ? '-' : ''}${(discount / 100).toFixed(2)}</span>
             </div>
 
@@ -352,6 +355,22 @@ export default function BlockCart({
                 </Label>
               </div>
             </div>
+
+            <div className="flex items-start space-x-3 p-4 border rounded-lg hover-elevate">
+              <RadioGroupItem value="venmo" id="venmo" data-testid="radio-payment-venmo" />
+              <div className="flex-1">
+                <Label htmlFor="venmo" className="cursor-pointer">
+                  <div className="mb-2">
+                    <span className="font-semibold">Pay with Venmo</span>
+                  </div>
+                  <div className="text-sm text-muted-foreground space-y-1">
+                    <p>- Quick and easy payment through your Venmo account.</p>
+                    <p>- Pay with your Venmo balance or linked payment methods.</p>
+                    <p>- Popular mobile payment app for seamless transactions.</p>
+                  </div>
+                </Label>
+              </div>
+            </div>
           </RadioGroup>
 
           {paymentMethod === 'affirm' && (
@@ -441,6 +460,16 @@ export default function BlockCart({
               <Info className="h-4 w-4" />
               <AlertDescription>
                 You'll be redirected to PayPal to complete your payment securely. 
+                Your booking will be confirmed once the payment is processed.
+              </AlertDescription>
+            </Alert>
+          )}
+
+          {paymentMethod === 'venmo' && (
+            <Alert>
+              <Info className="h-4 w-4" />
+              <AlertDescription>
+                You'll be redirected to Venmo to complete your payment securely. 
                 Your booking will be confirmed once the payment is processed.
               </AlertDescription>
             </Alert>
