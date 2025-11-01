@@ -30,22 +30,24 @@ import Block10Slideshow from "@/components/composer/Block10Slideshow";
 import Block11PersonalTouches from "@/components/composer/Block11PersonalTouches";
 import Block12EviteSaveTheDate from "@/components/composer/Block12EviteSaveTheDate";
 import BlockAddOns from "@/components/composer/BlockAddOns";
+import Block13TheCouple from "@/components/composer/Block13TheCouple";
 import Block13ContactPayment from "@/components/composer/Block13ContactPayment";
 
 const allSteps = [
-  { id: 1, title: 'Event Type', description: 'Choose your celebration', availableFor: ['all'] },
-  { id: 2, title: 'Colors', description: 'Choose your color theme', availableFor: ['modest-wedding', 'other'] },
-  { id: 3, title: 'Music', description: 'Pick your songs', availableFor: ['modest-wedding', 'other'] },
-  { id: 4, title: 'Announcements', description: 'Special moments', availableFor: ['modest-wedding', 'other'] },
-  { id: 5, title: 'Ceremony', description: 'Ceremony preferences', availableFor: ['all'] },
-  { id: 6, title: 'Processional', description: 'Seating & procession', availableFor: ['modest-wedding', 'other'] },
-  { id: 7, title: 'Reception', description: 'Reception details', availableFor: ['modest-wedding', 'other'] },
-  { id: 8, title: 'Photography', description: 'Photo preferences', availableFor: ['modest-wedding', 'other'] },
-  { id: 9, title: 'Slideshow', description: 'Upload photos', availableFor: ['modest-wedding', 'other'] },
-  { id: 10, title: 'Personal Touches', description: 'Special details', availableFor: ['modest-wedding', 'other'] },
-  { id: 11, title: 'Evites', description: 'Digital invitations', availableFor: ['all'] },
-  { id: 12, title: 'Add-Ons', description: 'Enhance your celebration', availableFor: ['all'] },
-  { id: 13, title: 'Cart', description: 'Review & payment', availableFor: ['all'] },
+  { id: 1, title: 'The Couple', description: 'Your information', availableFor: ['all'] },
+  { id: 2, title: 'Event Type', description: 'Choose your celebration', availableFor: ['all'] },
+  { id: 3, title: 'Colors', description: 'Choose your color theme', availableFor: ['modest-wedding', 'other'] },
+  { id: 4, title: 'Music', description: 'Pick your songs', availableFor: ['modest-wedding', 'other'] },
+  { id: 5, title: 'Announcements', description: 'Special moments', availableFor: ['modest-wedding', 'other'] },
+  { id: 6, title: 'Ceremony', description: 'Ceremony preferences', availableFor: ['all'] },
+  { id: 7, title: 'Processional', description: 'Seating & procession', availableFor: ['modest-wedding', 'other'] },
+  { id: 8, title: 'Reception', description: 'Reception details', availableFor: ['modest-wedding', 'other'] },
+  { id: 9, title: 'Photography', description: 'Photo preferences', availableFor: ['modest-wedding', 'other'] },
+  { id: 10, title: 'Slideshow', description: 'Upload photos', availableFor: ['modest-wedding', 'other'] },
+  { id: 11, title: 'Personal Touches', description: 'Special details', availableFor: ['modest-wedding', 'other'] },
+  { id: 12, title: 'Evites', description: 'Digital invitations', availableFor: ['all'] },
+  { id: 13, title: 'Add-Ons', description: 'Enhance your celebration', availableFor: ['all'] },
+  { id: 14, title: 'Cart', description: 'Review & payment', availableFor: ['all'] },
 ];
 
 const calculatePrice = (eventType: string, dayOfWeek: string): number => {
@@ -1204,6 +1206,17 @@ export default function WeddingComposer() {
 
         <div className="mb-8">
           {steps[currentStep - 1]?.id === 1 && (
+            <Block13TheCouple
+              customerName={formData.customerName}
+              customerName2={formData.customerName2}
+              customerEmail={formData.customerEmail}
+              customerPhone={formData.customerPhone}
+              smsConsent={formData.smsConsent}
+              mailingAddress={formData.mailingAddress}
+              onChange={updateField}
+            />
+          )}
+          {steps[currentStep - 1]?.id === 2 && (
             <Block1EventType
               eventType={formData.eventType}
               eventTypeOther={formData.eventTypeOther}
@@ -1212,7 +1225,7 @@ export default function WeddingComposer() {
               onChange={updateField}
             />
           )}
-          {steps[currentStep - 1]?.id === 2 && (
+          {steps[currentStep - 1]?.id === 3 && (
             <Block3SignatureColor
               signatureColor={formData.signatureColor}
               colorSwatchDecision={formData.colorSwatchDecision}
@@ -1220,7 +1233,7 @@ export default function WeddingComposer() {
               readOnly={isBlockReadOnly(2)}
             />
           )}
-          {steps[currentStep - 1]?.id === 3 && (
+          {steps[currentStep - 1]?.id === 4 && (
             <Block4Music
               processionalSong={formData.processionalSong}
               recessionalSong={formData.recessionalSong}
@@ -1234,7 +1247,7 @@ export default function WeddingComposer() {
               readOnly={isBlockReadOnly(3)}
             />
           )}
-          {steps[currentStep - 1]?.id === 4 && (
+          {steps[currentStep - 1]?.id === 5 && (
             <Block5Announcements
               grandIntroduction={formData.grandIntroduction}
               fatherDaughterDanceAnnouncement={formData.fatherDaughterDanceAnnouncement}
@@ -1246,7 +1259,7 @@ export default function WeddingComposer() {
               readOnly={isBlockReadOnly(4)}
             />
           )}
-          {steps[currentStep - 1]?.id === 5 && (
+          {steps[currentStep - 1]?.id === 6 && (
             <Block6Ceremony
               ceremonyScript={formData.ceremonyScript}
               vowChoices={formData.vowChoices}
@@ -1270,7 +1283,7 @@ export default function WeddingComposer() {
               readOnly={isBlockReadOnly(5)}
             />
           )}
-          {steps[currentStep - 1]?.id === 6 && (
+          {steps[currentStep - 1]?.id === 7 && (
             <Block7Processional
               walkingDownAisle={formData.walkingDownAisle}
               escortName={formData.escortName}
@@ -1294,7 +1307,7 @@ export default function WeddingComposer() {
               readOnly={isBlockReadOnly(6)}
             />
           )}
-          {steps[currentStep - 1]?.id === 7 && (
+          {steps[currentStep - 1]?.id === 8 && (
             <Block8Reception
               firstDance={formData.firstDance}
               firstDanceNA={formData.firstDanceNA}
@@ -1312,7 +1325,7 @@ export default function WeddingComposer() {
               readOnly={isBlockReadOnly(7)}
             />
           )}
-          {steps[currentStep - 1]?.id === 8 && (
+          {steps[currentStep - 1]?.id === 9 && (
             <Block9Photography
               mustHaveShots={formData.mustHaveShots}
               mustHaveShotsNA={formData.mustHaveShotsNA}
@@ -1327,7 +1340,7 @@ export default function WeddingComposer() {
               readOnly={isBlockReadOnly(8)}
             />
           )}
-          {steps[currentStep - 1]?.id === 9 && (
+          {steps[currentStep - 1]?.id === 10 && (
             <Block10Slideshow
               slideshowPhotos={formData.slideshowPhotos}
               slideshowPhotosNA={formData.slideshowPhotosNA}
@@ -1338,7 +1351,7 @@ export default function WeddingComposer() {
               readOnly={isBlockReadOnly(9)}
             />
           )}
-          {steps[currentStep - 1]?.id === 10 && (
+          {steps[currentStep - 1]?.id === 11 && (
             <Block11PersonalTouches
               freshFlorals={formData.freshFlorals}
               freshFloralsNA={formData.freshFloralsNA}
@@ -1357,7 +1370,7 @@ export default function WeddingComposer() {
               readOnly={isBlockReadOnly(10)}
             />
           )}
-          {steps[currentStep - 1]?.id === 11 && (
+          {steps[currentStep - 1]?.id === 12 && (
             <Block12EviteSaveTheDate
               eviteDesignStyle={formData.eviteDesignStyle}
               eviteHeaderText={formData.eviteHeaderText}
@@ -1376,7 +1389,7 @@ export default function WeddingComposer() {
               readOnly={isBlockReadOnly(11)}
             />
           )}
-          {steps[currentStep - 1]?.id === 12 && (
+          {steps[currentStep - 1]?.id === 13 && (
             <BlockAddOns
               photoBookAddon={formData.photoBookAddon}
               photoBookQuantity={formData.photoBookQuantity}
@@ -1389,7 +1402,7 @@ export default function WeddingComposer() {
               timeSlot={formData.timeSlot}
             />
           )}
-          {steps[currentStep - 1]?.id === 13 && (
+          {steps[currentStep - 1]?.id === 14 && (
             <Block13ContactPayment
               customerName={formData.customerName}
               customerName2={formData.customerName2}
@@ -1434,7 +1447,7 @@ export default function WeddingComposer() {
           {currentStep < steps.length ? (
             <Button
               onClick={handleNext}
-              disabled={!formData.eventType}
+              disabled={currentStep === 2 && !formData.eventType}
               data-testid="button-next"
             >
               Next
