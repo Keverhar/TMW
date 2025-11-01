@@ -369,9 +369,9 @@ export default function Block6Ceremony({
         <CardHeader>
           <div className="flex items-center gap-2">
             <Heart className="h-5 w-5" />
-            <CardTitle>Ceremony Script</CardTitle>
+            <CardTitle>Ceremony Script <span className="text-destructive">*</span></CardTitle>
           </div>
-          <CardDescription>Choose the words, mood, and meaning of the moment when you officially say "I do"</CardDescription>
+          <CardDescription>Choose the words, mood, and meaning of the moment when you officially say "I do" (Required)</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <RadioGroup value={ceremonyScript} onValueChange={(value) => onChange('ceremonyScript', value)} disabled={readOnly}>
