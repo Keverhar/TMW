@@ -464,25 +464,25 @@ function SummaryView({ composerData }: { composerData: WeddingComposerType | nul
             </div>
           </CardHeader>
           <CardContent className="space-y-2">
-            {composerData.photoBookAddon && (
+            {composerData.photoBookAddon && composerData.photoBookPrice && composerData.photoBookQuantity && (
               <div className="flex items-center justify-between">
                 <span>Photo Book (x{composerData.photoBookQuantity})</span>
                 <span className="font-semibold">{formatPrice(composerData.photoBookPrice * composerData.photoBookQuantity)}</span>
               </div>
             )}
-            {composerData.extraTimeAddon && (
+            {composerData.extraTimeAddon && composerData.extraTimePrice && (
               <div className="flex items-center justify-between">
                 <span>Extra Time (1 hour)</span>
                 <span className="font-semibold">{formatPrice(composerData.extraTimePrice)}</span>
               </div>
             )}
-            {composerData.byobBarAddon && (
+            {composerData.byobBarAddon && composerData.byobBarPrice && (
               <div className="flex items-center justify-between">
                 <span>BYOB Bar Service</span>
                 <span className="font-semibold">{formatPrice(composerData.byobBarPrice)}</span>
               </div>
             )}
-            {composerData.rehearsalAddon && (
+            {composerData.rehearsalAddon && composerData.rehearsalPrice && (
               <div className="flex items-center justify-between">
                 <span>Rehearsal</span>
                 <span className="font-semibold">{formatPrice(composerData.rehearsalPrice)}</span>
