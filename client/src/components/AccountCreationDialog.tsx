@@ -318,6 +318,7 @@ export default function AccountCreationDialog({ open, onOpenChange, onAccountCre
                             <SelectItem value="II">II</SelectItem>
                             <SelectItem value="III">III</SelectItem>
                             <SelectItem value="IV">IV</SelectItem>
+                            <SelectItem value="Other">Other</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />

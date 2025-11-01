@@ -14,7 +14,7 @@ export const users = pgTable("users", {
   firstName: text("first_name"),
   middleName: text("middle_name"),
   lastName: text("last_name"),
-  suffix: text("suffix"), // None, Jr., Sr., II, III, IV
+  suffix: text("suffix"), // None, Jr., Sr., II, III, IV, Other
   displayName: text("display_name"),
   alternateEmail: text("alternate_email"),
   primaryPhone: text("primary_phone"),
