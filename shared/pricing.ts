@@ -28,9 +28,9 @@ export const PRICING = {
       venmo: 0, // No discount for Venmo payment
     },
     elopement: {
-      ach: 5000, // $50 discount for ACH payment on elopements/vow renewals
+      ach: 3000, // $30 discount for ACH payment on elopements/vow renewals
       affirm: 0, // No discount for Affirm payment
-      echeck: 5000, // $50 discount for E-Check payment on elopements/vow renewals
+      echeck: 3000, // $30 discount for E-Check payment on elopements/vow renewals
       paypal: 0, // No discount for PayPal payment
       venmo: 0, // No discount for Venmo payment
     },

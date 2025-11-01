@@ -325,7 +325,7 @@ export default function Payment() {
                           <div className="text-sm text-muted-foreground space-y-1">
                             <p>- Simple and secure: pay directly from your bank account using your routing and account number.</p>
                             <p>- Funds take 2–3 days to clear, but your date is secured once payment is received.</p>
-                            <p className="font-medium text-foreground">- Special savings: Receive a $100 discount on weddings or $50 discount on elopements/vow renewals when you choose ACH.</p>
+                            <p className="font-medium text-foreground">- Special savings: Receive a $100 discount on weddings or $30 discount on elopements/vow renewals when you choose ACH.</p>
                           </div>
                         </Label>
                       </div>
@@ -339,7 +339,7 @@ export default function Payment() {
                           <div className="text-sm text-muted-foreground space-y-1">
                             <p>- Electronic check payment processed directly from your bank account.</p>
                             <p>- Similar to ACH with secure verification and quick processing.</p>
-                            <p className="font-medium text-foreground">- Special savings: Receive a $100 discount on weddings or $50 discount on elopements/vow renewals when you choose E-Check.</p>
+                            <p className="font-medium text-foreground">- Special savings: Receive a $100 discount on weddings or $30 discount on elopements/vow renewals when you choose E-Check.</p>
                           </div>
                         </Label>
                       </div>
