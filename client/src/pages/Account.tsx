@@ -206,7 +206,7 @@ export default function Account() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Login ID (Email)</label>
+                  <label className="text-sm font-medium">Login ID (Your Email is your Login ID)</label>
                   <Input
                     value={userEmail}
                     disabled
@@ -270,13 +270,14 @@ export default function Account() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Title</FormLabel>
-                        <Select onValueChange={field.onChange} value={field.value || undefined}>
+                        <Select onValueChange={field.onChange} value={field.value || " "}>
                           <FormControl>
                             <SelectTrigger data-testid="select-title">
                               <SelectValue placeholder="None" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
+                            <SelectItem value=" ">None</SelectItem>
                             <SelectItem value="Mr.">Mr.</SelectItem>
                             <SelectItem value="Sir">Sir</SelectItem>
                             <SelectItem value="Ms.">Ms.</SelectItem>
@@ -339,13 +340,14 @@ export default function Account() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Suffix</FormLabel>
-                        <Select onValueChange={field.onChange} value={field.value || undefined}>
+                        <Select onValueChange={field.onChange} value={field.value || " "}>
                           <FormControl>
                             <SelectTrigger data-testid="select-suffix">
                               <SelectValue placeholder="None" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
+                            <SelectItem value=" ">None</SelectItem>
                             <SelectItem value="Jr.">Jr.</SelectItem>
                             <SelectItem value="Sr.">Sr.</SelectItem>
                             <SelectItem value="II">II</SelectItem>
