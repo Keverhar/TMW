@@ -329,6 +329,20 @@ export default function Payment() {
                           </div>
                         </Label>
                       </div>
+
+                      <div className="flex items-start space-x-2 p-3 border rounded-md hover-elevate">
+                        <RadioGroupItem value="echeck" id="echeck" data-testid="radio-echeck" className="mt-1" />
+                        <Label htmlFor="echeck" className="flex-1 cursor-pointer">
+                          <div className="mb-2">
+                            <span className="font-semibold">Pay by E-Check</span>
+                          </div>
+                          <div className="text-sm text-muted-foreground space-y-1">
+                            <p>- Electronic check payment processed directly from your bank account.</p>
+                            <p>- Similar to ACH with secure verification and quick processing.</p>
+                            <p className="font-medium text-foreground">- Special savings: Receive a $100 discount on your wedding package when you choose E-Check.</p>
+                          </div>
+                        </Label>
+                      </div>
                     </RadioGroup>
                   </div>
 
