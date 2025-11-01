@@ -23,6 +23,7 @@ const signupSchema = z.object({
   middleName: z.string().optional(),
   lastName: z.string().min(1, "Last name is required"),
   suffix: z.string().optional(),
+  customSuffix: z.string().optional(),
   alternateEmail: z.string().email("Please enter a valid email").optional().or(z.literal("")),
   primaryPhone: z.string().min(1, "Primary phone is required"),
   alternatePhone: z.string().optional(),
@@ -62,6 +63,7 @@ export default function AccountCreationDialog({ open, onOpenChange, onAccountCre
       middleName: "",
       lastName: "",
       suffix: "",
+      customSuffix: "",
       alternateEmail: "",
       primaryPhone: "",
       alternatePhone: "",
@@ -72,6 +74,8 @@ export default function AccountCreationDialog({ open, onOpenChange, onAccountCre
       zip: "",
     },
   });
+
+  const suffixValue = form.watch("suffix");
 
   const handleEmailSignup = async (data: SignupForm) => {
     setIsSubmitting(true);
@@ -86,6 +90,7 @@ export default function AccountCreationDialog({ open, onOpenChange, onAccountCre
         middleName: data.middleName || null,
         lastName: data.lastName,
         suffix: data.suffix || null,
+        customSuffix: data.customSuffix || null,
         displayName,
         alternateEmail: data.alternateEmail || null,
         primaryPhone: data.primaryPhone,
@@ -326,6 +331,22 @@ export default function AccountCreationDialog({ open, onOpenChange, onAccountCre
                     )}
                   />
                 </div>
+
+                {suffixValue === "Other" && (
+                  <FormField
+                    control={form.control}
+                    name="customSuffix"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Custom Suffix</FormLabel>
+                        <FormControl>
+                          <Input placeholder="e.g., MD, Esq, Ret" {...field} data-testid="input-custom-suffix" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
               </div>
 
               {/* Contact Information */}

@@ -20,6 +20,7 @@ const accountSchema = z.object({
   middleName: z.string().optional(),
   lastName: z.string().min(1, "Last name is required"),
   suffix: z.string().optional(),
+  customSuffix: z.string().optional(),
   alternateEmail: z.string().email("Please enter a valid email").optional().or(z.literal("")),
   primaryPhone: z.string().min(1, "Primary phone is required"),
   alternatePhone: z.string().optional(),
@@ -59,6 +60,7 @@ export default function Account() {
       middleName: "",
       lastName: "",
       suffix: "",
+      customSuffix: "",
       alternateEmail: "",
       primaryPhone: "",
       alternatePhone: "",
@@ -69,6 +71,8 @@ export default function Account() {
       zip: "",
     },
   });
+
+  const suffixValue = form.watch("suffix");
 
   useEffect(() => {
     const loadAccountData = async () => {
@@ -93,6 +97,7 @@ export default function Account() {
             middleName: userData.middleName || "",
             lastName: userData.lastName || "",
             suffix: userData.suffix || "",
+            customSuffix: userData.customSuffix || "",
             alternateEmail: userData.alternateEmail || "",
             primaryPhone: userData.primaryPhone || "",
             alternatePhone: userData.alternatePhone || "",
@@ -133,6 +138,7 @@ export default function Account() {
         middleName: data.middleName || null,
         lastName: data.lastName,
         suffix: data.suffix || null,
+        customSuffix: data.customSuffix || null,
         displayName: `${data.firstName} ${data.lastName}`,
         alternateEmail: data.alternateEmail || null,
         primaryPhone: data.primaryPhone,
@@ -387,6 +393,22 @@ export default function Account() {
                     )}
                   />
                 </div>
+
+                {suffixValue === "Other" && (
+                  <FormField
+                    control={form.control}
+                    name="customSuffix"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Custom Suffix</FormLabel>
+                        <FormControl>
+                          <Input placeholder="e.g., MD, Esq, Ret" {...field} data-testid="input-custom-suffix" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
               </CardContent>
             </Card>
 
