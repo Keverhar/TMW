@@ -128,7 +128,7 @@ export default function Block13ContactPayment({
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-3xl font-serif mb-2">Contact & Payment Information</h2>
+        <h2 className="text-3xl font-serif mb-2">Cart</h2>
         <p className="text-muted-foreground">
           Final step! Once we have your information and payment, we'll lock in your reservation and send you a confirmation.
         </p>
