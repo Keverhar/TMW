@@ -31,6 +31,7 @@ import Block11PersonalTouches from "@/components/composer/Block11PersonalTouches
 import Block12EviteSaveTheDate from "@/components/composer/Block12EviteSaveTheDate";
 import BlockAddOns from "@/components/composer/BlockAddOns";
 import Block13ContactPayment from "@/components/composer/Block13ContactPayment";
+import BlockCart from "@/components/composer/BlockCart";
 
 const allSteps = [
   { id: 1, title: 'Event Type', description: 'Choose your celebration', availableFor: ['all'] },
@@ -1411,10 +1412,27 @@ export default function WeddingComposer() {
             />
           )}
           {steps[currentStep - 1]?.id === 14 && (
-            <div>
-              <h2>Cart - Coming Soon</h2>
-              <p>Booking Summary and Payment will be displayed here</p>
-            </div>
+            <BlockCart
+              eventType={formData.eventType}
+              basePackagePrice={basePrice}
+              photoBookAddon={formData.photoBookAddon}
+              photoBookQuantity={formData.photoBookQuantity}
+              extraTimeAddon={formData.extraTimeAddon}
+              byobBarAddon={formData.byobBarAddon}
+              rehearsalAddon={formData.rehearsalAddon}
+              photoBookPrice={photoBookPrice}
+              extraTimePrice={extraTimePrice}
+              byobBarPrice={byobBarPrice}
+              rehearsalPrice={rehearsalPrice}
+              paymentMethod={formData.paymentMethod}
+              achDiscountAmount={getPaymentDiscount('ach')}
+              affirmDiscountAmount={getPaymentDiscount('affirm')}
+              amountPaid={formData.amountPaid}
+              termsAccepted={formData.termsAccepted}
+              onChange={updateField}
+              preferredDate={formData.preferredDate}
+              timeSlot={formData.timeSlot}
+            />
           )}
         </div>
 
