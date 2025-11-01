@@ -91,7 +91,7 @@ export default function Block7Processional({
         <div className="flex gap-3 items-start bg-amber-50 dark:bg-amber-950 p-4 rounded-md border border-amber-200 dark:border-amber-800">
           <Lock className="h-5 w-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
           <div>
-            <p className="font-medium text-amber-900 dark:text-amber-100">Available with Full Wedding Package</p>
+            <p className="font-medium text-amber-900 dark:text-amber-100">Available with the Full Modest Wedding Package</p>
             <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
               This section is included in our Saturday, Friday/Sunday wedding packages. You can view all options but selections are not available for Elopement and Vow Renewal packages.
             </p>
