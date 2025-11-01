@@ -310,7 +310,15 @@ export default function AccountCreationDialog({ open, onOpenChange, onAccountCre
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Suffix</FormLabel>
-                        <Select onValueChange={field.onChange} value={field.value || " "}>
+                        <Select 
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            if (value !== "Other") {
+                              form.setValue("customSuffix", "");
+                            }
+                          }} 
+                          value={field.value || " "}
+                        >
                           <FormControl>
                             <SelectTrigger data-testid="select-suffix">
                               <SelectValue placeholder="None" />
@@ -340,7 +348,15 @@ export default function AccountCreationDialog({ open, onOpenChange, onAccountCre
                       <FormItem>
                         <FormLabel>Custom Suffix</FormLabel>
                         <FormControl>
-                          <Input placeholder="e.g., MD, Esq, Ret" {...field} data-testid="input-custom-suffix" />
+                          <Input 
+                            placeholder="e.g., MD, Esq, Ret" 
+                            {...field}
+                            onChange={(e) => {
+                              field.onChange(e);
+                              form.setValue("suffix", e.target.value || "Other");
+                            }}
+                            data-testid="input-custom-suffix" 
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
