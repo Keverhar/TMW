@@ -454,6 +454,15 @@ export default function WeddingComposer() {
       return;
     }
 
+    if (!formData.person2FullName || !formData.person2Role) {
+      toast({
+        title: "Missing information",
+        description: "Please fill in all required contact information for Person 2 (Name and Role).",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (formData.photoBookAddon && !formData.mailingAddress) {
       toast({
         title: "Mailing address required",

@@ -179,8 +179,8 @@ export const weddingComposers = pgTable("wedding_composers", {
   person1Phone: text("person1_phone").notNull(),
   person1AlternatePhone: text("person1_alternate_phone"), // Optional
   
-  person2Role: text("person2_role"), // Bride, Groom, Wife, Husband, Spouse, Partner, Other
-  person2FullName: text("person2_full_name"),
+  person2Role: text("person2_role").notNull(), // Bride, Groom, Wife, Husband, Spouse, Partner, Other
+  person2FullName: text("person2_full_name").notNull(),
   person2Pronouns: text("person2_pronouns"), // Optional: He/Him/His, She/Her/Hers, They/Them/Theirs, Prefer not to say
   person2Email: text("person2_email"), // Optional
   person2Phone: text("person2_phone"), // Optional

@@ -180,13 +180,13 @@ export default function Block13TheCouple({
         <CardHeader>
           <div className="flex items-center gap-2">
             <Users className="h-5 w-5" />
-            <CardTitle>Person 2 (Optional)</CardTitle>
+            <CardTitle>Person 2</CardTitle>
           </div>
-          <CardDescription>Additional contact information</CardDescription>
+          <CardDescription>Second member of the couple</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="person2-role">Role</Label>
+            <Label htmlFor="person2-role">Role *</Label>
             <Select 
               value={person2Role} 
               onValueChange={(value) => onChange('person2Role', value)}
@@ -205,13 +205,14 @@ export default function Block13TheCouple({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="person2-full-name">Full Name</Label>
+            <Label htmlFor="person2-full-name">Full Name *</Label>
             <Input
               id="person2-full-name"
               data-testid="input-person2-full-name"
               placeholder="First and last name"
               value={person2FullName}
               onChange={(e) => onChange('person2FullName', e.target.value)}
+              required
             />
           </div>
 
