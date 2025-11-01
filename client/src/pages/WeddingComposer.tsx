@@ -605,7 +605,7 @@ export default function WeddingComposer() {
       previousEventTypeRef.current = composer.eventType || ""; // Set the previous event type BEFORE loading data
       
       setFormData({
-        eventType: composer.eventType || "modest-wedding",
+        eventType: composer.eventType || "",
         eventTypeOther: composer.eventTypeOther || "",
         preferredDate: composer.preferredDate || "",
         backupDate: composer.backupDate || "",

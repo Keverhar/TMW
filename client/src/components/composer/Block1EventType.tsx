@@ -1,6 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Calendar } from "@/components/ui/calendar";
@@ -111,29 +110,28 @@ export default function Block1EventType({ eventType, eventTypeOther, preferredDa
           <CardDescription>This is the first step in shaping your celebration. Tell us what kind of event you're planning.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Select value={eventType} onValueChange={(value) => onChange('eventType', value)}>
-              <SelectTrigger id="event-type" data-testid="select-event-type">
-                <SelectValue placeholder="Make Your Selection" />
-              </SelectTrigger>
-              <SelectContent>
-                {eventTypes.map((type) => (
-                  <SelectItem key={type.value} value={type.value}>
-                    {type.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          <div className="space-y-3">
+            <RadioGroup value={eventType} onValueChange={(value) => onChange('eventType', value)}>
+              {eventTypes.map((type) => (
+                <div key={type.value} className="space-y-2">
+                  <div className="flex items-start space-x-3">
+                    <RadioGroupItem 
+                      value={type.value} 
+                      id={`event-${type.value}`} 
+                      data-testid={`radio-event-${type.value}`}
+                      className="mt-1"
+                    />
+                    <div className="flex-1">
+                      <Label htmlFor={`event-${type.value}`} className="cursor-pointer">
+                        <span className="font-semibold text-base">{type.label}</span>
+                      </Label>
+                      <p className="text-sm text-muted-foreground mt-1">{type.description}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </RadioGroup>
           </div>
-
-          {selectedEvent && (
-            <div className="p-4 bg-muted rounded-md">
-              <div className="flex gap-2 items-start">
-                <Info className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
-                <p className="text-sm text-muted-foreground">{selectedEvent.description}</p>
-              </div>
-            </div>
-          )}
 
           {eventType === 'other' && (
             <div className="space-y-2">
