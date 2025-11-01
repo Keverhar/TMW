@@ -270,14 +270,13 @@ export default function Account() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Title</FormLabel>
-                        <Select onValueChange={field.onChange} value={field.value}>
+                        <Select onValueChange={field.onChange} value={field.value || undefined}>
                           <FormControl>
                             <SelectTrigger data-testid="select-title">
                               <SelectValue placeholder="None" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="">None</SelectItem>
                             <SelectItem value="Mr.">Mr.</SelectItem>
                             <SelectItem value="Sir">Sir</SelectItem>
                             <SelectItem value="Ms.">Ms.</SelectItem>
@@ -340,14 +339,13 @@ export default function Account() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Suffix</FormLabel>
-                        <Select onValueChange={field.onChange} value={field.value}>
+                        <Select onValueChange={field.onChange} value={field.value || undefined}>
                           <FormControl>
                             <SelectTrigger data-testid="select-suffix">
                               <SelectValue placeholder="None" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="">None</SelectItem>
                             <SelectItem value="Jr.">Jr.</SelectItem>
                             <SelectItem value="Sr.">Sr.</SelectItem>
                             <SelectItem value="II">II</SelectItem>
