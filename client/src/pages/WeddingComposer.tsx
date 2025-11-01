@@ -228,10 +228,6 @@ export default function WeddingComposer() {
     smsConsent: false,
     mailingAddress: "",
     paymentMethod: "credit_card",
-    echeckRoutingNumber: "",
-    echeckAccountNumber: "",
-    echeckAccountHolder: "",
-    echeckCheckNumber: "",
     termsAccepted: false,
 
     // Add-ons
@@ -332,7 +328,7 @@ export default function WeddingComposer() {
         (formData.rehearsalAddon ? rehearsalPrice : 0);
       
       // Apply payment method discount
-      const paymentDiscount = (formData.paymentMethod === 'ach' || formData.paymentMethod === 'echeck') 
+      const paymentDiscount = formData.paymentMethod === 'ach' 
         ? achDiscountAmount 
         : formData.paymentMethod === 'affirm' 
           ? affirmDiscountAmount 
@@ -482,15 +478,6 @@ export default function WeddingComposer() {
       return;
     }
 
-    if (formData.paymentMethod === 'echeck' && (!formData.echeckRoutingNumber || !formData.echeckAccountNumber || !formData.echeckAccountHolder || !formData.echeckCheckNumber)) {
-      toast({
-        title: "E-Check information required",
-        description: "Please fill in all required E-Check payment details (Routing Number, Account Number, Name on Account, and Check Number).",
-        variant: "destructive",
-      });
-      return;
-    }
-
     if (!formData.eventType) {
       toast({
         title: "Missing information",
@@ -565,7 +552,7 @@ export default function WeddingComposer() {
       (formData.rehearsalAddon ? rehearsalPrice : 0);
     
     // Apply payment method discount
-    const paymentDiscount = (formData.paymentMethod === 'ach' || formData.paymentMethod === 'echeck') 
+    const paymentDiscount = formData.paymentMethod === 'ach' 
       ? achDiscountAmount 
       : formData.paymentMethod === 'affirm' 
         ? affirmDiscountAmount 
@@ -779,10 +766,6 @@ export default function WeddingComposer() {
         smsConsent: composer.smsConsent || false,
         mailingAddress: composer.mailingAddress || "",
         paymentMethod: composer.paymentMethod || "credit_card",
-        echeckRoutingNumber: composer.echeckRoutingNumber || "",
-        echeckAccountNumber: composer.echeckAccountNumber || "",
-        echeckAccountHolder: composer.echeckAccountHolder || "",
-        echeckCheckNumber: composer.echeckCheckNumber || "",
         termsAccepted: composer.termsAccepted || false,
         photoBookAddon: composer.photoBookAddon || false,
         photoBookQuantity: composer.photoBookQuantity || 1,
@@ -976,10 +959,6 @@ export default function WeddingComposer() {
                 smsConsent: composer.smsConsent || false,
                 mailingAddress: composer.mailingAddress || "",
                 paymentMethod: composer.paymentMethod || "credit_card",
-                echeckRoutingNumber: composer.echeckRoutingNumber || "",
-                echeckAccountNumber: composer.echeckAccountNumber || "",
-                echeckAccountHolder: composer.echeckAccountHolder || "",
-                echeckCheckNumber: composer.echeckCheckNumber || "",
                 termsAccepted: composer.termsAccepted || false,
                 photoBookAddon: composer.photoBookAddon || false,
                 photoBookQuantity: composer.photoBookQuantity || 1,
@@ -1142,7 +1121,7 @@ export default function WeddingComposer() {
         // Cart is complete when terms are accepted
         if (formData.termsAccepted) return 'complete';
         // Partial if user has selected ACH or E-Check (which have discounts, indicating interaction)
-        if (formData.paymentMethod === 'ach' || formData.paymentMethod === 'echeck') return 'partial';
+        if (formData.paymentMethod === 'ach') return 'partial';
         // None for default state (credit_card, affirm, and paypal don't show partial)
         return 'none';
       
@@ -1510,10 +1489,6 @@ export default function WeddingComposer() {
               smsConsent={formData.smsConsent}
               mailingAddress={formData.mailingAddress}
               paymentMethod={formData.paymentMethod}
-              echeckRoutingNumber={formData.echeckRoutingNumber}
-              echeckAccountNumber={formData.echeckAccountNumber}
-              echeckAccountHolder={formData.echeckAccountHolder}
-              echeckCheckNumber={formData.echeckCheckNumber}
               termsAccepted={formData.termsAccepted}
               photoBookAddon={formData.photoBookAddon}
               extraTimeAddon={formData.extraTimeAddon}

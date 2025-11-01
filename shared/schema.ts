@@ -187,10 +187,6 @@ export const weddingComposers = pgTable("wedding_composers", {
   smsConsent: boolean("sms_consent").default(false),
   mailingAddress: text("mailing_address"),
   paymentMethod: text("payment_method").default("credit_card"),
-  echeckRoutingNumber: text("echeck_routing_number"),
-  echeckAccountNumber: text("echeck_account_number"),
-  echeckAccountHolder: text("echeck_account_holder"),
-  echeckCheckNumber: text("echeck_check_number"),
   
   // Legacy columns (nullable for backward compatibility)
   customerName: text("customer_name"),
@@ -295,7 +291,7 @@ export const payments = pgTable("payments", {
   composerId: varchar("composer_id").notNull(),
   amount: integer("amount").notNull(), // Amount in cents
   currency: text("currency").notNull().default("usd"),
-  paymentMethod: text("payment_method").notNull(), // credit_card, ach, echeck, affirm, paypal, venmo, manual
+  paymentMethod: text("payment_method").notNull(), // credit_card, ach, affirm, paypal, venmo, manual
   status: text("status").notNull().default("pending"), // pending, processing, captured, failed, refunded
   source: text("source").notNull().default("stripe"), // stripe, manual
   stripePaymentIntentId: text("stripe_payment_intent_id"),
