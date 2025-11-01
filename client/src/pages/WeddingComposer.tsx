@@ -1031,7 +1031,7 @@ export default function WeddingComposer() {
     if (!isSimplifiedFlow) return false; // Full wedding packages have full access
     
     // Blocks available for all event types (not read-only)
-    const alwaysAvailableBlocks = [1, 2, 6, 12, 13, 14]; // The Couple, Event Type, Ceremony, Evites, Add-Ons, Cart
+    const alwaysAvailableBlocks = [1, 2, 6, 13, 14]; // The Couple, Event Type, Ceremony, Add-Ons, Cart
     return !alwaysAvailableBlocks.includes(blockId);
   };
 
