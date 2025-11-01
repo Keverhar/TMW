@@ -116,15 +116,6 @@ export default function Confirmation() {
                           <span className="text-foreground">${((composer.rehearsalPrice || 0) / 100).toFixed(2)}</span>
                         </div>
                       )}
-                      <div className="border-t pt-1 mt-1"></div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Subtotal:</span>
-                        <span className="text-foreground">${(((composer.basePackagePrice || 0) + 
-                          (composer.photoBookAddon ? (composer.photoBookPrice || 0) * (composer.photoBookQuantity || 1) : 0) +
-                          (composer.extraTimeAddon ? (composer.extraTimePrice || 0) : 0) +
-                          (composer.byobBarAddon ? (composer.byobBarPrice || 0) : 0) +
-                          (composer.rehearsalAddon ? (composer.rehearsalPrice || 0) : 0)) / 100).toFixed(2)}</span>
-                      </div>
                       {(composer.paymentMethod === 'ach' && (composer.achDiscountAmount || 0) > 0) && (
                         <div className="flex justify-between text-green-600 dark:text-green-400">
                           <span>ACH Discount:</span>
@@ -138,9 +129,27 @@ export default function Confirmation() {
                         </div>
                       )}
                       <div className="border-t pt-1 mt-1"></div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Subtotal:</span>
+                        <span className="text-foreground">${((composer.totalPrice || 0) / 100).toFixed(2)}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Tax:</span>
+                        <span className="text-foreground">$0.00</span>
+                      </div>
+                      <div className="border-t pt-1 mt-1"></div>
                       <div className="flex justify-between font-semibold">
-                        <span>Total Paid:</span>
+                        <span>Total:</span>
                         <span>${((composer.totalPrice || 0) / 100).toFixed(2)}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Amount Paid:</span>
+                        <span className="text-foreground">${((composer.amountPaid || 0) / 100).toFixed(2)}</span>
+                      </div>
+                      <div className="border-t pt-1 mt-1"></div>
+                      <div className="flex justify-between font-semibold text-lg">
+                        <span>Balance Due:</span>
+                        <span>${(((composer.totalPrice || 0) - (composer.amountPaid || 0)) / 100).toFixed(2)}</span>
                       </div>
                     </div>
                   </div>
