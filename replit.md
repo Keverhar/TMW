@@ -6,7 +6,8 @@ The Modest Wedding is a full-stack web application for booking wedding ceremonie
 
 ## User Preferences
 
-Preferred communication style: Simple, everyday language.
+- Preferred communication style: Simple, everyday language.
+- Data clearing: When user requests to "clear data," always clear all user accounts and bookings from the database (DELETE FROM users, wedding_composers, and bookings tables).
 
 ## Recent Changes
 
