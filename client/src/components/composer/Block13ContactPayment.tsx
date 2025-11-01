@@ -17,6 +17,9 @@ interface Block13ContactPaymentProps {
   smsConsent: boolean;
   mailingAddress: string;
   paymentMethod: string;
+  echeckRoutingNumber: string;
+  echeckAccountNumber: string;
+  echeckCheckNumber: string;
   termsAccepted: boolean;
   photoBookAddon: boolean;
   extraTimeAddon: boolean;
@@ -45,6 +48,9 @@ export default function Block13ContactPayment({
   smsConsent,
   mailingAddress,
   paymentMethod,
+  echeckRoutingNumber,
+  echeckAccountNumber,
+  echeckCheckNumber,
   termsAccepted,
   photoBookAddon,
   extraTimeAddon,
@@ -213,6 +219,49 @@ export default function Block13ContactPayment({
           </div>
         </CardContent>
       </Card>
+
+      {paymentMethod === 'e_check' && (
+        <Card>
+          <CardHeader>
+            <CardTitle>E-Check Payment Information</CardTitle>
+            <CardDescription>Please provide your banking details for E-Check payment</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="routing-number">Routing Number</Label>
+              <Input
+                id="routing-number"
+                data-testid="input-routing-number"
+                placeholder="Enter routing number"
+                value={echeckRoutingNumber}
+                onChange={(e) => onChange('echeckRoutingNumber', e.target.value)}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="account-number">Account Number</Label>
+              <Input
+                id="account-number"
+                data-testid="input-account-number"
+                placeholder="Enter account number"
+                value={echeckAccountNumber}
+                onChange={(e) => onChange('echeckAccountNumber', e.target.value)}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="check-number">Check Number</Label>
+              <Input
+                id="check-number"
+                data-testid="input-check-number"
+                placeholder="Enter check number"
+                value={echeckCheckNumber}
+                onChange={(e) => onChange('echeckCheckNumber', e.target.value)}
+              />
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       <Card>
         <CardHeader>

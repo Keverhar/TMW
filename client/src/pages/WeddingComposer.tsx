@@ -222,6 +222,9 @@ export default function WeddingComposer() {
     smsConsent: false,
     mailingAddress: "",
     paymentMethod: "credit_card",
+    echeckRoutingNumber: "",
+    echeckAccountNumber: "",
+    echeckCheckNumber: "",
     termsAccepted: false,
 
     // Add-ons
@@ -718,6 +721,9 @@ export default function WeddingComposer() {
         smsConsent: composer.smsConsent || false,
         mailingAddress: composer.mailingAddress || "",
         paymentMethod: composer.paymentMethod || "credit_card",
+        echeckRoutingNumber: composer.echeckRoutingNumber || "",
+        echeckAccountNumber: composer.echeckAccountNumber || "",
+        echeckCheckNumber: composer.echeckCheckNumber || "",
         termsAccepted: composer.termsAccepted || false,
         photoBookAddon: composer.photoBookAddon || false,
         photoBookQuantity: composer.photoBookQuantity || 1,
@@ -905,6 +911,9 @@ export default function WeddingComposer() {
                 smsConsent: composer.smsConsent || false,
                 mailingAddress: composer.mailingAddress || "",
                 paymentMethod: composer.paymentMethod || "credit_card",
+                echeckRoutingNumber: composer.echeckRoutingNumber || "",
+                echeckAccountNumber: composer.echeckAccountNumber || "",
+                echeckCheckNumber: composer.echeckCheckNumber || "",
                 termsAccepted: composer.termsAccepted || false,
                 photoBookAddon: composer.photoBookAddon || false,
                 photoBookQuantity: composer.photoBookQuantity || 1,
@@ -1428,6 +1437,9 @@ export default function WeddingComposer() {
               smsConsent={formData.smsConsent}
               mailingAddress={formData.mailingAddress}
               paymentMethod={formData.paymentMethod}
+              echeckRoutingNumber={formData.echeckRoutingNumber}
+              echeckAccountNumber={formData.echeckAccountNumber}
+              echeckCheckNumber={formData.echeckCheckNumber}
               termsAccepted={formData.termsAccepted}
               photoBookAddon={formData.photoBookAddon}
               extraTimeAddon={formData.extraTimeAddon}

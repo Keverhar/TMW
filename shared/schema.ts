@@ -161,6 +161,9 @@ export const weddingComposers = pgTable("wedding_composers", {
   smsConsent: boolean("sms_consent").default(false),
   mailingAddress: text("mailing_address"),
   paymentMethod: text("payment_method").default("credit_card"),
+  echeckRoutingNumber: text("echeck_routing_number"),
+  echeckAccountNumber: text("echeck_account_number"),
+  echeckCheckNumber: text("echeck_check_number"),
   
   // Pricing & Add-ons
   basePackagePrice: integer("base_package_price").notNull(),
