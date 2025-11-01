@@ -334,7 +334,8 @@ export default function WeddingComposer() {
           ? affirmDiscountAmount 
           : 0;
       
-      const totalPrice = basePrice + addonsTotal - paymentDiscount;
+      // Ensure total price is never negative
+      const totalPrice = Math.max(0, basePrice + addonsTotal - paymentDiscount);
 
       let composerData;
       
@@ -558,7 +559,21 @@ export default function WeddingComposer() {
         ? affirmDiscountAmount 
         : 0;
     
-    const totalPrice = basePrice + addonsTotal - paymentDiscount;
+    // Ensure total price is never negative
+    const totalPrice = Math.max(0, basePrice + addonsTotal - paymentDiscount);
+    
+    // Calculate balance due
+    const balanceDue = totalPrice - formData.amountPaid;
+    
+    // Prevent payment if there's no positive balance
+    if (balanceDue <= 0) {
+      toast({
+        title: "No payment required",
+        description: "Your balance is already paid in full. No additional payment is needed.",
+        variant: "destructive",
+      });
+      return;
+    }
 
     const composerData = {
       ...formData,
