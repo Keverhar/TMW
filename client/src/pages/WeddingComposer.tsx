@@ -30,7 +30,6 @@ import Block10Slideshow from "@/components/composer/Block10Slideshow";
 import Block11PersonalTouches from "@/components/composer/Block11PersonalTouches";
 import Block12EviteSaveTheDate from "@/components/composer/Block12EviteSaveTheDate";
 import BlockAddOns from "@/components/composer/BlockAddOns";
-import Block13ContactPayment from "@/components/composer/Block13ContactPayment";
 import BlockCart from "@/components/composer/BlockCart";
 
 const allSteps = [
@@ -46,8 +45,7 @@ const allSteps = [
   { id: 10, title: 'Personal Touches', description: 'Special details', availableFor: ['modest-wedding', 'other'] },
   { id: 11, title: 'Evites', description: 'Digital invitations', availableFor: ['all'] },
   { id: 12, title: 'Add-Ons', description: 'Enhance your celebration', availableFor: ['all'] },
-  { id: 13, title: 'Contact Information', description: 'Your details', availableFor: ['all'] },
-  { id: 14, title: 'Cart', description: 'Review & payment', availableFor: ['all'] },
+  { id: 13, title: 'Cart', description: 'Review & payment', availableFor: ['all'] },
 ];
 
 const calculatePrice = (eventType: string, dayOfWeek: string): number => {
@@ -1046,9 +1044,12 @@ export default function WeddingComposer() {
         if (formData.photoBookAddon || formData.extraTimeAddon || formData.byobBarAddon || formData.rehearsalAddon) return 'partial';
         return 'none';
       
-      case 13: // Contact Information
-        if (formData.customerName && formData.customerEmail && formData.customerPhone && formData.termsAccepted) return 'complete';
-        if (formData.customerName || formData.customerEmail || formData.customerPhone) return 'partial';
+      case 13: // Cart (Payment & Review)
+        // Cart is complete when terms are accepted
+        if (formData.termsAccepted) return 'complete';
+        // Partial if user has selected a non-default payment method (indicating interaction)
+        if (formData.paymentMethod === 'affirm' || formData.paymentMethod === 'ach') return 'partial';
+        // None for default state (credit_card is default, so no partial until user changes it)
         return 'none';
       
       default:
@@ -1383,35 +1384,6 @@ export default function WeddingComposer() {
             />
           )}
           {steps[currentStep - 1]?.id === 13 && (
-            <Block13ContactPayment
-              customerName={formData.customerName}
-              customerName2={formData.customerName2}
-              customerEmail={formData.customerEmail}
-              customerPhone={formData.customerPhone}
-              smsConsent={formData.smsConsent}
-              mailingAddress={formData.mailingAddress}
-              paymentMethod={formData.paymentMethod}
-              termsAccepted={formData.termsAccepted}
-              photoBookAddon={formData.photoBookAddon}
-              photoBookQuantity={formData.photoBookQuantity}
-              extraTimeAddon={formData.extraTimeAddon}
-              byobBarAddon={formData.byobBarAddon}
-              rehearsalAddon={formData.rehearsalAddon}
-              photoBookPrice={photoBookPrice}
-              extraTimePrice={extraTimePrice}
-              byobBarPrice={byobBarPrice}
-              rehearsalPrice={rehearsalPrice}
-              achDiscountAmount={getPaymentDiscount('ach')}
-              affirmDiscountAmount={getPaymentDiscount('affirm')}
-              onChange={updateField}
-              eventType={formData.eventType}
-              basePackagePrice={basePrice}
-              amountPaid={formData.amountPaid}
-              preferredDate={formData.preferredDate}
-              timeSlot={formData.timeSlot}
-            />
-          )}
-          {steps[currentStep - 1]?.id === 14 && (
             <BlockCart
               eventType={formData.eventType}
               basePackagePrice={basePrice}
