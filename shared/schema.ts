@@ -10,13 +10,11 @@ export const users = pgTable("users", {
   authProvider: text("auth_provider").notNull().default("email"), // email, google, facebook
   
   // Account Information
-  title: text("title"), // None, Mr., Sir, Ms., Mrs., Lady
-  customTitle: text("custom_title"), // Used when title is "Other"
+  title: text("title"), // None, Mr., Dr., Ms., Mrs.
   firstName: text("first_name"),
   middleName: text("middle_name"),
   lastName: text("last_name"),
-  suffix: text("suffix"), // None, Jr., Sr., II, III, IV, Other
-  customSuffix: text("custom_suffix"), // Used when suffix is "Other"
+  suffix: text("suffix"), // None, Jr., Sr., II, III, IV
   displayName: text("display_name"),
   alternateEmail: text("alternate_email"),
   primaryPhone: text("primary_phone"),
