@@ -205,8 +205,9 @@ export const weddingComposers = pgTable("wedding_composers", {
   byobBarPrice: integer("byob_bar_price").default(40000), // Price in cents
   rehearsalAddon: boolean("rehearsal_addon").default(false),
   rehearsalPrice: integer("rehearsal_price").default(15000), // Price in cents
-  achDiscountAmount: integer("ach_discount_amount").default(5000), // ACH discount in cents
+  achDiscountAmount: integer("ach_discount_amount").default(10000), // ACH discount in cents
   affirmDiscountAmount: integer("affirm_discount_amount").default(5000), // Affirm discount in cents
+  appliedDiscountAmount: integer("applied_discount_amount").default(0), // Actual discount applied and stored (one per account)
   totalPrice: integer("total_price"),
   amountPaid: integer("amount_paid").notNull().default(0),
   

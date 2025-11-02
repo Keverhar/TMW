@@ -153,21 +153,29 @@ export default function Payment() {
         const latestResponse = await fetch(`/api/wedding-composers/${composerId}`);
         const latestComposer = await latestResponse.json();
         
+        // Calculate the discount amount being applied
+        const discountAmount = (paymentMethod === 'ach' || paymentMethod === 'echeck') 
+          ? (latestComposer.achDiscountAmount || 0) 
+          : paymentMethod === 'affirm' 
+            ? (latestComposer.affirmDiscountAmount || 0) 
+            : 0;
+        
         // Calculate the amount being paid (displayTotal already includes discount)
         const paymentAmount = displayTotal;
         const currentAmountPaid = latestComposer?.amountPaid || 0;
         const newAmountPaid = currentAmountPaid + paymentAmount;
         
-        // Update payment status to completed, add to amount paid, and save payment method
+        // Update payment status to completed, add to amount paid, save payment method, and store the discount
         // Note: Do NOT modify totalPrice - it should remain the full price
-        // The cart will dynamically subtract discounts when displaying
+        // The appliedDiscountAmount is stored once and cannot be changed (one discount per account)
         await fetch(`/api/wedding-composers/${composerId}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ 
             paymentStatus: 'completed',
             amountPaid: newAmountPaid,
-            paymentMethod: paymentMethod
+            paymentMethod: paymentMethod,
+            appliedDiscountAmount: discountAmount
           }),
         });
         
@@ -593,10 +601,21 @@ export default function Payment() {
                       (composer.rehearsalAddon ? (composer.rehearsalPrice || 0) : 0)) / 100).toFixed(2)}</span>
                   </div>
                   
-                  <div className="flex justify-between text-sm text-green-600 dark:text-green-400" data-testid="row-payment-discount">
-                    <span>{paymentMethod === 'ach' ? 'ACH' : paymentMethod === 'echeck' ? 'E-Check' : paymentMethod === 'affirm' ? 'Affirm' : 'Payment'} Discount</span>
-                    <span data-testid="text-payment-discount">{(paymentMethod === 'ach' || paymentMethod === 'echeck' ? (composer.achDiscountAmount || 0) : paymentMethod === 'affirm' ? (composer.affirmDiscountAmount || 0) : 0) > 0 ? '-' : ''}${((paymentMethod === 'ach' || paymentMethod === 'echeck' ? (composer.achDiscountAmount || 0) : paymentMethod === 'affirm' ? (composer.affirmDiscountAmount || 0) : 0) / 100).toFixed(2)}</span>
-                  </div>
+                  {((composer.appliedDiscountAmount || 0) > 0 || (paymentMethod === 'ach' || paymentMethod === 'echeck' || paymentMethod === 'affirm')) && (
+                    <div className="flex justify-between text-sm text-green-600 dark:text-green-400" data-testid="row-payment-discount">
+                      <span>{composer.paymentMethod === 'ach' ? 'ACH' : composer.paymentMethod === 'echeck' ? 'E-Check' : composer.paymentMethod === 'affirm' ? 'Affirm' : paymentMethod === 'ach' ? 'ACH' : paymentMethod === 'echeck' ? 'E-Check' : paymentMethod === 'affirm' ? 'Affirm' : 'Payment'} Discount</span>
+                      <span data-testid="text-payment-discount">
+                        {((composer.appliedDiscountAmount || 0) > 0 
+                          ? (composer.appliedDiscountAmount || 0)
+                          : (paymentMethod === 'ach' || paymentMethod === 'echeck' ? (composer.achDiscountAmount || 0) : paymentMethod === 'affirm' ? (composer.affirmDiscountAmount || 0) : 0)
+                        ) > 0 ? '-' : ''}$
+                        {(((composer.appliedDiscountAmount || 0) > 0 
+                          ? (composer.appliedDiscountAmount || 0)
+                          : (paymentMethod === 'ach' || paymentMethod === 'echeck' ? (composer.achDiscountAmount || 0) : paymentMethod === 'affirm' ? (composer.affirmDiscountAmount || 0) : 0)
+                        ) / 100).toFixed(2)}
+                      </span>
+                    </div>
+                  )}
                   
                   <div className="flex justify-between text-sm" data-testid="row-tax">
                     <span>Tax</span>
@@ -612,7 +631,10 @@ export default function Payment() {
                       (composer.extraTimeAddon ? (composer.extraTimePrice || 0) : 0) + 
                       (composer.byobBarAddon ? (composer.byobBarPrice || 0) : 0) + 
                       (composer.rehearsalAddon ? (composer.rehearsalPrice || 0) : 0) - 
-                      (paymentMethod === 'ach' || paymentMethod === 'echeck' ? (composer.achDiscountAmount || 0) : paymentMethod === 'affirm' ? (composer.affirmDiscountAmount || 0) : 0)) / 100).toFixed(2)}</span>
+                      ((composer.appliedDiscountAmount || 0) > 0 
+                        ? (composer.appliedDiscountAmount || 0)
+                        : (paymentMethod === 'ach' || paymentMethod === 'echeck' ? (composer.achDiscountAmount || 0) : paymentMethod === 'affirm' ? (composer.affirmDiscountAmount || 0) : 0)
+                      )) / 100).toFixed(2)}</span>
                   </div>
                   
                   <div className="flex justify-between text-sm" data-testid="row-amount-paid">

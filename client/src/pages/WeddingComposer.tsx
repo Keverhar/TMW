@@ -248,6 +248,7 @@ export default function WeddingComposer() {
     byobBarAddon: false,
     rehearsalAddon: false,
     amountPaid: 0,
+    appliedDiscountAmount: 0,
   });
 
   const updateField = (field: string, value: string | boolean | number) => {
@@ -1624,6 +1625,7 @@ export default function WeddingComposer() {
               rehearsalPrice={rehearsalPrice}
               achDiscountAmount={getPaymentDiscount('ach', formData.eventType)}
               affirmDiscountAmount={getPaymentDiscount('affirm', formData.eventType)}
+              appliedDiscountAmount={formData.appliedDiscountAmount || 0}
               onChange={updateField}
               eventType={formData.eventType}
               basePackagePrice={basePrice}

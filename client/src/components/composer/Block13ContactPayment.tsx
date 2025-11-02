@@ -29,6 +29,7 @@ interface Block13ContactPaymentProps {
   rehearsalPrice: number;
   achDiscountAmount: number;
   affirmDiscountAmount: number;
+  appliedDiscountAmount: number;
   onChange: (field: string, value: string | boolean | number) => void;
   eventType: string;
   basePackagePrice: number;
@@ -57,6 +58,7 @@ export default function Block13ContactPayment({
   rehearsalPrice,
   achDiscountAmount,
   affirmDiscountAmount,
+  appliedDiscountAmount,
   onChange,
   eventType,
   basePackagePrice,
@@ -129,12 +131,15 @@ export default function Block13ContactPayment({
     return sum + addon.price;
   }, 0);
   
-  // Apply ACH/E-Check/Affirm discount if payment method is ACH, E-Check, or Affirm
-  const discount = paymentMethod === 'ach' || paymentMethod === 'echeck' ? achDiscountAmount : 
-                   paymentMethod === 'affirm' ? affirmDiscountAmount : 0;
+  // Use stored appliedDiscountAmount if it exists (one discount per account)
+  // Otherwise, calculate based on current payment method selection
+  const discount = appliedDiscountAmount > 0 
+    ? appliedDiscountAmount 
+    : (paymentMethod === 'ach' || paymentMethod === 'echeck' ? achDiscountAmount : 
+       paymentMethod === 'affirm' ? affirmDiscountAmount : 0);
   const totalPrice = basePackagePrice + addonsTotal - discount;
 
-  console.log('Block13 - Payment Method:', paymentMethod, 'ACH Discount Amount:', achDiscountAmount, 'Affirm Discount Amount:', affirmDiscountAmount, 'Calculated Discount:', discount);
+  console.log('Block13 - Payment Method:', paymentMethod, 'Applied Discount:', appliedDiscountAmount, 'Calculated Discount:', discount);
 
   return (
     <div className="space-y-6">
