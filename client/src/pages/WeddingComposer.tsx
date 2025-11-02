@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronLeft, ChevronRight, Save, UserPlus, LogOut, User, FileText, Home } from "lucide-react";
+import { ChevronLeft, ChevronRight, Save, UserPlus, LogOut, User, FileText, Home, Menu } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -1323,7 +1323,7 @@ export default function WeddingComposer() {
                       size="sm"
                       data-testid="button-account"
                     >
-                      <User className="h-4 w-4 mr-2" />
+                      <Menu className="h-4 w-4 mr-2" />
                       Menu
                     </Button>
                   </DropdownMenuTrigger>
@@ -1354,7 +1354,7 @@ export default function WeddingComposer() {
                       size="sm"
                       data-testid="button-auth-menu"
                     >
-                      <User className="h-4 w-4 mr-2" />
+                      <Menu className="h-4 w-4 mr-2" />
                       Menu
                     </Button>
                   </DropdownMenuTrigger>
