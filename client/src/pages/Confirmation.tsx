@@ -11,7 +11,9 @@ export default function Confirmation() {
   const composerId = params?.composerId;
 
   const handleLogoutAndHome = () => {
+    // Clear all localStorage data
     localStorage.removeItem("user");
+    localStorage.removeItem("composerData");
     setLocation("/");
   };
 
