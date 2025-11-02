@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Calendar, Heart, Music, Mic, Church, Users, PartyPopper, Camera, Image, Sparkles, Mail, DollarSign, Check, X } from "lucide-react";
+import { ArrowLeft, Calendar, Heart, Music, Mic, Church, Users, PartyPopper, Camera, Image, Sparkles, Mail, DollarSign, Check, X, Package } from "lucide-react";
 import { Loader2 } from "lucide-react";
 
 export default function Summary() {
@@ -140,6 +140,29 @@ export default function Summary() {
             </CardHeader>
             <CardContent>
               <p className="font-medium">{capitalize(composerData.eventType)}</p>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Add-ons */}
+        {(composerData.photoBookAddon || composerData.extraTimeAddon || composerData.byobBarAddon || composerData.rehearsalAddon) && (
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <Package className="h-5 w-5 text-primary" />
+                <CardTitle>Add-ons</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-1">
+                <BooleanDisplay 
+                  value={composerData.photoBookAddon} 
+                  label={`Photo Book${composerData.photoBookAddon && composerData.photoBookQuantity > 1 ? ` (×${composerData.photoBookQuantity})` : ''}`} 
+                />
+                <BooleanDisplay value={composerData.extraTimeAddon} label="Extra Time Block" />
+                <BooleanDisplay value={composerData.byobBarAddon} label="BYOB Bar Setup" />
+                <BooleanDisplay value={composerData.rehearsalAddon} label="Rehearsal Hour" />
+              </div>
             </CardContent>
           </Card>
         )}
@@ -665,15 +688,13 @@ export default function Summary() {
           </Card>
         )}
 
-        {/* Block 13: Contact & Add-ons */}
-        {(hasValue(composerData.person1FullName) || hasValue(composerData.person2FullName) || 
-          composerData.photoBookAddon || composerData.extraTimeAddon || composerData.byobBarAddon || 
-          composerData.rehearsalAddon) && (
+        {/* Block 13: Contact & Payment */}
+        {(hasValue(composerData.person1FullName) || hasValue(composerData.person2FullName)) && (
           <Card>
             <CardHeader>
               <div className="flex items-center gap-2">
-                <DollarSign className="h-5 w-5 text-primary" />
-                <CardTitle>Contact Information & Add-ons</CardTitle>
+                <Mail className="h-5 w-5 text-primary" />
+                <CardTitle>Contact Information & Payment</CardTitle>
               </div>
             </CardHeader>
             <CardContent className="space-y-3">
@@ -711,22 +732,6 @@ export default function Summary() {
               {toBoolean(composerData.smsConsent) && (
                 <div>
                   <BooleanDisplay value={true} label="SMS Consent" />
-                </div>
-              )}
-
-              {/* Add-ons */}
-              {(composerData.photoBookAddon || composerData.extraTimeAddon || composerData.byobBarAddon || composerData.rehearsalAddon) && (
-                <div className="pt-2 border-t">
-                  <p className="text-sm font-medium mb-2">Add-ons</p>
-                  <div className="ml-4 space-y-1">
-                    <BooleanDisplay 
-                      value={composerData.photoBookAddon} 
-                      label={`Photo Book${composerData.photoBookAddon && composerData.photoBookQuantity > 1 ? ` (×${composerData.photoBookQuantity})` : ''}`} 
-                    />
-                    <BooleanDisplay value={composerData.extraTimeAddon} label="Extra Time Block" />
-                    <BooleanDisplay value={composerData.byobBarAddon} label="BYOB Bar Setup" />
-                    <BooleanDisplay value={composerData.rehearsalAddon} label="Rehearsal Hour" />
-                  </div>
                 </div>
               )}
 
