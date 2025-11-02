@@ -25,7 +25,7 @@ const ALLOWED_FILE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/tiff'
 const ALLOWED_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.tiff', '.tif', '.bmp', '.gif'];
 const MAX_SLIDESHOW_PHOTOS = 30;
 const MAX_SLIDESHOW_TOTAL_SIZE = 1024 * 1024 * 1024; // 1GB
-const MAX_ENGAGEMENT_PHOTOS = 5;
+const MAX_ENGAGEMENT_PHOTOS = 1;
 const MAX_ENGAGEMENT_PHOTO_SIZE = 5 * 1024 * 1024; // 5MB
 
 export default function Block10Slideshow({
@@ -193,15 +193,15 @@ export default function Block10Slideshow({
             <CardTitle>Engagement Photo</CardTitle>
           </div>
           <CardDescription>
-            Upload engagement photos for display (up to 5 photos, 5MB each maximum)
+            Upload engagement photo for display (5MB maximum)
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <Label htmlFor="engagement-photos">Select Photos</Label>
+              <Label htmlFor="engagement-photos">Select Photo</Label>
               <div className="text-sm text-muted-foreground">
-                {engagementPhotosList.length}/{MAX_ENGAGEMENT_PHOTOS} photos
+                {engagementPhotosList.length}/{MAX_ENGAGEMENT_PHOTOS} photo
               </div>
             </div>
             
@@ -211,7 +211,6 @@ export default function Block10Slideshow({
               id="engagement-photos"
               data-testid="input-engagement-photos"
               accept={ALLOWED_EXTENSIONS.join(',')}
-              multiple
               onChange={handleEngagementPhotosChange}
               disabled={engagementPhotosNA}
               className="hidden"
@@ -226,7 +225,7 @@ export default function Block10Slideshow({
               className="w-full"
             >
               <Upload className="h-4 w-4 mr-2" />
-              {engagementPhotosList.length >= MAX_ENGAGEMENT_PHOTOS ? 'Maximum photos reached' : 'Upload Photos'}
+              {engagementPhotosList.length >= MAX_ENGAGEMENT_PHOTOS ? 'Maximum photo reached' : 'Upload Photo'}
             </Button>
 
             {engagementPhotosList.length > 0 && !engagementPhotosNA && (
