@@ -143,7 +143,7 @@ export default function Summary() {
     const summaryElement = document.querySelector('.container');
     if (!summaryElement) return;
 
-    // Create HTML document with embedded styles
+    // Create HTML document with embedded print-optimized styles
     const htmlContent = `
 <!DOCTYPE html>
 <html>
@@ -152,40 +152,93 @@ export default function Summary() {
   <title>Wedding Composer Summary - ${composerData.person1FullName || 'Guest'}</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    /* Base styles with print optimization applied */
     body { 
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      line-height: 1.6;
+      line-height: 1.3;
       color: #1f2937;
-      padding: 2rem;
+      padding: 0.5rem;
       max-width: 1200px;
       margin: 0 auto;
-      background: #f9fafb;
+      background: white;
     }
-    h1 { font-size: 2rem; margin-bottom: 0.5rem; color: #111827; }
-    h2 { font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.5rem; color: #374151; }
-    h3 { font-size: 1.1rem; margin-top: 1rem; margin-bottom: 0.5rem; color: #4b5563; }
-    p { margin-bottom: 0.75rem; color: #6b7280; }
-    .card { 
+    
+    /* Hide buttons and interactive elements */
+    button, [data-testid*="button"], [data-testid*="menu"], .no-print {
+      display: none !important;
+    }
+    
+    /* Compact typography */
+    h1 { font-size: 1.5rem; margin-bottom: 0.25rem; color: #111827; }
+    h2 { font-size: 1rem; margin-top: 0.5rem; margin-bottom: 0.25rem; color: #374151; }
+    h3 { font-size: 0.9rem; margin-top: 0.5rem; margin-bottom: 0.25rem; color: #4b5563; }
+    p { margin-bottom: 0.25rem; color: #6b7280; font-size: 0.875rem; line-height: 1.3; }
+    
+    /* Compact cards */
+    .card, [class*="Card"] { 
       background: white; 
-      border-radius: 0.5rem; 
-      padding: 1.5rem; 
-      margin-bottom: 1.5rem;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      border-radius: 0.25rem;
+      border: 1px solid #e5e7eb;
+      padding: 0.75rem 1rem;
+      margin-bottom: 0.5rem;
+      box-shadow: none;
+      page-break-inside: avoid;
+      break-inside: avoid;
     }
-    .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
-    .flex { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+    
+    /* Compact spacing */
+    .space-y-6 > * + *, .space-y-4 > * + * { margin-top: 0.5rem !important; }
+    .space-y-3 > * + * { margin-top: 0.375rem !important; }
+    .space-y-2 > * + * { margin-top: 0.25rem !important; }
+    .gap-4 { gap: 0.5rem !important; }
+    .gap-3 { gap: 0.375rem !important; }
+    .gap-2 { gap: 0.25rem !important; }
+    
+    .p-6, .p-4 { padding: 0.5rem !important; }
+    .py-4 { padding-top: 0.5rem !important; padding-bottom: 0.5rem !important; }
+    .px-4 { padding-left: 0.5rem !important; padding-right: 0.5rem !important; }
+    .my-4 { margin-top: 0.5rem !important; margin-bottom: 0.5rem !important; }
+    .mb-4, .mt-4 { margin-bottom: 0.5rem !important; margin-top: 0.5rem !important; }
+    
+    /* Grid and flex layouts */
+    .grid { display: grid; gap: 0.5rem; }
+    .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+    .flex { display: flex; justify-content: space-between; margin-bottom: 0.25rem; }
+    
+    /* Text sizes */
+    .text-sm { font-size: 0.8rem !important; line-height: 1.2 !important; }
+    .text-base { font-size: 0.875rem !important; line-height: 1.3 !important; }
+    .text-lg { font-size: 1rem !important; }
+    .text-xl { font-size: 1.125rem !important; }
+    .text-muted-foreground { font-size: 0.75rem !important; color: #6b7280; }
+    
+    /* Icon sizes */
+    svg { width: 0.875rem !important; height: 0.875rem !important; }
+    
+    /* Separators */
+    hr, [class*="Separator"] { 
+      border-top: 1px solid #e5e7eb; 
+      margin: 0.5rem 0 !important; 
+    }
+    
+    /* Utility classes */
     .label { font-weight: 600; color: #374151; }
     .value { color: #1f2937; }
-    .separator { border-top: 1px solid #e5e7eb; margin: 1rem 0; }
     .text-green { color: #059669; }
     .text-amber { color: #d97706; }
-    ul { margin-left: 1.5rem; margin-bottom: 0.5rem; }
-    li { margin-bottom: 0.25rem; }
+    ul { margin-left: 1.5rem; margin-bottom: 0.25rem; }
+    li { margin-bottom: 0.125rem; font-size: 0.875rem; }
+    
+    /* Print styles */
     @media print {
-      body { background: white; padding: 1rem; }
-      .card { box-shadow: none; border: 1px solid #e5e7eb; padding: 1rem; margin-bottom: 1rem; }
-      h1 { font-size: 1.5rem; }
-      h2 { font-size: 1.1rem; }
+      @page { margin: 0.5in; size: letter; }
+      body { background: white; padding: 0.5rem; }
+      .card, [class*="Card"] { 
+        box-shadow: none; 
+        border: 1px solid #e5e7eb; 
+        page-break-inside: avoid;
+      }
     }
   </style>
 </head>
