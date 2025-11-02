@@ -1348,16 +1348,12 @@ export default function WeddingComposer() {
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
-                      variant="default"
+                      variant="outline"
                       size="sm"
                       data-testid="button-auth-menu"
-                      className="h-auto py-2"
                     >
-                      <User className="h-4 w-4 mr-2 self-start mt-0.5" />
-                      <div className="flex flex-col items-start leading-tight">
-                        <span>Login or</span>
-                        <span>Create Account</span>
-                      </div>
+                      <User className="h-4 w-4 mr-2" />
+                      Menu
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
