@@ -1018,41 +1018,153 @@ export default function WeddingComposer() {
   const handleLeaveToHome = async () => {
     setShowLeaveConfirmDialog(false);
     
-    // Clear date and time from composer data if leaving without payment
-    if (composerId && composerPaymentStatus !== "completed") {
-      try {
-        const clearedData = {
-          preferredDate: "",
-          backupDate: "",
-          timeSlot: "",
-        };
-        
-        await apiRequest("PATCH", `/api/wedding-composers/${composerId}`, clearedData);
-        
-        // Update local form data
-        setFormData(prev => ({
-          ...prev,
-          preferredDate: "",
-          backupDate: "",
-          timeSlot: "",
-        }));
-      } catch (error) {
-        console.error("Error clearing date/time:", error);
-      }
-    }
-    
-    // For guests (no user account), clear all their selections
-    if (!userAccount) {
-      localStorage.removeItem("composerData");
-    }
-    
-    // Reset the initial dialog flag so it shows again when returning
-    setHasSeenInitialDialog(false);
-    setShowInitialDialog(true);
-    
-    // Clear guest session so dialog shows again when returning
+    // Clear all localStorage data (logout and clear selections)
+    localStorage.removeItem("user");
+    localStorage.removeItem("composerData");
     localStorage.removeItem("guestSession");
     
+    // Reset user account
+    setUserAccount(null);
+    setComposerId(null);
+    setComposerPaymentStatus("pending");
+    
+    // Reset all form data to initial empty state
+    setFormData({
+      eventType: "",
+      preferredDate: "",
+      backupDate: "",
+      timeSlot: "",
+      signatureColor: "",
+      colorSwatchDecision: "",
+      processionalSong: "",
+      recessionalSong: "",
+      receptionEntranceSong: "",
+      cakeCuttingSong: "",
+      fatherDaughterDanceSong: "",
+      lastDanceSong: "",
+      playlistUrl: "",
+      musicCompletionStatus: "",
+      grandIntroduction: "",
+      fatherDaughterDanceAnnouncement: "",
+      toastsSpeechesAnnouncement: "",
+      guestCallouts: "",
+      vibeCheck: "",
+      announcementsCompletionStatus: "",
+      ceremonyScript: "",
+      vowChoices: "",
+      unityCandle: false,
+      sandCeremony: false,
+      handfasting: false,
+      guestReadingOrSongChoice: "no",
+      guestReadingOrSong: "",
+      guestReadingOrSongName: "",
+      officiantPassageChoice: "no",
+      officiantPassage: "",
+      includingChildChoice: "no",
+      includingChild: "",
+      childrenOrganizer: "",
+      petInvolvementChoice: "no",
+      petPolicyAccepted: false,
+      petInvolvement: "",
+      ceremonySpecialRequests: "",
+      walkingDownAisle: "",
+      escortName: "",
+      ringBearerIncluded: "",
+      ringBearerFlowerGirl: "",
+      ringBearerOrganizer: "",
+      honoredGuestEscorts: "",
+      honoredGuestEscortsNA: false,
+      brideSideFrontRow: "",
+      brideSideFrontRowNA: false,
+      groomSideFrontRow: "",
+      groomSideFrontRowNA: false,
+      framedPhotos: "",
+      framedPhotosNA: false,
+      specialSeatingNeeds: "",
+      specialSeatingNeedsNA: false,
+      processionalSpecialInstructions: "",
+      processionalSpecialInstructionsNA: false,
+      processionalCompletionStatus: "",
+      firstDance: "",
+      firstDanceNA: false,
+      motherSonDance: "",
+      motherSonDanceNA: false,
+      specialDances: "",
+      specialDancesNA: false,
+      toastGivers: "",
+      toastGiversNA: false,
+      beveragePreferences: "",
+      receptionSpecialRequests: "",
+      receptionSpecialRequestsNA: false,
+      receptionCompletionStatus: "",
+      mustHaveShots: "",
+      mustHaveShotsNA: false,
+      vipList: "",
+      vipListNA: false,
+      groupPhotosRequested: "",
+      groupPhotosRequestedNA: false,
+      photographySpecialRequests: "",
+      photographySpecialRequestsNA: false,
+      photographyCompletionStatus: "",
+      slideshowPhotos: "[]",
+      slideshowPhotosNA: false,
+      engagementPhotos: "[]",
+      engagementPhotosNA: false,
+      slideshowCompletionStatus: "",
+      freshFlorals: "",
+      freshFloralsNA: false,
+      guestBookChoice: "",
+      guestBook: "",
+      cakeKnifeChoice: "",
+      cakeKnifeServiceSet: "",
+      departureOrganizer: "",
+      departureOrganizerTBD: false,
+      departureVehicleChoice: "",
+      departureVehicle: "",
+      personalTouchesSpecialInstructions: "",
+      personalTouchesSpecialInstructionsNA: false,
+      personalTouchesCompletionStatus: "",
+      eviteDesignStyle: "",
+      eviteHeaderText: "",
+      eviteBodyText: "",
+      eviteRsvpOption: "",
+      eviteRsvpCustomLink: "",
+      eviteDesignNoSpecialRequests: false,
+      eviteWordingNoSpecialRequests: false,
+      eviteRsvpNoSpecialRequests: false,
+      eviteCompletionStatus: "",
+      person1Role: "",
+      person1FullName: "",
+      person1Pronouns: "",
+      person1Email: "",
+      person1Phone: "",
+      person1AlternatePhone: "",
+      person2Role: "",
+      person2FullName: "",
+      person2Pronouns: "",
+      person2Email: "",
+      person2Phone: "",
+      smsConsent: false,
+      mailingAddress: "",
+      paymentMethod: "credit_card",
+      termsAccepted: false,
+      photoBookAddon: false,
+      photoBookQuantity: 1,
+      extraTimeAddon: false,
+      byobBarAddon: false,
+      rehearsalAddon: false,
+      amountPaid: 0,
+      appliedDiscountAmount: 0,
+    });
+    
+    // Reset other state
+    setCurrentStep(1);
+    setShowInitialDialog(true);
+    setHasSeenInitialDialog(false);
+    hasLoadedDataRef.current = false;
+    isInitialLoadRef.current = true;
+    
+    // Navigate to landing page
     setLocation("/");
   };
 
