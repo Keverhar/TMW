@@ -136,8 +136,8 @@ export default function Block7Processional({
 
       <Card>
         <CardHeader>
-          <CardTitle>Ring Bearer or Flower Child</CardTitle>
-          <CardDescription>Will you include a ring bearer or flower child in your ceremony?</CardDescription>
+          <CardTitle>Ring Bearer or Flower Girl</CardTitle>
+          <CardDescription>Will you include a ring bearer or flower girl in your ceremony?</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <RadioGroup value={ringBearerIncluded} onValueChange={(value) => onChange('ringBearerIncluded', value)} disabled={readOnly}>
@@ -154,7 +154,7 @@ export default function Block7Processional({
           {ringBearerIncluded === 'yes' && (
             <>
               <div className="space-y-2">
-                <Label htmlFor="ring-bearer-flower-girl">Ring Bearer / Flower Child Details</Label>
+                <Label htmlFor="ring-bearer-flower-girl">Ring Bearer / Flower Girl Details</Label>
                 <Textarea
                   id="ring-bearer-flower-girl"
                   data-testid="input-ring-bearer-flower-girl"
