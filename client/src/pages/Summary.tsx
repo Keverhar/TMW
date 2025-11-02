@@ -13,29 +13,38 @@ export default function Summary() {
   useEffect(() => {
     const loadData = async () => {
       const savedUser = localStorage.getItem("user");
-      if (!savedUser) {
-        setLocation("/composer");
-        return;
-      }
-
-      const user = JSON.parse(savedUser);
-      try {
-        const response = await fetch(`/api/wedding-composers/by-user?userId=${user.id}`);
-        if (response.ok) {
-          const composers = await response.json();
-          if (composers && composers.length > 0) {
-            // Get the most recent composer
-            const mostRecent = composers.sort((a: any, b: any) => 
-              new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
-            )[0];
-            setComposerData(mostRecent);
+      
+      // Try to load data from localStorage for guest users
+      const savedComposerData = localStorage.getItem("composerData");
+      
+      if (savedUser) {
+        // Logged-in user: fetch from API
+        const user = JSON.parse(savedUser);
+        try {
+          const response = await fetch(`/api/wedding-composers/by-user?userId=${user.id}`);
+          if (response.ok) {
+            const composers = await response.json();
+            if (composers && composers.length > 0) {
+              // Get the most recent composer
+              const mostRecent = composers.sort((a: any, b: any) => 
+                new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+              )[0];
+              setComposerData(mostRecent);
+            }
           }
+        } catch (error) {
+          console.error("Error loading composer data:", error);
         }
-      } catch (error) {
-        console.error("Error loading composer data:", error);
-      } finally {
-        setIsLoading(false);
+      } else if (savedComposerData) {
+        // Guest user: load from localStorage
+        try {
+          setComposerData(JSON.parse(savedComposerData));
+        } catch (error) {
+          console.error("Error parsing composer data:", error);
+        }
       }
+      
+      setIsLoading(false);
     };
 
     loadData();

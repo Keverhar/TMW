@@ -1098,6 +1098,31 @@ export default function WeddingComposer() {
     loadUserComposerData();
   }, [userAccount, composerId]);
 
+  // Load guest user's composer data from localStorage when component mounts
+  useEffect(() => {
+    const loadGuestComposerData = () => {
+      if (!userAccount && !hasLoadedDataRef.current) {
+        hasLoadedDataRef.current = true;
+        const savedComposerData = localStorage.getItem("composerData");
+        if (savedComposerData) {
+          try {
+            const parsedData = JSON.parse(savedComposerData);
+            isHydratingRef.current = true;
+            previousEventTypeRef.current = parsedData.eventType || "";
+            setFormData(parsedData);
+            setTimeout(() => {
+              isHydratingRef.current = false;
+            }, 100);
+          } catch (error) {
+            console.error("Error loading guest composer data:", error);
+          }
+        }
+      }
+    };
+    
+    loadGuestComposerData();
+  }, [userAccount]);
+
   // Reset to step 1 when returning from payment/confirmation
   useEffect(() => {
     if (lastLocationRef.current.includes('/payment') || lastLocationRef.current.includes('/confirmation')) {
@@ -1122,15 +1147,26 @@ export default function WeddingComposer() {
       return;
     }
     
-    // Only auto-save for pending composers after user makes changes
-    if (autosaveEnabled.current && userAccount && composerId && composerPaymentStatus === "pending") {
-      const timeoutId = setTimeout(() => {
-        saveProgress();
-      }, 1000); // Debounce auto-save
+    if (autosaveEnabled.current) {
+      // Auto-save for logged-in users with pending composers
+      if (userAccount && composerId && composerPaymentStatus === "pending") {
+        const timeoutId = setTimeout(() => {
+          saveProgress();
+        }, 1000); // Debounce auto-save
+        
+        return () => clearTimeout(timeoutId);
+      }
       
-      return () => clearTimeout(timeoutId);
+      // Save to localStorage for guest users
+      if (!userAccount) {
+        const timeoutId = setTimeout(() => {
+          localStorage.setItem("composerData", JSON.stringify(formData));
+        }, 500); // Debounce localStorage save
+        
+        return () => clearTimeout(timeoutId);
+      }
     }
-  }, [formData]);
+  }, [formData, userAccount, composerId, composerPaymentStatus]);
 
   // DO NOT save on login - user explicitly requested no autosave on login
 
