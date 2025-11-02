@@ -8,12 +8,13 @@ import { Loader2 } from "lucide-react";
 import { getAddonPrice } from "@shared/pricing";
 
 export default function Summary() {
-  const [, setLocation] = useLocation();
+  const [location, setLocation] = useLocation();
   const [isLoading, setIsLoading] = useState(true);
   const [composerData, setComposerData] = useState<any>(null);
 
   useEffect(() => {
     const loadData = async () => {
+      setIsLoading(true);
       const savedUser = localStorage.getItem("user");
       
       // Try to load data from localStorage for guest users
@@ -23,7 +24,7 @@ export default function Summary() {
         // Logged-in user: fetch from API
         const user = JSON.parse(savedUser);
         try {
-          const response = await fetch(`/api/wedding-composers/by-user?userId=${user.id}`);
+          const response = await fetch(`/api/wedding-composers/by-user?userId=${user.id}&t=${Date.now()}`);
           if (response.ok) {
             const composers = await response.json();
             if (composers && composers.length > 0) {
@@ -50,7 +51,7 @@ export default function Summary() {
     };
 
     loadData();
-  }, [setLocation]);
+  }, [location]);
 
   const capitalize = (str: string) => {
     if (!str) return str;
