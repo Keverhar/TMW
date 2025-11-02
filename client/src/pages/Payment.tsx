@@ -53,15 +53,15 @@ export default function Payment() {
   };
 
   // Calculate balance due (total - amount already paid) with ACH/E-Check or Affirm discount if applicable
-  // One discount per account: if appliedDiscountAmount exists, use it; otherwise calculate from payment method
+  // One discount per account: if appliedDiscountAmount exists, discount already applied, so don't apply again
   const calculateTotalPrice = () => {
     if (!composer) return 0;
     const balanceDue = (composer.totalPrice || 0) - (composer.amountPaid || 0);
     
-    // Use stored appliedDiscountAmount if it exists (one discount per account)
-    // Otherwise, calculate based on current payment method selection
+    // If a discount has already been applied (appliedDiscountAmount > 0), don't apply it again
+    // Only apply discount if this is the first payment (appliedDiscountAmount = 0)
     const discount = (composer.appliedDiscountAmount || 0) > 0
-      ? (composer.appliedDiscountAmount || 0)
+      ? 0  // Discount already used, don't apply again
       : (paymentMethod === 'ach' || paymentMethod === 'echeck') 
         ? (composer.achDiscountAmount || 0) 
         : paymentMethod === 'affirm' 
@@ -163,12 +163,16 @@ export default function Payment() {
         const latestResponse = await fetch(`/api/wedding-composers/${composerId}`);
         const latestComposer = await latestResponse.json();
         
-        // Calculate the discount amount being applied
-        const discountAmount = (paymentMethod === 'ach' || paymentMethod === 'echeck') 
-          ? (latestComposer.achDiscountAmount || 0) 
-          : paymentMethod === 'affirm' 
-            ? (latestComposer.affirmDiscountAmount || 0) 
-            : 0;
+        // Calculate the discount amount being applied (one discount per account)
+        // If appliedDiscountAmount already exists, don't apply a new discount
+        const currentAppliedDiscount = latestComposer.appliedDiscountAmount || 0;
+        const discountAmount = currentAppliedDiscount > 0
+          ? currentAppliedDiscount  // Keep existing discount
+          : (paymentMethod === 'ach' || paymentMethod === 'echeck') 
+            ? (latestComposer.achDiscountAmount || 0) 
+            : paymentMethod === 'affirm' 
+              ? (latestComposer.affirmDiscountAmount || 0) 
+              : 0;
         
         // Calculate the amount being paid (displayTotal already includes discount)
         const paymentAmount = displayTotal;
