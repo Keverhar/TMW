@@ -209,7 +209,6 @@ export default function Block10Slideshow({
               data-testid="input-engagement-photos"
               accept={ALLOWED_EXTENSIONS.join(',')}
               onChange={handleEngagementPhotosChange}
-              disabled={engagementPhotosNA}
               className="hidden"
             />
             
@@ -217,7 +216,7 @@ export default function Block10Slideshow({
               type="button"
               variant="outline"
               onClick={() => engagementInputRef.current?.click()}
-              disabled={readOnly || engagementPhotosNA || engagementPhotosList.length >= MAX_ENGAGEMENT_PHOTOS}
+              disabled={readOnly || engagementPhotosList.length >= MAX_ENGAGEMENT_PHOTOS}
               data-testid="button-upload-engagement-photos"
               className="w-full"
             >
@@ -225,7 +224,7 @@ export default function Block10Slideshow({
               {engagementPhotosList.length >= MAX_ENGAGEMENT_PHOTOS ? 'Maximum photo reached' : 'Upload Photo'}
             </Button>
 
-            {engagementPhotosList.length > 0 && !engagementPhotosNA && (
+            {engagementPhotosList.length > 0 && (
               <div className="space-y-2 max-h-48 overflow-y-auto border rounded-md p-3">
                 {engagementPhotosList.map((file, index) => (
                   <div key={index} className="flex items-center justify-between text-sm bg-muted p-2 rounded">
@@ -252,24 +251,6 @@ export default function Block10Slideshow({
               <p className="text-sm font-medium mb-1">Allowed file types:</p>
               <p className="text-sm text-muted-foreground">JPEG/JPG, PNG, TIFF, BMP, GIF (5MB max each)</p>
             </div>
-          </div>
-
-          <div className="flex items-center gap-2 pt-2">
-            <Checkbox
-              id="engagement-photos-na"
-              data-testid="checkbox-engagement-photos-na"
-              checked={engagementPhotosNA}
-              disabled={readOnly}
-              onCheckedChange={(checked) => {
-                onChange('engagementPhotosNA', checked as boolean);
-                if (checked) {
-                  onChange('engagementPhotos', '[]');
-                }
-              }}
-            />
-            <Label htmlFor="engagement-photos-na" className="text-sm font-normal cursor-pointer">
-              No special requests
-            </Label>
           </div>
         </CardContent>
       </Card>
@@ -302,7 +283,6 @@ export default function Block10Slideshow({
               accept={ALLOWED_EXTENSIONS.join(',')}
               multiple
               onChange={handleSlideshowPhotosChange}
-              disabled={slideshowPhotosNA}
               className="hidden"
             />
             
@@ -310,7 +290,7 @@ export default function Block10Slideshow({
               type="button"
               variant="outline"
               onClick={() => slideshowInputRef.current?.click()}
-              disabled={readOnly || slideshowPhotosNA || slideshowPhotosList.length >= MAX_SLIDESHOW_PHOTOS}
+              disabled={readOnly || slideshowPhotosList.length >= MAX_SLIDESHOW_PHOTOS}
               data-testid="button-upload-slideshow-photos"
               className="w-full"
             >
@@ -318,7 +298,7 @@ export default function Block10Slideshow({
               {slideshowPhotosList.length >= MAX_SLIDESHOW_PHOTOS ? 'Maximum photos reached' : 'Upload Photos'}
             </Button>
 
-            {slideshowPhotosList.length > 0 && !slideshowPhotosNA && (
+            {slideshowPhotosList.length > 0 && (
               <div className="space-y-2 max-h-48 overflow-y-auto border rounded-md p-3">
                 {slideshowPhotosList.map((file, index) => (
                   <div key={index} className="flex items-center justify-between text-sm bg-muted p-2 rounded">
@@ -345,24 +325,6 @@ export default function Block10Slideshow({
               <p className="text-sm font-medium mb-1">Allowed file types:</p>
               <p className="text-sm text-muted-foreground">JPEG/JPG, PNG, TIFF, BMP, GIF</p>
             </div>
-          </div>
-
-          <div className="flex items-center gap-2 pt-2">
-            <Checkbox
-              id="slideshow-photos-na"
-              data-testid="checkbox-slideshow-photos-na"
-              checked={slideshowPhotosNA}
-              disabled={readOnly}
-              onCheckedChange={(checked) => {
-                onChange('slideshowPhotosNA', checked as boolean);
-                if (checked) {
-                  onChange('slideshowPhotos', '[]');
-                }
-              }}
-            />
-            <Label htmlFor="slideshow-photos-na" className="text-sm font-normal cursor-pointer">
-              No special requests
-            </Label>
           </div>
         </CardContent>
       </Card>

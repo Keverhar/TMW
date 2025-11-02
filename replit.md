@@ -16,6 +16,8 @@ The Modest Wedding is a full-stack web application for booking wedding ceremonie
   - Users can skip the page entirely without uploading any photos
   - Users can mark the section as "All done (for now)" even without uploading photos
   - Removed the amber "You're making progress!" card - only the green completion card is shown
+  - Removed "No special requests" checkboxes from both Engagement Photo and Memory Wall Photos cards
+  - Upload controls are always enabled (not disabled by previous "No special requests" selections)
   - Page renamed from "Slideshow" to "Memory Wall" throughout the application
   - Engagement Photo changed to singular (1 photo limit instead of 5)
   - Memory Wall Photos card and Engagement Photo card reordered (Engagement Photo now appears first)
