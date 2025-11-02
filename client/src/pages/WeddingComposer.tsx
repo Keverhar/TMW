@@ -88,7 +88,9 @@ export default function WeddingComposer() {
   });
   const [hasSeenInitialDialog, setHasSeenInitialDialog] = useState(() => {
     const savedUser = localStorage.getItem("user");
-    return !!savedUser;
+    const savedComposerData = localStorage.getItem("composerData");
+    // Guest users who have composer data have already seen the dialog
+    return !!(savedUser || savedComposerData);
   });
   const [savedStepBeforeSimplification, setSavedStepBeforeSimplification] = useState<number | null>(null);
   const previousEventTypeRef = useRef<string>("");
