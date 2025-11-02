@@ -303,28 +303,92 @@ export default function Payment() {
                   <div className="space-y-3">
                     <Label>Payment Method</Label>
                     <RadioGroup value={paymentMethod} onValueChange={(value: any) => handlePaymentMethodChange(value)}>
-                      <div className="flex items-center space-x-2 p-3 border rounded-md hover-elevate">
-                        <RadioGroupItem value="card" id="card" data-testid="radio-card" />
-                        <Label htmlFor="card" className="flex-1 cursor-pointer">
-                          <div className="flex items-center gap-3">
-                            <CreditCard className="h-5 w-5" />
-                            <span>Credit or Debit Card</span>
+                      <div className="space-y-3">
+                        <div className="flex items-center space-x-2 p-3 border rounded-md hover-elevate">
+                          <RadioGroupItem value="card" id="card" data-testid="radio-card" />
+                          <Label htmlFor="card" className="flex-1 cursor-pointer">
+                            <div className="flex items-center gap-3">
+                              <CreditCard className="h-5 w-5" />
+                              <span>Credit or Debit Card</span>
+                            </div>
+                          </Label>
+                          <div className="flex gap-2">
+                            <SiVisa className="h-6 w-6 text-blue-600" />
+                            <SiMastercard className="h-6 w-6 text-orange-600" />
+                            <SiAmericanexpress className="h-6 w-6 text-blue-500" />
+                            <SiDiscover className="h-6 w-6 text-orange-500" />
                           </div>
-                        </Label>
-                        <div className="flex gap-2">
-                          <SiVisa className="h-6 w-6 text-blue-600" />
-                          <SiMastercard className="h-6 w-6 text-orange-600" />
-                          <SiAmericanexpress className="h-6 w-6 text-blue-500" />
-                          <SiDiscover className="h-6 w-6 text-orange-500" />
                         </div>
+
+                        {/* Card Details */}
+                        {paymentMethod === "card" && (
+                          <div className="ml-8 space-y-4 p-4 bg-muted rounded-md">
+                            <div className="space-y-2">
+                              <Label htmlFor="cardNumber">Card Number</Label>
+                              <Input
+                                id="cardNumber"
+                                placeholder="1234 5678 9012 3456"
+                                value={cardNumber}
+                                onChange={handleCardNumberChange}
+                                data-testid="input-card-number"
+                              />
+                            </div>
+
+                            <div className="space-y-2">
+                              <Label htmlFor="cardName">Cardholder Name</Label>
+                              <Input
+                                id="cardName"
+                                placeholder="John Doe"
+                                value={cardName}
+                                onChange={(e) => setCardName(e.target.value)}
+                                data-testid="input-card-name"
+                              />
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                              <div className="space-y-2">
+                                <Label htmlFor="expiry">Expiry Date</Label>
+                                <Input
+                                  id="expiry"
+                                  placeholder="MM/YY"
+                                  value={expiryDate}
+                                  onChange={handleExpiryChange}
+                                  data-testid="input-expiry"
+                                />
+                              </div>
+                              <div className="space-y-2">
+                                <Label htmlFor="cvv">CVV</Label>
+                                <Input
+                                  id="cvv"
+                                  placeholder="123"
+                                  value={cvv}
+                                  onChange={handleCvvChange}
+                                  type="password"
+                                  data-testid="input-cvv"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
 
-                      <div className="flex items-center space-x-2 p-3 border rounded-md hover-elevate">
-                        <RadioGroupItem value="paypal" id="paypal" data-testid="radio-paypal" />
-                        <Label htmlFor="paypal" className="flex-1 cursor-pointer flex items-center gap-3">
-                          <SiPaypal className="h-6 w-6 text-blue-600" />
-                          <span>PayPal</span>
-                        </Label>
+                      <div className="space-y-3">
+                        <div className="flex items-center space-x-2 p-3 border rounded-md hover-elevate">
+                          <RadioGroupItem value="paypal" id="paypal" data-testid="radio-paypal" />
+                          <Label htmlFor="paypal" className="flex-1 cursor-pointer flex items-center gap-3">
+                            <SiPaypal className="h-6 w-6 text-blue-600" />
+                            <span>PayPal</span>
+                          </Label>
+                        </div>
+
+                        {paymentMethod === "paypal" && (
+                          <div className="ml-8 p-6 bg-muted rounded-md text-center space-y-2">
+                            <SiPaypal className="h-12 w-12 mx-auto text-blue-600" />
+                            <p className="text-sm text-muted-foreground">
+                              You will be redirected to PayPal to complete your payment
+                            </p>
+                          </div>
+                        )}
                       </div>
 
                       <div className="flex items-start space-x-2 p-3 border rounded-md hover-elevate">
@@ -341,176 +405,120 @@ export default function Payment() {
                         </Label>
                       </div>
 
-                      <div className="flex items-start space-x-2 p-3 border rounded-md hover-elevate">
-                        <RadioGroupItem value="ach" id="ach" data-testid="radio-ach" className="mt-1" />
-                        <Label htmlFor="ach" className="flex-1 cursor-pointer">
-                          <div className="mb-2">
-                            <span className="font-semibold">Pay by ACH (Bank Transfer)</span>
+                      <div className="space-y-3">
+                        <div className="flex items-start space-x-2 p-3 border rounded-md hover-elevate">
+                          <RadioGroupItem value="ach" id="ach" data-testid="radio-ach" className="mt-1" />
+                          <Label htmlFor="ach" className="flex-1 cursor-pointer">
+                            <div className="mb-2">
+                              <span className="font-semibold">Pay by ACH (Bank Transfer)</span>
+                            </div>
+                            <div className="text-sm text-muted-foreground space-y-1">
+                              <p>- Simple and secure: pay directly from your bank account using your routing and account number.</p>
+                              <p>- Funds take 2–3 days to clear, but your date is secured once payment is received.</p>
+                              <p className="font-medium text-foreground">- Special savings: Receive a $100 discount on weddings or $30 discount on elopements/vow renewals when you choose ACH.</p>
+                            </div>
+                          </Label>
+                        </div>
+
+                        {paymentMethod === "ach" && (
+                          <div className="ml-8 p-6 bg-muted rounded-md space-y-4">
+                            <p className="text-sm font-semibold text-center">Bank Account Information</p>
+                            <div className="space-y-4">
+                              <div className="space-y-2">
+                                <Label htmlFor="routingNumber">Routing Number</Label>
+                                <Input
+                                  id="routingNumber"
+                                  placeholder="9 digits"
+                                  maxLength={9}
+                                  data-testid="input-routing-number"
+                                />
+                              </div>
+                              <div className="space-y-2">
+                                <Label htmlFor="accountNumber">Account Number</Label>
+                                <Input
+                                  id="accountNumber"
+                                  placeholder="Account number"
+                                  data-testid="input-account-number"
+                                />
+                              </div>
+                              <div className="space-y-2">
+                                <Label htmlFor="accountName">Name on Account</Label>
+                                <Input
+                                  id="accountName"
+                                  placeholder="Account holder name"
+                                  data-testid="input-account-name"
+                                />
+                              </div>
+                            </div>
+                            <p className="text-xs text-muted-foreground text-center">
+                              Your bank information is encrypted and secure. Payment will be processed within 2-3 business days.
+                            </p>
                           </div>
-                          <div className="text-sm text-muted-foreground space-y-1">
-                            <p>- Simple and secure: pay directly from your bank account using your routing and account number.</p>
-                            <p>- Funds take 2–3 days to clear, but your date is secured once payment is received.</p>
-                            <p className="font-medium text-foreground">- Special savings: Receive a $100 discount on weddings or $30 discount on elopements/vow renewals when you choose ACH.</p>
-                          </div>
-                        </Label>
+                        )}
                       </div>
 
-                      <div className="flex items-start space-x-2 p-3 border rounded-md hover-elevate">
-                        <RadioGroupItem value="echeck" id="echeck" data-testid="radio-echeck" className="mt-1" />
-                        <Label htmlFor="echeck" className="flex-1 cursor-pointer">
-                          <div className="mb-2">
-                            <span className="font-semibold">Pay by E-Check</span>
+                      <div className="space-y-3">
+                        <div className="flex items-start space-x-2 p-3 border rounded-md hover-elevate">
+                          <RadioGroupItem value="echeck" id="echeck" data-testid="radio-echeck" className="mt-1" />
+                          <Label htmlFor="echeck" className="flex-1 cursor-pointer">
+                            <div className="mb-2">
+                              <span className="font-semibold">Pay by E-Check</span>
+                            </div>
+                            <div className="text-sm text-muted-foreground space-y-1">
+                              <p>- Simple and secure: pay directly from your bank account using your routing and account number.</p>
+                              <p>- Funds take 2–3 days to clear, but your date is secured once payment is received.</p>
+                              <p className="font-medium text-foreground">- Special savings: Receive a $100 discount on weddings or $30 discount on elopements/vow renewals when you choose E-Check.</p>
+                            </div>
+                          </Label>
+                        </div>
+
+                        {paymentMethod === "echeck" && (
+                          <div className="ml-8 p-6 bg-muted rounded-md space-y-4">
+                            <p className="text-sm font-semibold text-center">Bank Account Information</p>
+                            <div className="space-y-4">
+                              <div className="space-y-2">
+                                <Label htmlFor="echeckRoutingNumber">Routing Number</Label>
+                                <Input
+                                  id="echeckRoutingNumber"
+                                  placeholder="9 digits"
+                                  maxLength={9}
+                                  data-testid="input-echeck-routing-number"
+                                />
+                              </div>
+                              <div className="space-y-2">
+                                <Label htmlFor="echeckAccountNumber">Account Number</Label>
+                                <Input
+                                  id="echeckAccountNumber"
+                                  placeholder="Account number"
+                                  data-testid="input-echeck-account-number"
+                                />
+                              </div>
+                              <div className="space-y-2">
+                                <Label htmlFor="echeckCheckNumber">Check Number</Label>
+                                <Input
+                                  id="echeckCheckNumber"
+                                  placeholder="Check number"
+                                  data-testid="input-echeck-check-number"
+                                />
+                              </div>
+                              <div className="space-y-2">
+                                <Label htmlFor="echeckAccountName">Name on Account</Label>
+                                <Input
+                                  id="echeckAccountName"
+                                  placeholder="Account holder name"
+                                  data-testid="input-echeck-account-name"
+                                />
+                              </div>
+                            </div>
+                            <p className="text-xs text-muted-foreground text-center">
+                              Your bank information is encrypted and secure. Payment will be processed within 2-3 business days.
+                            </p>
                           </div>
-                          <div className="text-sm text-muted-foreground space-y-1">
-                            <p>- Simple and secure: pay directly from your bank account using your routing and account number.</p>
-                            <p>- Funds take 2–3 days to clear, but your date is secured once payment is received.</p>
-                            <p className="font-medium text-foreground">- Special savings: Receive a $100 discount on weddings or $30 discount on elopements/vow renewals when you choose E-Check.</p>
-                          </div>
-                        </Label>
+                        )}
                       </div>
 
                     </RadioGroup>
                   </div>
-
-                  {/* Card Details */}
-                  {paymentMethod === "card" && (
-                    <div className="space-y-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="cardNumber">Card Number</Label>
-                        <Input
-                          id="cardNumber"
-                          placeholder="1234 5678 9012 3456"
-                          value={cardNumber}
-                          onChange={handleCardNumberChange}
-                          data-testid="input-card-number"
-                        />
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="cardName">Cardholder Name</Label>
-                        <Input
-                          id="cardName"
-                          placeholder="John Doe"
-                          value={cardName}
-                          onChange={(e) => setCardName(e.target.value)}
-                          data-testid="input-card-name"
-                        />
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="expiry">Expiry Date</Label>
-                          <Input
-                            id="expiry"
-                            placeholder="MM/YY"
-                            value={expiryDate}
-                            onChange={handleExpiryChange}
-                            data-testid="input-expiry"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="cvv">CVV</Label>
-                          <Input
-                            id="cvv"
-                            placeholder="123"
-                            value={cvv}
-                            onChange={handleCvvChange}
-                            type="password"
-                            data-testid="input-cvv"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {paymentMethod === "paypal" && (
-                    <div className="p-6 bg-muted rounded-md text-center space-y-2">
-                      <SiPaypal className="h-12 w-12 mx-auto text-blue-600" />
-                      <p className="text-sm text-muted-foreground">
-                        You will be redirected to PayPal to complete your payment
-                      </p>
-                    </div>
-                  )}
-
-                  {paymentMethod === "ach" && (
-                    <div className="p-6 bg-muted rounded-md space-y-4">
-                      <p className="text-sm font-semibold text-center">Bank Account Information</p>
-                      <div className="space-y-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="routingNumber">Routing Number</Label>
-                          <Input
-                            id="routingNumber"
-                            placeholder="9 digits"
-                            maxLength={9}
-                            data-testid="input-routing-number"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="accountNumber">Account Number</Label>
-                          <Input
-                            id="accountNumber"
-                            placeholder="Account number"
-                            data-testid="input-account-number"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="accountName">Name on Account</Label>
-                          <Input
-                            id="accountName"
-                            placeholder="Account holder name"
-                            data-testid="input-account-name"
-                          />
-                        </div>
-                      </div>
-                      <p className="text-xs text-muted-foreground text-center">
-                        Your bank information is encrypted and secure. Payment will be processed within 2-3 business days.
-                      </p>
-                    </div>
-                  )}
-
-                  {paymentMethod === "echeck" && (
-                    <div className="p-6 bg-muted rounded-md space-y-4">
-                      <p className="text-sm font-semibold text-center">Bank Account Information</p>
-                      <div className="space-y-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="echeckRoutingNumber">Routing Number</Label>
-                          <Input
-                            id="echeckRoutingNumber"
-                            placeholder="9 digits"
-                            maxLength={9}
-                            data-testid="input-echeck-routing-number"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="echeckAccountNumber">Account Number</Label>
-                          <Input
-                            id="echeckAccountNumber"
-                            placeholder="Account number"
-                            data-testid="input-echeck-account-number"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="echeckCheckNumber">Check Number</Label>
-                          <Input
-                            id="echeckCheckNumber"
-                            placeholder="Check number"
-                            data-testid="input-echeck-check-number"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="echeckAccountName">Name on Account</Label>
-                          <Input
-                            id="echeckAccountName"
-                            placeholder="Account holder name"
-                            data-testid="input-echeck-account-name"
-                          />
-                        </div>
-                      </div>
-                      <p className="text-xs text-muted-foreground text-center">
-                        Your bank information is encrypted and secure. Payment will be processed within 2-3 business days.
-                      </p>
-                    </div>
-                  )}
 
                   <Button
                     type="submit"
