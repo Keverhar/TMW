@@ -129,6 +129,55 @@ export default function Summary() {
           </Button>
         </div>
 
+        {/* The Couple */}
+        {(hasValue(composerData.person1FullName) || hasValue(composerData.person2FullName)) && (
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <Heart className="h-5 w-5 text-primary" />
+                <CardTitle>The Couple</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {hasValue(composerData.person1FullName) && (
+                <div className="space-y-1">
+                  <p className="text-sm"><span className="text-muted-foreground">Name:</span> {composerData.person1FullName}</p>
+                  {hasValue(composerData.person1Role) && <p className="text-sm"><span className="text-muted-foreground">Role:</span> {capitalize(composerData.person1Role)}</p>}
+                  {hasValue(composerData.person1Pronouns) && <p className="text-sm"><span className="text-muted-foreground">Pronouns:</span> {composerData.person1Pronouns}</p>}
+                  {hasValue(composerData.person1Email) && <p className="text-sm"><span className="text-muted-foreground">Email:</span> {composerData.person1Email}</p>}
+                  {hasValue(composerData.person1Phone) && <p className="text-sm"><span className="text-muted-foreground">Phone:</span> {composerData.person1Phone}</p>}
+                  {hasValue(composerData.person1AlternatePhone) && <p className="text-sm"><span className="text-muted-foreground">Alt Phone:</span> {composerData.person1AlternatePhone}</p>}
+                </div>
+              )}
+              {hasValue(composerData.person2FullName) && (
+                <div className="space-y-1">
+                  <p className="text-sm"><span className="text-muted-foreground">Name:</span> {composerData.person2FullName}</p>
+                  {hasValue(composerData.person2Role) && <p className="text-sm"><span className="text-muted-foreground">Role:</span> {capitalize(composerData.person2Role)}</p>}
+                  {hasValue(composerData.person2Pronouns) && <p className="text-sm"><span className="text-muted-foreground">Pronouns:</span> {composerData.person2Pronouns}</p>}
+                  {hasValue(composerData.person2Email) && <p className="text-sm"><span className="text-muted-foreground">Email:</span> {composerData.person2Email}</p>}
+                  {hasValue(composerData.person2Phone) && <p className="text-sm"><span className="text-muted-foreground">Phone:</span> {composerData.person2Phone}</p>}
+                </div>
+              )}
+              {hasValue(composerData.mailingAddress) && (
+                <div>
+                  <p className="text-sm text-muted-foreground">Mailing Address</p>
+                  <p className="font-medium whitespace-pre-wrap">{composerData.mailingAddress}</p>
+                </div>
+              )}
+              {toBoolean(composerData.smsConsent) && (
+                <div>
+                  <BooleanDisplay value={true} label="SMS Consent" />
+                </div>
+              )}
+              {toBoolean(composerData.termsAccepted) && (
+                <div>
+                  <BooleanDisplay value={true} label="Terms Accepted" />
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        )}
+
         {/* Block 1: Event Type */}
         {hasValue(composerData.eventType) && (
           <Card>
@@ -688,60 +737,6 @@ export default function Summary() {
           </Card>
         )}
 
-        {/* Block 13: Contact & Payment */}
-        {(hasValue(composerData.person1FullName) || hasValue(composerData.person2FullName)) && (
-          <Card>
-            <CardHeader>
-              <div className="flex items-center gap-2">
-                <Mail className="h-5 w-5 text-primary" />
-                <CardTitle>Contact Information & Payment</CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {hasValue(composerData.person1FullName) && (
-                <div>
-                  <p className="text-sm font-medium mb-2">Person 1</p>
-                  <div className="ml-4 space-y-1">
-                    <p className="text-sm"><span className="text-muted-foreground">Name:</span> {composerData.person1FullName}</p>
-                    {hasValue(composerData.person1Role) && <p className="text-sm"><span className="text-muted-foreground">Role:</span> {capitalize(composerData.person1Role)}</p>}
-                    {hasValue(composerData.person1Pronouns) && <p className="text-sm"><span className="text-muted-foreground">Pronouns:</span> {composerData.person1Pronouns}</p>}
-                    {hasValue(composerData.person1Email) && <p className="text-sm"><span className="text-muted-foreground">Email:</span> {composerData.person1Email}</p>}
-                    {hasValue(composerData.person1Phone) && <p className="text-sm"><span className="text-muted-foreground">Phone:</span> {composerData.person1Phone}</p>}
-                    {hasValue(composerData.person1AlternatePhone) && <p className="text-sm"><span className="text-muted-foreground">Alt Phone:</span> {composerData.person1AlternatePhone}</p>}
-                  </div>
-                </div>
-              )}
-              {hasValue(composerData.person2FullName) && (
-                <div>
-                  <p className="text-sm font-medium mb-2">Person 2</p>
-                  <div className="ml-4 space-y-1">
-                    <p className="text-sm"><span className="text-muted-foreground">Name:</span> {composerData.person2FullName}</p>
-                    {hasValue(composerData.person2Role) && <p className="text-sm"><span className="text-muted-foreground">Role:</span> {capitalize(composerData.person2Role)}</p>}
-                    {hasValue(composerData.person2Pronouns) && <p className="text-sm"><span className="text-muted-foreground">Pronouns:</span> {composerData.person2Pronouns}</p>}
-                    {hasValue(composerData.person2Email) && <p className="text-sm"><span className="text-muted-foreground">Email:</span> {composerData.person2Email}</p>}
-                    {hasValue(composerData.person2Phone) && <p className="text-sm"><span className="text-muted-foreground">Phone:</span> {composerData.person2Phone}</p>}
-                  </div>
-                </div>
-              )}
-              {hasValue(composerData.mailingAddress) && (
-                <div>
-                  <p className="text-sm text-muted-foreground">Mailing Address</p>
-                  <p className="font-medium whitespace-pre-wrap">{composerData.mailingAddress}</p>
-                </div>
-              )}
-              {toBoolean(composerData.smsConsent) && (
-                <div>
-                  <BooleanDisplay value={true} label="SMS Consent" />
-                </div>
-              )}
-              {toBoolean(composerData.termsAccepted) && (
-                <div>
-                  <BooleanDisplay value={true} label="Terms Accepted" />
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        )}
       </div>
     </div>
   );
