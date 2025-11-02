@@ -18,7 +18,7 @@ export default function Payment() {
   const composerId = params?.composerId;
   const { toast } = useToast();
 
-  const [paymentMethod, setPaymentMethod] = useState<"card" | "paypal" | "affirm" | "ach" | undefined>(undefined);
+  const [paymentMethod, setPaymentMethod] = useState<"card" | "paypal" | "affirm" | "ach" | "echeck" | undefined>(undefined);
   const [cardNumber, setCardNumber] = useState("");
   const [cardName, setCardName] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
@@ -31,7 +31,7 @@ export default function Payment() {
   });
 
   // Handle payment method change and save to database
-  const handlePaymentMethodChange = async (method: "card" | "paypal" | "affirm" | "ach") => {
+  const handlePaymentMethodChange = async (method: "card" | "paypal" | "affirm" | "ach" | "echeck") => {
     setPaymentMethod(method);
     
     // Save the payment method to the database immediately
@@ -52,11 +52,11 @@ export default function Payment() {
     }
   };
 
-  // Calculate balance due (total - amount already paid) with ACH or Affirm discount if applicable
+  // Calculate balance due (total - amount already paid) with ACH/E-Check or Affirm discount if applicable
   const calculateTotalPrice = () => {
     if (!composer) return 0;
-    const balanceDue = composer.totalPrice - (composer.amountPaid || 0);
-    const achDiscount = paymentMethod === 'ach' ? (composer.achDiscountAmount || 0) : 0;
+    const balanceDue = (composer.totalPrice || 0) - (composer.amountPaid || 0);
+    const achDiscount = (paymentMethod === 'ach' || paymentMethod === 'echeck') ? (composer.achDiscountAmount || 0) : 0;
     const affirmDiscount = paymentMethod === 'affirm' ? (composer.affirmDiscountAmount || 0) : 0;
     return balanceDue - achDiscount - affirmDiscount;
   };
@@ -153,27 +153,20 @@ export default function Payment() {
         const latestResponse = await fetch(`/api/wedding-composers/${composerId}`);
         const latestComposer = await latestResponse.json();
         
-        // Calculate discount amount from stored values
-        const discountAmount = paymentMethod === 'ach' ? (latestComposer.achDiscountAmount || 0) : 
-                              paymentMethod === 'affirm' ? (latestComposer.affirmDiscountAmount || 0) : 0;
-        
-        // Calculate the amount being paid (with discounts applied)
+        // Calculate the amount being paid (displayTotal already includes discount)
         const paymentAmount = displayTotal;
         const currentAmountPaid = latestComposer?.amountPaid || 0;
         const newAmountPaid = currentAmountPaid + paymentAmount;
         
-        // Reduce total price by discount amount (so balance calculation remains correct)
-        const currentTotalPrice = latestComposer?.totalPrice || 0;
-        const newTotalPrice = currentTotalPrice - discountAmount;
-        
-        // Update payment status to completed, add to amount paid, and adjust total price for discount
+        // Update payment status to completed and add to amount paid
+        // Note: Do NOT modify totalPrice - it should remain the full price
+        // The cart will dynamically subtract discounts when displaying
         await fetch(`/api/wedding-composers/${composerId}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ 
             paymentStatus: 'completed',
-            amountPaid: newAmountPaid,
-            totalPrice: newTotalPrice
+            amountPaid: newAmountPaid
           }),
         });
         
@@ -336,6 +329,20 @@ export default function Payment() {
                         </Label>
                       </div>
 
+                      <div className="flex items-start space-x-2 p-3 border rounded-md hover-elevate">
+                        <RadioGroupItem value="echeck" id="echeck" data-testid="radio-echeck" className="mt-1" />
+                        <Label htmlFor="echeck" className="flex-1 cursor-pointer">
+                          <div className="mb-2">
+                            <span className="font-semibold">Pay by E-Check</span>
+                          </div>
+                          <div className="text-sm text-muted-foreground space-y-1">
+                            <p>- Simple and secure: pay directly from your bank account using your routing and account number.</p>
+                            <p>- Funds take 2–3 days to clear, but your date is secured once payment is received.</p>
+                            <p className="font-medium text-foreground">- Special savings: Receive a $100 discount on weddings or $30 discount on elopements/vow renewals when you choose E-Check.</p>
+                          </div>
+                        </Label>
+                      </div>
+
                     </RadioGroup>
                   </div>
 
@@ -435,6 +442,50 @@ export default function Payment() {
                     </div>
                   )}
 
+                  {paymentMethod === "echeck" && (
+                    <div className="p-6 bg-muted rounded-md space-y-4">
+                      <p className="text-sm font-semibold text-center">Bank Account Information</p>
+                      <div className="space-y-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="echeckRoutingNumber">Routing Number</Label>
+                          <Input
+                            id="echeckRoutingNumber"
+                            placeholder="9 digits"
+                            maxLength={9}
+                            data-testid="input-echeck-routing-number"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="echeckAccountNumber">Account Number</Label>
+                          <Input
+                            id="echeckAccountNumber"
+                            placeholder="Account number"
+                            data-testid="input-echeck-account-number"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="echeckCheckNumber">Check Number</Label>
+                          <Input
+                            id="echeckCheckNumber"
+                            placeholder="Check number"
+                            data-testid="input-echeck-check-number"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="echeckAccountName">Name on Account</Label>
+                          <Input
+                            id="echeckAccountName"
+                            placeholder="Account holder name"
+                            data-testid="input-echeck-account-name"
+                          />
+                        </div>
+                      </div>
+                      <p className="text-xs text-muted-foreground text-center">
+                        Your bank information is encrypted and secure. Payment will be processed within 2-3 business days.
+                      </p>
+                    </div>
+                  )}
+
                   <Button
                     type="submit"
                     className="w-full"
@@ -486,20 +537,52 @@ export default function Payment() {
 
                 <div className="pt-4 border-t space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span>Package</span>
+                    <span>{composer.eventType.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}</span>
                     <span>${((composer.basePackagePrice || 0) / 100).toFixed(2)}</span>
                   </div>
+                  
+                  {composer.photoBookAddon && (
+                    <div className="flex justify-between text-sm">
+                      <span>Photo Book{(composer.photoBookQuantity || 1) > 1 ? ` (×${composer.photoBookQuantity})` : ''}</span>
+                      <span>${(((composer.photoBookPrice || 0) * (composer.photoBookQuantity || 1)) / 100).toFixed(2)}</span>
+                    </div>
+                  )}
+                  
+                  {composer.extraTimeAddon && (
+                    <div className="flex justify-between text-sm">
+                      <span>Extra Time Block (Saturday 6PM only)</span>
+                      <span>${((composer.extraTimePrice || 0) / 100).toFixed(2)}</span>
+                    </div>
+                  )}
+                  
+                  {composer.byobBarAddon && (
+                    <div className="flex justify-between text-sm">
+                      <span>BYOB Bar Setup</span>
+                      <span>${((composer.byobBarPrice || 0) / 100).toFixed(2)}</span>
+                    </div>
+                  )}
+                  
+                  {composer.rehearsalAddon && (
+                    <div className="flex justify-between text-sm">
+                      <span>Rehearsal Hour</span>
+                      <span>${((composer.rehearsalPrice || 0) / 100).toFixed(2)}</span>
+                    </div>
+                  )}
                   
                   <div className="border-t my-2"></div>
                   
                   <div className="flex justify-between text-sm" data-testid="row-subtotal">
                     <span>Subtotal</span>
-                    <span data-testid="text-subtotal">${((composer.basePackagePrice || 0) / 100).toFixed(2)}</span>
+                    <span data-testid="text-subtotal">${(((composer.basePackagePrice || 0) + 
+                      (composer.photoBookAddon ? (composer.photoBookPrice || 0) * (composer.photoBookQuantity || 1) : 0) + 
+                      (composer.extraTimeAddon ? (composer.extraTimePrice || 0) : 0) + 
+                      (composer.byobBarAddon ? (composer.byobBarPrice || 0) : 0) + 
+                      (composer.rehearsalAddon ? (composer.rehearsalPrice || 0) : 0)) / 100).toFixed(2)}</span>
                   </div>
                   
                   <div className="flex justify-between text-sm text-green-600 dark:text-green-400" data-testid="row-payment-discount">
-                    <span>{paymentMethod === 'ach' ? 'ACH' : paymentMethod === 'affirm' ? 'Affirm' : 'Payment'} Discount</span>
-                    <span data-testid="text-payment-discount">{(paymentMethod === 'ach' ? (composer.achDiscountAmount || 0) : paymentMethod === 'affirm' ? (composer.affirmDiscountAmount || 0) : 0) > 0 ? '-' : ''}${((paymentMethod === 'ach' ? (composer.achDiscountAmount || 0) : paymentMethod === 'affirm' ? (composer.affirmDiscountAmount || 0) : 0) / 100).toFixed(2)}</span>
+                    <span>{paymentMethod === 'ach' ? 'ACH' : paymentMethod === 'echeck' ? 'E-Check' : paymentMethod === 'affirm' ? 'Affirm' : 'Payment'} Discount</span>
+                    <span data-testid="text-payment-discount">{(paymentMethod === 'ach' || paymentMethod === 'echeck' ? (composer.achDiscountAmount || 0) : paymentMethod === 'affirm' ? (composer.affirmDiscountAmount || 0) : 0) > 0 ? '-' : ''}${((paymentMethod === 'ach' || paymentMethod === 'echeck' ? (composer.achDiscountAmount || 0) : paymentMethod === 'affirm' ? (composer.affirmDiscountAmount || 0) : 0) / 100).toFixed(2)}</span>
                   </div>
                   
                   <div className="flex justify-between text-sm" data-testid="row-tax">
@@ -511,7 +594,12 @@ export default function Payment() {
                   
                   <div className="flex justify-between text-sm font-semibold" data-testid="row-total">
                     <span>Total</span>
-                    <span data-testid="text-total">${(((composer.basePackagePrice || 0) - (paymentMethod === 'ach' ? (composer.achDiscountAmount || 0) : paymentMethod === 'affirm' ? (composer.affirmDiscountAmount || 0) : 0)) / 100).toFixed(2)}</span>
+                    <span data-testid="text-total">${(((composer.basePackagePrice || 0) + 
+                      (composer.photoBookAddon ? (composer.photoBookPrice || 0) * (composer.photoBookQuantity || 1) : 0) + 
+                      (composer.extraTimeAddon ? (composer.extraTimePrice || 0) : 0) + 
+                      (composer.byobBarAddon ? (composer.byobBarPrice || 0) : 0) + 
+                      (composer.rehearsalAddon ? (composer.rehearsalPrice || 0) : 0) - 
+                      (paymentMethod === 'ach' || paymentMethod === 'echeck' ? (composer.achDiscountAmount || 0) : paymentMethod === 'affirm' ? (composer.affirmDiscountAmount || 0) : 0)) / 100).toFixed(2)}</span>
                   </div>
                   
                   <div className="flex justify-between text-sm" data-testid="row-amount-paid">
@@ -521,9 +609,9 @@ export default function Payment() {
                   
                   <div className="border-t my-2"></div>
                   
-                  <div className="flex justify-between text-sm" data-testid="row-balance-due">
+                  <div className="flex justify-between text-sm font-semibold" data-testid="row-balance-due">
                     <span>Balance Due</span>
-                    <span data-testid="text-balance-due">${((composer.totalPrice - (composer.amountPaid || 0)) / 100).toFixed(2)}</span>
+                    <span data-testid="text-balance-due">${(((composer.totalPrice || 0) - (composer.amountPaid || 0)) / 100).toFixed(2)}</span>
                   </div>
                   
                   <div className="border-t my-2"></div>
