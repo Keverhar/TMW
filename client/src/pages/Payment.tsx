@@ -258,7 +258,7 @@ export default function Payment() {
       <div className="fixed top-4 right-4 z-[100] max-w-xs" data-testid="notice-placeholder">
         <div className="bg-amber-500/90 dark:bg-amber-600/90 backdrop-blur-sm text-white p-4 rounded-md shadow-lg border-2 border-amber-600 dark:border-amber-500">
           <p className="text-sm font-semibold leading-tight">
-            This is a placeholder page and does not process payments. No information needs to be entered to view the results.
+            This is a placeholder page and cannot process payments. No information needs to be added to view the results.
           </p>
         </div>
       </div>
