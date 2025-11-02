@@ -185,99 +185,6 @@ export default function Block10Slideshow({
         </div>
       )}
 
-      {/* Memory Wall Photos */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center gap-2">
-            <Images className="h-5 w-5" />
-            <CardTitle>Memory Wall Photos</CardTitle>
-          </div>
-          <CardDescription>
-            Upload photos for the memory wall during your reception (up to 30 photos, 1GB total)
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="slideshow-photos">Select Photos</Label>
-              <div className="text-sm text-muted-foreground">
-                {slideshowPhotosList.length}/{MAX_SLIDESHOW_PHOTOS} photos • {formatFileSize(totalSlideshowSize)}/1GB
-              </div>
-            </div>
-            
-            <input
-              ref={slideshowInputRef}
-              type="file"
-              id="slideshow-photos"
-              data-testid="input-slideshow-photos"
-              accept={ALLOWED_EXTENSIONS.join(',')}
-              multiple
-              onChange={handleSlideshowPhotosChange}
-              disabled={slideshowPhotosNA}
-              className="hidden"
-            />
-            
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => slideshowInputRef.current?.click()}
-              disabled={readOnly || slideshowPhotosNA || slideshowPhotosList.length >= MAX_SLIDESHOW_PHOTOS}
-              data-testid="button-upload-slideshow-photos"
-              className="w-full"
-            >
-              <Upload className="h-4 w-4 mr-2" />
-              {slideshowPhotosList.length >= MAX_SLIDESHOW_PHOTOS ? 'Maximum photos reached' : 'Upload Photos'}
-            </Button>
-
-            {slideshowPhotosList.length > 0 && !slideshowPhotosNA && (
-              <div className="space-y-2 max-h-48 overflow-y-auto border rounded-md p-3">
-                {slideshowPhotosList.map((file, index) => (
-                  <div key={index} className="flex items-center justify-between text-sm bg-muted p-2 rounded">
-                    <div className="flex-1 truncate">
-                      <span className="font-medium">{file.name}</span>
-                      <span className="text-muted-foreground ml-2">({formatFileSize(file.size)})</span>
-                    </div>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => removeSlideshowPhoto(index)}
-                      disabled={readOnly}
-                      data-testid={`button-remove-slideshow-photo-${index}`}
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            <div className="p-3 bg-muted rounded-md">
-              <p className="text-sm font-medium mb-1">Allowed file types:</p>
-              <p className="text-sm text-muted-foreground">JPEG/JPG, PNG, TIFF, BMP, GIF</p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 pt-2">
-            <Checkbox
-              id="slideshow-photos-na"
-              data-testid="checkbox-slideshow-photos-na"
-              checked={slideshowPhotosNA}
-              disabled={readOnly}
-              onCheckedChange={(checked) => {
-                onChange('slideshowPhotosNA', checked as boolean);
-                if (checked) {
-                  onChange('slideshowPhotos', '[]');
-                }
-              }}
-            />
-            <Label htmlFor="slideshow-photos-na" className="text-sm font-normal cursor-pointer">
-              No special requests
-            </Label>
-          </div>
-        </CardContent>
-      </Card>
-
       {/* Engagement Photos */}
       <Card>
         <CardHeader>
@@ -365,6 +272,99 @@ export default function Block10Slideshow({
               }}
             />
             <Label htmlFor="engagement-photos-na" className="text-sm font-normal cursor-pointer">
+              No special requests
+            </Label>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Memory Wall Photos */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center gap-2">
+            <Images className="h-5 w-5" />
+            <CardTitle>Memory Wall Photos</CardTitle>
+          </div>
+          <CardDescription>
+            Upload photos for the memory wall during your reception (up to 30 photos, 1GB total)
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="slideshow-photos">Select Photos</Label>
+              <div className="text-sm text-muted-foreground">
+                {slideshowPhotosList.length}/{MAX_SLIDESHOW_PHOTOS} photos • {formatFileSize(totalSlideshowSize)}/1GB
+              </div>
+            </div>
+            
+            <input
+              ref={slideshowInputRef}
+              type="file"
+              id="slideshow-photos"
+              data-testid="input-slideshow-photos"
+              accept={ALLOWED_EXTENSIONS.join(',')}
+              multiple
+              onChange={handleSlideshowPhotosChange}
+              disabled={slideshowPhotosNA}
+              className="hidden"
+            />
+            
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => slideshowInputRef.current?.click()}
+              disabled={readOnly || slideshowPhotosNA || slideshowPhotosList.length >= MAX_SLIDESHOW_PHOTOS}
+              data-testid="button-upload-slideshow-photos"
+              className="w-full"
+            >
+              <Upload className="h-4 w-4 mr-2" />
+              {slideshowPhotosList.length >= MAX_SLIDESHOW_PHOTOS ? 'Maximum photos reached' : 'Upload Photos'}
+            </Button>
+
+            {slideshowPhotosList.length > 0 && !slideshowPhotosNA && (
+              <div className="space-y-2 max-h-48 overflow-y-auto border rounded-md p-3">
+                {slideshowPhotosList.map((file, index) => (
+                  <div key={index} className="flex items-center justify-between text-sm bg-muted p-2 rounded">
+                    <div className="flex-1 truncate">
+                      <span className="font-medium">{file.name}</span>
+                      <span className="text-muted-foreground ml-2">({formatFileSize(file.size)})</span>
+                    </div>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => removeSlideshowPhoto(index)}
+                      disabled={readOnly}
+                      data-testid={`button-remove-slideshow-photo-${index}`}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <div className="p-3 bg-muted rounded-md">
+              <p className="text-sm font-medium mb-1">Allowed file types:</p>
+              <p className="text-sm text-muted-foreground">JPEG/JPG, PNG, TIFF, BMP, GIF</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 pt-2">
+            <Checkbox
+              id="slideshow-photos-na"
+              data-testid="checkbox-slideshow-photos-na"
+              checked={slideshowPhotosNA}
+              disabled={readOnly}
+              onCheckedChange={(checked) => {
+                onChange('slideshowPhotosNA', checked as boolean);
+                if (checked) {
+                  onChange('slideshowPhotos', '[]');
+                }
+              }}
+            />
+            <Label htmlFor="slideshow-photos-na" className="text-sm font-normal cursor-pointer">
               No special requests
             </Label>
           </div>
