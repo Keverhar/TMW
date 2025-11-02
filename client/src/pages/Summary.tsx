@@ -139,8 +139,72 @@ export default function Summary() {
   };
 
   const handleDownload = () => {
-    // Create a printable version and trigger download
-    window.print();
+    // Clone the summary content
+    const summaryElement = document.querySelector('.container');
+    if (!summaryElement) return;
+
+    // Create HTML document with embedded styles
+    const htmlContent = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Wedding Composer Summary - ${composerData.person1FullName || 'Guest'}</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      color: #1f2937;
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      background: #f9fafb;
+    }
+    h1 { font-size: 2rem; margin-bottom: 0.5rem; color: #111827; }
+    h2 { font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.5rem; color: #374151; }
+    h3 { font-size: 1.1rem; margin-top: 1rem; margin-bottom: 0.5rem; color: #4b5563; }
+    p { margin-bottom: 0.75rem; color: #6b7280; }
+    .card { 
+      background: white; 
+      border-radius: 0.5rem; 
+      padding: 1.5rem; 
+      margin-bottom: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    .flex { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+    .label { font-weight: 600; color: #374151; }
+    .value { color: #1f2937; }
+    .separator { border-top: 1px solid #e5e7eb; margin: 1rem 0; }
+    .text-green { color: #059669; }
+    .text-amber { color: #d97706; }
+    ul { margin-left: 1.5rem; margin-bottom: 0.5rem; }
+    li { margin-bottom: 0.25rem; }
+    @media print {
+      body { background: white; padding: 1rem; }
+      .card { box-shadow: none; border: 1px solid #e5e7eb; padding: 1rem; margin-bottom: 1rem; }
+      h1 { font-size: 1.5rem; }
+      h2 { font-size: 1.1rem; }
+    }
+  </style>
+</head>
+<body>
+  ${summaryElement.innerHTML}
+</body>
+</html>
+    `;
+
+    // Create blob and download
+    const blob = new Blob([htmlContent], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `wedding-summary-${composerData.person1FullName?.replace(/\s+/g, '-') || 'guest'}-${new Date().toISOString().split('T')[0]}.html`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   const handleLogout = () => {
