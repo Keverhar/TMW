@@ -68,6 +68,18 @@ export default function Summary() {
     return false;
   };
 
+  const formatPhoneNumber = (phone: string) => {
+    if (!phone) return phone;
+    // Remove all non-digit characters
+    const cleaned = phone.replace(/\D/g, '');
+    // Format as (###) ###-####
+    if (cleaned.length === 10) {
+      return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(6)}`;
+    }
+    // Return original if not 10 digits
+    return phone;
+  };
+
   const BooleanDisplay = ({ value, label }: { value: boolean; label: string }) => (
     value ? (
       <div className="flex items-center gap-2">
@@ -145,8 +157,8 @@ export default function Summary() {
                   {hasValue(composerData.person1Role) && <p className="text-sm"><span className="text-muted-foreground">Role:</span> {capitalize(composerData.person1Role)}</p>}
                   {hasValue(composerData.person1Pronouns) && <p className="text-sm"><span className="text-muted-foreground">Pronouns:</span> {composerData.person1Pronouns}</p>}
                   {hasValue(composerData.person1Email) && <p className="text-sm"><span className="text-muted-foreground">Email:</span> {composerData.person1Email}</p>}
-                  {hasValue(composerData.person1Phone) && <p className="text-sm"><span className="text-muted-foreground">Phone:</span> {composerData.person1Phone}</p>}
-                  {hasValue(composerData.person1AlternatePhone) && <p className="text-sm"><span className="text-muted-foreground">Alt Phone:</span> {composerData.person1AlternatePhone}</p>}
+                  {hasValue(composerData.person1Phone) && <p className="text-sm"><span className="text-muted-foreground">Phone:</span> {formatPhoneNumber(composerData.person1Phone)}</p>}
+                  {hasValue(composerData.person1AlternatePhone) && <p className="text-sm"><span className="text-muted-foreground">Alt Phone:</span> {formatPhoneNumber(composerData.person1AlternatePhone)}</p>}
                 </div>
               )}
               {hasValue(composerData.person2FullName) && (
@@ -155,7 +167,7 @@ export default function Summary() {
                   {hasValue(composerData.person2Role) && <p className="text-sm"><span className="text-muted-foreground">Role:</span> {capitalize(composerData.person2Role)}</p>}
                   {hasValue(composerData.person2Pronouns) && <p className="text-sm"><span className="text-muted-foreground">Pronouns:</span> {composerData.person2Pronouns}</p>}
                   {hasValue(composerData.person2Email) && <p className="text-sm"><span className="text-muted-foreground">Email:</span> {composerData.person2Email}</p>}
-                  {hasValue(composerData.person2Phone) && <p className="text-sm"><span className="text-muted-foreground">Phone:</span> {composerData.person2Phone}</p>}
+                  {hasValue(composerData.person2Phone) && <p className="text-sm"><span className="text-muted-foreground">Phone:</span> {formatPhoneNumber(composerData.person2Phone)}</p>}
                 </div>
               )}
               {hasValue(composerData.mailingAddress) && (
