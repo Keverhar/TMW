@@ -967,3 +967,192 @@ export default function Summary() {
     </div>
   );
 }
+
+// Add print-specific styles
+const printStyles = `
+  @media print {
+    /* Hide screen-only elements */
+    @page {
+      margin: 0.5in;
+      size: letter;
+    }
+    
+    body {
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+    
+    /* Hide navigation, buttons, and menus */
+    button,
+    [data-testid*="button"],
+    [data-testid*="menu"],
+    .no-print {
+      display: none !important;
+    }
+    
+    /* Reduce overall spacing */
+    .min-h-screen {
+      min-height: auto !important;
+    }
+    
+    .p-6 {
+      padding: 0.5rem !important;
+    }
+    
+    .space-y-6 > * + * {
+      margin-top: 0.75rem !important;
+    }
+    
+    /* Compact header */
+    h1 {
+      font-size: 1.5rem !important;
+      margin-bottom: 0.25rem !important;
+    }
+    
+    .text-muted-foreground {
+      font-size: 0.75rem !important;
+    }
+    
+    /* Compact cards */
+    .rounded-lg {
+      border-radius: 0.25rem !important;
+    }
+    
+    /* Reduce card padding */
+    [class*="CardHeader"] {
+      padding: 0.75rem 1rem !important;
+    }
+    
+    [class*="CardContent"] {
+      padding: 0.75rem 1rem !important;
+    }
+    
+    [class*="CardTitle"] {
+      font-size: 1rem !important;
+      margin-bottom: 0.25rem !important;
+    }
+    
+    [class*="CardDescription"] {
+      font-size: 0.75rem !important;
+    }
+    
+    /* Compact spacing in lists and grids */
+    .space-y-4 > * + * {
+      margin-top: 0.5rem !important;
+    }
+    
+    .space-y-3 > * + * {
+      margin-top: 0.375rem !important;
+    }
+    
+    .space-y-2 > * + * {
+      margin-top: 0.25rem !important;
+    }
+    
+    .gap-4 {
+      gap: 0.5rem !important;
+    }
+    
+    .gap-3 {
+      gap: 0.375rem !important;
+    }
+    
+    .gap-2 {
+      gap: 0.25rem !important;
+    }
+    
+    /* Reduce text sizes */
+    .text-sm {
+      font-size: 0.8rem !important;
+      line-height: 1.2 !important;
+    }
+    
+    .text-base {
+      font-size: 0.875rem !important;
+      line-height: 1.3 !important;
+    }
+    
+    .text-lg {
+      font-size: 1rem !important;
+    }
+    
+    .text-xl {
+      font-size: 1.125rem !important;
+    }
+    
+    /* Optimize grid layouts for print */
+    .grid-cols-2 {
+      grid-template-columns: repeat(2, 1fr) !important;
+    }
+    
+    /* Reduce icon sizes */
+    svg {
+      width: 0.875rem !important;
+      height: 0.875rem !important;
+    }
+    
+    /* Better page breaks */
+    .container > * {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    
+    /* Ensure cards don't break across pages */
+    [class*="Card"] {
+      page-break-inside: avoid;
+      break-inside: avoid;
+      margin-bottom: 0.5rem !important;
+    }
+    
+    /* Compact separators */
+    hr, [class*="Separator"] {
+      margin: 0.5rem 0 !important;
+    }
+    
+    /* Reduce padding on sections */
+    .p-4 {
+      padding: 0.5rem !important;
+    }
+    
+    .p-6 {
+      padding: 0.75rem !important;
+    }
+    
+    .py-4 {
+      padding-top: 0.5rem !important;
+      padding-bottom: 0.5rem !important;
+    }
+    
+    .px-4 {
+      padding-left: 0.5rem !important;
+      padding-right: 0.5rem !important;
+    }
+    
+    /* Tighter margins */
+    .my-4 {
+      margin-top: 0.5rem !important;
+      margin-bottom: 0.5rem !important;
+    }
+    
+    .mb-4 {
+      margin-bottom: 0.5rem !important;
+    }
+    
+    .mt-4 {
+      margin-top: 0.5rem !important;
+    }
+    
+    /* Hide dropdown menus completely */
+    [role="menu"],
+    [role="menuitem"] {
+      display: none !important;
+    }
+  }
+`;
+
+// Inject print styles into the document
+if (typeof document !== 'undefined') {
+  const styleSheet = document.createElement("style");
+  styleSheet.textContent = printStyles;
+  document.head.appendChild(styleSheet);
+}
