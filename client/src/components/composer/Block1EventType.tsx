@@ -202,12 +202,12 @@ export default function Block1EventType({ eventType, preferredDate, timeSlot, on
         <>
           <Card>
             <CardHeader>
-              <CardTitle>Choose Your Preferred Date</CardTitle>
+              <CardTitle>Choose Your Date</CardTitle>
               <CardDescription>Select the date you'd most love to celebrate your event</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-3">
-                <Label>Preferred Date ({availableDaysText} only)</Label>
+                <Label>Date ({availableDaysText} only)</Label>
                 {preferredDateObj && (
                   <div className="flex items-center gap-2 p-3 bg-primary/5 border border-primary/20 rounded-md" data-testid="text-selected-date">
                     <CalendarIcon className="h-4 w-4 text-primary" />

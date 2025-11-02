@@ -217,7 +217,7 @@ export default function Summary() {
             <CardContent className="space-y-2">
               {hasValue(composerData.preferredDate) && (
                 <div>
-                  <p className="text-sm text-muted-foreground">Preferred Date</p>
+                  <p className="text-sm text-muted-foreground">Date</p>
                   <p className="font-medium">{formatDate(composerData.preferredDate)}</p>
                 </div>
               )}

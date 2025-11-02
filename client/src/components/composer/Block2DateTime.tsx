@@ -143,7 +143,7 @@ export default function Block2DateTime({ preferredDate, timeSlot, onChange, even
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-3xl font-serif mb-2">Preferred Date & Time</h2>
+        <h2 className="text-3xl font-serif mb-2">Date & Time</h2>
         <p className="text-muted-foreground">
           Let's talk about when you'd like your celebration to happen. You can change your date any time before finalizing.
         </p>
@@ -151,12 +151,12 @@ export default function Block2DateTime({ preferredDate, timeSlot, onChange, even
 
       <Card>
         <CardHeader>
-          <CardTitle>Choose Your Preferred Date</CardTitle>
+          <CardTitle>Choose Your Date</CardTitle>
           <CardDescription>Select the date you'd most love to celebrate your event</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-3">
-            <Label>Preferred Date ({availableDaysText} only)</Label>
+            <Label>Date ({availableDaysText} only)</Label>
             {preferredDateObj && (
               <div className="flex items-center gap-2 p-3 bg-primary/5 border border-primary/20 rounded-md" data-testid="text-selected-date">
                 <CalendarIcon className="h-4 w-4 text-primary" />
