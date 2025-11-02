@@ -297,7 +297,7 @@ export default function Payment() {
                 variant="outline"
                 onClick={() => setLocation("/composer")}
                 data-testid="button-back-to-composer"
-                className="w-auto"
+                className="w-auto bg-black text-white hover:bg-black/90 dark:bg-black dark:text-white dark:hover:bg-black/90 border-black dark:border-black"
               >
                 Back to Wedding Composer
               </Button>
