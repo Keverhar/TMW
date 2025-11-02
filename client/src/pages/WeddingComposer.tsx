@@ -88,9 +88,9 @@ export default function WeddingComposer() {
   });
   const [hasSeenInitialDialog, setHasSeenInitialDialog] = useState(() => {
     const savedUser = localStorage.getItem("user");
-    const savedComposerData = localStorage.getItem("composerData");
-    // Guest users who have composer data have already seen the dialog
-    return !!(savedUser || savedComposerData);
+    const guestSession = localStorage.getItem("guestSession");
+    // Skip dialog if logged in OR if guest has active session
+    return !!(savedUser || guestSession === "active");
   });
   const [savedStepBeforeSimplification, setSavedStepBeforeSimplification] = useState<number | null>(null);
   const previousEventTypeRef = useRef<string>("");
@@ -839,6 +839,8 @@ export default function WeddingComposer() {
   const handleInitialDialogGuest = () => {
     setShowInitialDialog(false);
     setHasSeenInitialDialog(true);
+    // Mark guest session as active
+    localStorage.setItem("guestSession", "active");
   };
 
   const handleLoginFailure = () => {
@@ -855,6 +857,7 @@ export default function WeddingComposer() {
     // Clear all localStorage data
     localStorage.removeItem("user");
     localStorage.removeItem("composerData");
+    localStorage.removeItem("guestSession");
     
     // Reset user account
     setUserAccount(null);
@@ -1037,6 +1040,13 @@ export default function WeddingComposer() {
         console.error("Error clearing date/time:", error);
       }
     }
+    
+    // Reset the initial dialog flag so it shows again when returning
+    setHasSeenInitialDialog(false);
+    setShowInitialDialog(true);
+    
+    // Clear guest session so dialog shows again when returning
+    localStorage.removeItem("guestSession");
     
     setLocation("/");
   };

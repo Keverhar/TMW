@@ -14,6 +14,7 @@ export default function Confirmation() {
     // Clear all localStorage data
     localStorage.removeItem("user");
     localStorage.removeItem("composerData");
+    localStorage.removeItem("guestSession");
     setLocation("/");
   };
 
