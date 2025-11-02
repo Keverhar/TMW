@@ -734,18 +734,6 @@ export default function Summary() {
                   <BooleanDisplay value={true} label="SMS Consent" />
                 </div>
               )}
-
-              {/* Payment */}
-              {hasValue(composerData.paymentMethod) && (
-                <div className="pt-2 border-t">
-                  <p className="text-sm text-muted-foreground">Payment Method</p>
-                  <p className="font-medium">
-                    {composerData.paymentStatus === 'completed' 
-                      ? capitalize(composerData.paymentMethod)
-                      : 'None'}
-                  </p>
-                </div>
-              )}
               {toBoolean(composerData.termsAccepted) && (
                 <div>
                   <BooleanDisplay value={true} label="Terms Accepted" />
