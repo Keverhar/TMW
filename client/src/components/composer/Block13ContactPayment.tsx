@@ -145,74 +145,93 @@ export default function Block13ContactPayment({
         </p>
       </div>
 
-      <Card>
-        <CardHeader>
-          <div className="flex items-center gap-2">
-            <FileText className="h-5 w-5" />
-            <CardTitle>Booking Summary</CardTitle>
-          </div>
-          <CardDescription>Review your selections before proceeding</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <div className="flex justify-between">
-              <span>{formatPackageName(eventType)}</span>
-              <span>${(basePackagePrice / 100).toFixed(2)}</span>
+      {!eventType ? (
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <FileText className="h-5 w-5" />
+              <CardTitle>Booking Summary</CardTitle>
             </div>
-
-            {selectedAddons.map(addon => {
-              const price = addon.key === 'photoBookAddon' && addon.hasQuantity 
-                ? addon.price * photoBookQuantity 
-                : addon.price;
-              const label = addon.key === 'photoBookAddon' && photoBookQuantity > 1
-                ? `${addon.label} (×${photoBookQuantity})`
-                : addon.label;
-              return (
-                <div key={addon.key} className="flex justify-between">
-                  <span>{label}</span>
-                  <span>${(price / 100).toFixed(2)}</span>
-                </div>
-              );
-            })}
-
-            <div className="border-t my-2"></div>
-
-            <div className="flex justify-between" data-testid="row-subtotal">
-              <span>Subtotal</span>
-              <span data-testid="text-subtotal">${((basePackagePrice + addonsTotal) / 100).toFixed(2)}</span>
+            <CardDescription>Review your selections before proceeding</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="text-center py-8 text-muted-foreground">
+              <FileText className="h-12 w-12 mx-auto mb-3 opacity-20" />
+              <p>No booking selected</p>
+              <p className="text-sm mt-2">Select an event type to see your cart</p>
             </div>
-
-            <div className="flex justify-between text-green-600 dark:text-green-400" data-testid="row-payment-discount">
-              <span>{paymentMethod === 'ach' ? 'ACH' : paymentMethod === 'affirm' ? 'Affirm' : 'Payment'} Discount</span>
-              <span data-testid="text-payment-discount">{discount > 0 ? '-' : ''}${(discount / 100).toFixed(2)}</span>
+          </CardContent>
+        </Card>
+      ) : (
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <FileText className="h-5 w-5" />
+              <CardTitle>Booking Summary</CardTitle>
             </div>
+            <CardDescription>Review your selections before proceeding</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <div className="flex justify-between">
+                <span>{formatPackageName(eventType)}</span>
+                <span>${(basePackagePrice / 100).toFixed(2)}</span>
+              </div>
 
-            <div className="flex justify-between" data-testid="row-tax">
-              <span>Tax</span>
-              <span data-testid="text-tax">$0.00</span>
+              {selectedAddons.map(addon => {
+                const price = addon.key === 'photoBookAddon' && addon.hasQuantity 
+                  ? addon.price * photoBookQuantity 
+                  : addon.price;
+                const label = addon.key === 'photoBookAddon' && photoBookQuantity > 1
+                  ? `${addon.label} (×${photoBookQuantity})`
+                  : addon.label;
+                return (
+                  <div key={addon.key} className="flex justify-between">
+                    <span>{label}</span>
+                    <span>${(price / 100).toFixed(2)}</span>
+                  </div>
+                );
+              })}
+
+              <div className="border-t my-2"></div>
+
+              <div className="flex justify-between" data-testid="row-subtotal">
+                <span>Subtotal</span>
+                <span data-testid="text-subtotal">${((basePackagePrice + addonsTotal) / 100).toFixed(2)}</span>
+              </div>
+
+              <div className="flex justify-between text-green-600 dark:text-green-400" data-testid="row-payment-discount">
+                <span>{paymentMethod === 'ach' ? 'ACH' : paymentMethod === 'affirm' ? 'Affirm' : 'Payment'} Discount</span>
+                <span data-testid="text-payment-discount">{discount > 0 ? '-' : ''}${(discount / 100).toFixed(2)}</span>
+              </div>
+
+              <div className="flex justify-between" data-testid="row-tax">
+                <span>Tax</span>
+                <span data-testid="text-tax">$0.00</span>
+              </div>
+
+              <div className="border-t my-2"></div>
+
+              <div className="flex justify-between font-semibold" data-testid="row-total">
+                <span>Total</span>
+                <span data-testid="text-total">${((basePackagePrice + addonsTotal - discount) / 100).toFixed(2)}</span>
+              </div>
+
+              <div className="flex justify-between" data-testid="row-amount-paid">
+                <span>Amount Paid</span>
+                <span data-testid="text-amount-paid">${(amountPaid / 100).toFixed(2)}</span>
+              </div>
+
+              <div className="border-t my-2"></div>
+
+              <div className="flex justify-between font-semibold text-lg" data-testid="row-balance-due">
+                <span>Balance Due</span>
+                <span data-testid="text-balance-due">${((basePackagePrice + addonsTotal - discount - amountPaid) / 100).toFixed(2)}</span>
+              </div>
             </div>
-
-            <div className="border-t my-2"></div>
-
-            <div className="flex justify-between font-semibold" data-testid="row-total">
-              <span>Total</span>
-              <span data-testid="text-total">${((basePackagePrice + addonsTotal - discount) / 100).toFixed(2)}</span>
-            </div>
-
-            <div className="flex justify-between" data-testid="row-amount-paid">
-              <span>Amount Paid</span>
-              <span data-testid="text-amount-paid">${(amountPaid / 100).toFixed(2)}</span>
-            </div>
-
-            <div className="border-t my-2"></div>
-
-            <div className="flex justify-between font-semibold text-lg" data-testid="row-balance-due">
-              <span>Balance Due</span>
-              <span data-testid="text-balance-due">${((basePackagePrice + addonsTotal - discount - amountPaid) / 100).toFixed(2)}</span>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      )}
 
       <Card>
         <CardHeader>
