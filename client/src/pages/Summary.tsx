@@ -788,93 +788,119 @@ export default function Summary() {
           <Card>
             <CardHeader>
               <div className="flex items-center gap-2">
-                <DollarSign className="h-5 w-5 text-primary" />
+                <Package className="h-5 w-5" />
                 <CardTitle>Booking Summary</CardTitle>
               </div>
+              <CardDescription>Review your selections before proceeding</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              {/* Base Package */}
-              <div className="flex justify-between items-center">
-                <div>
-                  <p className="font-medium">
+              <div className="space-y-2">
+                {/* Base Package */}
+                <div className="flex justify-between">
+                  <span>
                     {composerData.eventType === 'modest-elopement' ? 'Modest Elopement' :
                      composerData.eventType === 'vow-renewal' ? 'Vow Renewal' :
                      composerData.eventType === 'modest-wedding' ? 'Modest Wedding' :
                      composerData.eventType === 'other' ? 'Other Event' :
                      capitalize(composerData.eventType)}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    {formatDate(composerData.preferredDate)}
-                  </p>
+                  </span>
+                  <span>${(calculateBasePrice(composerData.eventType, getDayOfWeek(composerData.preferredDate)) / 100).toFixed(2)}</span>
                 </div>
-                <p className="font-semibold">
-                  {formatCurrency(calculateBasePrice(composerData.eventType, getDayOfWeek(composerData.preferredDate)))}
-                </p>
-              </div>
 
-              {/* Add-ons */}
-              {(composerData.photoBookAddon || composerData.extraTimeAddon || composerData.byobBarAddon || composerData.rehearsalAddon) && (
-                <>
-                  <Separator />
-                  <div className="space-y-2">
-                    <p className="text-sm font-medium text-muted-foreground">Add-ons</p>
-                    {composerData.photoBookAddon && (
-                      <div className="flex justify-between items-center">
-                        <p className="text-sm">
-                          Photo Book {composerData.photoBookQuantity > 1 && `(×${composerData.photoBookQuantity})`}
-                        </p>
-                        <p className="text-sm font-medium">
-                          {formatCurrency(getAddonPrice('photoBook') * (composerData.photoBookQuantity || 1))}
-                        </p>
-                      </div>
-                    )}
-                    {composerData.extraTimeAddon && (
-                      <div className="flex justify-between items-center">
-                        <p className="text-sm">Extra Time Block</p>
-                        <p className="text-sm font-medium">{formatCurrency(getAddonPrice('extraTime'))}</p>
-                      </div>
-                    )}
-                    {composerData.byobBarAddon && (
-                      <div className="flex justify-between items-center">
-                        <p className="text-sm">BYOB Bar Setup</p>
-                        <p className="text-sm font-medium">{formatCurrency(getAddonPrice('byobBar'))}</p>
-                      </div>
-                    )}
-                    {composerData.rehearsalAddon && (
-                      <div className="flex justify-between items-center">
-                        <p className="text-sm">Rehearsal</p>
-                        <p className="text-sm font-medium">{formatCurrency(getAddonPrice('rehearsal'))}</p>
-                      </div>
-                    )}
+                {/* Add-ons */}
+                {composerData.photoBookAddon && (
+                  <div className="flex justify-between">
+                    <span>Photo Book {composerData.photoBookQuantity > 1 && `(×${composerData.photoBookQuantity})`}</span>
+                    <span>${((getAddonPrice('photoBook') * (composerData.photoBookQuantity || 1)) / 100).toFixed(2)}</span>
                   </div>
-                </>
-              )}
-
-              {/* Discount */}
-              {hasValue(composerData.appliedDiscountAmount) && composerData.appliedDiscountAmount > 0 && (
-                <>
-                  <Separator />
-                  <div className="flex justify-between items-center text-green-600">
-                    <p className="font-medium">Discount Applied</p>
-                    <p className="font-semibold">-{formatCurrency(composerData.appliedDiscountAmount)}</p>
+                )}
+                {composerData.extraTimeAddon && (
+                  <div className="flex justify-between">
+                    <span>Extra Time Block (Saturday 6PM only)</span>
+                    <span>${(getAddonPrice('extraTime') / 100).toFixed(2)}</span>
                   </div>
-                </>
-              )}
+                )}
+                {composerData.byobBarAddon && (
+                  <div className="flex justify-between">
+                    <span>BYOB Bar Setup</span>
+                    <span>${(getAddonPrice('byobBar') / 100).toFixed(2)}</span>
+                  </div>
+                )}
+                {composerData.rehearsalAddon && (
+                  <div className="flex justify-between">
+                    <span>Rehearsal Hour</span>
+                    <span>${(getAddonPrice('rehearsal') / 100).toFixed(2)}</span>
+                  </div>
+                )}
 
-              {/* Total */}
-              <Separator />
-              <div className="flex justify-between items-center">
-                <p className="text-lg font-bold">Total</p>
-                <p className="text-lg font-bold">
-                  {formatCurrency(
+                <div className="border-t my-2"></div>
+
+                {/* Subtotal */}
+                <div className="flex justify-between">
+                  <span>Subtotal</span>
+                  <span>${((
+                    calculateBasePrice(composerData.eventType, getDayOfWeek(composerData.preferredDate)) +
+                    (composerData.photoBookAddon ? getAddonPrice('photoBook') * (composerData.photoBookQuantity || 1) : 0) +
+                    (composerData.extraTimeAddon ? getAddonPrice('extraTime') : 0) +
+                    (composerData.byobBarAddon ? getAddonPrice('byobBar') : 0) +
+                    (composerData.rehearsalAddon ? getAddonPrice('rehearsal') : 0)
+                  ) / 100).toFixed(2)}</span>
+                </div>
+
+                {/* Payment Discount */}
+                <div className="flex justify-between text-green-600 dark:text-green-400">
+                  <span>
+                    {composerData.paymentMethod === 'ach' ? 'ACH' :
+                     composerData.paymentMethod === 'affirm' ? 'Affirm' :
+                     composerData.paymentMethod === 'paypal' ? 'PayPal' :
+                     composerData.paymentMethod === 'venmo' ? 'Venmo' :
+                     'Payment'} Discount
+                  </span>
+                  <span>{(composerData.appliedDiscountAmount || 0) > 0 ? '-' : ''}${((composerData.appliedDiscountAmount || 0) / 100).toFixed(2)}</span>
+                </div>
+
+                {/* Tax */}
+                <div className="flex justify-between">
+                  <span>Tax</span>
+                  <span>$0.00</span>
+                </div>
+
+                <div className="border-t my-2"></div>
+
+                {/* Total */}
+                <div className="flex justify-between font-semibold">
+                  <span>Total</span>
+                  <span>${((
                     calculateBasePrice(composerData.eventType, getDayOfWeek(composerData.preferredDate)) +
                     (composerData.photoBookAddon ? getAddonPrice('photoBook') * (composerData.photoBookQuantity || 1) : 0) +
                     (composerData.extraTimeAddon ? getAddonPrice('extraTime') : 0) +
                     (composerData.byobBarAddon ? getAddonPrice('byobBar') : 0) +
                     (composerData.rehearsalAddon ? getAddonPrice('rehearsal') : 0) -
                     (composerData.appliedDiscountAmount || 0)
-                  )}
-                </p>
+                  ) / 100).toFixed(2)}</span>
+                </div>
+
+                {/* Amount Paid */}
+                <div className="flex justify-between">
+                  <span>Amount Paid</span>
+                  <span>${((composerData.amountPaid || 0) / 100).toFixed(2)}</span>
+                </div>
+
+                <div className="border-t my-2"></div>
+
+                {/* Balance Due */}
+                <div className="flex justify-between font-semibold text-lg">
+                  <span>Balance Due</span>
+                  <span>${((
+                    calculateBasePrice(composerData.eventType, getDayOfWeek(composerData.preferredDate)) +
+                    (composerData.photoBookAddon ? getAddonPrice('photoBook') * (composerData.photoBookQuantity || 1) : 0) +
+                    (composerData.extraTimeAddon ? getAddonPrice('extraTime') : 0) +
+                    (composerData.byobBarAddon ? getAddonPrice('byobBar') : 0) +
+                    (composerData.rehearsalAddon ? getAddonPrice('rehearsal') : 0) -
+                    (composerData.appliedDiscountAmount || 0) -
+                    (composerData.amountPaid || 0)
+                  ) / 100).toFixed(2)}</span>
+                </div>
               </div>
             </CardContent>
           </Card>
