@@ -731,7 +731,7 @@ export default function Summary() {
               )}
 
               {/* Payment */}
-              {hasValue(composerData.paymentMethod) && (
+              {hasValue(composerData.paymentMethod) && composerData.paymentStatus === 'completed' && (
                 <div className="pt-2 border-t">
                   <p className="text-sm text-muted-foreground">Payment Method</p>
                   <p className="font-medium">{capitalize(composerData.paymentMethod)}</p>
