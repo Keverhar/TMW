@@ -192,7 +192,8 @@ export default function Summary() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" data-testid="button-menu">
-                <Menu className="h-4 w-4" />
+                <Menu className="h-4 w-4 mr-2" />
+                Menu
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
