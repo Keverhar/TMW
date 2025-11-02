@@ -53,12 +53,22 @@ export default function Payment() {
   };
 
   // Calculate balance due (total - amount already paid) with ACH/E-Check or Affirm discount if applicable
+  // One discount per account: if appliedDiscountAmount exists, use it; otherwise calculate from payment method
   const calculateTotalPrice = () => {
     if (!composer) return 0;
     const balanceDue = (composer.totalPrice || 0) - (composer.amountPaid || 0);
-    const achDiscount = (paymentMethod === 'ach' || paymentMethod === 'echeck') ? (composer.achDiscountAmount || 0) : 0;
-    const affirmDiscount = paymentMethod === 'affirm' ? (composer.affirmDiscountAmount || 0) : 0;
-    return balanceDue - achDiscount - affirmDiscount;
+    
+    // Use stored appliedDiscountAmount if it exists (one discount per account)
+    // Otherwise, calculate based on current payment method selection
+    const discount = (composer.appliedDiscountAmount || 0) > 0
+      ? (composer.appliedDiscountAmount || 0)
+      : (paymentMethod === 'ach' || paymentMethod === 'echeck') 
+        ? (composer.achDiscountAmount || 0) 
+        : paymentMethod === 'affirm' 
+          ? (composer.affirmDiscountAmount || 0) 
+          : 0;
+    
+    return balanceDue - discount;
   };
 
   const displayTotal = calculateTotalPrice();
