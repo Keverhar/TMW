@@ -1041,6 +1041,11 @@ export default function WeddingComposer() {
       }
     }
     
+    // For guests (no user account), clear all their selections
+    if (!userAccount) {
+      localStorage.removeItem("composerData");
+    }
+    
     // Reset the initial dialog flag so it shows again when returning
     setHasSeenInitialDialog(false);
     setShowInitialDialog(true);
