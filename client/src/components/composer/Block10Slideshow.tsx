@@ -185,12 +185,12 @@ export default function Block10Slideshow({
         </div>
       )}
 
-      {/* Engagement Photos */}
+      {/* Engagement Photo */}
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
             <Images className="h-5 w-5" />
-            <CardTitle>Engagement Photos</CardTitle>
+            <CardTitle>Engagement Photo</CardTitle>
           </div>
           <CardDescription>
             Upload engagement photos for display (up to 5 photos, 5MB each maximum)
