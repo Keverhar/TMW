@@ -1918,6 +1918,7 @@ export default function WeddingComposer() {
               eventType={formData.eventType}
               preferredDate={formData.preferredDate}
               timeSlot={formData.timeSlot}
+              amountPaid={formData.amountPaid}
             />
           )}
           {steps[currentStep - 1]?.id === 14 && (

@@ -20,6 +20,7 @@ interface BlockAddOnsProps {
   eventType: string;
   preferredDate: string;
   timeSlot: string;
+  amountPaid: number;
 }
 
 export default function BlockAddOns({
@@ -33,9 +34,12 @@ export default function BlockAddOns({
   eventType,
   preferredDate,
   timeSlot,
+  amountPaid,
 }: BlockAddOnsProps) {
   const [showByobDialog, setShowByobDialog] = useState(false);
+  const [showCannotReduceDialog, setShowCannotReduceDialog] = useState(false);
   const isSimplifiedFlow = eventType === 'modest-elopement' || eventType === 'vow-renewal';
+  const hasPaymentBeenMade = amountPaid > 0;
   
   // Check if Extra Time addon is eligible (Saturday at 6:00 PM)
   const isExtraTimeEligible = () => {
@@ -53,12 +57,53 @@ export default function BlockAddOns({
   const byobBarPrice = getAddonPrice('byobBar');
   const rehearsalPrice = getAddonPrice('rehearsal');
 
+  const handlePhotoBookChange = (checked: boolean) => {
+    // Prevent unchecking if payment has been made
+    if (!checked && hasPaymentBeenMade && photoBookAddon) {
+      setShowCannotReduceDialog(true);
+      return;
+    }
+    onChange('photoBookAddon', checked);
+  };
+
+  const handlePhotoBookQuantityChange = (newQuantity: number) => {
+    // Prevent reducing quantity if payment has been made
+    if (hasPaymentBeenMade && newQuantity < photoBookQuantity) {
+      setShowCannotReduceDialog(true);
+      return;
+    }
+    onChange('photoBookQuantity', newQuantity);
+  };
+
+  const handleExtraTimeChange = (checked: boolean) => {
+    // Prevent unchecking if payment has been made
+    if (!checked && hasPaymentBeenMade && extraTimeAddon) {
+      setShowCannotReduceDialog(true);
+      return;
+    }
+    onChange('extraTimeAddon', checked);
+  };
+
   const handleByobChange = (checked: boolean) => {
     if (checked) {
       setShowByobDialog(true);
     } else {
+      // Prevent unchecking if payment has been made
+      if (hasPaymentBeenMade && byobBarAddon) {
+        setShowCannotReduceDialog(true);
+        return;
+      }
       onChange('byobBarAddon', false);
     }
+  };
+
+  const handleRehearsalChange = (checked: boolean) => {
+    // Prevent unchecking if payment has been made
+    if (!checked && hasPaymentBeenMade && rehearsalAddon) {
+      setShowCannotReduceDialog(true);
+      return;
+    }
+    onChange('rehearsalAddon', checked);
   };
 
   const handleByobAccept = () => {
@@ -88,7 +133,7 @@ export default function BlockAddOns({
               <Checkbox
                 id="photo-book-addon"
                 checked={photoBookAddon}
-                onCheckedChange={(checked) => onChange('photoBookAddon', checked as boolean)}
+                onCheckedChange={(checked) => handlePhotoBookChange(checked as boolean)}
                 data-testid="checkbox-photo-book-addon"
               />
               <div className="flex-1">
@@ -111,7 +156,7 @@ export default function BlockAddOns({
                     min="1"
                     max="10"
                     value={photoBookQuantity}
-                    onChange={(e) => onChange('photoBookQuantity', parseInt(e.target.value) || 1)}
+                    onChange={(e) => handlePhotoBookQuantityChange(parseInt(e.target.value) || 1)}
                     className="w-24"
                     data-testid="input-photo-book-quantity"
                   />
@@ -146,7 +191,7 @@ export default function BlockAddOns({
                   id="extra-time-addon"
                   checked={extraTimeAddon}
                   disabled={!isExtraTimeEligible()}
-                  onCheckedChange={(checked) => onChange('extraTimeAddon', checked as boolean)}
+                  onCheckedChange={(checked) => handleExtraTimeChange(checked as boolean)}
                   data-testid="checkbox-extra-time-addon"
                 />
                 <div className="flex-1">
@@ -195,7 +240,7 @@ export default function BlockAddOns({
                 <Checkbox
                   id="rehearsal-addon"
                   checked={rehearsalAddon}
-                  onCheckedChange={(checked) => onChange('rehearsalAddon', checked as boolean)}
+                  onCheckedChange={(checked) => handleRehearsalChange(checked as boolean)}
                   data-testid="checkbox-rehearsal-addon"
                 />
                 <div className="flex-1">
@@ -228,6 +273,26 @@ export default function BlockAddOns({
               Accept
             </Button>
           </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showCannotReduceDialog} onOpenChange={setShowCannotReduceDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Cannot Reduce Add-Ons</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <p className="text-sm">
+              You cannot reduce add-ons after payment has been made. Partial Refund Requests are handled on a case-by-case basis. You will need to contact our staff at (970) 627-7987 for assistance.
+            </p>
+            <Button 
+              onClick={() => setShowCannotReduceDialog(false)} 
+              className="w-full"
+              data-testid="button-acknowledge-cannot-reduce"
+            >
+              Acknowledged
+            </Button>
+          </div>
         </DialogContent>
       </Dialog>
     </div>

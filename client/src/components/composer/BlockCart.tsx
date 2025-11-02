@@ -123,9 +123,7 @@ export default function BlockCart({
 
   // Check if balance due is negative and show dialog
   useEffect(() => {
-    console.log("Balance Due:", balanceDue, "Amount Paid:", amountPaid, "Total:", basePackagePrice + addonsTotal, "Discount:", discount);
     if (balanceDue < 0) {
-      console.log("Negative balance detected! Opening dialog...");
       setShowNegativeBalanceDialog(true);
     }
   }, [balanceDue]);
