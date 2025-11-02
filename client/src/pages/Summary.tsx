@@ -3,7 +3,13 @@ import { useLocation } from "wouter";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, Calendar, Heart, Music, Mic, Church, Users, PartyPopper, Camera, Image, Sparkles, Mail, DollarSign, Check, X, Package } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { ArrowLeft, Calendar, Heart, Music, Mic, Church, Users, PartyPopper, Camera, Image, Sparkles, Mail, DollarSign, Check, X, Package, Menu, Printer, Download, LogOut } from "lucide-react";
 import { Loader2 } from "lucide-react";
 import { getAddonPrice } from "@shared/pricing";
 
@@ -124,6 +130,23 @@ export default function Summary() {
     }).format(cents / 100);
   };
 
+  const handlePrint = () => {
+    window.print();
+  };
+
+  const handleDownload = () => {
+    // Create a printable version and trigger download
+    window.print();
+  };
+
+  const handleLogout = () => {
+    // Clear all localStorage data
+    localStorage.removeItem("user");
+    localStorage.removeItem("composerData");
+    localStorage.removeItem("guestSession");
+    setLocation("/");
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -166,14 +189,31 @@ export default function Summary() {
               Complete overview of your wedding selections
             </p>
           </div>
-          <Button
-            variant="outline"
-            onClick={() => setLocation("/composer")}
-            data-testid="button-back-to-composer"
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Composer
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" data-testid="button-menu">
+                <Menu className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => setLocation("/composer")} data-testid="menu-back-to-composer">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back to Composer
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={handlePrint} data-testid="menu-print">
+                <Printer className="h-4 w-4 mr-2" />
+                Print
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={handleDownload} data-testid="menu-download">
+                <Download className="h-4 w-4 mr-2" />
+                Download
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={handleLogout} data-testid="menu-logout">
+                <LogOut className="h-4 w-4 mr-2" />
+                Logout
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
         {/* The Couple */}
