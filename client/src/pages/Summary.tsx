@@ -731,10 +731,14 @@ export default function Summary() {
               )}
 
               {/* Payment */}
-              {hasValue(composerData.paymentMethod) && composerData.paymentStatus === 'completed' && (
+              {hasValue(composerData.paymentMethod) && (
                 <div className="pt-2 border-t">
                   <p className="text-sm text-muted-foreground">Payment Method</p>
-                  <p className="font-medium">{capitalize(composerData.paymentMethod)}</p>
+                  <p className="font-medium">
+                    {composerData.paymentStatus === 'completed' 
+                      ? capitalize(composerData.paymentMethod)
+                      : 'None'}
+                  </p>
                 </div>
               )}
               {toBoolean(composerData.termsAccepted) && (
