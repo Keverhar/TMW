@@ -17,11 +17,15 @@ export default function Summary() {
   const [location, setLocation] = useLocation();
   const [isLoading, setIsLoading] = useState(true);
   const [composerData, setComposerData] = useState<any>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     const loadData = async () => {
       setIsLoading(true);
       const savedUser = localStorage.getItem("user");
+      
+      // Set logged in status
+      setIsLoggedIn(!!savedUser);
       
       // Try to load data from localStorage for guest users
       const savedComposerData = localStorage.getItem("composerData");
@@ -147,6 +151,10 @@ export default function Summary() {
     setLocation("/");
   };
 
+  const handleCreateAccount = () => {
+    setLocation("/composer");
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -209,10 +217,17 @@ export default function Summary() {
                 <Download className="h-4 w-4 mr-2" />
                 Download
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={handleLogout} data-testid="menu-logout">
-                <LogOut className="h-4 w-4 mr-2" />
-                Logout
-              </DropdownMenuItem>
+              {isLoggedIn ? (
+                <DropdownMenuItem onClick={handleLogout} data-testid="menu-logout">
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Logout
+                </DropdownMenuItem>
+              ) : (
+                <DropdownMenuItem onClick={handleCreateAccount} data-testid="menu-create-account">
+                  <Users className="h-4 w-4 mr-2" />
+                  Create Account
+                </DropdownMenuItem>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
