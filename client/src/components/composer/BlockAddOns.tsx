@@ -21,6 +21,7 @@ interface BlockAddOnsProps {
   preferredDate: string;
   timeSlot: string;
   amountPaid: number;
+  paymentStatus: string;
 }
 
 export default function BlockAddOns({
@@ -35,11 +36,14 @@ export default function BlockAddOns({
   preferredDate,
   timeSlot,
   amountPaid,
+  paymentStatus,
 }: BlockAddOnsProps) {
   const [showByobDialog, setShowByobDialog] = useState(false);
   const [showCannotReduceDialog, setShowCannotReduceDialog] = useState(false);
   const isSimplifiedFlow = eventType === 'modest-elopement' || eventType === 'vow-renewal';
-  const hasPaymentBeenMade = amountPaid > 0;
+  const hasPaymentBeenMade = paymentStatus === 'completed';
+  
+  console.log('BlockAddOns - Payment Status:', paymentStatus, 'Has Payment Been Made:', hasPaymentBeenMade);
   
   // Check if Extra Time addon is eligible (Saturday at 6:00 PM)
   const isExtraTimeEligible = () => {

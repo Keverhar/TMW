@@ -1919,6 +1919,7 @@ export default function WeddingComposer() {
               preferredDate={formData.preferredDate}
               timeSlot={formData.timeSlot}
               amountPaid={formData.amountPaid}
+              paymentStatus={composerPaymentStatus}
             />
           )}
           {steps[currentStep - 1]?.id === 14 && (
