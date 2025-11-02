@@ -814,6 +814,7 @@ export default function WeddingComposer() {
         byobBarAddon: composer.byobBarAddon || false,
         rehearsalAddon: composer.rehearsalAddon || false,
         amountPaid: composer.amountPaid || 0,
+        appliedDiscountAmount: composer.appliedDiscountAmount || 0,
       });
       
       // Release hydration flag after a brief delay to ensure effect has run
@@ -1078,6 +1079,7 @@ export default function WeddingComposer() {
                 byobBarAddon: composer.byobBarAddon || false,
                 rehearsalAddon: composer.rehearsalAddon || false,
                 amountPaid: composer.amountPaid || 0,
+                appliedDiscountAmount: composer.appliedDiscountAmount || 0,
               });
               
               // Release hydration flag after a brief delay to ensure effect has run
