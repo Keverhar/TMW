@@ -8,7 +8,17 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronLeft, ChevronRight, Save, UserPlus, LogOut, User, FileText } from "lucide-react";
+import { ChevronLeft, ChevronRight, Save, UserPlus, LogOut, User, FileText, Home } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import type { WeddingComposer as WeddingComposerType } from "@shared/schema";
@@ -71,6 +81,7 @@ export default function WeddingComposer() {
   const [showAccountDialog, setShowAccountDialog] = useState(false);
   const [showInitialDialog, setShowInitialDialog] = useState(true);
   const [showLoginDialog, setShowLoginDialog] = useState(false);
+  const [showLeaveConfirmDialog, setShowLeaveConfirmDialog] = useState(false);
   const [userAccount, setUserAccount] = useState<{ id: string; email: string } | null>(() => {
     const savedUser = localStorage.getItem("user");
     return savedUser ? JSON.parse(savedUser) : null;
@@ -845,6 +856,27 @@ export default function WeddingComposer() {
     setLocation("/");
   };
 
+  const handleHomeNavigation = () => {
+    // Check if payment has been completed
+    if (composerPaymentStatus !== "completed") {
+      // Show confirmation dialog
+      setShowLeaveConfirmDialog(true);
+    } else {
+      // Navigate directly to home if payment is completed
+      setLocation("/");
+    }
+  };
+
+  const handleLeaveToHome = () => {
+    setShowLeaveConfirmDialog(false);
+    setLocation("/");
+  };
+
+  const handleGoToPayment = () => {
+    setShowLeaveConfirmDialog(false);
+    setCurrentStep(14); // Navigate to Cart page (step 14)
+  };
+
   // Verify user account exists in database on mount
   useEffect(() => {
     const verifyUserAccount = async () => {
@@ -1269,6 +1301,10 @@ export default function WeddingComposer() {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={handleHomeNavigation} data-testid="button-nav-home">
+                      <Home className="h-4 w-4 mr-2" />
+                      Home
+                    </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => setLocation('/account')} data-testid="button-nav-account">
                       <User className="h-4 w-4 mr-2" />
                       Account
@@ -1300,6 +1336,10 @@ export default function WeddingComposer() {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={handleHomeNavigation} data-testid="button-nav-home-guest">
+                      <Home className="h-4 w-4 mr-2" />
+                      Home
+                    </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => setShowLoginDialog(true)} data-testid="button-nav-login">
                       <User className="h-4 w-4 mr-2" />
                       Login
@@ -1631,6 +1671,25 @@ export default function WeddingComposer() {
           setShowLoginDialog(true);
         }}
       />
+
+      <AlertDialog open={showLeaveConfirmDialog} onOpenChange={setShowLeaveConfirmDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Leave Before Payment?</AlertDialogTitle>
+            <AlertDialogDescription>
+              If you leave before payment has been made, your date and time will not be saved.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={handleLeaveToHome} data-testid="button-leave-confirm">
+              Leave
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={handleGoToPayment} data-testid="button-go-to-payment">
+              Payment
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
