@@ -339,7 +339,7 @@ export default function WeddingComposer() {
         (formData.rehearsalAddon ? rehearsalPrice : 0);
       
       // Apply payment method discount
-      const paymentDiscount = formData.paymentMethod === 'ach' 
+      const paymentDiscount = formData.paymentMethod === 'ach' || formData.paymentMethod === 'echeck'
         ? achDiscountAmount 
         : formData.paymentMethod === 'affirm' 
           ? affirmDiscountAmount 
@@ -573,7 +573,7 @@ export default function WeddingComposer() {
       (formData.rehearsalAddon ? rehearsalPrice : 0);
     
     // Apply payment method discount
-    const paymentDiscount = formData.paymentMethod === 'ach' 
+    const paymentDiscount = formData.paymentMethod === 'ach' || formData.paymentMethod === 'echeck'
       ? achDiscountAmount 
       : formData.paymentMethod === 'affirm' 
         ? affirmDiscountAmount 

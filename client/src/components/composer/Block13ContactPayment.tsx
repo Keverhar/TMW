@@ -129,8 +129,8 @@ export default function Block13ContactPayment({
     return sum + addon.price;
   }, 0);
   
-  // Apply ACH/Affirm discount if payment method is ACH or Affirm
-  const discount = paymentMethod === 'ach' ? achDiscountAmount : 
+  // Apply ACH/E-Check/Affirm discount if payment method is ACH, E-Check, or Affirm
+  const discount = paymentMethod === 'ach' || paymentMethod === 'echeck' ? achDiscountAmount : 
                    paymentMethod === 'affirm' ? affirmDiscountAmount : 0;
   const totalPrice = basePackagePrice + addonsTotal - discount;
 
@@ -201,7 +201,7 @@ export default function Block13ContactPayment({
               </div>
 
               <div className="flex justify-between text-green-600 dark:text-green-400" data-testid="row-payment-discount">
-                <span>{paymentMethod === 'ach' ? 'ACH' : paymentMethod === 'affirm' ? 'Affirm' : 'Payment'} Discount</span>
+                <span>{paymentMethod === 'ach' ? 'ACH' : paymentMethod === 'echeck' ? 'E-Check' : paymentMethod === 'affirm' ? 'Affirm' : 'Payment'} Discount</span>
                 <span data-testid="text-payment-discount">{discount > 0 ? '-' : ''}${(discount / 100).toFixed(2)}</span>
               </div>
 
