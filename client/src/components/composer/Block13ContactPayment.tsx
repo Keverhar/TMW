@@ -365,13 +365,8 @@ export default function Block13ContactPayment({
           <div className="space-y-4">
             <div className="p-4 bg-amber-50 dark:bg-amber-950 rounded-md border border-amber-200 dark:border-amber-800">
               <p className="text-sm text-amber-900 dark:text-amber-100 font-medium">
-                Once payment has been made, the following selections cannot be changed:
+                Once payment has been made Add-Ons cannot be removed or reduced and the Event Type, Date and Time cannot be changed.
               </p>
-              <ul className="list-disc list-inside mt-2 space-y-1 text-sm text-amber-800 dark:text-amber-200">
-                <li>Wedding Type (Package)</li>
-                <li>Wedding Date</li>
-                <li>Wedding Time</li>
-              </ul>
             </div>
             <p className="text-sm text-muted-foreground">
               All other selections in your Wedding Composer can be updated up to 7 days before your event. If you need to change your wedding type, date, or time after payment, you will need to cancel and rebook (subject to our cancellation policy).
