@@ -23,6 +23,7 @@ interface BlockAddOnsProps {
   amountPaid: number;
   paymentStatus: string;
   basePackagePrice: number;
+  appliedDiscountAmount: number;
 }
 
 export default function BlockAddOns({
@@ -39,6 +40,7 @@ export default function BlockAddOns({
   amountPaid,
   paymentStatus,
   basePackagePrice,
+  appliedDiscountAmount,
 }: BlockAddOnsProps) {
   const [showByobDialog, setShowByobDialog] = useState(false);
   const [showCannotReduceDialog, setShowCannotReduceDialog] = useState(false);
@@ -72,8 +74,8 @@ export default function BlockAddOns({
     // Calculate new addons total after the proposed change (priceChange is negative when removing)
     const newAddonsTotal = currentAddonsTotal + priceChange;
     
-    // Calculate what balance due would be after the change
-    const newBalanceDue = basePackagePrice + newAddonsTotal - amountPaid;
+    // Calculate what balance due would be after the change (including discount)
+    const newBalanceDue = basePackagePrice + newAddonsTotal - appliedDiscountAmount - amountPaid;
     
     // Prevent if balance would become negative
     return newBalanceDue < 0;

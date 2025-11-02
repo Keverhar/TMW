@@ -1921,6 +1921,7 @@ export default function WeddingComposer() {
               amountPaid={formData.amountPaid}
               paymentStatus={composerPaymentStatus}
               basePackagePrice={basePrice}
+              appliedDiscountAmount={formData.appliedDiscountAmount || 0}
             />
           )}
           {steps[currentStep - 1]?.id === 14 && (
