@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, CreditCard, Lock } from "lucide-react";
 import { SiVisa, SiMastercard, SiAmericanexpress, SiDiscover, SiPaypal } from "react-icons/si";
@@ -25,7 +24,6 @@ export default function Payment() {
   const [expiryDate, setExpiryDate] = useState("");
   const [cvv, setCvv] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
-  const [showNegativeBalanceDialog, setShowNegativeBalanceDialog] = useState(false);
 
   const { data: composer, isLoading } = useQuery<WeddingComposer>({
     queryKey: ["/api/wedding-composers", composerId],
@@ -74,15 +72,6 @@ export default function Payment() {
   };
 
   const displayTotal = calculateTotalPrice();
-
-  // Check if balance due is negative and show dialog
-  useEffect(() => {
-    console.log("Payment Page - Display Total:", displayTotal);
-    if (displayTotal < 0) {
-      console.log("Negative balance detected on Payment page! Opening dialog...");
-      setShowNegativeBalanceDialog(true);
-    }
-  }, [displayTotal]);
 
   const formatCardNumber = (value: string) => {
     const cleaned = value.replace(/\s/g, "");
@@ -741,27 +730,6 @@ export default function Payment() {
           </Button>
         </div>
       </div>
-
-      {/* Negative Balance Dialog */}
-      <Dialog open={showNegativeBalanceDialog} onOpenChange={setShowNegativeBalanceDialog}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>Partial Refund Request</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <p className="text-sm">
-              Partial Refund Requests are handled on a case-by-case basis. You will need to contact our staff at (970) 627-7987 for assistance.
-            </p>
-            <Button 
-              onClick={() => setShowNegativeBalanceDialog(false)} 
-              className="w-full"
-              data-testid="button-acknowledge-refund"
-            >
-              Acknowledged
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }

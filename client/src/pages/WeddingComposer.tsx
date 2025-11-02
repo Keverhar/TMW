@@ -19,6 +19,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import type { WeddingComposer as WeddingComposerType } from "@shared/schema";
@@ -82,6 +83,7 @@ export default function WeddingComposer() {
   const [showInitialDialog, setShowInitialDialog] = useState(true);
   const [showLoginDialog, setShowLoginDialog] = useState(false);
   const [showLeaveConfirmDialog, setShowLeaveConfirmDialog] = useState(false);
+  const [showNegativeBalanceDialog, setShowNegativeBalanceDialog] = useState(false);
   const [userAccount, setUserAccount] = useState<{ id: string; email: string } | null>(() => {
     const savedUser = localStorage.getItem("user");
     return savedUser ? JSON.parse(savedUser) : null;
@@ -588,8 +590,14 @@ export default function WeddingComposer() {
     // Calculate balance due
     const balanceDue = totalPrice - formData.amountPaid;
     
-    // Prevent payment if there's no positive balance
-    if (balanceDue <= 0) {
+    // Check for negative balance (refund needed)
+    if (balanceDue < 0) {
+      setShowNegativeBalanceDialog(true);
+      return;
+    }
+    
+    // Prevent payment if balance is exactly zero
+    if (balanceDue === 0) {
       toast({
         title: "No payment required",
         description: "Your balance is already paid in full. No additional payment is needed.",
@@ -2024,6 +2032,26 @@ export default function WeddingComposer() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <Dialog open={showNegativeBalanceDialog} onOpenChange={setShowNegativeBalanceDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Partial Refund Request</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <p className="text-sm">
+              Partial Refund Requests are handled on a case-by-case basis. You will need to contact our staff at (970) 627-7987 for assistance.
+            </p>
+            <Button 
+              onClick={() => setShowNegativeBalanceDialog(false)} 
+              className="w-full"
+              data-testid="button-acknowledge-refund"
+            >
+              Acknowledged
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
