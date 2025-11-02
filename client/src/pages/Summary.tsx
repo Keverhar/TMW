@@ -20,10 +20,16 @@ export default function Summary() {
 
       const user = JSON.parse(savedUser);
       try {
-        const response = await fetch(`/api/wedding-composers/user/${user.id}`);
+        const response = await fetch(`/api/wedding-composers/by-user?userId=${user.id}`);
         if (response.ok) {
-          const data = await response.json();
-          setComposerData(data);
+          const composers = await response.json();
+          if (composers && composers.length > 0) {
+            // Get the most recent composer
+            const mostRecent = composers.sort((a: any, b: any) => 
+              new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+            )[0];
+            setComposerData(mostRecent);
+          }
         }
       } catch (error) {
         console.error("Error loading composer data:", error);
