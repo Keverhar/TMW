@@ -138,7 +138,12 @@ export default function Confirmation() {
                       <div className="border-t pt-1 mt-1"></div>
                       <div className="flex justify-between font-semibold">
                         <span>Total:</span>
-                        <span>${((composer.totalPrice || 0) / 100).toFixed(2)}</span>
+                        <span>${(((composer.basePackagePrice || 0) + 
+                          (composer.photoBookAddon ? (composer.photoBookPrice || 0) * (composer.photoBookQuantity || 1) : 0) +
+                          (composer.extraTimeAddon ? (composer.extraTimePrice || 0) : 0) +
+                          (composer.byobBarAddon ? (composer.byobBarPrice || 0) : 0) +
+                          (composer.rehearsalAddon ? (composer.rehearsalPrice || 0) : 0) -
+                          (composer.appliedDiscountAmount || 0)) / 100).toFixed(2)}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Amount Paid:</span>
@@ -147,7 +152,12 @@ export default function Confirmation() {
                       <div className="border-t pt-1 mt-1"></div>
                       <div className="flex justify-between font-semibold text-lg">
                         <span>Balance Due:</span>
-                        <span>${(((composer.totalPrice || 0) - (composer.amountPaid || 0)) / 100).toFixed(2)}</span>
+                        <span>${(((composer.basePackagePrice || 0) + 
+                          (composer.photoBookAddon ? (composer.photoBookPrice || 0) * (composer.photoBookQuantity || 1) : 0) +
+                          (composer.extraTimeAddon ? (composer.extraTimePrice || 0) : 0) +
+                          (composer.byobBarAddon ? (composer.byobBarPrice || 0) : 0) +
+                          (composer.rehearsalAddon ? (composer.rehearsalPrice || 0) : 0) -
+                          (composer.appliedDiscountAmount || 0) - (composer.amountPaid || 0)) / 100).toFixed(2)}</span>
                       </div>
                     </div>
                   </div>
