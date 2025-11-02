@@ -172,9 +172,9 @@ export default function Block10Slideshow({
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-3xl font-serif mb-2">Slideshow Options</h2>
+        <h2 className="text-3xl font-serif mb-2">Memory Wall Options</h2>
         <p className="text-muted-foreground">
-          Upload photos for your celebration slideshow and engagement photo display.
+          Upload photos for your celebration memory wall and engagement photo display.
         </p>
       </div>
 
@@ -185,15 +185,15 @@ export default function Block10Slideshow({
         </div>
       )}
 
-      {/* Slideshow Photos */}
+      {/* Memory Wall Photos */}
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
             <Images className="h-5 w-5" />
-            <CardTitle>Slideshow Photos</CardTitle>
+            <CardTitle>Memory Wall Photos</CardTitle>
           </div>
           <CardDescription>
-            Upload photos for the slideshow during your reception (up to 30 photos, 1GB total)
+            Upload photos for the memory wall during your reception (up to 30 photos, 1GB total)
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

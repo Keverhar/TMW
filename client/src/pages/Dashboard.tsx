@@ -55,7 +55,7 @@ export default function Dashboard() {
       { name: "Processional", complete: composer.processionalCompletionStatus === "done" },
       { name: "Reception", complete: composer.receptionCompletionStatus === "done" },
       { name: "Photography", complete: composer.photographyCompletionStatus === "done" },
-      { name: "Slideshow", complete: composer.slideshowCompletionStatus === "done" },
+      { name: "Memory Wall", complete: composer.slideshowCompletionStatus === "done" },
       { name: "Personal Touches", complete: composer.personalTouchesCompletionStatus === "done" },
       { name: "Contact Info", complete: !!composer.customerName && !!composer.customerEmail },
     ];
@@ -260,7 +260,7 @@ export default function Dashboard() {
                 { name: "Processional Details", complete: latestComposer.processionalCompletionStatus === "done" },
                 { name: "Reception Planning", complete: latestComposer.receptionCompletionStatus === "done" },
                 { name: "Photography Preferences", complete: latestComposer.photographyCompletionStatus === "done" },
-                { name: "Photo Slideshow", complete: latestComposer.slideshowCompletionStatus === "done" },
+                { name: "Memory Wall", complete: latestComposer.slideshowCompletionStatus === "done" },
                 { name: "Personal Touches", complete: latestComposer.personalTouchesCompletionStatus === "done" },
                 { name: "Contact Information", complete: !!latestComposer.customerName && !!latestComposer.customerEmail },
                 { name: "Payment", complete: latestComposer.paymentStatus === "paid" },

@@ -43,7 +43,7 @@ const allSteps = [
   { id: 7, title: 'Processional', description: 'Seating & procession', availableFor: ['modest-wedding', 'other'] },
   { id: 8, title: 'Reception', description: 'Reception details', availableFor: ['modest-wedding', 'other'] },
   { id: 9, title: 'Photography', description: 'Photo preferences', availableFor: ['modest-wedding', 'other'] },
-  { id: 10, title: 'Slideshow', description: 'Upload photos', availableFor: ['modest-wedding', 'other'] },
+  { id: 10, title: 'Memory Wall', description: 'Upload photos', availableFor: ['modest-wedding', 'other'] },
   { id: 11, title: 'Personal Touches', description: 'Special details', availableFor: ['modest-wedding', 'other'] },
   { id: 12, title: 'Evites', description: 'Digital invitations', availableFor: ['all'] },
   { id: 13, title: 'Add-Ons', description: 'Enhance your celebration', availableFor: ['all'] },
@@ -180,7 +180,7 @@ export default function WeddingComposer() {
     photographySpecialRequestsNA: false,
     photographyCompletionStatus: "",
 
-    // Block 10: Slideshow
+    // Block 10: Memory Wall
     slideshowPhotos: "[]",
     slideshowPhotosNA: false,
     engagementPhotos: "[]",
@@ -1169,7 +1169,7 @@ export default function WeddingComposer() {
         if (formData.photographyCompletionStatus === 'finish-later' || formData.mustHaveShots || formData.vipList) return 'partial';
         return 'none';
       
-      case 10: // Slideshow
+      case 10: // Memory Wall
         if (formData.slideshowCompletionStatus && formData.slideshowCompletionStatus !== 'finish-later') return 'complete';
         if (formData.slideshowCompletionStatus === 'finish-later' || formData.slideshowPhotos !== '[]' || formData.engagementPhotos !== '[]') return 'partial';
         return 'none';

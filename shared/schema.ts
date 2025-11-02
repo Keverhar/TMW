@@ -137,7 +137,7 @@ export const weddingComposers = pgTable("wedding_composers", {
   photographySpecialRequestsNA: boolean("photography_special_requests_na").default(false),
   photographyCompletionStatus: text("photography_completion_status"),
   
-  // Block 10: Slideshow
+  // Block 10: Memory Wall
   slideshowPhotos: text("slideshow_photos"), // JSON array of file metadata
   slideshowPhotosNA: boolean("slideshow_photos_na").default(false),
   engagementPhotos: text("engagement_photos"), // JSON array of file metadata
