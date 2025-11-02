@@ -223,6 +223,7 @@ export default function Booking() {
         title: "Booking Error",
         description: error.message || "Failed to process booking. Please try again.",
         variant: "destructive",
+        duration: 3000,
       });
       setIsProcessing(false);
     }

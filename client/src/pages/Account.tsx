@@ -115,6 +115,7 @@ export default function Account() {
           title: "Error",
           description: "Failed to load account information",
           variant: "destructive",
+          duration: 3000,
         });
       } finally {
         setIsLoading(false);
@@ -160,6 +161,7 @@ export default function Account() {
       toast({
         title: "Success",
         description: "Your account information has been updated",
+        duration: 3000,
       });
 
       // Clear password fields after successful save
@@ -170,6 +172,7 @@ export default function Account() {
         title: "Error",
         description: error.message || "Failed to update account information",
         variant: "destructive",
+        duration: 3000,
       });
     } finally {
       setIsSaving(false);

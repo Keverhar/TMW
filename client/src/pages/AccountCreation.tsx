@@ -84,12 +84,14 @@ export default function AccountCreation() {
       toast({
         title: "Account created successfully!",
         description: "You can now proceed with payment.",
+        duration: 3000,
       });
     } catch (error: any) {
       toast({
         title: "Signup failed",
         description: error.message || "Failed to create account. Please try again.",
         variant: "destructive",
+        duration: 3000,
       });
     }
   };
@@ -98,6 +100,7 @@ export default function AccountCreation() {
     toast({
       title: `${provider === "google" ? "Google" : "Facebook"} Sign-In`,
       description: `${provider === "google" ? "Google" : "Facebook"} OAuth integration will be added soon. For now, please use email signup.`,
+      duration: 3000,
     });
   };
 
@@ -107,6 +110,7 @@ export default function AccountCreation() {
         title: "Error",
         description: "No booking found. Please start over.",
         variant: "destructive",
+        duration: 3000,
       });
       return;
     }
@@ -122,6 +126,7 @@ export default function AccountCreation() {
       toast({
         title: "Payment Processing",
         description: `${method === "stripe" ? "Stripe" : "Affirm"} payment integration will be added soon.`,
+        duration: 3000,
       });
 
       setTimeout(() => {
@@ -133,6 +138,7 @@ export default function AccountCreation() {
         title: "Payment error",
         description: error.message || "Failed to process payment. Please try again.",
         variant: "destructive",
+        duration: 3000,
       });
     }
   };

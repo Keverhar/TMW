@@ -107,6 +107,7 @@ export default function Block12EviteSaveTheDate({
     toast({
       title: "Download Started",
       description: "Your save-the-date design will be downloaded as an image.",
+      duration: 3000,
     });
   };
 
@@ -114,6 +115,7 @@ export default function Block12EviteSaveTheDate({
     toast({
       title: "Share Link Generated",
       description: "A shareable link has been copied to your clipboard!",
+      duration: 3000,
     });
   };
 
