@@ -5,12 +5,19 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Calendar } from "@/components/ui/calendar";
 import { Info, Calendar as CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
+import { useQuery } from "@tanstack/react-query";
 
 interface Block1EventTypeProps {
   eventType: string;
   preferredDate: string;
   timeSlot: string;
   onChange: (field: string, value: string) => void;
+}
+
+interface BookedSlot {
+  date: string;
+  timeSlot: string;
+  eventType: string;
 }
 
 const eventTypes = [
@@ -77,6 +84,11 @@ const getTimeSlots = (preferredDate: string, eventType: string) => {
 };
 
 export default function Block1EventType({ eventType, preferredDate, timeSlot, onChange }: Block1EventTypeProps) {
+  // Fetch booked slots from the API to prevent double-booking
+  const { data: bookedSlots = [] } = useQuery<BookedSlot[]>({
+    queryKey: ['/api/availability/booked-slots'],
+  });
+
   const selectedEvent = eventTypes.find(e => e.value === eventType);
   const isSimplifiedFlow = eventType === 'modest-elopement' || eventType === 'vow-renewal';
   const allowedDays = isSimplifiedFlow 
@@ -100,19 +112,51 @@ export default function Block1EventType({ eventType, preferredDate, timeSlot, on
   minDate.setDate(minDate.getDate() + minDaysInAdvance);
   minDate.setHours(0, 0, 0, 0);
   
-  // Matcher function to disable days not in allowedDays or too soon
+  // Build a map of dates that have booked time slots
+  const bookedDatesMap = new Map<string, Set<string>>();
+  bookedSlots.forEach(slot => {
+    if (!bookedDatesMap.has(slot.date)) {
+      bookedDatesMap.set(slot.date, new Set());
+    }
+    bookedDatesMap.get(slot.date)!.add(slot.timeSlot);
+  });
+  
+  // Check if a date has any available time slots
+  const hasAvailableSlots = (date: Date): boolean => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const dateStr = `${year}-${month}-${day}`;
+    
+    const bookedSlotsForDate = bookedDatesMap.get(dateStr);
+    if (!bookedSlotsForDate) return true; // No bookings on this date
+    
+    // Get all possible time slots for this date
+    const allSlots = getTimeSlots(dateStr, eventType);
+    const allSlotValues = new Set(allSlots.map(s => s.value));
+    
+    // Check if all slots are booked
+    return !Array.from(allSlotValues).every(slot => bookedSlotsForDate.has(slot));
+  };
+  
+  // Matcher function to disable days not in allowedDays, too soon, or fully booked
   const disabledDays = (date: Date) => {
     const isTooSoon = date < minDate;
     const isWrongDay = !allowedDays.includes(date.getDay());
-    return isTooSoon || isWrongDay;
+    const isFullyBooked = !hasAvailableSlots(date);
+    return isTooSoon || isWrongDay || isFullyBooked;
   };
   
-  // Matcher function to highlight available days (must be right day AND not too soon)
+  // Matcher function to highlight available days (must be right day, not too soon, and has slots)
   const highlightDays = (date: Date) => {
     const isRightDay = allowedDays.includes(date.getDay());
     const isNotTooSoon = date >= minDate;
-    return isRightDay && isNotTooSoon;
+    const hasSlotsAvailable = hasAvailableSlots(date);
+    return isRightDay && isNotTooSoon && hasSlotsAvailable;
   };
+  
+  // Get booked time slots for the selected date
+  const bookedTimeSlotsForSelectedDate = preferredDate ? bookedDatesMap.get(preferredDate) : new Set();
 
   return (
     <div className="space-y-6">
@@ -192,7 +236,7 @@ export default function Block1EventType({ eventType, preferredDate, timeSlot, on
                   />
                 </div>
                 <p className="text-sm text-muted-foreground text-center">
-                  💡 Available days: {availableDaysText}
+                  💡 Available days: {availableDaysText}. Grayed out dates are fully booked or unavailable.
                 </p>
               </div>
             </CardContent>
@@ -206,15 +250,27 @@ export default function Block1EventType({ eventType, preferredDate, timeSlot, on
               </CardHeader>
               <CardContent className="space-y-4">
                 <RadioGroup value={timeSlot} onValueChange={(value) => onChange('timeSlot', value)}>
-                  {timeSlots.map((slot) => (
-                    <div key={slot.value} className="flex items-center space-x-2">
-                      <RadioGroupItem value={slot.value} id={`time-${slot.value}`} data-testid={`radio-time-${slot.value}`} />
-                      <Label htmlFor={`time-${slot.value}`} className="flex-1 cursor-pointer">
-                        <span className="font-medium">{slot.label}</span>
-                        {slot.arrival && <span className="text-sm text-muted-foreground ml-2">({slot.arrival})</span>}
-                      </Label>
-                    </div>
-                  ))}
+                  {timeSlots.map((slot) => {
+                    const isBooked = bookedTimeSlotsForSelectedDate?.has(slot.value);
+                    return (
+                      <div key={slot.value} className="flex items-center space-x-2">
+                        <RadioGroupItem 
+                          value={slot.value} 
+                          id={`time-${slot.value}`} 
+                          data-testid={`radio-time-${slot.value}`}
+                          disabled={isBooked}
+                        />
+                        <Label 
+                          htmlFor={`time-${slot.value}`} 
+                          className={`flex-1 ${isBooked ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                        >
+                          <span className="font-medium">{slot.label}</span>
+                          {slot.arrival && <span className="text-sm text-muted-foreground ml-2">({slot.arrival})</span>}
+                          {isBooked && <span className="text-xs text-destructive ml-2 font-medium">(Already Booked)</span>}
+                        </Label>
+                      </div>
+                    );
+                  })}
                 </RadioGroup>
 
                 <div className="flex gap-2 items-start bg-amber-50 dark:bg-amber-950 p-3 rounded-md mt-4">
