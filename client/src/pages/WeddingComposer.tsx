@@ -1169,9 +1169,9 @@ export default function WeddingComposer() {
         if (formData.photographyCompletionStatus === 'finish-later' || formData.mustHaveShots || formData.vipList) return 'partial';
         return 'none';
       
-      case 10: // Memory Wall
-        if (formData.slideshowCompletionStatus && formData.slideshowCompletionStatus !== 'finish-later') return 'complete';
-        if (formData.slideshowCompletionStatus === 'finish-later' || formData.slideshowPhotos !== '[]' || formData.engagementPhotos !== '[]') return 'partial';
+      case 10: // Memory Wall (optional - not required for progression)
+        if (formData.slideshowCompletionStatus === 'done') return 'complete';
+        if (formData.slideshowCompletionStatus === 'later' || formData.slideshowPhotos !== '[]' || formData.engagementPhotos !== '[]') return 'partial';
         return 'none';
       
       case 11: // Personal Touches

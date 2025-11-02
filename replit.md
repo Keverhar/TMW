@@ -11,6 +11,17 @@ The Modest Wedding is a full-stack web application for booking wedding ceremonie
 
 ## Recent Changes
 
+### November 2, 2025
+- **Memory Wall Made Optional**: Block 10 (Memory Wall) is now completely optional and will not block user progression through the booking flow
+  - Users can skip the page entirely without uploading any photos
+  - Users can mark the section as "All done (for now)" even without uploading photos
+  - Users can still mark as "We'll finish this later" if they want to return
+  - Page renamed from "Slideshow" to "Memory Wall" throughout the application
+  - Engagement Photo changed to singular (1 photo limit instead of 5)
+  - Memory Wall Photos card and Engagement Photo card reordered (Engagement Photo now appears first)
+  - Completion status properly tracked: 'done' = complete, 'later'/has-data = partial, untouched = none
+  - Navigation logic ensures the page never blocks users from proceeding to subsequent steps
+
 ### November 1, 2025
 - **Person 2 Required Fields**: Person 2 is now mandatory in the booking flow. Only the full name and role are required; pronouns, email, and phone remain optional.
 - **Title and Suffix Options**: Removed custom title and suffix functionality. Title dropdown now only shows: Mr., Dr., Ms., Mrs. Suffix dropdown now only shows: Jr., Sr., II, III, IV.

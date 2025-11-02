@@ -163,11 +163,10 @@ export default function Block10Slideshow({
     onChange('engagementPhotos', JSON.stringify(updated));
   };
 
-  // Check if fields are filled
-  const isSlideshowFilled = slideshowPhotosNA || slideshowPhotosList.length > 0;
-  const isEngagementFilled = engagementPhotosNA || engagementPhotosList.length > 0;
-  const allRequiredFieldsFilled = isSlideshowFilled && isEngagementFilled;
-  const someFieldsEmpty = !allRequiredFieldsFilled;
+  // Memory Wall is optional - always show option to mark as done, and show "later" option when no data
+  const hasAnyData = slideshowPhotosList.length > 0 || engagementPhotosList.length > 0 || slideshowPhotosNA || engagementPhotosNA;
+  const allRequiredFieldsFilled = true; // Always show "done" option since this section is optional
+  const someFieldsEmpty = !hasAnyData; // Show "later" option when no data entered yet
 
   return (
     <div className="space-y-6">
@@ -378,9 +377,9 @@ export default function Block10Slideshow({
               <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
               <div className="space-y-3 flex-1">
                 <div>
-                  <p className="font-medium text-green-900 dark:text-green-100">Great! Your slideshow planning is complete.</p>
+                  <p className="font-medium text-green-900 dark:text-green-100">Memory Wall photos are optional.</p>
                   <p className="text-sm text-green-700 dark:text-green-300 mt-1">
-                    Please confirm your status to continue.
+                    You can upload photos or skip this section and mark it as complete.
                   </p>
                 </div>
                 
@@ -415,9 +414,9 @@ export default function Block10Slideshow({
               <AlertCircle className="h-5 w-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
               <div className="space-y-3 flex-1">
                 <div>
-                  <p className="font-medium text-amber-900 dark:text-amber-100">You're making progress!</p>
+                  <p className="font-medium text-amber-900 dark:text-amber-100">Want to add photos later?</p>
                   <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
-                    Some slideshow fields still need attention. Please confirm your status.
+                    This section is optional. You can come back to upload photos later if you'd like.
                   </p>
                 </div>
                 
