@@ -337,40 +337,18 @@ export default function WeddingComposer() {
       // Ensure total price is never negative
       const totalPrice = Math.max(0, basePrice + addonsTotal - paymentDiscount);
 
-      let composerData;
-      
-      // For paid/initiated composers: preserve date/time
-      // For pending composers: exclude date/time (only save on payment)
-      if (composerPaymentStatus === "completed" || composerPaymentStatus === "payment_initiated") {
-        composerData = {
-          ...formData,
-          basePackagePrice: basePrice,
-          photoBookPrice,
-          extraTimePrice,
-          byobBarPrice,
-          rehearsalPrice,
-          achDiscountAmount,
-          affirmDiscountAmount,
-          totalPrice,
-          userId: userAccount?.id || null,
-        };
-      } else {
-        composerData = {
-          ...formData,
-          preferredDate: "", // Exclude date/time for unpaid composers
-          backupDate: "",
-          timeSlot: "",
-          basePackagePrice: basePrice,
-          photoBookPrice,
-          extraTimePrice,
-          byobBarPrice,
-          rehearsalPrice,
-          achDiscountAmount,
-          affirmDiscountAmount,
-          totalPrice,
-          userId: userAccount?.id || null,
-        };
-      }
+      const composerData = {
+        ...formData,
+        basePackagePrice: basePrice,
+        photoBookPrice,
+        extraTimePrice,
+        byobBarPrice,
+        rehearsalPrice,
+        achDiscountAmount,
+        affirmDiscountAmount,
+        totalPrice,
+        userId: userAccount?.id || null,
+      };
 
       if (composerId) {
         await apiRequest("PATCH", `/api/wedding-composers/${composerId}`, composerData);
