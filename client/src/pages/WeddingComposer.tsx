@@ -1287,7 +1287,7 @@ export default function WeddingComposer() {
                       data-testid="button-account"
                     >
                       <User className="h-4 w-4 mr-2" />
-                      Account
+                      Menu
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
