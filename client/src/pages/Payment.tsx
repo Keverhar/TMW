@@ -258,7 +258,7 @@ export default function Payment() {
       <div className="fixed top-4 right-4 z-[100] max-w-xs" data-testid="notice-placeholder">
         <div className="bg-amber-500/90 dark:bg-amber-600/90 backdrop-blur-sm text-white p-4 rounded-md shadow-lg border-2 border-amber-600 dark:border-amber-500">
           <p className="text-sm font-semibold leading-tight">
-            This is a placeholder page and does not process payments. No information needs to be added to view the results.
+            This is a placeholder page and does not process payments. No information needs to be entered to view the results.
           </p>
         </div>
       </div>
@@ -391,18 +391,28 @@ export default function Payment() {
                         )}
                       </div>
 
-                      <div className="flex items-start space-x-2 p-3 border rounded-md hover-elevate">
-                        <RadioGroupItem value="affirm" id="affirm" data-testid="radio-affirm" className="mt-1" />
-                        <Label htmlFor="affirm" className="flex-1 cursor-pointer">
-                          <div className="mb-2">
-                            <span className="font-semibold">Pay Over Time with Affirm</span>
+                      <div className="space-y-3">
+                        <div className="flex items-start space-x-2 p-3 border rounded-md hover-elevate">
+                          <RadioGroupItem value="affirm" id="affirm" data-testid="radio-affirm" className="mt-1" />
+                          <Label htmlFor="affirm" className="flex-1 cursor-pointer">
+                            <div className="mb-2">
+                              <span className="font-semibold">Pay Over Time with Affirm</span>
+                            </div>
+                            <div className="text-sm text-muted-foreground space-y-1">
+                              <p>- Flexible: split your $5,000 wedding into smaller monthly payments.</p>
+                              <p>- Quick decision, no late fees, and clear terms.</p>
+                              <p>- Trusted brand used by millions.</p>
+                            </div>
+                          </Label>
+                        </div>
+
+                        {paymentMethod === "affirm" && (
+                          <div className="ml-8 p-6 bg-muted rounded-md text-center space-y-2">
+                            <p className="text-sm text-muted-foreground">
+                              You have selected to pay over time with Affirm, and you will need to submit an application for financing with them. We will share information about this transaction to assist Affirm in evaluating your application.
+                            </p>
                           </div>
-                          <div className="text-sm text-muted-foreground space-y-1">
-                            <p>- Flexible: split your $5,000 wedding into smaller monthly payments.</p>
-                            <p>- Quick decision, no late fees, and clear terms.</p>
-                            <p>- Trusted brand used by millions.</p>
-                          </div>
-                        </Label>
+                        )}
                       </div>
 
                       <div className="space-y-3">
