@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import { ShoppingCart, FileText, Info, CreditCard } from "lucide-react";
 
 interface BlockCartProps {
@@ -57,6 +58,7 @@ export default function BlockCart({
 }: BlockCartProps) {
   const [showTermsDialog, setShowTermsDialog] = useState(false);
   const [showRefundDialog, setShowRefundDialog] = useState(false);
+  const [showNegativeBalanceDialog, setShowNegativeBalanceDialog] = useState(false);
   
   // Payment form state
   const [cardNumber, setCardNumber] = useState('');
@@ -116,6 +118,15 @@ export default function BlockCart({
                    paymentMethod === 'affirm' ? affirmDiscountAmount :
                    paymentMethod === 'paypal' ? paypalDiscountAmount :
                    paymentMethod === 'venmo' ? venmoDiscountAmount : 0;
+
+  const balanceDue = basePackagePrice + addonsTotal - discount - amountPaid;
+
+  // Check if balance due is negative and show dialog
+  useEffect(() => {
+    if (balanceDue < 0) {
+      setShowNegativeBalanceDialog(true);
+    }
+  }, [balanceDue]);
 
   // If no event type is selected, show empty cart message
   if (!eventType) {
@@ -216,7 +227,7 @@ export default function BlockCart({
 
             <div className="flex justify-between font-semibold text-lg" data-testid="row-balance-due">
               <span>Balance Due</span>
-              <span data-testid="text-balance-due">${((basePackagePrice + addonsTotal - discount - amountPaid) / 100).toFixed(2)}</span>
+              <span data-testid="text-balance-due">${(balanceDue / 100).toFixed(2)}</span>
             </div>
           </div>
         </CardContent>
@@ -510,6 +521,27 @@ export default function BlockCart({
           </DialogHeader>
           <div className="space-y-4 text-sm">
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. These are placeholder refund policy details.</p>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Negative Balance Dialog */}
+      <Dialog open={showNegativeBalanceDialog} onOpenChange={setShowNegativeBalanceDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Partial Refund Request</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <p className="text-sm">
+              Partial Refund Requests are handled on a case-by-case basis. You will need to contact our staff at (970) 627-7987 for assistance.
+            </p>
+            <Button 
+              onClick={() => setShowNegativeBalanceDialog(false)} 
+              className="w-full"
+              data-testid="button-acknowledge-refund"
+            >
+              Acknowledged
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
