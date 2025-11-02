@@ -56,19 +56,14 @@ export default function Block7Processional({
   const isRingBearerFilled = ringBearerIncluded === 'no' || (ringBearerIncluded === 'yes' && ringBearerFlowerGirl && ringBearerOrganizer);
   const isEscortFilled = walkingDownAisle !== 'with-someone' || (walkingDownAisle === 'with-someone' && escortName);
   const isHonoredGuestsFilled = honoredGuestEscortsNA || honoredGuestEscorts;
-  const isBrideSideFilled = brideSideFrontRowNA || brideSideFrontRow;
-  const isGroomSideFilled = groomSideFrontRowNA || groomSideFrontRow;
-  const isFramedPhotosFilled = framedPhotosNA || framedPhotos;
   const isSpecialSeatingFilled = specialSeatingNeedsNA || specialSeatingNeeds;
   const isSpecialInstructionsFilled = processionalSpecialInstructionsNA || processionalSpecialInstructions;
 
   const allRequiredFieldsFilled = isWalkingDownAisleFilled && isEscortFilled && isRingBearerFilled && 
-    isHonoredGuestsFilled && isBrideSideFilled && isGroomSideFilled && isFramedPhotosFilled && 
-    isSpecialSeatingFilled && isSpecialInstructionsFilled;
+    isHonoredGuestsFilled && isSpecialSeatingFilled && isSpecialInstructionsFilled;
 
   const someFieldsEmpty = !isWalkingDownAisleFilled || !isEscortFilled || !isRingBearerFilled || 
-    !isHonoredGuestsFilled || !isBrideSideFilled || !isGroomSideFilled || !isFramedPhotosFilled || 
-    !isSpecialSeatingFilled || !isSpecialInstructionsFilled;
+    !isHonoredGuestsFilled || !isSpecialSeatingFilled || !isSpecialInstructionsFilled;
 
   const handleCompletionStatusChange = (status: string) => {
     if (processionalCompletionStatus === status) {
@@ -214,104 +209,6 @@ export default function Block7Processional({
             <Label htmlFor="honored-guest-escorts-na" className="cursor-pointer">
               No - Guests can seat themselves
             </Label>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Reserved Front Row Seating</CardTitle>
-          <CardDescription>Who should be seated in the front row on each side?</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="bride-side-front-row">Bride's Side Front Row</Label>
-            <Textarea
-              id="bride-side-front-row"
-              data-testid="input-bride-side-front-row"
-              placeholder="Names & relationships"
-              value={brideSideFrontRow}
-              onChange={(e) => onChange('brideSideFrontRow', e.target.value)}
-              rows={2}
-              disabled={brideSideFrontRowNA || readOnly}
-            />
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="bride-side-front-row-na"
-                data-testid="checkbox-bride-side-front-row-na"
-                checked={brideSideFrontRowNA}
-                onCheckedChange={(checked) => {
-                  onChange('brideSideFrontRowNA', checked as boolean);
-                  if (checked) {
-                    onChange('brideSideFrontRow', '');
-                  }
-                }}
-                disabled={readOnly}
-              />
-              <Label htmlFor="bride-side-front-row-na" className="cursor-pointer">
-                N/A
-              </Label>
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="groom-side-front-row">Groom's Side Front Row</Label>
-            <Textarea
-              id="groom-side-front-row"
-              data-testid="input-groom-side-front-row"
-              placeholder="Names & relationships"
-              value={groomSideFrontRow}
-              onChange={(e) => onChange('groomSideFrontRow', e.target.value)}
-              rows={2}
-              disabled={groomSideFrontRowNA || readOnly}
-            />
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="groom-side-front-row-na"
-                data-testid="checkbox-groom-side-front-row-na"
-                checked={groomSideFrontRowNA}
-                onCheckedChange={(checked) => {
-                  onChange('groomSideFrontRowNA', checked as boolean);
-                  if (checked) {
-                    onChange('groomSideFrontRow', '');
-                  }
-                }}
-                disabled={readOnly}
-              />
-              <Label htmlFor="groom-side-front-row-na" className="cursor-pointer">
-                N/A
-              </Label>
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="framed-photos">Framed Photos of Honor</Label>
-            <Textarea
-              id="framed-photos"
-              data-testid="input-framed-photos"
-              placeholder="Family members not able to attend (names, relationships, and who will be responsible for photos)"
-              value={framedPhotos}
-              onChange={(e) => onChange('framedPhotos', e.target.value)}
-              rows={2}
-              disabled={framedPhotosNA || readOnly}
-            />
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="framed-photos-na"
-                data-testid="checkbox-framed-photos-na"
-                checked={framedPhotosNA}
-                onCheckedChange={(checked) => {
-                  onChange('framedPhotosNA', checked as boolean);
-                  if (checked) {
-                    onChange('framedPhotos', '');
-                  }
-                }}
-                disabled={readOnly}
-              />
-              <Label htmlFor="framed-photos-na" className="cursor-pointer">
-                N/A
-              </Label>
-            </div>
           </div>
         </CardContent>
       </Card>
