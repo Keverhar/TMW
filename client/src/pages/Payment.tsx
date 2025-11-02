@@ -121,39 +121,6 @@ export default function Payment() {
       return;
     }
 
-    if (paymentMethod === "card") {
-      if (!cardNumber || !cardName || !expiryDate || !cvv) {
-        toast({
-          title: "Missing information",
-          description: "Please fill in all card details.",
-          variant: "destructive",
-          duration: 3000,
-        });
-        return;
-      }
-
-      const cleanedCardNumber = cardNumber.replace(/\s/g, "");
-      if (cleanedCardNumber.length !== 16) {
-        toast({
-          title: "Invalid card number",
-          description: "Card number must be 16 digits.",
-          variant: "destructive",
-          duration: 3000,
-        });
-        return;
-      }
-
-      if (cvv.length < 3) {
-        toast({
-          title: "Invalid CVV",
-          description: "CVV must be at least 3 digits.",
-          variant: "destructive",
-          duration: 3000,
-        });
-        return;
-      }
-    }
-
     setIsProcessing(true);
 
     // Simulate payment processing and update payment status
