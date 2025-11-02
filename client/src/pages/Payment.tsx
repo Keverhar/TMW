@@ -542,30 +542,42 @@ export default function Payment() {
                   </div>
                   
                   {composer.photoBookAddon && (
-                    <div className="flex justify-between text-sm">
-                      <span>Photo Book{(composer.photoBookQuantity || 1) > 1 ? ` (×${composer.photoBookQuantity})` : ''}</span>
-                      <span>${(((composer.photoBookPrice || 0) * (composer.photoBookQuantity || 1)) / 100).toFixed(2)}</span>
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-sm">
+                        <span className="font-medium">Photo Book{(composer.photoBookQuantity || 1) > 1 ? ` (×${composer.photoBookQuantity})` : ''}</span>
+                        <span>${(((composer.photoBookPrice || 0) * (composer.photoBookQuantity || 1)) / 100).toFixed(2)}</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground">A beautifully designed keepsake photo book of your special day</p>
                     </div>
                   )}
                   
                   {composer.extraTimeAddon && (
-                    <div className="flex justify-between text-sm">
-                      <span>Extra Time Block (Saturday 6PM only)</span>
-                      <span>${((composer.extraTimePrice || 0) / 100).toFixed(2)}</span>
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-sm">
+                        <span className="font-medium">Extra Time Block (Saturday 6PM only)</span>
+                        <span>${((composer.extraTimePrice || 0) / 100).toFixed(2)}</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground">Add an additional hour to your celebration</p>
                     </div>
                   )}
                   
                   {composer.byobBarAddon && (
-                    <div className="flex justify-between text-sm">
-                      <span>BYOB Bar Setup</span>
-                      <span>${((composer.byobBarPrice || 0) / 100).toFixed(2)}</span>
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-sm">
+                        <span className="font-medium">BYOB Bar Service</span>
+                        <span>${((composer.byobBarPrice || 0) / 100).toFixed(2)}</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground">Professional bar service for your beverages (bring your own beverages)</p>
                     </div>
                   )}
                   
                   {composer.rehearsalAddon && (
-                    <div className="flex justify-between text-sm">
-                      <span>Rehearsal Hour</span>
-                      <span>${((composer.rehearsalPrice || 0) / 100).toFixed(2)}</span>
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-sm">
+                        <span className="font-medium">Rehearsal</span>
+                        <span>${((composer.rehearsalPrice || 0) / 100).toFixed(2)}</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground">A practice run-through the day before your wedding</p>
                     </div>
                   )}
                   
