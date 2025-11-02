@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, Calendar, Heart, Music, Mic, Church, Users, PartyPopper, Camera, Image, Sparkles, Mail, DollarSign, Check, X, Package } from "lucide-react";
 import { Loader2 } from "lucide-react";
+import { getAddonPrice } from "@shared/pricing";
 
 export default function Summary() {
   const [, setLocation] = useLocation();
@@ -97,6 +99,29 @@ export default function Summary() {
       </div>
     ) : null
   );
+
+  const calculateBasePrice = (eventType: string, dayOfWeek: string): number => {
+    if (eventType === 'modest-wedding' || eventType === 'other') {
+      return dayOfWeek === 'saturday' ? 450000 : 390000;
+    } else if (eventType === 'modest-elopement' || eventType === 'vow-renewal') {
+      return dayOfWeek === 'friday' ? 150000 : 99900;
+    }
+    return 390000;
+  };
+
+  const getDayOfWeek = (dateStr: string): string => {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    return dayNames[date.getDay()];
+  };
+
+  const formatCurrency = (cents: number): string => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    }).format(cents / 100);
+  };
 
   if (isLoading) {
     return (
@@ -754,6 +779,103 @@ export default function Summary() {
                   )}
                 </div>
               )}
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Booking Summary */}
+        {hasValue(composerData.eventType) && hasValue(composerData.preferredDate) && (
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <DollarSign className="h-5 w-5 text-primary" />
+                <CardTitle>Booking Summary</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {/* Base Package */}
+              <div className="flex justify-between items-center">
+                <div>
+                  <p className="font-medium">
+                    {composerData.eventType === 'modest-elopement' ? 'Modest Elopement' :
+                     composerData.eventType === 'vow-renewal' ? 'Vow Renewal' :
+                     composerData.eventType === 'modest-wedding' ? 'Modest Wedding' :
+                     composerData.eventType === 'other' ? 'Other Event' :
+                     capitalize(composerData.eventType)}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {formatDate(composerData.preferredDate)}
+                  </p>
+                </div>
+                <p className="font-semibold">
+                  {formatCurrency(calculateBasePrice(composerData.eventType, getDayOfWeek(composerData.preferredDate)))}
+                </p>
+              </div>
+
+              {/* Add-ons */}
+              {(composerData.photoBookAddon || composerData.extraTimeAddon || composerData.byobBarAddon || composerData.rehearsalAddon) && (
+                <>
+                  <Separator />
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium text-muted-foreground">Add-ons</p>
+                    {composerData.photoBookAddon && (
+                      <div className="flex justify-between items-center">
+                        <p className="text-sm">
+                          Photo Book {composerData.photoBookQuantity > 1 && `(×${composerData.photoBookQuantity})`}
+                        </p>
+                        <p className="text-sm font-medium">
+                          {formatCurrency(getAddonPrice('photoBook') * (composerData.photoBookQuantity || 1))}
+                        </p>
+                      </div>
+                    )}
+                    {composerData.extraTimeAddon && (
+                      <div className="flex justify-between items-center">
+                        <p className="text-sm">Extra Time Block</p>
+                        <p className="text-sm font-medium">{formatCurrency(getAddonPrice('extraTime'))}</p>
+                      </div>
+                    )}
+                    {composerData.byobBarAddon && (
+                      <div className="flex justify-between items-center">
+                        <p className="text-sm">BYOB Bar Setup</p>
+                        <p className="text-sm font-medium">{formatCurrency(getAddonPrice('byobBar'))}</p>
+                      </div>
+                    )}
+                    {composerData.rehearsalAddon && (
+                      <div className="flex justify-between items-center">
+                        <p className="text-sm">Rehearsal</p>
+                        <p className="text-sm font-medium">{formatCurrency(getAddonPrice('rehearsal'))}</p>
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
+
+              {/* Discount */}
+              {hasValue(composerData.appliedDiscountAmount) && composerData.appliedDiscountAmount > 0 && (
+                <>
+                  <Separator />
+                  <div className="flex justify-between items-center text-green-600">
+                    <p className="font-medium">Discount Applied</p>
+                    <p className="font-semibold">-{formatCurrency(composerData.appliedDiscountAmount)}</p>
+                  </div>
+                </>
+              )}
+
+              {/* Total */}
+              <Separator />
+              <div className="flex justify-between items-center">
+                <p className="text-lg font-bold">Total</p>
+                <p className="text-lg font-bold">
+                  {formatCurrency(
+                    calculateBasePrice(composerData.eventType, getDayOfWeek(composerData.preferredDate)) +
+                    (composerData.photoBookAddon ? getAddonPrice('photoBook') * (composerData.photoBookQuantity || 1) : 0) +
+                    (composerData.extraTimeAddon ? getAddonPrice('extraTime') : 0) +
+                    (composerData.byobBarAddon ? getAddonPrice('byobBar') : 0) +
+                    (composerData.rehearsalAddon ? getAddonPrice('rehearsal') : 0) -
+                    (composerData.appliedDiscountAmount || 0)
+                  )}
+                </p>
+              </div>
             </CardContent>
           </Card>
         )}
