@@ -41,24 +41,40 @@ export default function Summary() {
     loadData();
   }, [setLocation]);
 
-  const formatPackageName = (type: string) => {
-    if (!type) return "Not selected";
-    return type.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  const capitalize = (str: string) => {
+    if (!str) return str;
+    // Handle kebab-case and snake_case
+    return str
+      .split(/[-_\s]/)
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
   };
 
   const formatDate = (dateStr: string) => {
-    if (!dateStr) return "Not selected";
+    if (!dateStr) return null;
     const date = new Date(dateStr);
     return date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
   };
 
-  const formatTimeSlot = (slot: string) => {
-    if (!slot) return "Not selected";
-    return slot;
+  const hasValue = (value: any) => {
+    if (value === null || value === undefined || value === "") return false;
+    if (value === "no" || value === false) return false;
+    if (value === "[]") return false;
+    return true;
   };
 
-  const BooleanDisplay = ({ value }: { value: boolean }) => (
-    value ? <Check className="h-4 w-4 text-green-600" /> : <X className="h-4 w-4 text-muted-foreground" />
+  const toBoolean = (value: any): boolean => {
+    if (value === true || value === 'yes') return true;
+    return false;
+  };
+
+  const BooleanDisplay = ({ value, label }: { value: boolean; label: string }) => (
+    value ? (
+      <div className="flex items-center gap-2">
+        <Check className="h-4 w-4 text-green-600" />
+        <span className="text-sm">{label}</span>
+      </div>
+    ) : null
   );
 
   if (isLoading) {
@@ -79,7 +95,7 @@ export default function Summary() {
               <CardDescription>You don't have any saved wedding composer data yet.</CardDescription>
             </CardHeader>
             <CardContent>
-              <Button onClick={() => setLocation("/composer")}>
+              <Button onClick={() => setLocation("/composer")} data-testid="button-go-to-composer">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Go to Composer
               </Button>
@@ -89,6 +105,9 @@ export default function Summary() {
       </div>
     );
   }
+
+  // Check if any unity ceremonies are selected
+  const hasUnityCeremonies = toBoolean(composerData.unityCandle) || toBoolean(composerData.sandCeremony) || toBoolean(composerData.handfasting);
 
   return (
     <div className="min-h-screen bg-background p-6">
@@ -111,46 +130,54 @@ export default function Summary() {
         </div>
 
         {/* Block 1: Event Type */}
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Heart className="h-5 w-5 text-primary" />
-              <CardTitle>Event Type</CardTitle>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <p className="font-medium">{formatPackageName(composerData.eventType)}</p>
-          </CardContent>
-        </Card>
+        {hasValue(composerData.eventType) && (
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <Heart className="h-5 w-5 text-primary" />
+                <CardTitle>Event Type</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="font-medium">{capitalize(composerData.eventType)}</p>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Block 2: Date & Time */}
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Calendar className="h-5 w-5 text-primary" />
-              <CardTitle>Date & Time</CardTitle>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <div>
-              <p className="text-sm text-muted-foreground">Preferred Date</p>
-              <p className="font-medium">{formatDate(composerData.preferredDate)}</p>
-            </div>
-            {composerData.backupDate && (
-              <div>
-                <p className="text-sm text-muted-foreground">Backup Date</p>
-                <p className="font-medium">{formatDate(composerData.backupDate)}</p>
+        {(hasValue(composerData.preferredDate) || hasValue(composerData.backupDate) || hasValue(composerData.timeSlot)) && (
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <Calendar className="h-5 w-5 text-primary" />
+                <CardTitle>Date & Time</CardTitle>
               </div>
-            )}
-            <div>
-              <p className="text-sm text-muted-foreground">Time Slot</p>
-              <p className="font-medium">{formatTimeSlot(composerData.timeSlot)}</p>
-            </div>
-          </CardContent>
-        </Card>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              {hasValue(composerData.preferredDate) && (
+                <div>
+                  <p className="text-sm text-muted-foreground">Preferred Date</p>
+                  <p className="font-medium">{formatDate(composerData.preferredDate)}</p>
+                </div>
+              )}
+              {hasValue(composerData.backupDate) && (
+                <div>
+                  <p className="text-sm text-muted-foreground">Backup Date</p>
+                  <p className="font-medium">{formatDate(composerData.backupDate)}</p>
+                </div>
+              )}
+              {hasValue(composerData.timeSlot) && (
+                <div>
+                  <p className="text-sm text-muted-foreground">Time Slot</p>
+                  <p className="font-medium">{composerData.timeSlot}</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        )}
 
         {/* Block 3: Signature Color */}
-        {composerData.signatureColor && (
+        {(hasValue(composerData.signatureColor) || hasValue(composerData.colorSwatchDecision)) && (
           <Card>
             <CardHeader>
               <div className="flex items-center gap-2">
@@ -159,14 +186,16 @@ export default function Summary() {
               </div>
             </CardHeader>
             <CardContent className="space-y-2">
-              <div>
-                <p className="text-sm text-muted-foreground">Selected Color</p>
-                <p className="font-medium">{composerData.signatureColor}</p>
-              </div>
-              {composerData.colorSwatchDecision && (
+              {hasValue(composerData.signatureColor) && (
+                <div>
+                  <p className="text-sm text-muted-foreground">Selected Color</p>
+                  <p className="font-medium">{capitalize(composerData.signatureColor)}</p>
+                </div>
+              )}
+              {hasValue(composerData.colorSwatchDecision) && (
                 <div>
                   <p className="text-sm text-muted-foreground">Color Swatch Decision</p>
-                  <p className="font-medium">{composerData.colorSwatchDecision}</p>
+                  <p className="font-medium">{capitalize(composerData.colorSwatchDecision)}</p>
                 </div>
               )}
             </CardContent>
@@ -174,9 +203,10 @@ export default function Summary() {
         )}
 
         {/* Block 4: Music */}
-        {(composerData.processionalSong || composerData.recessionalSong || composerData.receptionEntranceSong || 
-          composerData.cakeCuttingSong || composerData.fatherDaughterDanceSong || composerData.lastDanceSong || 
-          composerData.playlistUrl) && (
+        {(hasValue(composerData.processionalSong) || hasValue(composerData.recessionalSong) || 
+          hasValue(composerData.receptionEntranceSong) || hasValue(composerData.cakeCuttingSong) || 
+          hasValue(composerData.fatherDaughterDanceSong) || hasValue(composerData.lastDanceSong) || 
+          hasValue(composerData.playlistUrl)) && (
           <Card>
             <CardHeader>
               <div className="flex items-center gap-2">
@@ -185,43 +215,43 @@ export default function Summary() {
               </div>
             </CardHeader>
             <CardContent className="space-y-2">
-              {composerData.processionalSong && (
+              {hasValue(composerData.processionalSong) && (
                 <div>
                   <p className="text-sm text-muted-foreground">Processional Song</p>
                   <p className="font-medium">{composerData.processionalSong}</p>
                 </div>
               )}
-              {composerData.recessionalSong && (
+              {hasValue(composerData.recessionalSong) && (
                 <div>
                   <p className="text-sm text-muted-foreground">Recessional Song</p>
                   <p className="font-medium">{composerData.recessionalSong}</p>
                 </div>
               )}
-              {composerData.receptionEntranceSong && (
+              {hasValue(composerData.receptionEntranceSong) && (
                 <div>
                   <p className="text-sm text-muted-foreground">Reception Entrance Song</p>
                   <p className="font-medium">{composerData.receptionEntranceSong}</p>
                 </div>
               )}
-              {composerData.cakeCuttingSong && (
+              {hasValue(composerData.cakeCuttingSong) && (
                 <div>
                   <p className="text-sm text-muted-foreground">Cake Cutting Song</p>
                   <p className="font-medium">{composerData.cakeCuttingSong}</p>
                 </div>
               )}
-              {composerData.fatherDaughterDanceSong && (
+              {hasValue(composerData.fatherDaughterDanceSong) && (
                 <div>
                   <p className="text-sm text-muted-foreground">Father Daughter Dance Song</p>
                   <p className="font-medium">{composerData.fatherDaughterDanceSong}</p>
                 </div>
               )}
-              {composerData.lastDanceSong && (
+              {hasValue(composerData.lastDanceSong) && (
                 <div>
                   <p className="text-sm text-muted-foreground">Last Dance Song</p>
                   <p className="font-medium">{composerData.lastDanceSong}</p>
                 </div>
               )}
-              {composerData.playlistUrl && (
+              {hasValue(composerData.playlistUrl) && (
                 <div>
                   <p className="text-sm text-muted-foreground">Playlist URL</p>
                   <p className="font-medium break-all">{composerData.playlistUrl}</p>
@@ -232,8 +262,9 @@ export default function Summary() {
         )}
 
         {/* Block 5: Announcements */}
-        {(composerData.grandIntroduction || composerData.fatherDaughterDanceAnnouncement || 
-          composerData.toastsSpeechesAnnouncement || composerData.guestCallouts || composerData.vibeCheck) && (
+        {(hasValue(composerData.grandIntroduction) || hasValue(composerData.fatherDaughterDanceAnnouncement) || 
+          hasValue(composerData.toastsSpeechesAnnouncement) || hasValue(composerData.guestCallouts) || 
+          hasValue(composerData.vibeCheck)) && (
           <Card>
             <CardHeader>
               <div className="flex items-center gap-2">
@@ -242,31 +273,31 @@ export default function Summary() {
               </div>
             </CardHeader>
             <CardContent className="space-y-2">
-              {composerData.grandIntroduction && (
+              {hasValue(composerData.grandIntroduction) && (
                 <div>
                   <p className="text-sm text-muted-foreground">Grand Introduction</p>
                   <p className="font-medium whitespace-pre-wrap">{composerData.grandIntroduction}</p>
                 </div>
               )}
-              {composerData.fatherDaughterDanceAnnouncement && (
+              {hasValue(composerData.fatherDaughterDanceAnnouncement) && (
                 <div>
                   <p className="text-sm text-muted-foreground">Father Daughter Dance Announcement</p>
                   <p className="font-medium whitespace-pre-wrap">{composerData.fatherDaughterDanceAnnouncement}</p>
                 </div>
               )}
-              {composerData.toastsSpeechesAnnouncement && (
+              {hasValue(composerData.toastsSpeechesAnnouncement) && (
                 <div>
                   <p className="text-sm text-muted-foreground">Toasts & Speeches Announcement</p>
                   <p className="font-medium whitespace-pre-wrap">{composerData.toastsSpeechesAnnouncement}</p>
                 </div>
               )}
-              {composerData.guestCallouts && (
+              {hasValue(composerData.guestCallouts) && (
                 <div>
                   <p className="text-sm text-muted-foreground">Guest Callouts</p>
                   <p className="font-medium whitespace-pre-wrap">{composerData.guestCallouts}</p>
                 </div>
               )}
-              {composerData.vibeCheck && (
+              {hasValue(composerData.vibeCheck) && (
                 <div>
                   <p className="text-sm text-muted-foreground">Vibe Check</p>
                   <p className="font-medium whitespace-pre-wrap">{composerData.vibeCheck}</p>
@@ -277,10 +308,12 @@ export default function Summary() {
         )}
 
         {/* Block 6: Ceremony */}
-        {(composerData.ceremonyScript || composerData.vowChoices || composerData.unityCandle || 
-          composerData.sandCeremony || composerData.handfasting || composerData.guestReadingOrSong || 
-          composerData.officiantPassage || composerData.includingChild || composerData.petInvolvement || 
-          composerData.ceremonySpecialRequests) && (
+        {(hasValue(composerData.ceremonyScript) || hasValue(composerData.vowChoices) || hasUnityCeremonies || 
+          (hasValue(composerData.guestReadingOrSong) && composerData.guestReadingOrSongChoice === 'yes') || 
+          (hasValue(composerData.officiantPassage) && composerData.officiantPassageChoice === 'yes') || 
+          (hasValue(composerData.includingChild) && composerData.includingChildChoice === 'yes') || 
+          (hasValue(composerData.petInvolvement) && composerData.petInvolvementChoice === 'yes') || 
+          hasValue(composerData.ceremonySpecialRequests)) && (
           <Card>
             <CardHeader>
               <div className="flex items-center gap-2">
@@ -289,70 +322,64 @@ export default function Summary() {
               </div>
             </CardHeader>
             <CardContent className="space-y-3">
-              {composerData.ceremonyScript && (
+              {hasValue(composerData.ceremonyScript) && (
                 <div>
                   <p className="text-sm text-muted-foreground">Ceremony Script</p>
-                  <p className="font-medium">{composerData.ceremonyScript}</p>
+                  <p className="font-medium">{capitalize(composerData.ceremonyScript)}</p>
                 </div>
               )}
-              {composerData.vowChoices && (
+              {hasValue(composerData.vowChoices) && (
                 <div>
                   <p className="text-sm text-muted-foreground">Vow Choices</p>
-                  <p className="font-medium">{composerData.vowChoices}</p>
+                  <p className="font-medium">{capitalize(composerData.vowChoices)}</p>
                 </div>
               )}
-              <div>
-                <p className="text-sm text-muted-foreground mb-1">Unity Ceremonies</p>
-                <div className="flex gap-4">
-                  <div className="flex items-center gap-2">
-                    <BooleanDisplay value={composerData.unityCandle} />
-                    <span className="text-sm">Unity Candle</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <BooleanDisplay value={composerData.sandCeremony} />
-                    <span className="text-sm">Sand Ceremony</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <BooleanDisplay value={composerData.handfasting} />
-                    <span className="text-sm">Handfasting</span>
+              {hasUnityCeremonies && (
+                <div>
+                  <p className="text-sm text-muted-foreground mb-1">Unity Ceremonies</p>
+                  <div className="flex flex-wrap gap-4">
+                    <BooleanDisplay value={toBoolean(composerData.unityCandle)} label="Unity Candle" />
+                    <BooleanDisplay value={toBoolean(composerData.sandCeremony)} label="Sand Ceremony" />
+                    <BooleanDisplay value={toBoolean(composerData.handfasting)} label="Handfasting" />
                   </div>
                 </div>
-              </div>
-              {composerData.guestReadingOrSong && (
+              )}
+              {hasValue(composerData.guestReadingOrSong) && composerData.guestReadingOrSongChoice === 'yes' && (
                 <div>
                   <p className="text-sm text-muted-foreground">Guest Reading/Song</p>
                   <p className="font-medium whitespace-pre-wrap">{composerData.guestReadingOrSong}</p>
-                  {composerData.guestReadingOrSongName && (
+                  {hasValue(composerData.guestReadingOrSongName) && (
                     <p className="text-sm text-muted-foreground mt-1">Performer: {composerData.guestReadingOrSongName}</p>
                   )}
                 </div>
               )}
-              {composerData.officiantPassage && (
+              {hasValue(composerData.officiantPassage) && composerData.officiantPassageChoice === 'yes' && (
                 <div>
                   <p className="text-sm text-muted-foreground">Officiant Passage</p>
                   <p className="font-medium whitespace-pre-wrap">{composerData.officiantPassage}</p>
                 </div>
               )}
-              {composerData.includingChild && (
+              {hasValue(composerData.includingChild) && composerData.includingChildChoice === 'yes' && (
                 <div>
                   <p className="text-sm text-muted-foreground">Including Children</p>
                   <p className="font-medium whitespace-pre-wrap">{composerData.includingChild}</p>
-                  {composerData.childrenOrganizer && (
+                  {hasValue(composerData.childrenOrganizer) && (
                     <p className="text-sm text-muted-foreground mt-1">Organizer: {composerData.childrenOrganizer}</p>
                   )}
                 </div>
               )}
-              {composerData.petInvolvement && (
+              {hasValue(composerData.petInvolvement) && composerData.petInvolvementChoice === 'yes' && (
                 <div>
                   <p className="text-sm text-muted-foreground">Pet Involvement</p>
                   <p className="font-medium whitespace-pre-wrap">{composerData.petInvolvement}</p>
-                  <div className="flex items-center gap-2 mt-1">
-                    <BooleanDisplay value={composerData.petPolicyAccepted} />
-                    <span className="text-sm">Pet Policy Accepted</span>
-                  </div>
+                  {toBoolean(composerData.petPolicyAccepted) && (
+                    <div className="mt-1">
+                      <BooleanDisplay value={true} label="Pet Policy Accepted" />
+                    </div>
+                  )}
                 </div>
               )}
-              {composerData.ceremonySpecialRequests && (
+              {hasValue(composerData.ceremonySpecialRequests) && (
                 <div>
                   <p className="text-sm text-muted-foreground">Special Requests</p>
                   <p className="font-medium whitespace-pre-wrap">{composerData.ceremonySpecialRequests}</p>
@@ -363,8 +390,11 @@ export default function Summary() {
         )}
 
         {/* Block 7: Processional */}
-        {(composerData.walkingDownAisle || composerData.escortName || composerData.ringBearerFlowerGirl || 
-          composerData.honoredGuestEscorts || composerData.specialSeatingNeeds || composerData.processionalSpecialInstructions) && (
+        {(hasValue(composerData.walkingDownAisle) || hasValue(composerData.escortName) || 
+          (hasValue(composerData.ringBearerFlowerGirl) && composerData.ringBearerIncluded === 'yes') || 
+          (hasValue(composerData.honoredGuestEscorts) && !composerData.honoredGuestEscortsNA) || 
+          (hasValue(composerData.specialSeatingNeeds) && !composerData.specialSeatingNeedsNA) || 
+          (hasValue(composerData.processionalSpecialInstructions) && !composerData.processionalSpecialInstructionsNA)) && (
           <Card>
             <CardHeader>
               <div className="flex items-center gap-2">
@@ -373,42 +403,37 @@ export default function Summary() {
               </div>
             </CardHeader>
             <CardContent className="space-y-2">
-              {composerData.walkingDownAisle && (
+              {hasValue(composerData.walkingDownAisle) && (
                 <div>
                   <p className="text-sm text-muted-foreground">Walking Down Aisle</p>
-                  <p className="font-medium">{composerData.walkingDownAisle}</p>
-                  {composerData.escortName && (
+                  <p className="font-medium">{capitalize(composerData.walkingDownAisle)}</p>
+                  {hasValue(composerData.escortName) && (
                     <p className="text-sm mt-1">Escort: {composerData.escortName}</p>
                   )}
                 </div>
               )}
-              {composerData.ringBearerIncluded && (
+              {hasValue(composerData.ringBearerFlowerGirl) && composerData.ringBearerIncluded === 'yes' && (
                 <div>
                   <p className="text-sm text-muted-foreground">Ring Bearer / Flower Girl</p>
-                  <p className="font-medium">{composerData.ringBearerIncluded === 'yes' ? 'Yes' : 'No'}</p>
-                  {composerData.ringBearerFlowerGirl && (
-                    <>
-                      <p className="text-sm mt-1">Details: {composerData.ringBearerFlowerGirl}</p>
-                      {composerData.ringBearerOrganizer && (
-                        <p className="text-sm">Organizer: {composerData.ringBearerOrganizer}</p>
-                      )}
-                    </>
+                  <p className="font-medium whitespace-pre-wrap">{composerData.ringBearerFlowerGirl}</p>
+                  {hasValue(composerData.ringBearerOrganizer) && (
+                    <p className="text-sm mt-1">Organizer: {composerData.ringBearerOrganizer}</p>
                   )}
                 </div>
               )}
-              {composerData.honoredGuestEscorts && !composerData.honoredGuestEscortsNA && (
+              {hasValue(composerData.honoredGuestEscorts) && !composerData.honoredGuestEscortsNA && (
                 <div>
                   <p className="text-sm text-muted-foreground">Honored Guest Escorts</p>
                   <p className="font-medium whitespace-pre-wrap">{composerData.honoredGuestEscorts}</p>
                 </div>
               )}
-              {composerData.specialSeatingNeeds && !composerData.specialSeatingNeedsNA && (
+              {hasValue(composerData.specialSeatingNeeds) && !composerData.specialSeatingNeedsNA && (
                 <div>
                   <p className="text-sm text-muted-foreground">Special Seating or Mobility Needs</p>
                   <p className="font-medium whitespace-pre-wrap">{composerData.specialSeatingNeeds}</p>
                 </div>
               )}
-              {composerData.processionalSpecialInstructions && !composerData.processionalSpecialInstructionsNA && (
+              {hasValue(composerData.processionalSpecialInstructions) && !composerData.processionalSpecialInstructionsNA && (
                 <div>
                   <p className="text-sm text-muted-foreground">Special Instructions</p>
                   <p className="font-medium whitespace-pre-wrap">{composerData.processionalSpecialInstructions}</p>
@@ -419,8 +444,12 @@ export default function Summary() {
         )}
 
         {/* Block 8: Reception */}
-        {(composerData.firstDance || composerData.motherSonDance || composerData.specialDances || 
-          composerData.toastGivers || composerData.beveragePreferences || composerData.receptionSpecialRequests) && (
+        {((hasValue(composerData.firstDance) && !composerData.firstDanceNA) || 
+          (hasValue(composerData.motherSonDance) && !composerData.motherSonDanceNA) || 
+          (hasValue(composerData.specialDances) && !composerData.specialDancesNA) || 
+          (hasValue(composerData.toastGivers) && !composerData.toastGiversNA) || 
+          hasValue(composerData.beveragePreferences) || 
+          (hasValue(composerData.receptionSpecialRequests) && !composerData.receptionSpecialRequestsNA)) && (
           <Card>
             <CardHeader>
               <div className="flex items-center gap-2">
@@ -429,37 +458,37 @@ export default function Summary() {
               </div>
             </CardHeader>
             <CardContent className="space-y-2">
-              {composerData.firstDance && !composerData.firstDanceNA && (
+              {hasValue(composerData.firstDance) && !composerData.firstDanceNA && (
                 <div>
                   <p className="text-sm text-muted-foreground">First Dance</p>
                   <p className="font-medium whitespace-pre-wrap">{composerData.firstDance}</p>
                 </div>
               )}
-              {composerData.motherSonDance && !composerData.motherSonDanceNA && (
+              {hasValue(composerData.motherSonDance) && !composerData.motherSonDanceNA && (
                 <div>
                   <p className="text-sm text-muted-foreground">Mother Son Dance</p>
                   <p className="font-medium whitespace-pre-wrap">{composerData.motherSonDance}</p>
                 </div>
               )}
-              {composerData.specialDances && !composerData.specialDancesNA && (
+              {hasValue(composerData.specialDances) && !composerData.specialDancesNA && (
                 <div>
                   <p className="text-sm text-muted-foreground">Special Dances</p>
                   <p className="font-medium whitespace-pre-wrap">{composerData.specialDances}</p>
                 </div>
               )}
-              {composerData.toastGivers && !composerData.toastGiversNA && (
+              {hasValue(composerData.toastGivers) && !composerData.toastGiversNA && (
                 <div>
                   <p className="text-sm text-muted-foreground">Toast Givers</p>
                   <p className="font-medium whitespace-pre-wrap">{composerData.toastGivers}</p>
                 </div>
               )}
-              {composerData.beveragePreferences && (
+              {hasValue(composerData.beveragePreferences) && (
                 <div>
                   <p className="text-sm text-muted-foreground">Beverage Preferences</p>
                   <p className="font-medium whitespace-pre-wrap">{composerData.beveragePreferences}</p>
                 </div>
               )}
-              {composerData.receptionSpecialRequests && !composerData.receptionSpecialRequestsNA && (
+              {hasValue(composerData.receptionSpecialRequests) && !composerData.receptionSpecialRequestsNA && (
                 <div>
                   <p className="text-sm text-muted-foreground">Special Requests</p>
                   <p className="font-medium whitespace-pre-wrap">{composerData.receptionSpecialRequests}</p>
@@ -470,8 +499,10 @@ export default function Summary() {
         )}
 
         {/* Block 9: Photography */}
-        {(composerData.mustHaveShots || composerData.vipList || composerData.groupPhotosRequested || 
-          composerData.photographySpecialRequests) && (
+        {((hasValue(composerData.mustHaveShots) && !composerData.mustHaveShotsNA) || 
+          (hasValue(composerData.vipList) && !composerData.vipListNA) || 
+          (hasValue(composerData.groupPhotosRequested) && !composerData.groupPhotosRequestedNA) || 
+          (hasValue(composerData.photographySpecialRequests) && !composerData.photographySpecialRequestsNA)) && (
           <Card>
             <CardHeader>
               <div className="flex items-center gap-2">
@@ -480,25 +511,25 @@ export default function Summary() {
               </div>
             </CardHeader>
             <CardContent className="space-y-2">
-              {composerData.mustHaveShots && !composerData.mustHaveShotsNA && (
+              {hasValue(composerData.mustHaveShots) && !composerData.mustHaveShotsNA && (
                 <div>
                   <p className="text-sm text-muted-foreground">Must Have Shots</p>
                   <p className="font-medium whitespace-pre-wrap">{composerData.mustHaveShots}</p>
                 </div>
               )}
-              {composerData.vipList && !composerData.vipListNA && (
+              {hasValue(composerData.vipList) && !composerData.vipListNA && (
                 <div>
                   <p className="text-sm text-muted-foreground">VIP List</p>
                   <p className="font-medium whitespace-pre-wrap">{composerData.vipList}</p>
                 </div>
               )}
-              {composerData.groupPhotosRequested && !composerData.groupPhotosRequestedNA && (
+              {hasValue(composerData.groupPhotosRequested) && !composerData.groupPhotosRequestedNA && (
                 <div>
                   <p className="text-sm text-muted-foreground">Group Photos Requested</p>
                   <p className="font-medium whitespace-pre-wrap">{composerData.groupPhotosRequested}</p>
                 </div>
               )}
-              {composerData.photographySpecialRequests && !composerData.photographySpecialRequestsNA && (
+              {hasValue(composerData.photographySpecialRequests) && !composerData.photographySpecialRequestsNA && (
                 <div>
                   <p className="text-sm text-muted-foreground">Special Requests</p>
                   <p className="font-medium whitespace-pre-wrap">{composerData.photographySpecialRequests}</p>
@@ -509,8 +540,8 @@ export default function Summary() {
         )}
 
         {/* Block 10: Memory Wall */}
-        {((composerData.slideshowPhotos && composerData.slideshowPhotos !== '[]') || 
-          (composerData.engagementPhotos && composerData.engagementPhotos !== '[]')) && (
+        {((composerData.slideshowPhotos && composerData.slideshowPhotos !== '[]' && !composerData.slideshowPhotosNA) || 
+          (composerData.engagementPhotos && composerData.engagementPhotos !== '[]' && !composerData.engagementPhotosNA)) && (
           <Card>
             <CardHeader>
               <div className="flex items-center gap-2">
@@ -522,13 +553,13 @@ export default function Summary() {
               {composerData.slideshowPhotos && composerData.slideshowPhotos !== '[]' && !composerData.slideshowPhotosNA && (
                 <div>
                   <p className="text-sm text-muted-foreground">Memory Wall Photos</p>
-                  <p className="font-medium">{JSON.parse(composerData.slideshowPhotos).length} photo(s) uploaded</p>
+                  <p className="font-medium">{JSON.parse(composerData.slideshowPhotos).length} Photo(s) Uploaded</p>
                 </div>
               )}
               {composerData.engagementPhotos && composerData.engagementPhotos !== '[]' && !composerData.engagementPhotosNA && (
                 <div>
-                  <p className="text-sm text-muted-foreground">Engagement Photos</p>
-                  <p className="font-medium">{JSON.parse(composerData.engagementPhotos).length} photo(s) uploaded</p>
+                  <p className="text-sm text-muted-foreground">Engagement Photo</p>
+                  <p className="font-medium">{JSON.parse(composerData.engagementPhotos).length} Photo(s) Uploaded</p>
                 </div>
               )}
             </CardContent>
@@ -536,8 +567,11 @@ export default function Summary() {
         )}
 
         {/* Block 11: Personal Touches */}
-        {(composerData.freshFlorals || composerData.guestBook || composerData.cakeKnifeServiceSet || 
-          composerData.departureOrganizer || composerData.departureVehicle || composerData.personalTouchesSpecialInstructions) && (
+        {((hasValue(composerData.freshFlorals) && !composerData.freshFloralsNA) || 
+          hasValue(composerData.guestBook) || hasValue(composerData.cakeKnifeServiceSet) || 
+          (hasValue(composerData.departureOrganizer) && !composerData.departureOrganizerTBD) || 
+          hasValue(composerData.departureVehicle) || 
+          (hasValue(composerData.personalTouchesSpecialInstructions) && !composerData.personalTouchesSpecialInstructionsNA)) && (
           <Card>
             <CardHeader>
               <div className="flex items-center gap-2">
@@ -546,46 +580,40 @@ export default function Summary() {
               </div>
             </CardHeader>
             <CardContent className="space-y-2">
-              {composerData.freshFlorals && !composerData.freshFloralsNA && (
+              {hasValue(composerData.freshFlorals) && !composerData.freshFloralsNA && (
                 <div>
                   <p className="text-sm text-muted-foreground">Fresh Florals</p>
                   <p className="font-medium whitespace-pre-wrap">{composerData.freshFlorals}</p>
                 </div>
               )}
-              {composerData.guestBookChoice && (
+              {hasValue(composerData.guestBookChoice) && hasValue(composerData.guestBook) && (
                 <div>
                   <p className="text-sm text-muted-foreground">Guest Book</p>
-                  <p className="font-medium">{composerData.guestBookChoice}</p>
-                  {composerData.guestBook && (
-                    <p className="text-sm mt-1">{composerData.guestBook}</p>
-                  )}
+                  <p className="font-medium">{capitalize(composerData.guestBookChoice)}</p>
+                  <p className="text-sm mt-1">{composerData.guestBook}</p>
                 </div>
               )}
-              {composerData.cakeKnifeChoice && (
+              {hasValue(composerData.cakeKnifeChoice) && hasValue(composerData.cakeKnifeServiceSet) && (
                 <div>
                   <p className="text-sm text-muted-foreground">Cake Knife</p>
-                  <p className="font-medium">{composerData.cakeKnifeChoice}</p>
-                  {composerData.cakeKnifeServiceSet && (
-                    <p className="text-sm mt-1">{composerData.cakeKnifeServiceSet}</p>
-                  )}
+                  <p className="font-medium">{capitalize(composerData.cakeKnifeChoice)}</p>
+                  <p className="text-sm mt-1">{composerData.cakeKnifeServiceSet}</p>
                 </div>
               )}
-              {composerData.departureOrganizer && !composerData.departureOrganizerTBD && (
+              {hasValue(composerData.departureOrganizer) && !composerData.departureOrganizerTBD && (
                 <div>
                   <p className="text-sm text-muted-foreground">Departure Organizer</p>
                   <p className="font-medium">{composerData.departureOrganizer}</p>
                 </div>
               )}
-              {composerData.departureVehicleChoice && (
+              {hasValue(composerData.departureVehicleChoice) && hasValue(composerData.departureVehicle) && (
                 <div>
                   <p className="text-sm text-muted-foreground">Departure Vehicle</p>
-                  <p className="font-medium">{composerData.departureVehicleChoice}</p>
-                  {composerData.departureVehicle && (
-                    <p className="text-sm mt-1">{composerData.departureVehicle}</p>
-                  )}
+                  <p className="font-medium">{capitalize(composerData.departureVehicleChoice)}</p>
+                  <p className="text-sm mt-1">{composerData.departureVehicle}</p>
                 </div>
               )}
-              {composerData.personalTouchesSpecialInstructions && !composerData.personalTouchesSpecialInstructionsNA && (
+              {hasValue(composerData.personalTouchesSpecialInstructions) && !composerData.personalTouchesSpecialInstructionsNA && (
                 <div>
                   <p className="text-sm text-muted-foreground">Special Instructions</p>
                   <p className="font-medium whitespace-pre-wrap">{composerData.personalTouchesSpecialInstructions}</p>
@@ -596,8 +624,8 @@ export default function Summary() {
         )}
 
         {/* Block 12: Evite */}
-        {(composerData.eviteDesignStyle || composerData.eviteHeaderText || composerData.eviteBodyText || 
-          composerData.eviteRsvpOption) && (
+        {(hasValue(composerData.eviteDesignStyle) || hasValue(composerData.eviteHeaderText) || 
+          hasValue(composerData.eviteBodyText) || hasValue(composerData.eviteRsvpOption)) && (
           <Card>
             <CardHeader>
               <div className="flex items-center gap-2">
@@ -606,29 +634,29 @@ export default function Summary() {
               </div>
             </CardHeader>
             <CardContent className="space-y-2">
-              {composerData.eviteDesignStyle && !composerData.eviteDesignNoSpecialRequests && (
+              {hasValue(composerData.eviteDesignStyle) && !composerData.eviteDesignNoSpecialRequests && (
                 <div>
                   <p className="text-sm text-muted-foreground">Design Style</p>
-                  <p className="font-medium">{composerData.eviteDesignStyle}</p>
+                  <p className="font-medium">{capitalize(composerData.eviteDesignStyle)}</p>
                 </div>
               )}
-              {composerData.eviteHeaderText && !composerData.eviteWordingNoSpecialRequests && (
+              {hasValue(composerData.eviteHeaderText) && !composerData.eviteWordingNoSpecialRequests && (
                 <div>
                   <p className="text-sm text-muted-foreground">Header Text</p>
                   <p className="font-medium">{composerData.eviteHeaderText}</p>
                 </div>
               )}
-              {composerData.eviteBodyText && !composerData.eviteWordingNoSpecialRequests && (
+              {hasValue(composerData.eviteBodyText) && !composerData.eviteWordingNoSpecialRequests && (
                 <div>
                   <p className="text-sm text-muted-foreground">Body Text</p>
                   <p className="font-medium whitespace-pre-wrap">{composerData.eviteBodyText}</p>
                 </div>
               )}
-              {composerData.eviteRsvpOption && !composerData.eviteRsvpNoSpecialRequests && (
+              {hasValue(composerData.eviteRsvpOption) && !composerData.eviteRsvpNoSpecialRequests && (
                 <div>
                   <p className="text-sm text-muted-foreground">RSVP Option</p>
-                  <p className="font-medium">{composerData.eviteRsvpOption}</p>
-                  {composerData.eviteRsvpCustomLink && (
+                  <p className="font-medium">{capitalize(composerData.eviteRsvpOption)}</p>
+                  {hasValue(composerData.eviteRsvpCustomLink) && (
                     <p className="text-sm mt-1 break-all">{composerData.eviteRsvpCustomLink}</p>
                   )}
                 </div>
@@ -638,87 +666,85 @@ export default function Summary() {
         )}
 
         {/* Block 13: Contact & Add-ons */}
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <DollarSign className="h-5 w-5 text-primary" />
-              <CardTitle>Contact Information & Add-ons</CardTitle>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {/* Couple Information */}
-            {composerData.person1FullName && (
-              <div>
-                <p className="text-sm font-medium mb-2">Person 1</p>
-                <div className="ml-4 space-y-1">
-                  <p className="text-sm"><span className="text-muted-foreground">Name:</span> {composerData.person1FullName}</p>
-                  {composerData.person1Role && <p className="text-sm"><span className="text-muted-foreground">Role:</span> {composerData.person1Role}</p>}
-                  {composerData.person1Pronouns && <p className="text-sm"><span className="text-muted-foreground">Pronouns:</span> {composerData.person1Pronouns}</p>}
-                  {composerData.person1Email && <p className="text-sm"><span className="text-muted-foreground">Email:</span> {composerData.person1Email}</p>}
-                  {composerData.person1Phone && <p className="text-sm"><span className="text-muted-foreground">Phone:</span> {composerData.person1Phone}</p>}
-                  {composerData.person1AlternatePhone && <p className="text-sm"><span className="text-muted-foreground">Alt Phone:</span> {composerData.person1AlternatePhone}</p>}
+        {(hasValue(composerData.person1FullName) || hasValue(composerData.person2FullName) || 
+          composerData.photoBookAddon || composerData.extraTimeAddon || composerData.byobBarAddon || 
+          composerData.rehearsalAddon) && (
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <DollarSign className="h-5 w-5 text-primary" />
+                <CardTitle>Contact Information & Add-ons</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {hasValue(composerData.person1FullName) && (
+                <div>
+                  <p className="text-sm font-medium mb-2">Person 1</p>
+                  <div className="ml-4 space-y-1">
+                    <p className="text-sm"><span className="text-muted-foreground">Name:</span> {composerData.person1FullName}</p>
+                    {hasValue(composerData.person1Role) && <p className="text-sm"><span className="text-muted-foreground">Role:</span> {capitalize(composerData.person1Role)}</p>}
+                    {hasValue(composerData.person1Pronouns) && <p className="text-sm"><span className="text-muted-foreground">Pronouns:</span> {composerData.person1Pronouns}</p>}
+                    {hasValue(composerData.person1Email) && <p className="text-sm"><span className="text-muted-foreground">Email:</span> {composerData.person1Email}</p>}
+                    {hasValue(composerData.person1Phone) && <p className="text-sm"><span className="text-muted-foreground">Phone:</span> {composerData.person1Phone}</p>}
+                    {hasValue(composerData.person1AlternatePhone) && <p className="text-sm"><span className="text-muted-foreground">Alt Phone:</span> {composerData.person1AlternatePhone}</p>}
+                  </div>
                 </div>
-              </div>
-            )}
-            {composerData.person2FullName && (
-              <div>
-                <p className="text-sm font-medium mb-2">Person 2</p>
-                <div className="ml-4 space-y-1">
-                  <p className="text-sm"><span className="text-muted-foreground">Name:</span> {composerData.person2FullName}</p>
-                  {composerData.person2Role && <p className="text-sm"><span className="text-muted-foreground">Role:</span> {composerData.person2Role}</p>}
-                  {composerData.person2Pronouns && <p className="text-sm"><span className="text-muted-foreground">Pronouns:</span> {composerData.person2Pronouns}</p>}
-                  {composerData.person2Email && <p className="text-sm"><span className="text-muted-foreground">Email:</span> {composerData.person2Email}</p>}
-                  {composerData.person2Phone && <p className="text-sm"><span className="text-muted-foreground">Phone:</span> {composerData.person2Phone}</p>}
+              )}
+              {hasValue(composerData.person2FullName) && (
+                <div>
+                  <p className="text-sm font-medium mb-2">Person 2</p>
+                  <div className="ml-4 space-y-1">
+                    <p className="text-sm"><span className="text-muted-foreground">Name:</span> {composerData.person2FullName}</p>
+                    {hasValue(composerData.person2Role) && <p className="text-sm"><span className="text-muted-foreground">Role:</span> {capitalize(composerData.person2Role)}</p>}
+                    {hasValue(composerData.person2Pronouns) && <p className="text-sm"><span className="text-muted-foreground">Pronouns:</span> {composerData.person2Pronouns}</p>}
+                    {hasValue(composerData.person2Email) && <p className="text-sm"><span className="text-muted-foreground">Email:</span> {composerData.person2Email}</p>}
+                    {hasValue(composerData.person2Phone) && <p className="text-sm"><span className="text-muted-foreground">Phone:</span> {composerData.person2Phone}</p>}
+                  </div>
                 </div>
-              </div>
-            )}
-            {composerData.mailingAddress && (
-              <div>
-                <p className="text-sm text-muted-foreground">Mailing Address</p>
-                <p className="font-medium whitespace-pre-wrap">{composerData.mailingAddress}</p>
-              </div>
-            )}
-            <div className="flex items-center gap-2">
-              <BooleanDisplay value={composerData.smsConsent} />
-              <span className="text-sm">SMS Consent</span>
-            </div>
+              )}
+              {hasValue(composerData.mailingAddress) && (
+                <div>
+                  <p className="text-sm text-muted-foreground">Mailing Address</p>
+                  <p className="font-medium whitespace-pre-wrap">{composerData.mailingAddress}</p>
+                </div>
+              )}
+              {toBoolean(composerData.smsConsent) && (
+                <div>
+                  <BooleanDisplay value={true} label="SMS Consent" />
+                </div>
+              )}
 
-            {/* Add-ons */}
-            <div className="pt-2 border-t">
-              <p className="text-sm font-medium mb-2">Add-ons</p>
-              <div className="ml-4 space-y-1">
-                <div className="flex items-center gap-2">
-                  <BooleanDisplay value={composerData.photoBookAddon} />
-                  <span className="text-sm">Photo Book {composerData.photoBookAddon && composerData.photoBookQuantity > 1 && `(×${composerData.photoBookQuantity})`}</span>
+              {/* Add-ons */}
+              {(composerData.photoBookAddon || composerData.extraTimeAddon || composerData.byobBarAddon || composerData.rehearsalAddon) && (
+                <div className="pt-2 border-t">
+                  <p className="text-sm font-medium mb-2">Add-ons</p>
+                  <div className="ml-4 space-y-1">
+                    <BooleanDisplay 
+                      value={composerData.photoBookAddon} 
+                      label={`Photo Book${composerData.photoBookAddon && composerData.photoBookQuantity > 1 ? ` (×${composerData.photoBookQuantity})` : ''}`} 
+                    />
+                    <BooleanDisplay value={composerData.extraTimeAddon} label="Extra Time Block" />
+                    <BooleanDisplay value={composerData.byobBarAddon} label="BYOB Bar Setup" />
+                    <BooleanDisplay value={composerData.rehearsalAddon} label="Rehearsal Hour" />
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <BooleanDisplay value={composerData.extraTimeAddon} />
-                  <span className="text-sm">Extra Time Block</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <BooleanDisplay value={composerData.byobBarAddon} />
-                  <span className="text-sm">BYOB Bar Setup</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <BooleanDisplay value={composerData.rehearsalAddon} />
-                  <span className="text-sm">Rehearsal Hour</span>
-                </div>
-              </div>
-            </div>
+              )}
 
-            {/* Payment */}
-            {composerData.paymentMethod && (
-              <div className="pt-2 border-t">
-                <p className="text-sm text-muted-foreground">Payment Method</p>
-                <p className="font-medium">{composerData.paymentMethod.replace('_', ' ').replace(/\b\w/g, (l: string) => l.toUpperCase())}</p>
-              </div>
-            )}
-            <div className="flex items-center gap-2">
-              <BooleanDisplay value={composerData.termsAccepted} />
-              <span className="text-sm">Terms Accepted</span>
-            </div>
-          </CardContent>
-        </Card>
+              {/* Payment */}
+              {hasValue(composerData.paymentMethod) && (
+                <div className="pt-2 border-t">
+                  <p className="text-sm text-muted-foreground">Payment Method</p>
+                  <p className="font-medium">{capitalize(composerData.paymentMethod)}</p>
+                </div>
+              )}
+              {toBoolean(composerData.termsAccepted) && (
+                <div>
+                  <BooleanDisplay value={true} label="Terms Accepted" />
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   );
