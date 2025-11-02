@@ -163,10 +163,8 @@ export default function Block10Slideshow({
     onChange('engagementPhotos', JSON.stringify(updated));
   };
 
-  // Memory Wall is optional - always show option to mark as done, and show "later" option when no data
-  const hasAnyData = slideshowPhotosList.length > 0 || engagementPhotosList.length > 0 || slideshowPhotosNA || engagementPhotosNA;
+  // Memory Wall is optional - always show option to mark as done
   const allRequiredFieldsFilled = true; // Always show "done" option since this section is optional
-  const someFieldsEmpty = !hasAnyData; // Show "later" option when no data entered yet
 
   return (
     <div className="space-y-6">
@@ -399,43 +397,6 @@ export default function Block10Slideshow({
                   />
                   <Label htmlFor="slideshow-complete-done" className="text-sm font-normal cursor-pointer">
                     All done (for now)
-                  </Label>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {someFieldsEmpty && (
-        <Card className="border-amber-200 dark:border-amber-900">
-          <CardContent className="pt-6">
-            <div className="flex items-start gap-3">
-              <AlertCircle className="h-5 w-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
-              <div className="space-y-3 flex-1">
-                <div>
-                  <p className="font-medium text-amber-900 dark:text-amber-100">Want to add photos later?</p>
-                  <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
-                    This section is optional. You can come back to upload photos later if you'd like.
-                  </p>
-                </div>
-                
-                <div className="flex items-center gap-2">
-                  <Checkbox
-                    id="slideshow-incomplete-later"
-                    data-testid="checkbox-slideshow-incomplete-later"
-                    checked={slideshowCompletionStatus === 'later'}
-                    disabled={readOnly}
-                    onCheckedChange={(checked) => {
-                      if (checked) {
-                        onChange('slideshowCompletionStatus', 'later');
-                      } else {
-                        onChange('slideshowCompletionStatus', '');
-                      }
-                    }}
-                  />
-                  <Label htmlFor="slideshow-incomplete-later" className="text-sm font-normal cursor-pointer">
-                    We'll finish this later
                   </Label>
                 </div>
               </div>

@@ -15,11 +15,11 @@ The Modest Wedding is a full-stack web application for booking wedding ceremonie
 - **Memory Wall Made Optional**: Block 10 (Memory Wall) is now completely optional and will not block user progression through the booking flow
   - Users can skip the page entirely without uploading any photos
   - Users can mark the section as "All done (for now)" even without uploading photos
-  - Users can still mark as "We'll finish this later" if they want to return
+  - Removed the amber "You're making progress!" card - only the green completion card is shown
   - Page renamed from "Slideshow" to "Memory Wall" throughout the application
   - Engagement Photo changed to singular (1 photo limit instead of 5)
   - Memory Wall Photos card and Engagement Photo card reordered (Engagement Photo now appears first)
-  - Completion status properly tracked: 'done' = complete, 'later'/has-data = partial, untouched = none
+  - Completion status properly tracked: 'done' = complete, has-data = partial, untouched = none
   - Navigation logic ensures the page never blocks users from proceeding to subsequent steps
 
 ### November 1, 2025

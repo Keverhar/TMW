@@ -1171,7 +1171,7 @@ export default function WeddingComposer() {
       
       case 10: // Memory Wall (optional - not required for progression)
         if (formData.slideshowCompletionStatus === 'done') return 'complete';
-        if (formData.slideshowCompletionStatus === 'later' || formData.slideshowPhotos !== '[]' || formData.engagementPhotos !== '[]') return 'partial';
+        if (formData.slideshowPhotos !== '[]' || formData.engagementPhotos !== '[]') return 'partial';
         return 'none';
       
       case 11: // Personal Touches
