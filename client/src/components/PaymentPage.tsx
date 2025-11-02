@@ -14,7 +14,7 @@ interface PaymentPageProps {
 }
 
 export default function PaymentPage({ totalAmount, onPaymentComplete, onBack }: PaymentPageProps) {
-  const [paymentMethod, setPaymentMethod] = useState<'card' | 'affirm' | 'ach'>('card');
+  const [paymentMethod, setPaymentMethod] = useState<'card' | 'affirm' | 'ach' | 'echeck'>('card');
   const [isProcessing, setIsProcessing] = useState(false);
   
   const [cardNumber, setCardNumber] = useState('');
@@ -72,7 +72,7 @@ export default function PaymentPage({ totalAmount, onPaymentComplete, onBack }: 
             <CardDescription>Choose how you'd like to pay</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <RadioGroup value={paymentMethod} onValueChange={(value) => setPaymentMethod(value as 'card' | 'affirm' | 'ach')}>
+            <RadioGroup value={paymentMethod} onValueChange={(value) => setPaymentMethod(value as 'card' | 'affirm' | 'ach' | 'echeck')}>
               <div className="flex items-start space-x-3 p-4 border rounded-lg hover-elevate">
                 <RadioGroupItem value="card" id="card" data-testid="radio-payment-card" />
                 <div className="flex-1">
@@ -118,6 +118,22 @@ export default function PaymentPage({ totalAmount, onPaymentComplete, onBack }: 
                 </div>
               </div>
 
+              <div className="flex items-start space-x-3 p-4 border rounded-lg hover-elevate">
+                <RadioGroupItem value="echeck" id="echeck" data-testid="radio-payment-echeck" />
+                <div className="flex-1">
+                  <Label htmlFor="echeck" className="cursor-pointer">
+                    <div className="mb-2">
+                      <span className="font-semibold">Pay by E-Check</span>
+                    </div>
+                    <div className="text-sm text-muted-foreground space-y-1">
+                      <p>- Simple and secure: pay directly from your bank account using your routing and account number.</p>
+                      <p>- Funds take 2–3 days to clear, but your date is secured once payment is received.</p>
+                      <p className="font-medium text-foreground">- Special savings: Receive a $100 discount on weddings or $30 discount on elopements/vow renewals when you choose E-Check.</p>
+                    </div>
+                  </Label>
+                </div>
+              </div>
+
             </RadioGroup>
 
             {paymentMethod === 'affirm' && (
@@ -155,6 +171,50 @@ export default function PaymentPage({ totalAmount, onPaymentComplete, onBack }: 
                     id="accountName"
                     placeholder="Account holder name"
                     data-testid="input-account-name"
+                  />
+                </div>
+                <Alert>
+                  <Info className="h-4 w-4" />
+                  <AlertDescription>
+                    Your bank information is encrypted and secure. Payment will be processed within 2-3 business days.
+                  </AlertDescription>
+                </Alert>
+              </div>
+            )}
+
+            {paymentMethod === 'echeck' && (
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="echeckRoutingNumber">Routing Number</Label>
+                  <Input
+                    id="echeckRoutingNumber"
+                    placeholder="9 digits"
+                    maxLength={9}
+                    data-testid="input-echeck-routing-number"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="echeckAccountNumber">Account Number</Label>
+                  <Input
+                    id="echeckAccountNumber"
+                    placeholder="Account number"
+                    data-testid="input-echeck-account-number"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="checkNumber">Check Number</Label>
+                  <Input
+                    id="checkNumber"
+                    placeholder="Check number"
+                    data-testid="input-check-number"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="echeckAccountName">Name on Account</Label>
+                  <Input
+                    id="echeckAccountName"
+                    placeholder="Account holder name"
+                    data-testid="input-echeck-account-name"
                   />
                 </div>
                 <Alert>
