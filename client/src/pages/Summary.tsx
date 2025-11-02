@@ -804,7 +804,7 @@ export default function Summary() {
                      composerData.eventType === 'other' ? 'Other Event' :
                      capitalize(composerData.eventType)}
                   </span>
-                  <span>${(calculateBasePrice(composerData.eventType, getDayOfWeek(composerData.preferredDate)) / 100).toFixed(2)}</span>
+                  <span>${((composerData.basePackagePrice || calculateBasePrice(composerData.eventType, getDayOfWeek(composerData.preferredDate))) / 100).toFixed(2)}</span>
                 </div>
 
                 {/* Add-ons */}
@@ -839,7 +839,7 @@ export default function Summary() {
                 <div className="flex justify-between">
                   <span>Subtotal</span>
                   <span>${((
-                    calculateBasePrice(composerData.eventType, getDayOfWeek(composerData.preferredDate)) +
+                    (composerData.basePackagePrice || calculateBasePrice(composerData.eventType, getDayOfWeek(composerData.preferredDate))) +
                     (composerData.photoBookAddon ? getAddonPrice('photoBook') * (composerData.photoBookQuantity || 1) : 0) +
                     (composerData.extraTimeAddon ? getAddonPrice('extraTime') : 0) +
                     (composerData.byobBarAddon ? getAddonPrice('byobBar') : 0) +
@@ -871,7 +871,7 @@ export default function Summary() {
                 <div className="flex justify-between font-semibold">
                   <span>Total</span>
                   <span>${((
-                    calculateBasePrice(composerData.eventType, getDayOfWeek(composerData.preferredDate)) +
+                    (composerData.basePackagePrice || calculateBasePrice(composerData.eventType, getDayOfWeek(composerData.preferredDate))) +
                     (composerData.photoBookAddon ? getAddonPrice('photoBook') * (composerData.photoBookQuantity || 1) : 0) +
                     (composerData.extraTimeAddon ? getAddonPrice('extraTime') : 0) +
                     (composerData.byobBarAddon ? getAddonPrice('byobBar') : 0) +
@@ -892,7 +892,7 @@ export default function Summary() {
                 <div className="flex justify-between font-semibold text-lg">
                   <span>Balance Due</span>
                   <span>${((
-                    calculateBasePrice(composerData.eventType, getDayOfWeek(composerData.preferredDate)) +
+                    (composerData.basePackagePrice || calculateBasePrice(composerData.eventType, getDayOfWeek(composerData.preferredDate))) +
                     (composerData.photoBookAddon ? getAddonPrice('photoBook') * (composerData.photoBookQuantity || 1) : 0) +
                     (composerData.extraTimeAddon ? getAddonPrice('extraTime') : 0) +
                     (composerData.byobBarAddon ? getAddonPrice('byobBar') : 0) +
