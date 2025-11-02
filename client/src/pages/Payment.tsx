@@ -158,7 +158,7 @@ export default function Payment() {
         const currentAmountPaid = latestComposer?.amountPaid || 0;
         const newAmountPaid = currentAmountPaid + paymentAmount;
         
-        // Update payment status to completed and add to amount paid
+        // Update payment status to completed, add to amount paid, and save payment method
         // Note: Do NOT modify totalPrice - it should remain the full price
         // The cart will dynamically subtract discounts when displaying
         await fetch(`/api/wedding-composers/${composerId}`, {
@@ -166,7 +166,8 @@ export default function Payment() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ 
             paymentStatus: 'completed',
-            amountPaid: newAmountPaid
+            amountPaid: newAmountPaid,
+            paymentMethod: paymentMethod
           }),
         });
         
