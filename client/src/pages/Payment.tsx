@@ -193,6 +193,9 @@ export default function Payment() {
           }),
         });
         
+        // Invalidate the query cache to ensure Confirmation page shows fresh data
+        await queryClient.invalidateQueries({ queryKey: ["/api/wedding-composers", composerId] });
+        
         toast({
           title: "Payment successful!",
           description: "Your wedding booking has been confirmed.",
@@ -660,7 +663,15 @@ export default function Payment() {
                   
                   <div className="flex justify-between text-sm font-semibold" data-testid="row-balance-due">
                     <span>Balance Due</span>
-                    <span data-testid="text-balance-due">${(((composer.totalPrice || 0) - (composer.amountPaid || 0)) / 100).toFixed(2)}</span>
+                    <span data-testid="text-balance-due">${(((composer.basePackagePrice || 0) + 
+                      (composer.photoBookAddon ? (composer.photoBookPrice || 0) * (composer.photoBookQuantity || 1) : 0) + 
+                      (composer.extraTimeAddon ? (composer.extraTimePrice || 0) : 0) + 
+                      (composer.byobBarAddon ? (composer.byobBarPrice || 0) : 0) + 
+                      (composer.rehearsalAddon ? (composer.rehearsalPrice || 0) : 0) - 
+                      ((composer.appliedDiscountAmount || 0) > 0 
+                        ? (composer.appliedDiscountAmount || 0)
+                        : (paymentMethod === 'ach' || paymentMethod === 'echeck' ? (composer.achDiscountAmount || 0) : paymentMethod === 'affirm' ? (composer.affirmDiscountAmount || 0) : 0)
+                      ) - (composer.amountPaid || 0)) / 100).toFixed(2)}</span>
                   </div>
                   
                   <div className="border-t my-2"></div>
