@@ -205,29 +205,6 @@ export default function Summary() {
           </Card>
         )}
 
-        {/* Add-ons */}
-        {(composerData.photoBookAddon || composerData.extraTimeAddon || composerData.byobBarAddon || composerData.rehearsalAddon) && (
-          <Card>
-            <CardHeader>
-              <div className="flex items-center gap-2">
-                <Package className="h-5 w-5 text-primary" />
-                <CardTitle>Add-ons</CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-1">
-                <BooleanDisplay 
-                  value={composerData.photoBookAddon} 
-                  label={`Photo Book${composerData.photoBookAddon && composerData.photoBookQuantity > 1 ? ` (×${composerData.photoBookQuantity})` : ''}`} 
-                />
-                <BooleanDisplay value={composerData.extraTimeAddon} label="Extra Time Block" />
-                <BooleanDisplay value={composerData.byobBarAddon} label="BYOB Bar Setup" />
-                <BooleanDisplay value={composerData.rehearsalAddon} label="Rehearsal Hour" />
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
         {/* Block 2: Date & Time */}
         {(hasValue(composerData.preferredDate) || hasValue(composerData.backupDate) || hasValue(composerData.timeSlot)) && (
           <Card>
@@ -256,6 +233,29 @@ export default function Summary() {
                   <p className="font-medium">{composerData.timeSlot}</p>
                 </div>
               )}
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Add-ons */}
+        {(composerData.photoBookAddon || composerData.extraTimeAddon || composerData.byobBarAddon || composerData.rehearsalAddon) && (
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <Package className="h-5 w-5 text-primary" />
+                <CardTitle>Add-ons</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-1">
+                <BooleanDisplay 
+                  value={composerData.photoBookAddon} 
+                  label={`Photo Book${composerData.photoBookAddon && composerData.photoBookQuantity > 1 ? ` (×${composerData.photoBookQuantity})` : ''}`} 
+                />
+                <BooleanDisplay value={composerData.extraTimeAddon} label="Extra Time Block" />
+                <BooleanDisplay value={composerData.byobBarAddon} label="BYOB Bar Setup" />
+                <BooleanDisplay value={composerData.rehearsalAddon} label="Rehearsal Hour" />
+              </div>
             </CardContent>
           </Card>
         )}
