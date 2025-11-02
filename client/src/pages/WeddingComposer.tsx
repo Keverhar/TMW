@@ -1361,6 +1361,10 @@ export default function WeddingComposer() {
                       <Home className="h-4 w-4 mr-2" />
                       Home
                     </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setLocation('/summary')} data-testid="button-nav-summary-guest">
+                      <FileText className="h-4 w-4 mr-2" />
+                      Summary
+                    </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => setShowLoginDialog(true)} data-testid="button-nav-login">
                       <User className="h-4 w-4 mr-2" />
                       Login
