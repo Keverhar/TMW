@@ -254,25 +254,53 @@ export default function Payment() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Non-closeable placeholder notice */}
-      <div className="fixed top-4 right-4 z-[100] max-w-xs" data-testid="notice-placeholder">
-        <div className="bg-amber-500/90 dark:bg-amber-600/90 backdrop-blur-sm text-white p-4 rounded-md shadow-lg border-2 border-amber-600 dark:border-amber-500">
-          <p className="text-sm font-semibold leading-tight">
-            This is a placeholder page and cannot process payments. No information needs to be added to view the results.
-          </p>
-        </div>
-      </div>
-
       <div className="sticky top-0 z-50 bg-background border-b">
         <div className="max-w-4xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-xl font-serif font-bold">The Wedding Composer</h2>
-              <p className="text-sm text-muted-foreground">Secure Payment</p>
-            </div>
+          <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-2">
               <Lock className="h-4 w-4 text-green-600 dark:text-green-400" />
               <span className="text-xs text-muted-foreground">Encrypted Connection</span>
+            </div>
+            
+            {/* Placeholder notice - centered */}
+            <div className="flex-1 flex justify-center" data-testid="notice-placeholder">
+              <div className="bg-amber-500/90 dark:bg-amber-600/90 backdrop-blur-sm text-white px-4 py-2 rounded-md border-2 border-amber-600 dark:border-amber-500">
+                <p className="text-xs font-semibold leading-tight">
+                  This is a placeholder page and cannot process payments. No information needs to be added to view the results.
+                </p>
+              </div>
+            </div>
+
+            {/* Action buttons - right side */}
+            <div className="flex flex-col gap-2">
+              <Button
+                type="button"
+                onClick={handleSubmit}
+                size="default"
+                disabled={isProcessing}
+                data-testid="button-complete-payment"
+                className="w-auto"
+              >
+                {isProcessing ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Processing...
+                  </>
+                ) : paymentMethod ? (
+                  `Pay $${(displayTotal / 100).toFixed(2)}`
+                ) : (
+                  "Select Payment Method"
+                )}
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setLocation("/composer")}
+                data-testid="button-back-to-composer"
+                className="w-auto"
+              >
+                Back to Wedding Composer
+              </Button>
             </div>
           </div>
         </div>
@@ -529,25 +557,6 @@ export default function Payment() {
 
                     </RadioGroup>
                   </div>
-
-                  <Button
-                    type="submit"
-                    className="w-full"
-                    size="lg"
-                    disabled={isProcessing}
-                    data-testid="button-complete-payment"
-                  >
-                    {isProcessing ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Processing...
-                      </>
-                    ) : paymentMethod ? (
-                      `Pay $${(displayTotal / 100).toFixed(2)}`
-                    ) : (
-                      "Select Payment Method"
-                    )}
-                  </Button>
                 </form>
               </CardContent>
             </Card>
