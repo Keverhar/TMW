@@ -263,7 +263,7 @@ export default function Block10Slideshow({
             <CardTitle>Memory Wall Photos</CardTitle>
           </div>
           <CardDescription>
-            Upload photos for the memory wall during your reception (up to 30 photos, 1GB total)
+            Upload photos for the memory wall during your reception (up to 30 photos, 1GB total). These will be framed in your signature color. Specific order or timing is not available.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
