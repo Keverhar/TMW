@@ -22,6 +22,7 @@ interface BlockAddOnsProps {
   timeSlot: string;
   amountPaid: number;
   paymentStatus: string;
+  basePackagePrice: number;
 }
 
 export default function BlockAddOns({
@@ -37,13 +38,11 @@ export default function BlockAddOns({
   timeSlot,
   amountPaid,
   paymentStatus,
+  basePackagePrice,
 }: BlockAddOnsProps) {
   const [showByobDialog, setShowByobDialog] = useState(false);
   const [showCannotReduceDialog, setShowCannotReduceDialog] = useState(false);
   const isSimplifiedFlow = eventType === 'modest-elopement' || eventType === 'vow-renewal';
-  const hasPaymentBeenMade = paymentStatus === 'completed';
-  
-  console.log('BlockAddOns - Payment Status:', paymentStatus, 'Has Payment Been Made:', hasPaymentBeenMade);
   
   // Check if Extra Time addon is eligible (Saturday at 6:00 PM)
   const isExtraTimeEligible = () => {
@@ -61,29 +60,57 @@ export default function BlockAddOns({
   const byobBarPrice = getAddonPrice('byobBar');
   const rehearsalPrice = getAddonPrice('rehearsal');
 
+  // Calculate what the balance would be after a change
+  const wouldCreateNegativeBalance = (priceChange: number) => {
+    // Calculate current addons total
+    const currentAddonsTotal = 
+      (photoBookAddon ? photoBookPrice * photoBookQuantity : 0) +
+      (extraTimeAddon ? extraTimePrice : 0) +
+      (byobBarAddon ? byobBarPrice : 0) +
+      (rehearsalAddon ? rehearsalPrice : 0);
+    
+    // Calculate new addons total after the proposed change (priceChange is negative when removing)
+    const newAddonsTotal = currentAddonsTotal + priceChange;
+    
+    // Calculate what balance due would be after the change
+    const newBalanceDue = basePackagePrice + newAddonsTotal - amountPaid;
+    
+    // Prevent if balance would become negative
+    return newBalanceDue < 0;
+  };
+
   const handlePhotoBookChange = (checked: boolean) => {
-    // Prevent unchecking if payment has been made
-    if (!checked && hasPaymentBeenMade && photoBookAddon) {
-      setShowCannotReduceDialog(true);
-      return;
+    if (!checked && photoBookAddon) {
+      // Removing photo book addon
+      const priceChange = -(photoBookPrice * photoBookQuantity);
+      if (wouldCreateNegativeBalance(priceChange)) {
+        setShowCannotReduceDialog(true);
+        return;
+      }
     }
     onChange('photoBookAddon', checked);
   };
 
   const handlePhotoBookQuantityChange = (newQuantity: number) => {
-    // Prevent reducing quantity if payment has been made
-    if (hasPaymentBeenMade && newQuantity < photoBookQuantity) {
-      setShowCannotReduceDialog(true);
-      return;
+    if (newQuantity < photoBookQuantity) {
+      // Reducing quantity
+      const priceChange = -(photoBookPrice * (photoBookQuantity - newQuantity));
+      if (wouldCreateNegativeBalance(priceChange)) {
+        setShowCannotReduceDialog(true);
+        return;
+      }
     }
     onChange('photoBookQuantity', newQuantity);
   };
 
   const handleExtraTimeChange = (checked: boolean) => {
-    // Prevent unchecking if payment has been made
-    if (!checked && hasPaymentBeenMade && extraTimeAddon) {
-      setShowCannotReduceDialog(true);
-      return;
+    if (!checked && extraTimeAddon) {
+      // Removing extra time addon
+      const priceChange = -extraTimePrice;
+      if (wouldCreateNegativeBalance(priceChange)) {
+        setShowCannotReduceDialog(true);
+        return;
+      }
     }
     onChange('extraTimeAddon', checked);
   };
@@ -92,8 +119,9 @@ export default function BlockAddOns({
     if (checked) {
       setShowByobDialog(true);
     } else {
-      // Prevent unchecking if payment has been made
-      if (hasPaymentBeenMade && byobBarAddon) {
+      // Removing BYOB addon
+      const priceChange = -byobBarPrice;
+      if (wouldCreateNegativeBalance(priceChange)) {
         setShowCannotReduceDialog(true);
         return;
       }
@@ -102,10 +130,13 @@ export default function BlockAddOns({
   };
 
   const handleRehearsalChange = (checked: boolean) => {
-    // Prevent unchecking if payment has been made
-    if (!checked && hasPaymentBeenMade && rehearsalAddon) {
-      setShowCannotReduceDialog(true);
-      return;
+    if (!checked && rehearsalAddon) {
+      // Removing rehearsal addon
+      const priceChange = -rehearsalPrice;
+      if (wouldCreateNegativeBalance(priceChange)) {
+        setShowCannotReduceDialog(true);
+        return;
+      }
     }
     onChange('rehearsalAddon', checked);
   };
