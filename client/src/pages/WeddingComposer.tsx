@@ -867,8 +867,32 @@ export default function WeddingComposer() {
     }
   };
 
-  const handleLeaveToHome = () => {
+  const handleLeaveToHome = async () => {
     setShowLeaveConfirmDialog(false);
+    
+    // Clear date and time from composer data if leaving without payment
+    if (composerId && composerPaymentStatus !== "completed") {
+      try {
+        const clearedData = {
+          preferredDate: "",
+          backupDate: "",
+          timeSlot: "",
+        };
+        
+        await apiRequest("PATCH", `/api/wedding-composers/${composerId}`, clearedData);
+        
+        // Update local form data
+        setFormData(prev => ({
+          ...prev,
+          preferredDate: "",
+          backupDate: "",
+          timeSlot: "",
+        }));
+      } catch (error) {
+        console.error("Error clearing date/time:", error);
+      }
+    }
+    
     setLocation("/");
   };
 
