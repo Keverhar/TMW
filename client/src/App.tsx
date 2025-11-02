@@ -10,6 +10,7 @@ import Payment from "@/pages/Payment";
 import Confirmation from "@/pages/Confirmation";
 import Dashboard from "@/pages/Dashboard";
 import Account from "@/pages/Account";
+import Summary from "@/pages/Summary";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -20,6 +21,7 @@ function Router() {
         <Route path="/" component={Home} />
         <Route path="/composer" component={WeddingComposer} />
         <Route path="/account" component={Account} />
+        <Route path="/summary" component={Summary} />
         <Route path="/dashboard" component={Dashboard} />
         <Route path="/payment/:composerId" component={Payment} />
         <Route path="/confirmation/:composerId" component={Confirmation} />

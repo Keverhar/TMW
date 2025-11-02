@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronLeft, ChevronRight, Save, UserPlus, LogOut, User } from "lucide-react";
+import { ChevronLeft, ChevronRight, Save, UserPlus, LogOut, User, FileText } from "lucide-react";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import type { WeddingComposer as WeddingComposerType } from "@shared/schema";
@@ -1294,6 +1294,10 @@ export default function WeddingComposer() {
                     <DropdownMenuItem onClick={() => setLocation('/account')} data-testid="button-nav-account">
                       <User className="h-4 w-4 mr-2" />
                       Account
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setLocation('/summary')} data-testid="button-nav-summary">
+                      <FileText className="h-4 w-4 mr-2" />
+                      Summary
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={handleLogout} data-testid="button-logout">
                       <LogOut className="h-4 w-4 mr-2" />
