@@ -1541,8 +1541,8 @@ export default function WeddingComposer() {
         return 'none';
       
       case 13: // Add-Ons
-        // Add-ons are optional, turn green when any add-on is selected
-        if (formData.photoBookAddon || formData.extraTimeAddon || formData.byobBarAddon || formData.rehearsalAddon) return 'complete';
+        // Add-ons block never turns green (complete)
+        if (formData.photoBookAddon || formData.extraTimeAddon || formData.byobBarAddon || formData.rehearsalAddon) return 'partial';
         return 'none';
       
       case 14: // Cart (Payment & Review)
