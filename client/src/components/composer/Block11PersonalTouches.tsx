@@ -51,7 +51,6 @@ export default function Block11PersonalTouches({
   
   const allRequiredFieldsFilled = isFreshFloralsFilled && isGuestBookFilled && isCakeKnifeFilled && 
                                    isDepartureOrganizerFilled && isDepartureVehicleFilled && isSpecialInstructionsFilled;
-  const someFieldsEmpty = !allRequiredFieldsFilled;
 
   return (
     <div className="space-y-6">
@@ -376,42 +375,6 @@ export default function Block11PersonalTouches({
         </Card>
       )}
 
-      {someFieldsEmpty && (
-        <Card className="border-amber-200 dark:border-amber-900">
-          <CardContent className="pt-6">
-            <div className="flex items-start gap-3">
-              <AlertCircle className="h-5 w-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
-              <div className="space-y-3 flex-1">
-                <div>
-                  <p className="font-medium text-amber-900 dark:text-amber-100">You're making progress!</p>
-                  <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
-                    Some personal touches fields still need attention. Please confirm your status.
-                  </p>
-                </div>
-                
-                <div className="flex items-center gap-2">
-                  <Checkbox
-                    id="personal-touches-incomplete-later"
-                    data-testid="checkbox-personal-touches-incomplete-later"
-                    checked={personalTouchesCompletionStatus === 'later'}
-                    onCheckedChange={(checked) => {
-                      if (checked) {
-                        onChange('personalTouchesCompletionStatus', 'later');
-                      } else {
-                        onChange('personalTouchesCompletionStatus', '');
-                      }
-                    }}
-                    disabled={readOnly}
-                  />
-                  <Label htmlFor="personal-touches-incomplete-later" className="text-sm font-normal cursor-pointer">
-                    We'll finish this later
-                  </Label>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
     </div>
   );
 }
