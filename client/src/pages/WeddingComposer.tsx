@@ -1622,7 +1622,7 @@ export default function WeddingComposer() {
                 let colorClasses = '';
                 if (isReadOnly) {
                   // Disabled blocks: light grey text on black background
-                  colorClasses = 'bg-black text-gray-400';
+                  colorClasses = 'bg-black text-[#D3D3D3]';
                 } else {
                   // Enabled blocks: color based on completion status
                   switch (completionStatus) {
