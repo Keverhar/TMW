@@ -31,24 +31,6 @@ export default function Block9Photography({
   onChange,
   readOnly = false
 }: Block9PhotographyProps) {
-  const isMustHaveShotsFilled = mustHaveShotsNA || mustHaveShots;
-  const isVipListFilled = vipListNA || vipList;
-  const isGroupPhotosFilled = groupPhotosRequestedNA || groupPhotosRequested;
-  const isSpecialRequestsFilled = photographySpecialRequestsNA || photographySpecialRequests;
-
-  const allRequiredFieldsFilled = isMustHaveShotsFilled && isVipListFilled && 
-    isGroupPhotosFilled && isSpecialRequestsFilled;
-
-  const someFieldsEmpty = !isMustHaveShotsFilled || !isVipListFilled || 
-    !isGroupPhotosFilled || !isSpecialRequestsFilled;
-
-  const handleCompletionStatusChange = (status: string) => {
-    if (photographyCompletionStatus === status) {
-      onChange('photographyCompletionStatus', '');
-    } else {
-      onChange('photographyCompletionStatus', status);
-    }
-  };
 
   return (
     <div className="space-y-6">
@@ -221,42 +203,6 @@ export default function Block9Photography({
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Photography Planning Status</CardTitle>
-          <CardDescription>Let us know if you're ready to move forward or need more time</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="photography-all-done"
-              data-testid="checkbox-photography-all-done"
-              checked={photographyCompletionStatus === 'all-done'}
-              onCheckedChange={() => handleCompletionStatusChange('all-done')}
-              disabled={readOnly || !allRequiredFieldsFilled}
-            />
-            <Label htmlFor="photography-all-done" className={`cursor-pointer font-medium ${!allRequiredFieldsFilled ? 'opacity-50' : ''}`}>
-              All done (for now)
-            </Label>
-          </div>
-          
-          {!allRequiredFieldsFilled && (
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="photography-finish-later"
-                data-testid="checkbox-photography-finish-later"
-                checked={photographyCompletionStatus === 'finish-later'}
-                onCheckedChange={() => handleCompletionStatusChange('finish-later')}
-                disabled={readOnly}
-              />
-              <Label htmlFor="photography-finish-later" className="cursor-pointer font-medium">
-                We'll finish this later
-              </Label>
-            </div>
-          )}
-
-        </CardContent>
-      </Card>
     </div>
   );
 }

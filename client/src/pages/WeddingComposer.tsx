@@ -1516,8 +1516,8 @@ export default function WeddingComposer() {
         return 'none';
       
       case 9: // Photography
-        if (formData.photographyCompletionStatus && formData.photographyCompletionStatus !== 'finish-later') return 'complete';
-        if (formData.photographyCompletionStatus === 'finish-later' || formData.mustHaveShots || formData.vipList) return 'partial';
+        // Photography block never turns green (complete)
+        if (formData.mustHaveShots || formData.vipList || formData.groupPhotosRequested || formData.photographySpecialRequests) return 'partial';
         return 'none';
       
       case 10: // Memory Wall (optional - not required for progression)
