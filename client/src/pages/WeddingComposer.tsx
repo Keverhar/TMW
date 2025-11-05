@@ -1511,8 +1511,8 @@ export default function WeddingComposer() {
         return 'none';
       
       case 8: // Reception
-        if (formData.receptionCompletionStatus && formData.receptionCompletionStatus !== 'finish-later') return 'complete';
-        if (formData.receptionCompletionStatus === 'finish-later' || formData.firstDance || formData.beveragePreferences) return 'partial';
+        // Reception block never turns green (complete)
+        if (formData.firstDance || formData.motherSonDance || formData.specialDances || formData.toastGivers || formData.beveragePreferences || formData.receptionSpecialRequests) return 'partial';
         return 'none';
       
       case 9: // Photography

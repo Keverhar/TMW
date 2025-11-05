@@ -38,25 +38,6 @@ export default function Block8Reception({
   onChange,
   readOnly = false
 }: Block8ReceptionProps) {
-  const isFirstDanceFilled = firstDanceNA || firstDance;
-  const isMotherSonDanceFilled = motherSonDanceNA || motherSonDance;
-  const isSpecialDancesFilled = specialDancesNA || specialDances;
-  const isToastGiversFilled = toastGiversNA || toastGivers;
-  const isSpecialRequestsFilled = receptionSpecialRequestsNA || receptionSpecialRequests;
-
-  const allRequiredFieldsFilled = isFirstDanceFilled && isMotherSonDanceFilled && 
-    isSpecialDancesFilled && isToastGiversFilled && beveragePreferences && isSpecialRequestsFilled;
-
-  const someFieldsEmpty = !isFirstDanceFilled || !isMotherSonDanceFilled || !isSpecialDancesFilled || 
-    !isToastGiversFilled || !beveragePreferences || !isSpecialRequestsFilled;
-
-  const handleCompletionStatusChange = (status: string) => {
-    if (receptionCompletionStatus === status) {
-      onChange('receptionCompletionStatus', '');
-    } else {
-      onChange('receptionCompletionStatus', status);
-    }
-  };
 
   return (
     <div className="space-y-6">
@@ -265,42 +246,6 @@ export default function Block8Reception({
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Reception Planning Status</CardTitle>
-          <CardDescription>Let us know if you're ready to move forward or need more time</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="reception-all-done"
-              data-testid="checkbox-reception-all-done"
-              checked={receptionCompletionStatus === 'all-done'}
-              onCheckedChange={() => handleCompletionStatusChange('all-done')}
-              disabled={readOnly || !allRequiredFieldsFilled}
-            />
-            <Label htmlFor="reception-all-done" className={`cursor-pointer font-medium ${!allRequiredFieldsFilled ? 'opacity-50' : ''}`}>
-              All done (for now)
-            </Label>
-          </div>
-          
-          {!allRequiredFieldsFilled && (
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="reception-finish-later"
-                data-testid="checkbox-reception-finish-later"
-                checked={receptionCompletionStatus === 'finish-later'}
-                onCheckedChange={() => handleCompletionStatusChange('finish-later')}
-                disabled={readOnly}
-              />
-              <Label htmlFor="reception-finish-later" className="cursor-pointer font-medium">
-                We'll finish this later
-              </Label>
-            </div>
-          )}
-
-        </CardContent>
-      </Card>
     </div>
   );
 }
