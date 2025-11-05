@@ -6,6 +6,9 @@ import { Calendar } from "@/components/ui/calendar";
 import { Info, Calendar as CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { useQuery } from "@tanstack/react-query";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
 
 interface Block1EventTypeProps {
   eventType: string;
@@ -13,6 +16,7 @@ interface Block1EventTypeProps {
   timeSlot: string;
   onChange: (field: string, value: string) => void;
   readOnly?: boolean;
+  amountPaid?: number;
 }
 
 interface BookedSlot {
@@ -84,7 +88,8 @@ const getTimeSlots = (preferredDate: string, eventType: string) => {
   ];
 };
 
-export default function Block1EventType({ eventType, preferredDate, timeSlot, onChange, readOnly }: Block1EventTypeProps) {
+export default function Block1EventType({ eventType, preferredDate, timeSlot, onChange, readOnly, amountPaid = 0 }: Block1EventTypeProps) {
+  const [showDateChangeDialog, setShowDateChangeDialog] = useState(false);
   // Fetch booked slots from the API to prevent double-booking
   const { data: bookedSlots = [] } = useQuery<BookedSlot[]>({
     queryKey: ['/api/availability/booked-slots'],
@@ -222,6 +227,20 @@ export default function Block1EventType({ eventType, preferredDate, timeSlot, on
                     selected={preferredDateObj}
                     onSelect={(date) => {
                       if (date) {
+                        const newDayOfWeek = date.getDay();
+                        
+                        // Check if user is trying to downgrade from Friday to Wednesday after payment
+                        if (amountPaid > 0 && isSimplifiedFlow && preferredDate) {
+                          const currentDate = new Date(preferredDate + 'T12:00:00');
+                          const currentDayOfWeek = currentDate.getDay();
+                          
+                          // Prevent downgrade from Friday (5) to Wednesday (3)
+                          if (currentDayOfWeek === 5 && newDayOfWeek === 3) {
+                            setShowDateChangeDialog(true);
+                            return;
+                          }
+                        }
+                        
                         const year = date.getFullYear();
                         const month = String(date.getMonth() + 1).padStart(2, '0');
                         const day = String(date.getDate()).padStart(2, '0');
@@ -287,6 +306,26 @@ export default function Block1EventType({ eventType, preferredDate, timeSlot, on
           )}
         </>
       )}
+
+      <Dialog open={showDateChangeDialog} onOpenChange={setShowDateChangeDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Date Change Not Allowed</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <p className="text-sm">
+              You cannot change your date from Friday to Wednesday after payment has been made. If you need to make this change, please contact our staff at (970) 627-7987 for assistance.
+            </p>
+            <Button 
+              onClick={() => setShowDateChangeDialog(false)} 
+              className="w-full"
+              data-testid="button-acknowledge-date-change"
+            >
+              Understood
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

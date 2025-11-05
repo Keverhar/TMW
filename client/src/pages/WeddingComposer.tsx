@@ -1766,6 +1766,7 @@ export default function WeddingComposer() {
               timeSlot={formData.timeSlot}
               onChange={updateField}
               readOnly={isBlockReadOnly(2)}
+              amountPaid={formData.amountPaid}
             />
           )}
           {steps[currentStep - 1]?.id === 3 && (
