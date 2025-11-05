@@ -1488,8 +1488,9 @@ export default function WeddingComposer() {
   
   // Helper function to determine if a block should be read-only
   const isBlockReadOnly = (blockId: number): boolean => {
-    // Block 2 (Event Type) becomes read-only once payment has been made
-    if (blockId === 2 && (formData.amountPaid || 0) > 0) {
+    // Block 2 (Event Type) becomes read-only only if payment has been made for a modest wedding
+    // This allows upgrades from elopement/vow renewal to modest wedding, but prevents downgrades
+    if (blockId === 2 && (formData.amountPaid || 0) > 0 && formData.eventType === 'modest-wedding') {
       return true;
     }
     

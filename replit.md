@@ -12,7 +12,7 @@ The Modest Wedding is a full-stack web application for booking wedding ceremonie
 ## Recent Changes
 
 ### November 5, 2025
-- **Event Type Lock After Payment**: Block 1 (Event Type selection) becomes read-only once any payment has been made (amountPaid > 0), preventing users from changing their event type after payment
+- **Event Type Lock After Payment**: Block 2 (Event Type selection) becomes read-only only when payment has been made for a modest wedding, preventing downgrades to cheaper packages (elopement/vow renewal). Users who paid for elopement/vow renewal can still upgrade to modest wedding since this increases the price
 - **Navigation Tab Color Updates**:
   - No entries: Black background with white text
   - Partial entries: Black background with yellow text
