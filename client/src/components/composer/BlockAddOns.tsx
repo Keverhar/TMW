@@ -320,7 +320,7 @@ export default function BlockAddOns({
           </DialogHeader>
           <div className="space-y-4">
             <p className="text-sm">
-              You cannot reduce add-ons after payment has been made. Partial Refund Requests are handled on a case-by-case basis. You will need to contact our staff at (970) 627-7987 for assistance.
+              You cannot reduce the value of the combined add-ons after payment has been made, if that results in a negative balance. Partial Refund Requests are handled on a case-by-case basis. You will need to contact our staff at (970) 627-7987 for assistance.
             </p>
             <Button 
               onClick={() => setShowCannotReduceDialog(false)} 
