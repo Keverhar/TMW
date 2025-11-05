@@ -1628,7 +1628,7 @@ export default function WeddingComposer() {
                       break;
                     case 'none':
                     default:
-                      colorClasses = 'bg-muted text-[#FFFFFF] hover-elevate';
+                      colorClasses = 'bg-black text-white hover-elevate';
                       break;
                   }
                 }
