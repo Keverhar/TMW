@@ -1498,8 +1498,8 @@ export default function WeddingComposer() {
         return 'none';
       
       case 5: // Announcements
-        if (formData.announcementsCompletionStatus && formData.announcementsCompletionStatus !== 'finish-later') return 'complete';
-        if (formData.announcementsCompletionStatus === 'finish-later' || formData.grandIntroduction || formData.vibeCheck) return 'partial';
+        // Announcements block never turns green (complete)
+        if (formData.grandIntroduction || formData.fatherDaughterDanceAnnouncement || formData.toastsSpeechesAnnouncement || formData.guestCallouts || formData.vibeCheck) return 'partial';
         return 'none';
       
       case 6: // Ceremony

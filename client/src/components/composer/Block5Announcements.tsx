@@ -44,16 +44,6 @@ export default function Block5Announcements({
   onChange,
   readOnly = false
 }: Block5AnnouncementsProps) {
-  const allRequiredFieldsFilled = grandIntroduction && fatherDaughterDanceAnnouncement && toastsSpeechesAnnouncement && vibeCheck;
-  const someFieldsEmpty = !grandIntroduction || !fatherDaughterDanceAnnouncement || !toastsSpeechesAnnouncement || !vibeCheck;
-
-  const handleCompletionStatusChange = (status: string) => {
-    if (announcementsCompletionStatus === status) {
-      onChange('announcementsCompletionStatus', '');
-    } else {
-      onChange('announcementsCompletionStatus', status);
-    }
-  };
 
   return (
     <div className="space-y-6">
@@ -174,42 +164,6 @@ export default function Block5Announcements({
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Announcements Selection Status</CardTitle>
-          <CardDescription>Let us know if you're ready to move forward or need more time</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="announcements-all-done"
-              data-testid="checkbox-announcements-all-done"
-              checked={announcementsCompletionStatus === 'all-done'}
-              onCheckedChange={() => handleCompletionStatusChange('all-done')}
-              disabled={readOnly || !allRequiredFieldsFilled}
-            />
-            <Label htmlFor="announcements-all-done" className={`cursor-pointer font-medium ${!allRequiredFieldsFilled ? 'opacity-50' : ''}`}>
-              All done (for now)
-            </Label>
-          </div>
-          
-          {!allRequiredFieldsFilled && (
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="announcements-finish-later"
-                data-testid="checkbox-announcements-finish-later"
-                checked={announcementsCompletionStatus === 'finish-later'}
-                onCheckedChange={() => handleCompletionStatusChange('finish-later')}
-                disabled={readOnly}
-              />
-              <Label htmlFor="announcements-finish-later" className="cursor-pointer font-medium">
-                We'll finish this later
-              </Label>
-            </div>
-          )}
-
-        </CardContent>
-      </Card>
     </div>
   );
 }
