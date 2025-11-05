@@ -1649,7 +1649,14 @@ export default function WeddingComposer() {
                     data-testid={`button-step-${stepNumber}`}
                     className={`px-2 py-0.5 rounded-md text-xs font-medium transition-colors whitespace-nowrap ${colorClasses} ${borderClass}`}
                   >
-                    <span className="block">{step.title}</span>
+                    <span className="block flex items-center gap-1.5">
+                      <span>{step.title}</span>
+                      {step.id === 14 && formData.eventType && (
+                        <span className="font-bold" data-testid="text-balance-due">
+                          ${(balanceDue / 100).toFixed(2)}
+                        </span>
+                      )}
+                    </span>
                   </button>
                 );
               })}
