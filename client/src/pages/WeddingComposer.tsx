@@ -1627,7 +1627,12 @@ export default function WeddingComposer() {
                   // Enabled blocks: color based on completion status
                   switch (completionStatus) {
                     case 'complete':
-                      colorClasses = 'bg-green-600/80 text-[#FFFFFF] hover-elevate';
+                      // Cart tab (step 14) should be white on black when complete (balance = $0)
+                      if (step.id === 14) {
+                        colorClasses = 'bg-black text-white hover-elevate';
+                      } else {
+                        colorClasses = 'bg-green-600/80 text-[#FFFFFF] hover-elevate';
+                      }
                       break;
                     case 'partial':
                       colorClasses = 'bg-black text-yellow-400 hover-elevate';
