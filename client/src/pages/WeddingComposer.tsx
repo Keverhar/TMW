@@ -1622,24 +1622,24 @@ export default function WeddingComposer() {
                 let colorClasses = '';
                 if (isReadOnly) {
                   // Disabled blocks: light grey text on black background
-                  colorClasses = 'bg-black text-[#D3D3D3]';
+                  colorClasses = 'bg-black text-[#D3D3D3] border border-[#D3D3D3]';
                 } else {
                   // Enabled blocks: color based on completion status
                   switch (completionStatus) {
                     case 'complete':
                       // Cart tab (step 14) should be white on black when complete (balance = $0)
                       if (step.id === 14) {
-                        colorClasses = 'bg-black text-white hover-elevate';
+                        colorClasses = 'bg-black text-white border border-white hover-elevate';
                       } else {
-                        colorClasses = 'bg-green-600/80 text-[#FFFFFF] hover-elevate';
+                        colorClasses = 'bg-green-600/80 text-[#FFFFFF] border border-green-600 hover-elevate';
                       }
                       break;
                     case 'partial':
-                      colorClasses = 'bg-black text-yellow-400 hover-elevate';
+                      colorClasses = 'bg-black text-yellow-400 border border-yellow-400 hover-elevate';
                       break;
                     case 'none':
                     default:
-                      colorClasses = 'bg-black text-white hover-elevate';
+                      colorClasses = 'bg-black text-white border border-white hover-elevate';
                       break;
                   }
                 }
