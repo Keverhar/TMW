@@ -11,6 +11,14 @@ The Modest Wedding is a full-stack web application for booking wedding ceremonie
 
 ## Recent Changes
 
+### November 5, 2025
+- **Navigation Tab Completion Status Updates**:
+  - Removed "Completion Status" card from Evites page (Block 12)
+  - 11 navigation tabs now never turn green (complete): Colors, Music, Announcements, Processional, Reception, Photography, Memory Wall, Personal Touches, Evites, Add-Ons, and Cart
+  - Cart tab (Block 14) only shows green (complete) when balance due is $0
+  - These tabs show amber (partial) when fields are filled, but never green except Cart when paid in full
+  - Cart shows partial status when user has selected payment method or accepted terms
+
 ### November 2, 2025
 - **Memory Wall Made Optional**: Block 10 (Memory Wall) is now completely optional and will not block user progression through the booking flow
   - Users can skip the page entirely without uploading any photos

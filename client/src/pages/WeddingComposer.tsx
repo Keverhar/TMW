@@ -1461,6 +1461,31 @@ export default function WeddingComposer() {
   // Always show all steps - users can view all blocks even if some are read-only
   const steps = allSteps;
   
+  // Calculate pricing and balance for use in completion status
+  const dayOfWeek = getDayOfWeek(formData.preferredDate);
+  const basePrice = calculatePrice(formData.eventType, dayOfWeek);
+  const photoBookPrice = getAddonPrice('photoBook');
+  const extraTimePrice = getAddonPrice('extraTime');
+  const byobBarPrice = getAddonPrice('byobBar');
+  const rehearsalPrice = getAddonPrice('rehearsal');
+  const achDiscountAmount = getPaymentDiscount('ach', formData.eventType);
+  const affirmDiscountAmount = getPaymentDiscount('affirm', formData.eventType);
+  
+  const addonsTotal =
+    (formData.photoBookAddon ? photoBookPrice * (formData.photoBookQuantity || 1) : 0) +
+    (formData.extraTimeAddon ? extraTimePrice : 0) +
+    (formData.byobBarAddon ? byobBarPrice : 0) +
+    (formData.rehearsalAddon ? rehearsalPrice : 0);
+  
+  const paymentDiscount = formData.paymentMethod === 'ach' || formData.paymentMethod === 'echeck'
+    ? achDiscountAmount 
+    : formData.paymentMethod === 'affirm' 
+      ? affirmDiscountAmount 
+      : 0;
+  
+  const totalPrice = Math.max(0, basePrice + addonsTotal - paymentDiscount);
+  const balanceDue = totalPrice - (formData.amountPaid || 0);
+  
   // Helper function to determine if a block should be read-only
   const isBlockReadOnly = (blockId: number): boolean => {
     if (!isSimplifiedFlow) return false; // Full wedding packages have full access
@@ -1546,11 +1571,10 @@ export default function WeddingComposer() {
         return 'none';
       
       case 14: // Cart (Payment & Review)
-        // Cart is complete when terms are accepted
-        if (formData.termsAccepted) return 'complete';
-        // Partial if user has selected ACH or E-Check (which have discounts, indicating interaction)
-        if (formData.paymentMethod === 'ach') return 'partial';
-        // None for default state (credit_card, affirm, and paypal don't show partial)
+        // Cart is complete only when balance due is $0
+        if (balanceDue === 0) return 'complete';
+        // Partial if user has interacted with cart (selected payment method or accepted terms)
+        if (formData.paymentMethod || formData.termsAccepted) return 'partial';
         return 'none';
       
       default:
@@ -1559,21 +1583,6 @@ export default function WeddingComposer() {
   };
 
   const progress = (currentStep / steps.length) * 100;
-  const dayOfWeek = getDayOfWeek(formData.preferredDate);
-  const basePrice = calculatePrice(formData.eventType, dayOfWeek);
-
-  // Get current prices from pricing config
-  const photoBookPrice = getAddonPrice('photoBook');
-  const extraTimePrice = getAddonPrice('extraTime');
-  const byobBarPrice = getAddonPrice('byobBar');
-  const rehearsalPrice = getAddonPrice('rehearsal');
-  
-  const addonsTotal =
-    (formData.photoBookAddon ? photoBookPrice * (formData.photoBookQuantity || 1) : 0) +
-    (formData.extraTimeAddon ? extraTimePrice : 0) +
-    (formData.byobBarAddon ? byobBarPrice : 0) +
-    (formData.rehearsalAddon ? rehearsalPrice : 0);
-  const totalPrice = basePrice + addonsTotal;
 
   return (
     <div className="min-h-screen bg-background">
