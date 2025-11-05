@@ -1621,8 +1621,8 @@ export default function WeddingComposer() {
                 // Determine color based on completion status or read-only status
                 let colorClasses = '';
                 if (isReadOnly) {
-                  // Disabled blocks: dark grey background with dark red text
-                  colorClasses = 'bg-[#4A4A4A] text-[#8B0000]';
+                  // Disabled blocks: light grey text on black background
+                  colorClasses = 'bg-black text-gray-400';
                 } else {
                   // Enabled blocks: color based on completion status
                   switch (completionStatus) {
