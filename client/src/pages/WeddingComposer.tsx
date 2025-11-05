@@ -1521,7 +1521,7 @@ export default function WeddingComposer() {
         return 'none';
       
       case 10: // Memory Wall (optional - not required for progression)
-        if (formData.slideshowCompletionStatus === 'done') return 'complete';
+        // Memory Wall block never turns green (complete)
         if (formData.slideshowPhotos !== '[]' || formData.engagementPhotos !== '[]') return 'partial';
         return 'none';
       

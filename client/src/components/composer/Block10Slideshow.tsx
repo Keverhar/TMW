@@ -163,8 +163,6 @@ export default function Block10Slideshow({
     onChange('engagementPhotos', JSON.stringify(updated));
   };
 
-  // Memory Wall is optional - always show option to mark as done
-  const allRequiredFieldsFilled = true; // Always show "done" option since this section is optional
 
   return (
     <div className="space-y-6">
@@ -329,43 +327,6 @@ export default function Block10Slideshow({
         </CardContent>
       </Card>
 
-      {/* Completion Status */}
-      {allRequiredFieldsFilled && (
-        <Card className="border-green-200 dark:border-green-900">
-          <CardContent className="pt-6">
-            <div className="flex items-start gap-3">
-              <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
-              <div className="space-y-3 flex-1">
-                <div>
-                  <p className="font-medium text-green-900 dark:text-green-100">Memory Wall photos are optional.</p>
-                  <p className="text-sm text-green-700 dark:text-green-300 mt-1">
-                    You can upload photos or skip this section and mark it as complete.
-                  </p>
-                </div>
-                
-                <div className="flex items-center gap-2">
-                  <Checkbox
-                    id="slideshow-complete-done"
-                    data-testid="checkbox-slideshow-complete-done"
-                    checked={slideshowCompletionStatus === 'done'}
-                    disabled={readOnly}
-                    onCheckedChange={(checked) => {
-                      if (checked) {
-                        onChange('slideshowCompletionStatus', 'done');
-                      } else {
-                        onChange('slideshowCompletionStatus', '');
-                      }
-                    }}
-                  />
-                  <Label htmlFor="slideshow-complete-done" className="text-sm font-normal cursor-pointer">
-                    All done (for now)
-                  </Label>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
     </div>
   );
 }
