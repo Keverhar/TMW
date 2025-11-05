@@ -17,6 +17,8 @@ interface Block1EventTypeProps {
   onChange: (field: string, value: string) => void;
   readOnly?: boolean;
   amountPaid?: number;
+  addonsTotal?: number;
+  appliedDiscountAmount?: number;
 }
 
 interface BookedSlot {
@@ -42,6 +44,18 @@ const eventTypes = [
     description: "Celebrate your journey together with a heartfelt renewal ceremony."
   }
 ];
+
+// Calculate package price based on event type and day of week
+const calculatePrice = (eventType: string, dayOfWeek: string): number => {
+  if (eventType === 'modest-wedding' || eventType === 'other') {
+    // Modest Wedding: Saturday = $4500, Friday/Sunday = $3900
+    return dayOfWeek === 'saturday' ? 450000 : 390000;
+  } else if (eventType === 'modest-elopement' || eventType === 'vow-renewal') {
+    // Elopement/Vow Renewal: Friday = $1500, Wednesday = $999
+    return dayOfWeek === 'friday' ? 150000 : 99900;
+  }
+  return 390000; // Default
+};
 
 // Time slots vary by day of week and event type
 const getTimeSlots = (preferredDate: string, eventType: string) => {
@@ -88,8 +102,18 @@ const getTimeSlots = (preferredDate: string, eventType: string) => {
   ];
 };
 
-export default function Block1EventType({ eventType, preferredDate, timeSlot, onChange, readOnly, amountPaid = 0 }: Block1EventTypeProps) {
+export default function Block1EventType({ 
+  eventType, 
+  preferredDate, 
+  timeSlot, 
+  onChange, 
+  readOnly, 
+  amountPaid = 0,
+  addonsTotal = 0,
+  appliedDiscountAmount = 0 
+}: Block1EventTypeProps) {
   const [showDateChangeDialog, setShowDateChangeDialog] = useState(false);
+  const [showSaturday6pmDialog, setShowSaturday6pmDialog] = useState(false);
   // Fetch booked slots from the API to prevent double-booking
   const { data: bookedSlots = [] } = useQuery<BookedSlot[]>({
     queryKey: ['/api/availability/booked-slots'],
@@ -101,6 +125,13 @@ export default function Block1EventType({ eventType, preferredDate, timeSlot, on
     ? [3, 5] // Wednesday (3), Friday (5)
     : [5, 6, 0]; // Friday (5), Saturday (6), Sunday (0)
   const timeSlots = getTimeSlots(preferredDate, eventType);
+  
+  // Check if current selection is Saturday 6 PM wedding
+  const isSaturday6pmWedding = () => {
+    if (!preferredDate || !timeSlot) return false;
+    const dateObj = new Date(preferredDate + 'T12:00:00');
+    return eventType === 'modest-wedding' && dateObj.getDay() === 6 && timeSlot === '6pm-9pm';
+  };
   
   const getDayName = (dayNumber: number): string => {
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -173,7 +204,18 @@ export default function Block1EventType({ eventType, preferredDate, timeSlot, on
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-3">
-            <RadioGroup value={eventType} onValueChange={(value) => onChange('eventType', value)} disabled={readOnly}>
+            <RadioGroup 
+              value={eventType} 
+              onValueChange={(value) => {
+                // Prevent event type changes for Saturday 6 PM weddings with payment
+                if (amountPaid > 0 && isSaturday6pmWedding()) {
+                  setShowSaturday6pmDialog(true);
+                  return;
+                }
+                onChange('eventType', value);
+              }} 
+              disabled={readOnly}
+            >
               {eventTypes.map((type) => (
                 <div key={type.value} className="space-y-2">
                   <div className="flex items-start space-x-3">
@@ -227,20 +269,24 @@ export default function Block1EventType({ eventType, preferredDate, timeSlot, on
                     selected={preferredDateObj}
                     onSelect={(date) => {
                       if (date) {
-                        const newDayOfWeek = date.getDay();
-                        
                         if (amountPaid > 0 && preferredDate) {
                           const currentDate = new Date(preferredDate + 'T12:00:00');
                           const currentDayOfWeek = currentDate.getDay();
+                          const newDayOfWeek = date.getDay();
                           
-                          // For elopement/vow renewal: Prevent downgrade from Friday (5) to Wednesday (3)
-                          if (isSimplifiedFlow && currentDayOfWeek === 5 && newDayOfWeek === 3) {
-                            setShowDateChangeDialog(true);
-                            return;
-                          }
+                          // Get day names for price calculation
+                          const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+                          const currentDayName = days[currentDayOfWeek];
+                          const newDayName = days[newDayOfWeek];
                           
-                          // For weddings: Prevent downgrade from Saturday (6) to Sunday (0) or Friday (5)
-                          if (!isSimplifiedFlow && currentDayOfWeek === 6 && (newDayOfWeek === 0 || newDayOfWeek === 5)) {
+                          // Calculate current and new base prices
+                          const currentBasePrice = calculatePrice(eventType, currentDayName);
+                          const newBasePrice = calculatePrice(eventType, newDayName);
+                          
+                          // Check if change would create negative balance
+                          const newBalance = newBasePrice + addonsTotal - appliedDiscountAmount - amountPaid;
+                          
+                          if (newBalance < 0) {
                             setShowDateChangeDialog(true);
                             return;
                           }
@@ -275,7 +321,17 @@ export default function Block1EventType({ eventType, preferredDate, timeSlot, on
                 <CardDescription>Select your preferred time for the celebration</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <RadioGroup value={timeSlot} onValueChange={(value) => onChange('timeSlot', value)}>
+                <RadioGroup 
+                  value={timeSlot} 
+                  onValueChange={(value) => {
+                    // Prevent time slot changes for Saturday 6 PM weddings with payment
+                    if (amountPaid > 0 && isSaturday6pmWedding()) {
+                      setShowSaturday6pmDialog(true);
+                      return;
+                    }
+                    onChange('timeSlot', value);
+                  }}
+                >
                   {timeSlots.map((slot) => {
                     const isBooked = bookedTimeSlotsForSelectedDate?.has(slot.value);
                     return (
@@ -315,16 +371,36 @@ export default function Block1EventType({ eventType, preferredDate, timeSlot, on
       <Dialog open={showDateChangeDialog} onOpenChange={setShowDateChangeDialog}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>Date Change Not Allowed</DialogTitle>
+            <DialogTitle>Change Would Create Negative Balance</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <p className="text-sm">
-              You cannot change your date to a lower-priced day after payment has been made. If you need to make this change, please contact our staff at (970) 627-7987 for assistance.
+              This change would result in a negative balance due based on your payment already made. Partial Refund Requests are handled on a case-by-case basis. You will need to contact our staff at (970) 627-7987 for assistance.
             </p>
             <Button 
               onClick={() => setShowDateChangeDialog(false)} 
               className="w-full"
               data-testid="button-acknowledge-date-change"
+            >
+              Understood
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showSaturday6pmDialog} onOpenChange={setShowSaturday6pmDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Cannot Change Event Type or Time</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <p className="text-sm">
+              You have a 6:00 PM Saturday wedding with payment already made. You cannot change the event type or time slot after payment. However, you can change to a different Saturday at 6:00 PM if available. For other changes, please contact our staff at (970) 627-7987.
+            </p>
+            <Button 
+              onClick={() => setShowSaturday6pmDialog(false)} 
+              className="w-full"
+              data-testid="button-acknowledge-saturday-6pm"
             >
               Understood
             </Button>

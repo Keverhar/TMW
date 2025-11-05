@@ -1779,6 +1779,8 @@ export default function WeddingComposer() {
               onChange={updateField}
               readOnly={isBlockReadOnly(2)}
               amountPaid={formData.amountPaid}
+              addonsTotal={addonsTotal}
+              appliedDiscountAmount={formData.appliedDiscountAmount || 0}
             />
           )}
           {steps[currentStep - 1]?.id === 3 && (
