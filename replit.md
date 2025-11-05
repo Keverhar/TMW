@@ -12,12 +12,19 @@ The Modest Wedding is a full-stack web application for booking wedding ceremonie
 ## Recent Changes
 
 ### November 5, 2025
+- **Event Type Lock After Payment**: Block 1 (Event Type selection) becomes read-only once any payment has been made (amountPaid > 0), preventing users from changing their event type after payment
+- **Navigation Tab Color Updates**:
+  - No entries: Black background with white text
+  - Partial entries: Black background with yellow text
+  - Complete (Cart only when balance = $0): Green background with white text
+  - Read-only: Dark gray background with dark red text
 - **Navigation Tab Completion Status Updates**:
   - Removed "Completion Status" card from Evites page (Block 12)
   - 11 navigation tabs now never turn green (complete): Colors, Music, Announcements, Processional, Reception, Photography, Memory Wall, Personal Touches, Evites, Add-Ons, and Cart
   - Cart tab (Block 14) only shows green (complete) when balance due is $0
   - These tabs show amber (partial) when fields are filled, but never green except Cart when paid in full
   - Cart shows partial status when user has selected payment method or accepted terms
+- **Dialog Message Updates**: Updated "Cannot Reduce Add-Ons" dialog to clarify that reduction is prevented only when it would result in a negative balance
 
 ### November 2, 2025
 - **Memory Wall Made Optional**: Block 10 (Memory Wall) is now completely optional and will not block user progression through the booking flow

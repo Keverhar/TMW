@@ -12,6 +12,7 @@ interface Block1EventTypeProps {
   preferredDate: string;
   timeSlot: string;
   onChange: (field: string, value: string) => void;
+  readOnly?: boolean;
 }
 
 interface BookedSlot {
@@ -83,7 +84,7 @@ const getTimeSlots = (preferredDate: string, eventType: string) => {
   ];
 };
 
-export default function Block1EventType({ eventType, preferredDate, timeSlot, onChange }: Block1EventTypeProps) {
+export default function Block1EventType({ eventType, preferredDate, timeSlot, onChange, readOnly }: Block1EventTypeProps) {
   // Fetch booked slots from the API to prevent double-booking
   const { data: bookedSlots = [] } = useQuery<BookedSlot[]>({
     queryKey: ['/api/availability/booked-slots'],
@@ -167,7 +168,7 @@ export default function Block1EventType({ eventType, preferredDate, timeSlot, on
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-3">
-            <RadioGroup value={eventType} onValueChange={(value) => onChange('eventType', value)}>
+            <RadioGroup value={eventType} onValueChange={(value) => onChange('eventType', value)} disabled={readOnly}>
               {eventTypes.map((type) => (
                 <div key={type.value} className="space-y-2">
                   <div className="flex items-start space-x-3">
@@ -176,6 +177,7 @@ export default function Block1EventType({ eventType, preferredDate, timeSlot, on
                       id={`event-${type.value}`} 
                       data-testid={`radio-event-${type.value}`}
                       className="mt-1"
+                      disabled={readOnly}
                     />
                     <div className="flex-1">
                       <Label htmlFor={`event-${type.value}`} className="cursor-pointer">

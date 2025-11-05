@@ -1488,6 +1488,11 @@ export default function WeddingComposer() {
   
   // Helper function to determine if a block should be read-only
   const isBlockReadOnly = (blockId: number): boolean => {
+    // Block 1 (Event Type) becomes read-only once payment has been made
+    if (blockId === 1 && (formData.amountPaid || 0) > 0) {
+      return true;
+    }
+    
     if (!isSimplifiedFlow) return false; // Full wedding packages have full access
     
     // Blocks available for all event types (not read-only)
@@ -1759,6 +1764,7 @@ export default function WeddingComposer() {
               preferredDate={formData.preferredDate}
               timeSlot={formData.timeSlot}
               onChange={updateField}
+              readOnly={isBlockReadOnly(1)}
             />
           )}
           {steps[currentStep - 1]?.id === 3 && (
