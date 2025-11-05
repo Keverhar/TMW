@@ -1624,7 +1624,7 @@ export default function WeddingComposer() {
                       colorClasses = 'bg-green-600/80 text-[#FFFFFF] hover-elevate';
                       break;
                     case 'partial':
-                      colorClasses = 'bg-yellow-600/80 text-[#FFFFFF] hover-elevate';
+                      colorClasses = 'bg-black text-yellow-400 hover-elevate';
                       break;
                     case 'none':
                     default:
