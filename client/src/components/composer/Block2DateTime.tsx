@@ -231,6 +231,16 @@ export default function Block2DateTime({ preferredDate, timeSlot, onChange, even
             </div>
           )}
 
+          {!isSimplifiedFlow && preferredDateObj && preferredDateObj.getDay() === 6 && (
+            <div className="flex gap-2 items-start bg-blue-50 dark:bg-blue-950 p-3 rounded-md mt-4">
+              <Info className="h-4 w-4 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+              <div className="text-sm text-blue-900 dark:text-blue-100">
+                <p className="font-medium mb-1">Note:</p>
+                <p>If you choose Saturday for your event, you cannot change to Friday or Sunday after payment has been made.</p>
+              </div>
+            </div>
+          )}
+
           <div className="flex gap-2 items-start bg-amber-50 dark:bg-amber-950 p-3 rounded-md mt-4">
             <Info className="h-4 w-4 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
             <div className="text-sm text-amber-900 dark:text-amber-100">
