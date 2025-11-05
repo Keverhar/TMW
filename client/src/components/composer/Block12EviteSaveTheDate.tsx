@@ -91,11 +91,6 @@ export default function Block12EviteSaveTheDate({
 
   const selectedTemplate = designTemplates.find(t => t.id === eviteDesignStyle) || designTemplates[0];
 
-  const hasDesignSelection = eviteDesignStyle || eviteDesignNoSpecialRequests;
-  const hasWordingSelection = (eviteHeaderText && eviteBodyText) || eviteWordingNoSpecialRequests;
-  const hasRsvpSelection = eviteRsvpOption || eviteRsvpNoSpecialRequests;
-  const allCategoriesFilled = hasDesignSelection && hasWordingSelection && hasRsvpSelection;
-
   const generateDefaultBodyText = () => {
     const names = [customerName, customerName2].filter(n => n).join(' & ') || 'The Happy Couple';
     const dateStr = preferredDate ? new Date(preferredDate).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) : '[Date]';
@@ -379,63 +374,6 @@ export default function Block12EviteSaveTheDate({
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Completion Status</CardTitle>
-          <CardDescription>
-            {allCategoriesFilled
-              ? "You've made selections in all categories. Are you ready to proceed?"
-              : "Some categories haven't been filled yet. You can finish later if needed."}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          {allCategoriesFilled ? (
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="evite-all-done"
-                data-testid="checkbox-evite-all-done"
-                checked={eviteCompletionStatus === 'all_done'}
-                onCheckedChange={(checked) => {
-                  if (checked) {
-                    onChange('eviteCompletionStatus', 'all_done');
-                  } else {
-                    onChange('eviteCompletionStatus', '');
-                  }
-                }}
-                disabled={readOnly}
-              />
-              <Label htmlFor="evite-all-done" className="cursor-pointer">
-                All done (for now) – I'm ready to proceed
-              </Label>
-            </div>
-          ) : (
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="evite-finish-later"
-                data-testid="checkbox-evite-finish-later"
-                checked={eviteCompletionStatus === 'finish_later'}
-                onCheckedChange={(checked) => {
-                  if (checked) {
-                    onChange('eviteCompletionStatus', 'finish_later');
-                  } else {
-                    onChange('eviteCompletionStatus', '');
-                  }
-                }}
-                disabled={readOnly}
-              />
-              <Label htmlFor="evite-finish-later" className="cursor-pointer">
-                We'll finish this later – I want to proceed for now
-              </Label>
-            </div>
-          )}
-          
-          {!eviteCompletionStatus && (
-            <p className="text-sm text-muted-foreground">
-              * You must check this box to proceed to payment
-            </p>
-          )}
-        </CardContent>
-      </Card>
     </div>
   );
 }

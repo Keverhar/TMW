@@ -1536,8 +1536,8 @@ export default function WeddingComposer() {
         return 'none';
       
       case 12: // Evites
-        if (formData.eviteCompletionStatus && formData.eviteCompletionStatus !== 'finish-later') return 'complete';
-        if (formData.eviteCompletionStatus === 'finish-later' || formData.eviteDesignStyle || formData.eviteHeaderText) return 'partial';
+        // Evites block never turns green (complete)
+        if (formData.eviteDesignStyle || formData.eviteHeaderText || formData.eviteBodyText || formData.eviteRsvpOption) return 'partial';
         return 'none';
       
       case 13: // Add-Ons
