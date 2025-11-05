@@ -13,7 +13,10 @@ The Modest Wedding is a full-stack web application for booking wedding ceremonie
 
 ### November 5, 2025
 - **Event Type Lock After Payment**: Block 2 (Event Type selection) becomes read-only only when payment has been made for a modest wedding, preventing downgrades to cheaper packages (elopement/vow renewal). Users who paid for elopement/vow renewal can still upgrade to modest wedding since this increases the price
-- **Date Change Restrictions for Elopement/Vow Renewal**: After payment, users can upgrade from Wednesday to Friday, but cannot downgrade from Friday to Wednesday. A dialog appears explaining that the date change is not allowed and provides contact information (970) 627-7987
+- **Date Change Restrictions After Payment**: 
+  - Elopement/Vow Renewal: Users can upgrade from Wednesday to Friday, but cannot downgrade from Friday to Wednesday
+  - Modest Wedding: Users can upgrade from Sunday to Saturday or Friday to Saturday, but cannot downgrade from Saturday to Sunday or Friday
+  - A dialog appears when attempting a downgrade, explaining that the date change is not allowed and provides contact information (970) 627-7987
 - **Navigation Tab Color Updates**:
   - No entries: Black background with white text
   - Partial entries: Black background with yellow text

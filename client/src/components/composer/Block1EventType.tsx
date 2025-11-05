@@ -229,13 +229,18 @@ export default function Block1EventType({ eventType, preferredDate, timeSlot, on
                       if (date) {
                         const newDayOfWeek = date.getDay();
                         
-                        // Check if user is trying to downgrade from Friday to Wednesday after payment
-                        if (amountPaid > 0 && isSimplifiedFlow && preferredDate) {
+                        if (amountPaid > 0 && preferredDate) {
                           const currentDate = new Date(preferredDate + 'T12:00:00');
                           const currentDayOfWeek = currentDate.getDay();
                           
-                          // Prevent downgrade from Friday (5) to Wednesday (3)
-                          if (currentDayOfWeek === 5 && newDayOfWeek === 3) {
+                          // For elopement/vow renewal: Prevent downgrade from Friday (5) to Wednesday (3)
+                          if (isSimplifiedFlow && currentDayOfWeek === 5 && newDayOfWeek === 3) {
+                            setShowDateChangeDialog(true);
+                            return;
+                          }
+                          
+                          // For weddings: Prevent downgrade from Saturday (6) to Sunday (0) or Friday (5)
+                          if (!isSimplifiedFlow && currentDayOfWeek === 6 && (newDayOfWeek === 0 || newDayOfWeek === 5)) {
                             setShowDateChangeDialog(true);
                             return;
                           }
@@ -314,7 +319,7 @@ export default function Block1EventType({ eventType, preferredDate, timeSlot, on
           </DialogHeader>
           <div className="space-y-4">
             <p className="text-sm">
-              You cannot change your date from Friday to Wednesday after payment has been made. If you need to make this change, please contact our staff at (970) 627-7987 for assistance.
+              You cannot change your date to a lower-priced day after payment has been made. If you need to make this change, please contact our staff at (970) 627-7987 for assistance.
             </p>
             <Button 
               onClick={() => setShowDateChangeDialog(false)} 
