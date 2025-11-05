@@ -1537,12 +1537,20 @@ export default function WeddingComposer() {
       
       case 8: // Reception
         // Reception block never turns green (complete)
-        if (formData.firstDance || formData.motherSonDance || formData.specialDances || formData.toastGivers || formData.beveragePreferences || formData.receptionSpecialRequests) return 'partial';
+        if (formData.firstDance || formData.firstDanceNA || 
+            formData.motherSonDance || formData.motherSonDanceNA || 
+            formData.specialDances || formData.specialDancesNA || 
+            formData.toastGivers || formData.toastGiversNA || 
+            formData.beveragePreferences || 
+            formData.receptionSpecialRequests || formData.receptionSpecialRequestsNA) return 'partial';
         return 'none';
       
       case 9: // Photography
         // Photography block never turns green (complete)
-        if (formData.mustHaveShots || formData.vipList || formData.groupPhotosRequested || formData.photographySpecialRequests) return 'partial';
+        if (formData.mustHaveShots || formData.mustHaveShotsNA || 
+            formData.vipList || formData.vipListNA || 
+            formData.groupPhotosRequested || formData.groupPhotosRequestedNA || 
+            formData.photographySpecialRequests || formData.photographySpecialRequestsNA) return 'partial';
         return 'none';
       
       case 10: // Memory Wall (optional - not required for progression)
@@ -1552,12 +1560,15 @@ export default function WeddingComposer() {
       
       case 11: // Personal Touches
         // Personal Touches block never turns green (complete)
-        // Check for partial completion - exclude departureOrganizerTBD and checkbox-only flags as they don't represent actual data
-        const hasPersonalTouchesData = (formData.freshFlorals && formData.freshFlorals.trim() !== '') || 
-            formData.guestBookChoice || formData.cakeKnifeChoice || 
-            formData.departureVehicleChoice || (formData.departureOrganizer && formData.departureOrganizer.trim() !== '' && !formData.departureOrganizerTBD) || 
-            (formData.personalTouchesSpecialInstructions && formData.personalTouchesSpecialInstructions.trim() !== '');
-        if (formData.personalTouchesCompletionStatus === 'finish-later' || hasPersonalTouchesData) return 'partial';
+        const hasPersonalTouchesData = 
+            formData.freshFlorals || formData.freshFloralsNA || 
+            formData.guestBookChoice || 
+            formData.cakeKnifeChoice || 
+            formData.departureVehicleChoice || 
+            formData.departureOrganizer || formData.departureOrganizerTBD ||
+            formData.departureVehicle ||
+            formData.personalTouchesSpecialInstructions || formData.personalTouchesSpecialInstructionsNA;
+        if (hasPersonalTouchesData) return 'partial';
         return 'none';
       
       case 12: // Evites
