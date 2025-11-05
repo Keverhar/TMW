@@ -1493,8 +1493,8 @@ export default function WeddingComposer() {
         return 'none';
       
       case 4: // Music
-        if (formData.musicCompletionStatus && formData.musicCompletionStatus !== 'finish-later') return 'complete';
-        if (formData.musicCompletionStatus === 'finish-later' || formData.processionalSong || formData.recessionalSong || formData.playlistUrl) return 'partial';
+        // Music block never turns green (complete)
+        if (formData.processionalSong || formData.recessionalSong || formData.receptionEntranceSong || formData.cakeCuttingSong || formData.lastDanceSong || formData.playlistUrl) return 'partial';
         return 'none';
       
       case 5: // Announcements

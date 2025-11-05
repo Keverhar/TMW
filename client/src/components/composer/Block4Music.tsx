@@ -168,16 +168,6 @@ export default function Block4Music({
     }
   };
 
-  const allRequiredFieldsFilled = processionalSong && recessionalSong && receptionEntranceSong && cakeCuttingSong && lastDanceSong;
-  const someFieldsEmpty = !processionalSong || !recessionalSong || !receptionEntranceSong || !cakeCuttingSong || !lastDanceSong;
-
-  const handleCompletionStatusChange = (status: string) => {
-    if (musicCompletionStatus === status) {
-      onChange('musicCompletionStatus', '');
-    } else {
-      onChange('musicCompletionStatus', status);
-    }
-  };
 
   return (
     <div className="space-y-6">
@@ -583,43 +573,6 @@ export default function Block4Music({
               Our software automatically times and cues every song and your host will speak when needed, so there's no need to worry about transitions.
             </p>
           </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Music Selection Status</CardTitle>
-          <CardDescription>Let us know if you're ready to move forward or need more time</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="music-all-done"
-              data-testid="checkbox-music-all-done"
-              checked={musicCompletionStatus === 'all-done'}
-              onCheckedChange={() => handleCompletionStatusChange('all-done')}
-              disabled={readOnly || !allRequiredFieldsFilled}
-            />
-            <Label htmlFor="music-all-done" className={`cursor-pointer font-medium ${!allRequiredFieldsFilled ? 'opacity-50' : ''}`}>
-              All done (for now)
-            </Label>
-          </div>
-          
-          {!allRequiredFieldsFilled && (
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="music-finish-later"
-                data-testid="checkbox-music-finish-later"
-                checked={musicCompletionStatus === 'finish-later'}
-                onCheckedChange={() => handleCompletionStatusChange('finish-later')}
-                disabled={readOnly}
-              />
-              <Label htmlFor="music-finish-later" className="cursor-pointer font-medium">
-                We'll finish this later
-              </Label>
-            </div>
-          )}
-
         </CardContent>
       </Card>
     </div>
