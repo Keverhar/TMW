@@ -51,27 +51,6 @@ export default function Block7Processional({
   onChange,
   readOnly = false
 }: Block7ProcessionalProps) {
-  // Determine if all required fields are filled - "undecided" does not count as filled
-  const isWalkingDownAisleFilled = walkingDownAisle && walkingDownAisle !== 'undecided';
-  const isRingBearerFilled = ringBearerIncluded === 'no' || (ringBearerIncluded === 'yes' && ringBearerFlowerGirl && ringBearerOrganizer);
-  const isEscortFilled = walkingDownAisle !== 'with-someone' || (walkingDownAisle === 'with-someone' && escortName);
-  const isHonoredGuestsFilled = honoredGuestEscortsNA || honoredGuestEscorts;
-  const isSpecialSeatingFilled = specialSeatingNeedsNA || specialSeatingNeeds;
-  const isSpecialInstructionsFilled = processionalSpecialInstructionsNA || processionalSpecialInstructions;
-
-  const allRequiredFieldsFilled = isWalkingDownAisleFilled && isEscortFilled && isRingBearerFilled && 
-    isHonoredGuestsFilled && isSpecialSeatingFilled && isSpecialInstructionsFilled;
-
-  const someFieldsEmpty = !isWalkingDownAisleFilled || !isEscortFilled || !isRingBearerFilled || 
-    !isHonoredGuestsFilled || !isSpecialSeatingFilled || !isSpecialInstructionsFilled;
-
-  const handleCompletionStatusChange = (status: string) => {
-    if (processionalCompletionStatus === status) {
-      onChange('processionalCompletionStatus', '');
-    } else {
-      onChange('processionalCompletionStatus', status);
-    }
-  };
 
   return (
     <div className="space-y-6">
@@ -288,42 +267,6 @@ export default function Block7Processional({
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Processional Planning Status</CardTitle>
-          <CardDescription>Let us know if you're ready to move forward or need more time</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="processional-all-done"
-              data-testid="checkbox-processional-all-done"
-              checked={processionalCompletionStatus === 'all-done'}
-              onCheckedChange={() => handleCompletionStatusChange('all-done')}
-              disabled={readOnly || !allRequiredFieldsFilled}
-            />
-            <Label htmlFor="processional-all-done" className={`cursor-pointer font-medium ${!allRequiredFieldsFilled ? 'opacity-50' : ''}`}>
-              All done (for now)
-            </Label>
-          </div>
-          
-          {!allRequiredFieldsFilled && (
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="processional-finish-later"
-                data-testid="checkbox-processional-finish-later"
-                checked={processionalCompletionStatus === 'finish-later'}
-                onCheckedChange={() => handleCompletionStatusChange('finish-later')}
-                disabled={readOnly}
-              />
-              <Label htmlFor="processional-finish-later" className="cursor-pointer font-medium">
-                We'll finish this later
-              </Label>
-            </div>
-          )}
-
-        </CardContent>
-      </Card>
     </div>
   );
 }

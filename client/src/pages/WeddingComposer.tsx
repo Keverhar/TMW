@@ -1506,8 +1506,8 @@ export default function WeddingComposer() {
         return formData.ceremonyScript ? 'complete' : 'none';
       
       case 7: // Processional
-        if (formData.processionalCompletionStatus && formData.processionalCompletionStatus !== 'finish-later') return 'complete';
-        if (formData.processionalCompletionStatus === 'finish-later' || formData.walkingDownAisle || formData.ringBearerIncluded) return 'partial';
+        // Processional block never turns green (complete)
+        if (formData.walkingDownAisle || formData.escortName || formData.ringBearerIncluded || formData.ringBearerFlowerGirl || formData.ringBearerOrganizer || formData.honoredGuestEscorts || formData.specialSeatingNeeds || formData.processionalSpecialInstructions) return 'partial';
         return 'none';
       
       case 8: // Reception
