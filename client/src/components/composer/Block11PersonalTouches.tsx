@@ -41,17 +41,6 @@ export default function Block11PersonalTouches({
   onChange,
   readOnly = false
 }: Block11PersonalTouchesProps) {
-  // Check if fields are filled - "To Be Decided Later" does not count as filled
-  const isFreshFloralsFilled = freshFloralsNA || freshFlorals.trim() !== '';
-  const isGuestBookFilled = guestBookChoice !== '';
-  const isCakeKnifeFilled = cakeKnifeChoice !== '';
-  const isDepartureOrganizerFilled = !departureOrganizerTBD && departureOrganizer.trim() !== '';
-  const isDepartureVehicleFilled = departureVehicleChoice !== '' && (departureVehicleChoice === 'no' || departureVehicle.trim() !== '');
-  const isSpecialInstructionsFilled = personalTouchesSpecialInstructionsNA || personalTouchesSpecialInstructions.trim() !== '';
-  
-  const allRequiredFieldsFilled = isFreshFloralsFilled && isGuestBookFilled && isCakeKnifeFilled && 
-                                   isDepartureOrganizerFilled && isDepartureVehicleFilled && isSpecialInstructionsFilled;
-
   return (
     <div className="space-y-6">
       <div>
@@ -336,44 +325,6 @@ export default function Block11PersonalTouches({
           </div>
         </CardContent>
       </Card>
-
-      {/* Completion Status */}
-      {allRequiredFieldsFilled && (
-        <Card className="border-green-200 dark:border-green-900">
-          <CardContent className="pt-6">
-            <div className="flex items-start gap-3">
-              <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
-              <div className="space-y-3 flex-1">
-                <div>
-                  <p className="font-medium text-green-900 dark:text-green-100">Great! Your personal touches planning is complete.</p>
-                  <p className="text-sm text-green-700 dark:text-green-300 mt-1">
-                    Please confirm your status to continue.
-                  </p>
-                </div>
-                
-                <div className="flex items-center gap-2">
-                  <Checkbox
-                    id="personal-touches-complete-done"
-                    data-testid="checkbox-personal-touches-complete-done"
-                    checked={personalTouchesCompletionStatus === 'done'}
-                    onCheckedChange={(checked) => {
-                      if (checked) {
-                        onChange('personalTouchesCompletionStatus', 'done');
-                      } else {
-                        onChange('personalTouchesCompletionStatus', '');
-                      }
-                    }}
-                    disabled={readOnly}
-                  />
-                  <Label htmlFor="personal-touches-complete-done" className="text-sm font-normal cursor-pointer">
-                    All done (for now)
-                  </Label>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
 
     </div>
   );

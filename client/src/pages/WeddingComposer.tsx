@@ -1526,7 +1526,7 @@ export default function WeddingComposer() {
         return 'none';
       
       case 11: // Personal Touches
-        if (formData.personalTouchesCompletionStatus && formData.personalTouchesCompletionStatus !== 'finish-later') return 'complete';
+        // Personal Touches block never turns green (complete)
         // Check for partial completion - exclude departureOrganizerTBD and checkbox-only flags as they don't represent actual data
         const hasPersonalTouchesData = (formData.freshFlorals && formData.freshFlorals.trim() !== '') || 
             formData.guestBookChoice || formData.cakeKnifeChoice || 
