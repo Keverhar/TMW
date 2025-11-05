@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { Info, Palette, Lock } from "lucide-react";
 
@@ -110,24 +110,24 @@ export default function Block3SignatureColor({ signatureColor, colorSwatchDecisi
 
       <Card>
         <CardHeader>
-          <CardTitle>Swatch Preview or Final Decision</CardTitle>
+          <CardTitle>Swatch Preview</CardTitle>
           <CardDescription>Would you like to see the color in person before finalizing?</CardDescription>
         </CardHeader>
         <CardContent>
-          <RadioGroup value={colorSwatchDecision} onValueChange={(value) => onChange('colorSwatchDecision', value)} disabled={readOnly}>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="see-swatches-at-tour" id="swatch-tour" data-testid="radio-swatch-tour" disabled={readOnly} />
-              <Label htmlFor="swatch-tour" className="cursor-pointer">
-                I'm still deciding — I'd like to see swatches at my tour
-              </Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="final-decision" id="swatch-finalize" data-testid="radio-swatch-finalize" disabled={readOnly} />
-              <Label htmlFor="swatch-finalize" className="cursor-pointer">
-                I'm ready to finalize my selection now
-              </Label>
-            </div>
-          </RadioGroup>
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="swatch-tour"
+              data-testid="checkbox-swatch-tour"
+              checked={colorSwatchDecision === 'see-swatches-at-tour'}
+              onCheckedChange={(checked) => {
+                onChange('colorSwatchDecision', checked ? 'see-swatches-at-tour' : '');
+              }}
+              disabled={readOnly}
+            />
+            <Label htmlFor="swatch-tour" className="cursor-pointer">
+              I'm still deciding — I'd like to see swatches at my tour
+            </Label>
+          </div>
         </CardContent>
       </Card>
     </div>

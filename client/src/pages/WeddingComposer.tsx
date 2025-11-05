@@ -1488,8 +1488,8 @@ export default function WeddingComposer() {
         return 'none';
       
       case 3: // Colors
-        if (formData.colorSwatchDecision && formData.colorSwatchDecision !== 'see-swatches-at-tour') return 'complete';
-        if (formData.signatureColor || formData.colorSwatchDecision === 'see-swatches-at-tour') return 'partial';
+        // Colors block never turns green (complete)
+        if (formData.signatureColor || formData.colorSwatchDecision) return 'partial';
         return 'none';
       
       case 4: // Music
