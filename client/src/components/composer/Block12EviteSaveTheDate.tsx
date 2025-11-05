@@ -93,7 +93,7 @@ export default function Block12EviteSaveTheDate({
 
   const generateDefaultBodyText = () => {
     const names = [customerName, customerName2].filter(n => n).join(' & ') || 'The Happy Couple';
-    const dateStr = preferredDate ? new Date(preferredDate).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) : '[Date]';
+    const dateStr = preferredDate ? new Date(preferredDate + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) : '[Date]';
     const timeStr = timeSlot || '[Time]';
     return `${names} are getting married!\n\nJoin us on ${dateStr} at ${timeStr}\nThe Modest Wedding Venue – Charlotte, NC\n\nFormal invitation to follow.`;
   };

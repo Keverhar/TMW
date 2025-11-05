@@ -74,7 +74,7 @@ export default function Summary() {
 
   const formatDate = (dateStr: string) => {
     if (!dateStr) return null;
-    const date = new Date(dateStr);
+    const date = new Date(dateStr + 'T12:00:00');
     return date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
   };
 
@@ -122,7 +122,7 @@ export default function Summary() {
 
   const getDayOfWeek = (dateStr: string): string => {
     if (!dateStr) return '';
-    const date = new Date(dateStr);
+    const date = new Date(dateStr + 'T12:00:00');
     const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     return dayNames[date.getDay()];
   };
