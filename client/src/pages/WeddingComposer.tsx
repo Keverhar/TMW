@@ -1666,7 +1666,7 @@ export default function WeddingComposer() {
                 );
               })}
             </div>
-            <div className="flex-shrink-0 flex gap-2">
+            <div className="flex-shrink-0 flex flex-col items-end gap-1">
               {userAccount ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -1729,6 +1729,11 @@ export default function WeddingComposer() {
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
+              )}
+              {formData.eventType && (
+                <div className="text-xs font-semibold" data-testid="text-total-amount">
+                  Total: ${(totalPrice / 100).toFixed(2)}
+                </div>
               )}
             </div>
           </div>
