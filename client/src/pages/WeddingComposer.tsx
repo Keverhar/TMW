@@ -1654,19 +1654,17 @@ export default function WeddingComposer() {
                     data-testid={`button-step-${stepNumber}`}
                     className={`px-2 py-0.5 rounded-md text-xs font-medium transition-colors whitespace-nowrap ${colorClasses} ${borderClass}`}
                   >
-                    <span className="block flex items-center gap-1.5">
-                      <span>{step.title}</span>
-                      {step.id === 14 && formData.eventType && (
-                        <span className="font-bold" data-testid="text-balance-due">
-                          ${(balanceDue / 100).toFixed(2)}
-                        </span>
-                      )}
-                    </span>
+                    {step.title}
                   </button>
                 );
               })}
             </div>
             <div className="flex-shrink-0 flex flex-col items-end gap-1">
+              {formData.eventType && (
+                <div className="text-xs font-semibold" data-testid="text-total-amount">
+                  Total: ${(totalPrice / 100).toFixed(2)}
+                </div>
+              )}
               {userAccount ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -1729,11 +1727,6 @@ export default function WeddingComposer() {
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-              )}
-              {formData.eventType && (
-                <div className="text-xs font-semibold" data-testid="text-total-amount">
-                  Total: ${(totalPrice / 100).toFixed(2)}
-                </div>
               )}
             </div>
           </div>
