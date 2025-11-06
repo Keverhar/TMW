@@ -152,7 +152,7 @@ export default function Block13TheCouple({
               data-testid="input-person1-phone"
               type="tel"
               placeholder="(555) 123-4567"
-              value={person1Phone}
+              value={formatPhoneNumber(person1Phone)}
               onChange={(e) => onChange('person1Phone', formatPhoneNumber(e.target.value))}
               required
             />
@@ -165,7 +165,7 @@ export default function Block13TheCouple({
               data-testid="input-person1-alternate-phone"
               type="tel"
               placeholder="(555) 123-4567"
-              value={person1AlternatePhone}
+              value={formatPhoneNumber(person1AlternatePhone)}
               onChange={(e) => onChange('person1AlternatePhone', formatPhoneNumber(e.target.value))}
             />
           </div>
@@ -261,7 +261,7 @@ export default function Block13TheCouple({
               data-testid="input-person2-phone"
               type="tel"
               placeholder="(555) 123-4567"
-              value={person2Phone}
+              value={formatPhoneNumber(person2Phone)}
               onChange={(e) => onChange('person2Phone', formatPhoneNumber(e.target.value))}
             />
           </div>
