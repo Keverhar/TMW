@@ -39,6 +39,17 @@ const pronounOptions = [
   "Prefer not to say"
 ];
 
+const formatPhoneNumber = (value: string): string => {
+  // Remove all non-digit characters
+  const cleaned = value.replace(/\D/g, '');
+  
+  // Format as (XXX) XXX-XXXX
+  if (cleaned.length === 0) return '';
+  if (cleaned.length <= 3) return `(${cleaned}`;
+  if (cleaned.length <= 6) return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3)}`;
+  return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(6, 10)}`;
+};
+
 export default function Block13TheCouple({
   person1Role,
   person1FullName,
@@ -142,7 +153,7 @@ export default function Block13TheCouple({
               type="tel"
               placeholder="(555) 123-4567"
               value={person1Phone}
-              onChange={(e) => onChange('person1Phone', e.target.value)}
+              onChange={(e) => onChange('person1Phone', formatPhoneNumber(e.target.value))}
               required
             />
           </div>
@@ -155,7 +166,7 @@ export default function Block13TheCouple({
               type="tel"
               placeholder="(555) 123-4567"
               value={person1AlternatePhone}
-              onChange={(e) => onChange('person1AlternatePhone', e.target.value)}
+              onChange={(e) => onChange('person1AlternatePhone', formatPhoneNumber(e.target.value))}
             />
           </div>
 
@@ -251,7 +262,7 @@ export default function Block13TheCouple({
               type="tel"
               placeholder="(555) 123-4567"
               value={person2Phone}
-              onChange={(e) => onChange('person2Phone', e.target.value)}
+              onChange={(e) => onChange('person2Phone', formatPhoneNumber(e.target.value))}
             />
           </div>
         </CardContent>
